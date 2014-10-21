@@ -1,0 +1,1 @@
+This folder shall contain mini helper-projects used for developmental purposes.

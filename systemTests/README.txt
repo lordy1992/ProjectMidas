@@ -1,0 +1,1 @@
+This folder shall contain projects used to test the full Project Midas system.
