@@ -1,0 +1,21 @@
+﻿Build started 25/10/2014 12:50:56 PM.
+     1>Project "C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\umdf\hidumdf.vcxproj" on node 2 (Rebuild target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IWin7Debug\ /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM\wdm" /Zi /nologo /W4 /WX /Od /Oi /Oy- /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D _WIN32_WINNT=0x0601 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06010000 /D DBG=1 /GF /Gm- /Zp8 /GS /Gy /fp:precise /Zc:wchar_t- /Zc:forScope- /GR- /Fo"Win7Debug\\" /Fd"Win7Debug\vc120.pdb" /Gz /wd4748 /wd4603 /wd4627 /wd4986 /wd4987 /wd4996 /FI"C:\Program Files (x86)\Windows Kits\8.1\Include\Shared\warning.h" /analyze- /errorReport:prompt /kernel -cbstring /d1import_no_registry /d2AllowCompatibleILVersions /d2Zi+ hidumdf.c
+         hidumdf.c
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D _WIN32_WINNT=0x0601 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06010000 /D DBG=1 /D "SMP_ID=\\\"{269C1DA1-F3A3-4154-B7B2-AE1D4A3C4FC1}\\\"" /l"0x0409" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\UM" /IWin7Debug\ /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM\wdm" /nologo /fo"Win7Debug\hidumdf.res" hidumdf.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Win7Debug\hidumdf.sys" /VERSION:"6.3" /INCREMENTAL:NO /NOLOGO /WX /SECTION:"INIT,d" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\memcmp.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\BufferOverflowK.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\ntoskrnl.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\hal.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\wmilib.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\win7\KM\x86\hidclass.lib" /NODEFAULTLIB /MANIFEST:NO /DEBUG /PDB:"Win7Debug\hidumdf.pdb" /SUBSYSTEM:NATIVE,"6.01" /Driver /OPT:REF /OPT:ICF /ENTRY:"GsDriverEntry@8" /RELEASE /IMPLIB:"Win7Debug\hidumdf.lib" /MERGE:"_TEXT=.text;_PAGE=PAGE" /MACHINE:X86 /PROFILE /kernel /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221 /osversion:6.3 /pdbcompress /debugtype:pdata Win7Debug\hidumdf.res
+         Win7Debug\hidumdf.obj
+         hidumdf.vcxproj -> C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\umdf\Win7Debug\hidumdf.sys
+       DriverTestSign:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe sign /ph /sha1 "70F39E4FD11814D38E1B6E36B07DD47472562442" 
+         Done Adding Additional Store
+         Successfully signed: C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\umdf\Win7Debug\hidumdf.sys
+         
+     1>Done Building Project "C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\umdf\hidumdf.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:04.14

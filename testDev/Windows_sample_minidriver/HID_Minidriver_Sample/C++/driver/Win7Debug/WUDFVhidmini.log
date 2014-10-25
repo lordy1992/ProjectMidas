@@ -1,0 +1,36 @@
+﻿Build started 25/10/2014 12:50:56 PM.
+     1>Project "C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\driver\WUDFVhidmini.vcxproj" on node 3 (Rebuild target(s)).
+     1>StampInf:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\stampinf.exe -d "*" -a "x86" -v "*" -k "1.11" -u "1.11.0" -f .\Win7Debug\\WUDFVhidmini.Inf 
+         Stamping .\Win7Debug\\WUDFVhidmini.Inf [Version] section with DriverVer=10/25/2014,12.50.57.68
+       RunWpp:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\tracewpp.exe -cfgdir:"C:\Program Files (x86)\Windows Kits\8.1\bin\wppconfig\rev1" -scan:"internal.h" -odir:"Win7Debug\\" -dll dllsup.cpp comsup.cpp driver.cpp device.cpp queue.cpp WudfVhidmini.rc 
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IWin7Debug\ /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM\wdm" /I..\inc /I..\..\..\inc /Zi /nologo /W4 /WX /Od /Oi /Oy- /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D WIN32_LEAN_AND_MEAN=1 /D _WIN32_WINNT=0x0603 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06030000 /D DBG=1 /D _WINDLL /D _UNICODE /D UNICODE /D EVENT_TRACING /D UMDF_VERSION_MAJOR=1 /D UMDF_VERSION_MINOR=11 /GF /Gm- /Zp8 /GS /Gy /fp:precise /Zc:wchar_t- /Zc:forScope- /GR- /Fo"Win7Debug\\" /Fd"Win7Debug\vc120.pdb" /Gz /wd4748 /wd4603 /wd4627 /wd4986 /wd4987 /wd4996 /FI"C:\Program Files (x86)\Windows Kits\8.1\Include\Shared\warning.h" /analyze- /errorReport:prompt /d1import_no_registry /d2AllowCompatibleILVersions /d2Zi+ dllsup.cpp comsup.cpp driver.cpp device.cpp queue.cpp
+         dllsup.cpp
+         comsup.cpp
+         driver.cpp
+         device.cpp
+         queue.cpp
+         Generating Code...
+       ResourceCompile:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\rc.exe /D _X86_=1 /D i386=1 /D STD_CALL /D DEPRECATE_DDK_FUNCTIONS=1 /D MSC_NOOPT /D WIN32_LEAN_AND_MEAN=1 /D _WIN32_WINNT=0x0603 /D WINVER=0x0601 /D WINNT=1 /D NTDDI_VERSION=0x06030000 /D DBG=1 /D "SMP_ID=\\\"{6ABD4EE3-7F56-433D-B527-4BB3B7DFCAF3}\\\"" /D _UNICODE /D UNICODE /D EVENT_TRACING /l"0x0409" /IWin7Debug\ /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM" /I"C:\Program Files (x86)\Windows Kits\8.1\Include\KM\wdm" /I..\inc /I..\..\..\inc /nologo /fo"Win7Debug\WudfVhidmini.res" WudfVhidmini.rc 
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Win7Debug\WUDFVhidmini.dll" /VERSION:"6.3" /INCREMENTAL:NO /NOLOGO /WX /SECTION:"INIT,d" "C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\UM\x86\strsafe.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\UM\x86\kernel32.lib" "C:\Program Files (x86)\Windows Kits\8.1\lib\winv6.3\UM\x86\advapi32.lib" /DEF:"exports.def" /MANIFEST:NO /DEBUG /PDB:"Win7Debug\WUDFVhidmini.pdb" /SUBSYSTEM:WINDOWS,"6.01" /OPT:REF /OPT:ICF /ENTRY:"_DllMainCRTStartup@12" /RELEASE /DYNAMICBASE /NXCOMPAT /IMPLIB:"Win7Debug\WUDFVhidmini.lib" /MERGE:"_TEXT=.text;_PAGE=PAGE" /MACHINE:X86 /PROFILE /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221 /osversion:6.3 /pdbcompress /debugtype:pdata /DLL Win7Debug\WudfVhidmini.res
+         Win7Debug\dllsup.obj
+         Win7Debug\comsup.obj
+         Win7Debug\driver.obj
+         Win7Debug\device.obj
+         Win7Debug\queue.obj
+            Creating library Win7Debug\WUDFVhidmini.lib and object Win7Debug\WUDFVhidmini.exp
+         WUDFVhidmini.vcxproj -> C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\driver\Win7Debug\WUDFVhidmini.dll
+       DriverTestSign:
+         C:\Program Files (x86)\Windows Kits\8.1\bin\x86\signtool.exe sign /ph /sha1 "70F39E4FD11814D38E1B6E36B07DD47472562442" 
+         Done Adding Additional Store
+         Successfully signed: C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\driver\Win7Debug\WUDFVhidmini.dll
+         
+     1>Done Building Project "C:\Users\Jeremy\Downloads\HID_Minidriver_Sample\C++\driver\WUDFVhidmini.vcxproj" (Rebuild target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:07.40
