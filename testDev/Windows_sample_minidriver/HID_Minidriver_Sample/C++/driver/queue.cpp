@@ -31,28 +31,33 @@ Environment:
 // by the mini driver in response to IOCTL_HID_GET_REPORT_DESCRIPTOR.
 //
 HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
-    0x06,0x00, 0xFF,                // USAGE_PAGE (Vender Defined Usage Page)
-    0x09,0x01,                      // USAGE (Vendor Usage 0x01)
-    0xA1,0x01,                      // COLLECTION (Application)
-    0x85,CONTROL_FEATURE_REPORT_ID,    // REPORT_ID (1)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x15,0x00,                         // LOGICAL_MINIMUM(0)
-    0x26,0xff, 0x00,                   // LOGICAL_MAXIMUM(255)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,FEATURE_REPORT_SIZE_CB,       // REPORT_COUNT 
-    0x96,(FEATURE_REPORT_SIZE_CB & 0xff), (FEATURE_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0xB1,0x00,                         // FEATURE (Data,Ary,Abs)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,INPUT_REPORT_SIZE_CB,       // REPORT_COUNT 
-    0x96,(INPUT_REPORT_SIZE_CB & 0xff), (INPUT_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0x81,0x00,                         // INPUT (Data,Ary,Abs)
-    0x09,0x01,                         // USAGE (Vendor Usage 0x01)
-    0x75,0x08,                         // REPORT_SIZE (0x08)
-    //0x95,OUTPUT_REPORT_SIZE_CB,      // REPORT_COUNT 
-    0x96,(OUTPUT_REPORT_SIZE_CB & 0xff), (OUTPUT_REPORT_SIZE_CB >> 8), // REPORT_COUNT 
-    0x91,0x00,                         // OUTPUT (Data,Ary,Abs)
-    0xC0,                           // END_COLLECTION
+    0x05, 0x01,                      // USAGE_PAGE (Generic Desktop)
+    0x09, 0x02,                      // USAGE (MOUSE)
+    0xA1, 0x01,                      // COLLECTION (Application)
+    0x85, CONTROL_FEATURE_REPORT_ID,    // REPORT_ID (1)
+    0x09, 0x01,                         // USAGE (Pointer)
+	0xa1, 0x00,                         // COLLECTION (Physical)
+	0x05, 0x09,                            // USAGE_PAGE (Button)
+	0x19, 0x01,                            // USAGE_MINIMUM (Button 1)
+	0x29, 0x03,                            // USAGE_MAXIMUM (Button 3)
+	0x15, 0x00,                            // LOGICAL_MINIMUM(0)
+	0x25, 0x01,                            // LOGICAL_MAXIMUM(1)
+	0x95, 0x03,                            // REPORT_COUNT (3)
+	0x75, 0x01,                            // REPORT_SIZE (1)
+	0x81, 0x02,                            // INPUT (Data,Var,Abs)
+	0x95, 0x01,                            // REPORT_COUNT (1)
+	0x75, 0x05,                            // REPORT_SIZE (5)
+	0x81, 0x03,                            // INPUT (Cnst,Var,Abs)
+	0x05, 0x01,                            // USAGE_PAGE (Generic Desktop)
+	0x09, 0x30,                            // USAGE (X)
+	0x09, 0x31,                            // USAGE (Y)
+	0x15, 0x81,                            // LOGICAL_MINIMUM (-127)
+	0x25, 0x7F,                            // LOGICAL_MAXIMUM (127)
+	0x75, 0x08,                            // REPORT_SIZE (8)
+	0x95, 0x02,                            // REPORT_COUNT (2)
+	0x81, 0x06,                            // INPUT (Data,Var,Rel)
+	0xC0,                               // END_COLLECTION
+	0xC0                             //END_COLLECTION
 };
 
 //
@@ -60,7 +65,8 @@ HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 // in response to IOCTL_HID_GET_DEVICE_DESCRIPTOR. The size
 // of report descriptor is currently the size of G_DefaultReportDescriptor.
 //
-
+// J^2: Verified codes (http://www.usbmadesimple.co.uk/ums_ms_desc_conf.htm)
+//
 HID_DESCRIPTOR              G_DefaultHidDescriptor = {
     0x09,   // length of HID descriptor
     0x21,   // descriptor type == HID  0x21
