@@ -30,8 +30,8 @@ typedef UCHAR HID_REPORT_DESCRIPTOR, *PHID_REPORT_DESCRIPTOR;
 // These are the device attributes returned by the mini driver in response
 // to IOCTL_HID_GET_DEVICE_ATTRIBUTES.
 //
-#define HIDMINI_PID              0xFEED
-#define HIDMINI_VID              0xBEEF
+#define HIDMINI_PID              0x4A4C
+#define HIDMINI_VID              0x4A48
 #define HIDMINI_VERSION          0x0101
 
 //
@@ -54,8 +54,6 @@ public:
 
     HID_DEVICE_ATTRIBUTES m_Attributes;
 
-    BYTE m_DeviceData;
-
 //
 // Private methods.
 //
@@ -73,7 +71,6 @@ private:
         m_Attributes.VendorID = HIDMINI_VID;
         m_Attributes.ProductID = HIDMINI_PID;
         m_Attributes.VersionNumber = HIDMINI_VERSION;
-        m_DeviceData = 'K';
     }
 
     HRESULT
