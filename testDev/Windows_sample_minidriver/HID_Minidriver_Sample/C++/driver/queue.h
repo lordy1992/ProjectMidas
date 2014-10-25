@@ -50,8 +50,6 @@ private:
 
     PCMyDevice m_Device;
 
-    UCHAR m_OutputReport;
-
 //
 // Private methods.
 //
@@ -62,8 +60,7 @@ private:
         _In_ PCMyDevice Device
         ) : 
         m_FxQueue(NULL),
-        m_Device(Device),
-        m_OutputReport(0)
+        m_Device(Device)
     {
     }
 
@@ -176,27 +173,7 @@ public:
         );
 
     HRESULT
-    GetFeature(
-      _In_ IWDFIoRequest2 *FxRequest
-      );
-
-    HRESULT
-    SetFeature(
-      _In_ IWDFIoRequest2 *FxRequest
-      );
-
-    HRESULT
     GetInputReport(
-        _In_ IWDFIoRequest2 *FxRequest
-        );
-
-    HRESULT
-    SetOutputReport(
-        _In_ IWDFIoRequest2 *FxRequest
-        );
-
-    HRESULT
-    WriteReport(
         _In_ IWDFIoRequest2 *FxRequest
         );
 

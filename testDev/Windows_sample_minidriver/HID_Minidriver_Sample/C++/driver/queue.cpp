@@ -320,31 +320,9 @@ Return Value:
         hr = ReadReport(fxRequest2, &completeRequest);
         break;
 
-    case IOCTL_UMDF_HID_GET_FEATURE:       // METHOD_NEITHER
-
-        hr = GetFeature(fxRequest2);
-        break;
-
     case IOCTL_UMDF_HID_GET_INPUT_REPORT:  // METHOD_NEITHER
 
         hr = GetInputReport(fxRequest2);
-        break;
-
-    case IOCTL_UMDF_HID_SET_FEATURE:       // METHOD_NEITHER
-
-        hr = SetFeature(fxRequest2);
-        break;
-
-    case IOCTL_UMDF_HID_SET_OUTPUT_REPORT: // METHOD_NEITHER
-
-        hr = SetOutputReport(fxRequest2);
-        break;
-
-    case IOCTL_HID_WRITE_REPORT:           // METHOD_NEITHER
-        //
-        // Transmits a class driver-supplied report to the device.
-        //
-        hr = WriteReport(fxRequest2);
         break;
 
     case IOCTL_HID_GET_STRING:                      // METHOD_NEITHER     
@@ -493,7 +471,7 @@ Return Value:
     if (FAILED(hr)) 
     {
         Trace(TRACE_LEVEL_ERROR, "%!FUNC! Buffer copy failed %!hresult!\n", hr);
-        goto exit;;
+        goto exit;
     }
 
     //
@@ -608,260 +586,6 @@ CMyQueue::ReadReport(
 }
 
 HRESULT
-CMyQueue::GetFeature(
-    _In_ IWDFIoRequest2 *FxRequest
-    )
-/*++
-
-Routine Description:
-
-    Handles IOCTL_UMDF_HID_GET_FEATURE for all the collection.
-
-
-Arguments:
-
-    Request - Pointer to Request Packet.
-
-Return Value:
-
-    NT status code.
-
---*/
-{
-    HRESULT hr;
-    IWDFMemory *memory = NULL;
-    SIZE_T inBufferCb, outBufferCb;
-    ULONG reportSize;
-    PVOID inBuffer;
-    UCHAR reportId;
-    PUCHAR reportBuffer = NULL;
-    PMY_DEVICE_ATTRIBUTES myAttributes;
-
-    // *************************************************************************
-    // IOCTL_UMDF_HID_GET_FEATURE
-    // Input report ID:
-    //     UMDF driver retrieves report ID associated with this collection 
-    //     by retrieving the buffer containing report ID by calling 
-    //     IWDFRequest::GetInputMemory() or RetrieveInputMemory. 
-    // Output report buffer and length: 
-    //     UMDF driver calls IWDFRequest::GetOutputMemory() to get memory 
-    //     buffer and its length. The driver fills the buffer with feature data. 
-    //
-    // *************************************************************************
-
-    Trace(TRACE_LEVEL_INFORMATION, "GetFeature\n");
-
-    //
-    // Get input report ID
-    //
-    hr = FxRequest->RetrieveInputMemory(&memory);
-    if (FAILED(hr)) {
-        Trace(TRACE_LEVEL_ERROR, "RetrieveINputMemory failed %!hresult!\n", hr);
-        return hr;        
-    }
-
-    inBuffer = memory->GetDataBuffer(&inBufferCb);
-    SAFE_RELEASE(memory);
-    
-    if (inBufferCb < sizeof(reportId)) 
-    {
-        hr = HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
-        Trace(TRACE_LEVEL_ERROR, 
-            "%!FUNC! Insufficient buffer size %!hresult!\n", hr);
-        return hr;
-    }
-
-    reportId = *(PUCHAR)inBuffer;
-    if (reportId != CONTROL_COLLECTION_REPORT_ID)
-    {
-        //
-        // If collection ID is not for control collection then handle
-        // this request just as you would for a regular collection.
-        //
-        hr = HRESULT_FROM_NT(STATUS_INVALID_PARAMETER);
-        Trace(TRACE_LEVEL_INFORMATION, 
-            "Unexpected request, %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Get output buffer
-    //
-    hr = FxRequest->RetrieveOutputMemory(&memory);
-    if (FAILED(hr)) {
-        Trace(TRACE_LEVEL_ERROR, "RetrieveOutputMemory failed %!hresult!\n", hr);
-        return hr;        
-    }
-    reportBuffer = (PUCHAR) memory->GetDataBuffer(&outBufferCb);
-    SAFE_RELEASE(memory);
-    
-    //
-    // Since output buffer is for write only (no read allowed by UMDF in output
-    // buffer), any read from output buffer would be reading garbage), so don't 
-    // let app embed custom control code in output buffer. The minidriver can 
-    // support multiple features using separate report ID instead of using 
-    // custom control code. Since this is targeted at report ID 1, we know it
-    // is a request for getting attributes.
-    //
-    reportSize = sizeof(MY_DEVICE_ATTRIBUTES) + 1;  // +1 for report ID
-    if (outBufferCb < reportSize)
-    {
-        hr = HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
-        Trace(TRACE_LEVEL_ERROR, 
-            "%!FUNC! Insufficient report buffer size %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Since this device has one report ID, hidclass would pass on the report
-    // ID in the buffer (it wouldn't if report descriptor did not have any report
-    // ID). However, since UMDF allows only writes to an output buffer, we can't 
-    // "read" the report ID from "output" buffer. There is no need to read the 
-    // report ID since we get it other way as shown above, however this is 
-    // something to keep in mind.
-    //
-    reportBuffer++;   // skip the report ID
-    myAttributes = (PMY_DEVICE_ATTRIBUTES) reportBuffer;
-    myAttributes->ProductID = m_Device->m_Attributes.ProductID;
-    myAttributes->VendorID = m_Device->m_Attributes.VendorID;
-    myAttributes->VersionNumber = m_Device->m_Attributes.VersionNumber;
-
-    //
-    // Report how many bytes were copied
-    //
-    FxRequest->SetInformation(reportSize);
-    hr = S_OK;
-    
-    return hr;
-}
-
-HRESULT
-CMyQueue::SetFeature(
-    _In_ IWDFIoRequest2 *FxRequest
-    )
-/*++
-
-Routine Description:
-
-    Handles IOCTL_UMDF_HID_SET_FEATURE for all the collection.
-    For control collection (custom defined collection) it handles
-    the user-defined control codes for sideband communication
-
-Arguments:
-
-    Request - Pointer to Request Packet.
-
-Return Value:
-
-    NT status code.
-
---*/
-{
-    HRESULT hr;
-    IWDFMemory *memory = NULL;
-    SIZE_T inBufferCb, reportSize;
-    UCHAR reportId; 
-    SIZE_T pOutBufferSize;
-    PHIDMINI_CONTROL_INFO controlInfo = NULL;
-    
-    // *************************************************************************
-    // IOCTL_UMDF_HID_SET_FEATURE
-    // Input report ID:
-    //     UMDF driver retrieves report ID associated with this collection 
-    //     through pOutBufferSize parameter passed to a call to 
-    //     IWDFRequest::GetDeviceIoControlParameters DDI.
-    // Input report buffer and length: 
-    //     UMDF driver calls IWDFRequest::GetInputMemory() to get memory 
-    //     buffer and its length. The buffer contains feature report data that
-    //     driver transfers to the device. 
-    //
-    // *************************************************************************
-
-    Trace(TRACE_LEVEL_INFORMATION, "SetFeature\n");
-
-    //
-    // Get report ID if needed.
-    //
-    FxRequest->GetDeviceIoControlParameters(NULL, NULL, &pOutBufferSize);
-    reportId = (UCHAR) pOutBufferSize;
-
-    if (reportId != CONTROL_COLLECTION_REPORT_ID)
-    {
-        //
-        // If collection ID is not for control collection then handle
-        // this request just as you would for a regular collection.
-        //
-        hr = HRESULT_FROM_NT(STATUS_INVALID_PARAMETER);
-        Trace(TRACE_LEVEL_INFORMATION, 
-            "Unknown request, %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Get input report buffer. 
-    //
-    hr = FxRequest->RetrieveInputMemory(&memory);
-    if (FAILED(hr)) {
-        Trace(TRACE_LEVEL_ERROR, "RetrieveInputMemory failed %!hresult!\n", hr);
-        return hr;        
-    }
-    controlInfo = (PHIDMINI_CONTROL_INFO)memory->GetDataBuffer(&inBufferCb);
-    SAFE_RELEASE(memory);
-
-    //
-    // before touching control code make sure buffer is big enough.
-    //
-    reportSize = sizeof(HIDMINI_CONTROL_INFO);
-    Trace(TRACE_LEVEL_INFORMATION, "Expected report size: %I64d\n", reportSize);
-    if (inBufferCb < reportSize) 
-    {
-        hr = HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
-        Trace(TRACE_LEVEL_ERROR, 
-            "%!FUNC! Unexpected buffer size %I64d, expected %I64d %!hresult!\n", 
-            inBufferCb, reportSize, hr);
-        return hr;
-    }
-
-    switch(controlInfo->ControlCode) 
-    {
-    case HIDMINI_CONTROL_CODE_SET_ATTRIBUTES:
-        //
-        // Store the device attributes in device extension
-        //
-        m_Device->m_Attributes.ProductID = controlInfo->u.Attributes.ProductID;
-        m_Device->m_Attributes.VendorID = controlInfo->u.Attributes.VendorID;
-        m_Device->m_Attributes.VersionNumber = controlInfo->u.Attributes.VersionNumber;
-
-        //
-        // set status and information
-        //
-        FxRequest->SetInformation(reportSize);
-        hr = S_OK;
-
-        break;
-
-    case HIDMINI_CONTROL_CODE_DUMMY1:
-        Trace(TRACE_LEVEL_INFORMATION,
-            "Control Code HIDMINI_CONTROL_CODE_DUMMY1\n");
-        hr = HRESULT_FROM_NT(STATUS_NOT_IMPLEMENTED);
-        break;
-
-    case HIDMINI_CONTROL_CODE_DUMMY2:
-        Trace(TRACE_LEVEL_INFORMATION, 
-            "Control Code HIDMINI_CONTROL_CODE_DUMMY2\n");
-        hr = HRESULT_FROM_NT(STATUS_NOT_IMPLEMENTED);
-        break;
-
-    default:
-        Trace(TRACE_LEVEL_INFORMATION, "Unknown control Code\n");
-        hr = HRESULT_FROM_NT(STATUS_NOT_IMPLEMENTED);
-        break;
-    }
-
-    return hr;
-}
-
-HRESULT
 CMyQueue::GetInputReport(
     _In_ IWDFIoRequest2 *FxRequest
     )
@@ -957,213 +681,21 @@ Return Value:
     }
 
     reportBuffer->ReportId = CONTROL_COLLECTION_REPORT_ID;
-    reportBuffer->Data = m_OutputReport;
 
-    Trace(TRACE_LEVEL_INFORMATION, "Returning %d in input report\n", m_OutputReport);
+	// TODO: Temporarily hardcoding
+	reportBuffer->buttons = 0x05;
+	reportBuffer->x = 0x55;
+	reportBuffer->y = 0x55;
 
-    //
-    // Report how many bytes were copied
-    //
-    FxRequest->SetInformation(reportSize);
-    hr = S_OK;
-    
-    return hr;
-}
-
-
-HRESULT
-CMyQueue::SetOutputReport(
-    _In_ IWDFIoRequest2 *FxRequest
-    )
-/*++
-
-Routine Description:
-
-    Handles IOCTL_UMDF_HID_SET_OUTPUT_REPORT for all the collection.
-
-Arguments:
-
-    Request - Pointer to Request Packet.
-
-Return Value:
-
-    NT status code.
-
---*/
-{
-    HRESULT hr;
-    IWDFMemory *memory = NULL;
-    SIZE_T inBufferCb, reportSize;
-    UCHAR reportId; 
-    SIZE_T pOutBufferSize;
-    PHIDMINI_OUTPUT_REPORT reportBuffer = NULL;
-    
-    // *************************************************************************
-    // IOCTL_UMDF_HID_SET_OUTPUT_REPORT
-    // Input report ID:
-    //     UMDF driver retrieves report ID associated with this collection 
-    //     through pOutBufferSize parameter passed to a call to 
-    //     IWDFRequest::GetDeviceIoControlParameters DDI.
-    // Input report buffer and length: 
-    //     UMDF driver calls IWDFRequest::GetInputMemory() to get memory 
-    //     buffer and its length. The buffer contains feature report data that
-    //     driver transfers to the device. 
-    //
-    // *************************************************************************
-
-    Trace(TRACE_LEVEL_INFORMATION, "SetOutputReport\n");
-
-    //
-    // Get report ID if needed.
-    //
-    FxRequest->GetDeviceIoControlParameters(NULL, NULL, &pOutBufferSize);
-    reportId = (UCHAR) pOutBufferSize;
-
-    if (reportId != CONTROL_COLLECTION_REPORT_ID)
-    {
-        //
-        // If collection ID is not for control collection then handle
-        // this request just as you would for a regular collection.
-        //
-        hr = HRESULT_FROM_NT(STATUS_INVALID_PARAMETER);
-        Trace(TRACE_LEVEL_INFORMATION, 
-            "Unknown request, %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Get input report buffer. 
-    //
-    hr = FxRequest->RetrieveInputMemory(&memory);
-    if (FAILED(hr)) {
-        Trace(TRACE_LEVEL_ERROR, "RetrieveInputMemory failed %!hresult!\n", hr);
-        return hr;        
-    }
-    
-    reportBuffer = (PHIDMINI_OUTPUT_REPORT)memory->GetDataBuffer(&inBufferCb);
-    SAFE_RELEASE(memory);
-
-    //
-    // before touching buffer make sure buffer is big enough.
-    //
-    reportSize = sizeof(PHIDMINI_OUTPUT_REPORT);
-    Trace(TRACE_LEVEL_INFORMATION, "Expected report size: %I64d\n", reportSize);
-    if (inBufferCb < reportSize) 
-    {
-        hr = HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
-        Trace(TRACE_LEVEL_ERROR, 
-            "%!FUNC! Unexpected buffer size %I64d, expected %I64d %!hresult!\n", 
-            inBufferCb, reportSize, hr);
-        return hr;
-    }
-
-    m_OutputReport = reportBuffer->Data;
-    Trace(TRACE_LEVEL_INFORMATION, "Received %d in output report\n", reportBuffer->Data);
+    Trace(TRACE_LEVEL_INFORMATION, "Returning buttons: %d, x: %d, y:%d in input report\n", reportBuffer->buttons, 
+		reportBuffer->x, reportBuffer->y);
 
     //
     // Report how many bytes were copied
     //
     FxRequest->SetInformation(reportSize);
     hr = S_OK;
-
-    return hr;
-}
-
-
-HRESULT
-CMyQueue::WriteReport(
-    _In_ IWDFIoRequest2 *FxRequest
-    )
-/*++
-
-Routine Description:
-
-    Handles IOCTL_HID_WRITE_REPORT all the collection.
-
-Arguments:
-
-    Request - Pointer to  Request Packet.
-
-Return Value:
-
-    NT status code.
-
---*/
-{
-    HRESULT hr;
-    IWDFMemory *memory = NULL;
-    SIZE_T inBufferCb, reportSize;
-    UCHAR reportId; 
-    SIZE_T pOutBufferSize;
-    PHIDMINI_OUTPUT_REPORT outputReport = NULL;
     
-    // *************************************************************************
-    // IOCTL_HID_WRITE_REPORT
-    // Input report ID:
-    //     UMDF driver retrieves report ID associated with this collection 
-    //     through pOutBufferSize parameter passed to a call to 
-    //     IWDFRequest::GetDeviceIoControlParameters DDI.
-    // Input report buffer and length: 
-    //     UMDF driver calls IWDFRequest::GetInputMemory() to get memory 
-    //     buffer and its length. The buffer contains feature report data that
-    //     driver transfers to the device. 
-    //
-    // *************************************************************************
-
-    Trace(TRACE_LEVEL_INFORMATION, "WriteReport\n");
-
-    //
-    // Get report ID if needed.
-    //
-    FxRequest->GetDeviceIoControlParameters(NULL, NULL, &pOutBufferSize);
-    reportId = (UCHAR) pOutBufferSize;
-
-    if (reportId != CONTROL_COLLECTION_REPORT_ID)
-    {
-        //
-        // If collection ID is not for control collection then handle
-        // this request just as you would for a regular collection.
-        //
-        hr = HRESULT_FROM_NT(STATUS_INVALID_PARAMETER);
-        Trace(TRACE_LEVEL_INFORMATION, 
-            "Unknown request, %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Get input report buffer. 
-    //
-    hr = FxRequest->RetrieveInputMemory(&memory);
-    if (FAILED(hr)) {
-        Trace(TRACE_LEVEL_ERROR, "RetrieveINputMemory failed %!hresult!\n", hr);
-        return hr;        
-    }
-    outputReport = (PHIDMINI_OUTPUT_REPORT) memory->GetDataBuffer(&inBufferCb);
-    SAFE_RELEASE(memory);
-
-    //
-    // make sure buffer is big enough.
-    //
-    reportSize = sizeof(HIDMINI_OUTPUT_REPORT);  
-    if (inBufferCb < reportSize) 
-    {
-        hr =  HRESULT_FROM_NT(STATUS_INVALID_BUFFER_SIZE);
-        Trace(TRACE_LEVEL_ERROR, 
-            "%!FUNC! Unexpected buffer size %!hresult!\n", hr);
-        return hr;
-    }
-
-    //
-    // Store the device data in device extension. 
-    //
-    m_Device->m_DeviceData = outputReport->Data;
-
-    //
-    // set status and information
-    //
-    FxRequest->SetInformation(reportSize);
-    hr = S_OK;
-
     return hr;
 }
 
@@ -1460,9 +992,9 @@ CMyManualQueue::Initialize(
     hr = FxDevice->CreateIoQueue(
                         unknown,
                         FALSE,                        // bDefaultQueue
-                        WdfIoQueueDispatchManual, 
-                        FALSE,                       // bPowerManaged
-                        TRUE,                        // bAllowZeroLengthRequests
+                        WdfIoQueueDispatchManual,     //TODO: May want to change to sequential or parallel
+                        FALSE,                        // bPowerManaged
+                        TRUE,                         // bAllowZeroLengthRequests
                         &fxQueue 
                         );
     if (FAILED(hr))
@@ -1567,7 +1099,11 @@ CMyManualQueue::_TimerCallback(
             //
             readReport = (PHIDMINI_INPUT_REPORT)buffer;
             readReport->ReportId = CONTROL_FEATURE_REPORT_ID;
-            readReport->Data = This->m_Device->m_DeviceData;
+            
+			// TODO: Temporarily hardcoding
+			readReport->buttons = 0x02;
+			readReport->x = 0xaa;
+			readReport->y = 0xaa;
             
             //
             // Report how many bytes were copied
