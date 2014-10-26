@@ -33,8 +33,8 @@ Author:
 // These are the default device attributes set in the driver
 // which are used to identify the device.
 //
-#define HIDMINI_DEFAULT_PID              0xFEED
-#define HIDMINI_DEFAULT_VID              0xBEEF
+#define HIDMINI_DEFAULT_PID              0x4A4C
+#define HIDMINI_DEFAULT_VID              0x4A48
 
 //
 // These are the device attributes returned by the mini driver in response
@@ -49,22 +49,7 @@ Author:
 // Function prototypes
 //
 BOOLEAN
-GetFeature(
-    HANDLE file
-    );
-
-BOOLEAN
-SetFeature(
-    HANDLE file
-    );
-
-BOOLEAN
 GetInputReport(
-    HANDLE file
-    );
-
-BOOLEAN
-SetOutputReport(
     HANDLE file
     );
 
@@ -88,11 +73,6 @@ CheckIfOurDevice(
 
 BOOLEAN
 ReadInputData(
-    _In_ HANDLE file
-    );
-
-BOOLEAN
-WriteOutputData(
     _In_ HANDLE file
     );
 
@@ -152,7 +132,7 @@ main(
     //
     // Enumerate devices of this interface class
     //
-    printf("\n....looking for our HID device (with UP=0xFF00 "
+    printf("\n....looking for our HID device (with UP=0x01 "
                 "and Usage=0x01)\n");
 
     for(i=0; SetupDiEnumDeviceInterfaces (hardwareDeviceInfo,
@@ -183,36 +163,8 @@ main(
         printf("...sending control request to our device\n");
 
         //
-        // Get/Set feature loopback 
-        //
-        bSuccess = GetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-        
-        bSuccess = SetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = GetFeature(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        //
         // Get/Set report loopback
         //
-        bSuccess = GetInputReport(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = SetOutputReport(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
         bSuccess = GetInputReport(file);
         if (bSuccess == FALSE) {
             goto cleanup;
@@ -221,16 +173,6 @@ main(
         //
         // Read/Write report loopback 
         //
-        bSuccess = ReadInputData(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
-        bSuccess = WriteOutputData(file);
-        if (bSuccess == FALSE) {
-            goto cleanup;
-        }
-
         bSuccess = ReadInputData(file);
         if (bSuccess == FALSE) {
             goto cleanup;
@@ -321,7 +263,7 @@ OpenDeviceInterface (
     }
 
     file = CreateFile ( deviceInterfaceDetailData->DevicePath,
-                            GENERIC_READ | GENERIC_WRITE,
+                            GENERIC_READ,
                             0, // FILE_SHARE_READ | FILE_SHARE_READ |
                             NULL, // no SECURITY_ATTRIBUTES structure
                             OPEN_EXISTING, // No special create flags
@@ -354,8 +296,8 @@ CheckIfOurDevice(
 {
     PHIDP_PREPARSED_DATA Ppd; // The opaque parser info describing this device
     HIDP_CAPS                       Caps; // The Capabilities of this hid device.
-    USAGE                               MyUsagePage = 0xff00;
-    USAGE                               MyUsage = 0x0001;
+    USAGE                               MyUsagePage = 0x01;
+    USAGE                               MyUsage = 0x01;
     HIDD_ATTRIBUTES attr; // Device attributes
 
     if (!HidD_GetAttributes(file, &attr))
@@ -392,125 +334,6 @@ CheckIfOurDevice(
 
     return FALSE;
 
-}
-
-BOOLEAN
-GetFeature(
-    HANDLE file
-    )
-{
-    PMY_DEVICE_ATTRIBUTES myDevAttributes = NULL;
-    ULONG bufferSize;
-    PUCHAR buffer;
-    BOOLEAN bSuccess;
-
-    //
-    // Allocate memory equal to 1 byte for report ID + size of  
-    // feature report. Buffer size for get feature should be atleast equal to 
-    // the size of feature report.
-    //
-    bufferSize = FEATURE_REPORT_SIZE_CB + 1;
-    buffer = (PUCHAR) malloc (bufferSize);
-    if (!buffer )
-    {
-        printf("malloc failed\n");
-        return FALSE;
-    }
-
-    ZeroMemory(buffer, bufferSize);
-
-    //
-    // Fill the first byte with report ID of control collection
-    //
-    buffer[0] = CONTROL_COLLECTION_REPORT_ID;
-
-    //
-    // Send Hid control code thru HidD_GetFeature API
-    //
-    bSuccess = HidD_GetFeature(file,  // HidDeviceObject,
-                                   buffer,    // ReportBuffer,
-                                   bufferSize // ReportBufferLength
-                                   );
-    if (!bSuccess)
-    {
-        printf("failed HidD_GetFeature\n");
-    }
-    else
-    {
-        myDevAttributes = (PMY_DEVICE_ATTRIBUTES) (buffer + 1); // +1 to skip report id
-
-        printf("Received following feature attributes from device: \n"
-               "    VendorID: 0x%x, \n"
-               "    ProductID: 0x%x, \n"
-               "    VersionNumber: 0x%x\n",
-               myDevAttributes->VendorID,
-               myDevAttributes->ProductID,
-               myDevAttributes->VersionNumber);
-    }
-
-    free(buffer);
-    return bSuccess;
-}
-
-BOOLEAN
-SetFeature(
-    HANDLE file
-    )
-{
-    PHIDMINI_CONTROL_INFO  controlInfo = NULL;
-    PMY_DEVICE_ATTRIBUTES myDevAttributes = NULL;
-    ULONG bufferSize;
-    BOOLEAN bSuccess;
-
-    //
-    // Allocate memory equal to HIDMINI_CONTROL_INFO
-    //
-    bufferSize = sizeof(HIDMINI_CONTROL_INFO);
-    controlInfo = (PHIDMINI_CONTROL_INFO) malloc (bufferSize);
-    if (!controlInfo )
-    {
-        printf("malloc failed\n");
-        return FALSE;
-    }
-
-    ZeroMemory(controlInfo, bufferSize);
-
-    //
-    // Fill the control structure with the report ID of the control collection and
-    // the control code.
-    //
-    controlInfo->ReportId = CONTROL_COLLECTION_REPORT_ID;
-    controlInfo->ControlCode = HIDMINI_CONTROL_CODE_SET_ATTRIBUTES;
-    myDevAttributes = (PMY_DEVICE_ATTRIBUTES)&controlInfo->u.Attributes;
-    myDevAttributes->VendorID = HIDMINI_TEST_VID;
-    myDevAttributes->ProductID = HIDMINI_TEST_PID;
-    myDevAttributes->VersionNumber = HIDMINI_TEST_VERSION;
-
-    //
-    // Set feature
-    //
-    bSuccess = HidD_SetFeature(file,         // HidDeviceObject,
-                         controlInfo,  // ReportBuffer,
-                         bufferSize    // ReportBufferLength
-                         );
-    if (!bSuccess)
-    {
-        printf("failed HidD_SetFeature \n");
-    }
-    else
-    {
-        printf("Set following feature attributes on device: \n"
-               "    VendorID: 0x%x, \n"
-               "    ProductID: 0x%x, \n"
-               "    VersionNumber: 0x%x\n",
-               myDevAttributes->VendorID,
-               myDevAttributes->ProductID,
-               myDevAttributes->VersionNumber);
-    }
-
-    free(controlInfo);
-
-    return bSuccess;
 }
 
 BOOLEAN
@@ -553,58 +376,9 @@ GetInputReport(
     }
     else
     {
-        printf("Received following data in input report: %d\n", 
-           ((PHIDMINI_INPUT_REPORT) buffer)->Data); 
-    }
-
-    free(buffer);
-    return bSuccess;
-}
-
-
-BOOLEAN
-SetOutputReport(
-    HANDLE file
-    )
-{
-    ULONG bufferSize;
-    PHIDMINI_OUTPUT_REPORT buffer;
-    BOOLEAN bSuccess;
-
-    //
-    // Allocate memory 
-    //
-    bufferSize = sizeof(HIDMINI_OUTPUT_REPORT);
-    buffer = (PHIDMINI_OUTPUT_REPORT) malloc (bufferSize);
-    if (!buffer )
-    {
-        printf("malloc failed\n");
-        return FALSE;
-    }
-
-    ZeroMemory(buffer, bufferSize);
-
-    //
-    // Fill the report
-    //
-    buffer->ReportId = CONTROL_COLLECTION_REPORT_ID;
-    buffer->Data = (UCHAR) (rand() % UCHAR_MAX);
-
-    //
-    // Send Hid control code 
-    //
-    bSuccess = HidD_SetOutputReport(file,  // HidDeviceObject,
-                               buffer,    // ReportBuffer,
-                               bufferSize // ReportBufferLength
-                               );
-    if (!bSuccess)
-    {
-        printf("failed HidD_SetOutputReport\n");
-    }
-    else
-    {
-        printf("Set following data in output report: %d\n", 
-           ((PHIDMINI_OUTPUT_REPORT) buffer)->Data); 
+		PHIDMINI_INPUT_REPORT result = (PHIDMINI_INPUT_REPORT) buffer;
+        printf("Received following data in input report: Buttons: %d, x: %d, y: %d\n", 
+			result->buttons, result->x, result->y);
     }
 
     free(buffer);
@@ -653,63 +427,11 @@ ReadInputData(
     }
     else
     {
-        printf("Read following byte from device: %d\n", 
-            report->Data);
+        printf("Read following bytes from device: Buttons: %d, x: %d, y: %d\n", 
+            report->buttons, report->x, report->y);
     }
 
     free(report);
-
-    return (BOOLEAN) bSuccess;
-}
-
-BOOLEAN
-WriteOutputData(
-    _In_ HANDLE file
-    )
-{
-    PHIDMINI_OUTPUT_REPORT outputReport;
-    ULONG outputReportSize;
-    BOOL bSuccess;
-    DWORD bytesWritten;
-
-    //
-    // Allocate memory for outtput report
-    //
-    outputReportSize = sizeof(HIDMINI_OUTPUT_REPORT);
-    outputReport = (PHIDMINI_OUTPUT_REPORT) malloc (outputReportSize);
-    if (!outputReport )
-    {
-        printf("malloc failed\n");
-        return FALSE;
-    }
-
-    ZeroMemory(outputReport, outputReportSize);
-
-    outputReport->ReportId = CONTROL_COLLECTION_REPORT_ID;
-    outputReport->Data = (UCHAR) (rand() % UCHAR_MAX);
-
-    //
-    // Wrute output data. 
-    //
-    bSuccess = WriteFile(
-              file,        // HANDLE hFile,
-              (PVOID) outputReport,      // LPVOID lpBuffer,
-              outputReportSize,  // DWORD nNumberOfBytesToRead,
-              &bytesWritten,  // LPDWORD lpNumberOfBytesRead,
-              NULL         // LPOVERLAPPED lpOverlapped
-            );
-
-    if (!bSuccess)
-    {
-        printf("failed WriteFile \n");
-    }
-    else
-    {
-        printf("Wrote following byte to device: %d\n", 
-            outputReport->Data);
-    }
-
-    free(outputReport);
 
     return (BOOLEAN) bSuccess;
 }

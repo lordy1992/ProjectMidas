@@ -1102,8 +1102,8 @@ CMyManualQueue::_TimerCallback(
             
 			// TODO: Temporarily hardcoding
 			readReport->buttons = 0x02;
-			readReport->x = 0xaa;
-			readReport->y = 0xaa;
+			readReport->x = 0x7F;
+			readReport->y = 0x7F;
             
             //
             // Report how many bytes were copied
