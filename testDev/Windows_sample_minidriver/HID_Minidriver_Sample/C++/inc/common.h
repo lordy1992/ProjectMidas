@@ -21,16 +21,6 @@ Environment:
 #define __VHIDMINI_COMMON_H__
 
 //
-// Custom control codes are defined here. They are to be used for sideband 
-// communication with the hid minidriver. These control codes are sent to 
-// the hid minidriver using Hid_SetFeature() API to a custom collection 
-// defined especially to handle such requests.
-//
-#define  HIDMINI_CONTROL_CODE_SET_ATTRIBUTES              0x00
-#define  HIDMINI_CONTROL_CODE_DUMMY1                      0x01
-#define  HIDMINI_CONTROL_CODE_DUMMY2                      0x02
-
-//
 // This is the report id of the collection to which the control codes are sent
 //
 #define CONTROL_COLLECTION_REPORT_ID                      0x01
@@ -45,65 +35,17 @@ Environment:
 #define VHIDMINI_DEVICE_STRING_INDEX    5
 #include <pshpack1.h>
 
-typedef struct _MY_DEVICE_ATTRIBUTES {
-
-    USHORT          VendorID;
-    USHORT          ProductID;
-    USHORT          VersionNumber;
-
-} MY_DEVICE_ATTRIBUTES, *PMY_DEVICE_ATTRIBUTES;
-
-typedef struct _HIDMINI_CONTROL_INFO {
-
-    //
-    //report ID of the collection to which the control request is sent
-    //
-    UCHAR    ReportId;   
-
-    //
-    // One byte control code (user-defined) for communication with hid 
-    // mini driver
-    //
-    UCHAR   ControlCode;
-
-    //
-    // This union contains input data for the control request.
-    //
-    union {
-        MY_DEVICE_ATTRIBUTES Attributes;
-        struct {
-            ULONG Dummy1;
-            ULONG Dummy2;
-        } Dummy;
-    } u;
-    
-} HIDMINI_CONTROL_INFO, * PHIDMINI_CONTROL_INFO;
-
 //
 // input from device to system
 //
 typedef struct _HIDMINI_INPUT_REPORT {
     
     UCHAR ReportId;   
-
-    UCHAR Data; 
+	UINT8 buttons;
+	INT8 x;
+	INT8 y;
 
 } HIDMINI_INPUT_REPORT, *PHIDMINI_INPUT_REPORT;
-
-//
-// output to device from system
-//
-typedef struct _HIDMINI_OUTPUT_REPORT {
-    
-    UCHAR ReportId;   
-
-    UCHAR Data; 
-
-    USHORT Pad1;
-
-    ULONG Pad2;
-
-} HIDMINI_OUTPUT_REPORT, *PHIDMINI_OUTPUT_REPORT;
 
 #include <poppack.h>
 
@@ -113,8 +55,6 @@ typedef struct _HIDMINI_OUTPUT_REPORT {
 // excluding the report ID). Since HIDMINI_CONTROL_INFO includes report ID,
 // we subtract one from the size.
 //
-#define FEATURE_REPORT_SIZE_CB      ((USHORT)(sizeof(HIDMINI_CONTROL_INFO) - 1))
 #define INPUT_REPORT_SIZE_CB        ((USHORT)(sizeof(HIDMINI_INPUT_REPORT) - 1))
-#define OUTPUT_REPORT_SIZE_CB       ((USHORT)(sizeof(HIDMINI_OUTPUT_REPORT) - 1))
 
 #endif //__VHIDMINI_COMMON_H__
