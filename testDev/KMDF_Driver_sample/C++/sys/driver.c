@@ -203,7 +203,7 @@ Return Value:
 
     devContext = GetDeviceContext(hDevice);
     
-    WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&queueConfig, WdfIoQueueDispatchParallel);
+    WDF_IO_QUEUE_CONFIG_INIT_DEFAULT_QUEUE(&queueConfig, WdfIoQueueDispatchParallel); //TODO: choose appropriate dispatch type.
     queueConfig.EvtIoInternalDeviceControl = HidFx2EvtInternalDeviceControl;
 
     status = WdfIoQueueCreate(hDevice,

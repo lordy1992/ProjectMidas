@@ -26,7 +26,7 @@ Revision History:
 
 --*/
 
-#define USE_HARDCODED_HID_REPORT_DESCRIPTOR
+#define TEMPORARY
 
 #include <hidusbfx2.h>
 
@@ -41,6 +41,31 @@ Revision History:
     #pragma alloc_text( PAGE, GetVendorData)
 #endif
 
+/*++
+
+Routine Description:
+
+This event is called when the framework receives
+IRP_MJ_INTERNAL DEVICE_CONTROL requests from the system.
+
+Arguments:
+
+Queue - Handle to the framework queue object that is associated
+with the I/O request.
+Request - Handle to a framework request object.
+
+OutputBufferLength - length of the request's output buffer,
+if an output buffer is available.
+InputBufferLength - length of the request's input buffer,
+if an input buffer is available.
+
+IoControlCode - the driver-defined or system-defined I/O control code
+(IOCTL) that is associated with the request.
+Return Value:
+
+VOID
+
+--*/
 VOID
 HidFx2EvtInternalDeviceControl(
     IN WDFQUEUE     Queue,
@@ -49,32 +74,6 @@ HidFx2EvtInternalDeviceControl(
     IN size_t       InputBufferLength,
     IN ULONG        IoControlCode
     )
-/*++
-
-Routine Description:
-
-    This event is called when the framework receives 
-    IRP_MJ_INTERNAL DEVICE_CONTROL requests from the system.
-
-Arguments:
-
-    Queue - Handle to the framework queue object that is associated
-            with the I/O request.
-    Request - Handle to a framework request object.
-
-    OutputBufferLength - length of the request's output buffer,
-                        if an output buffer is available.
-    InputBufferLength - length of the request's input buffer,
-                        if an input buffer is available.
-
-    IoControlCode - the driver-defined or system-defined I/O control code
-                    (IOCTL) that is associated with the request.
-Return Value:
-
-    VOID
-
---*/
-
 {
     NTSTATUS            status = STATUS_SUCCESS;
     WDFDEVICE           device;
@@ -151,31 +150,7 @@ Return Value:
 //
     case IOCTL_HID_SEND_IDLE_NOTIFICATION_REQUEST:
 
-        //
-        // Hidclass sends this IOCTL for devices that have opted-in for Selective
-        // Suspend feature. This feature is enabled by adding a registry value
-        // "SelectiveSuspendEnabled" = 1 in the hardware key through inf file 
-        // (see hidusbfx2.inf). Since hidclass is the power policy owner for 
-        // this stack, it controls when to send idle notification and when to 
-        // cancel it. This IOCTL is passed to USB stack. USB stack pends it. 
-        // USB stack completes the request when it determines that the device is
-        // idle. Hidclass's idle notification callback get called that requests a 
-        // wait-wake Irp and subsequently powers down the device. 
-        // The device is powered-up either when a handle is opened for the PDOs 
-        // exposed by hidclass, or when usb stack completes wait
-        // wake request. In the first case, hidclass cancels the notification 
-        // request (pended with usb stack), cancels wait-wake Irp and powers up
-        // the device. In the second case, an external wake event triggers completion
-        // of wait-wake irp and powering up of device.
-        //
-        status = HidFx2SendIdleNotification(Request);
-
-        if (!NT_SUCCESS(status)) {
-            TraceEvents(TRACE_LEVEL_ERROR, DBG_IOCTL,
-                "SendIdleNotification failed with status: 0x%x\n", status);
-            
-            WdfRequestComplete(Request, status);
-        } 
+		DbgPrint("Hit IOCTL_HID_SEND_IDLE_NOTIFICATION_REQUEST... Didn't expect to get here.");
         
         return;
 
@@ -184,8 +159,7 @@ Return Value:
         // This sends a HID class feature report to a top-level collection of
         // a HID class device.
         //
-        status = HidFx2SetFeature(Request);
-        WdfRequestComplete(Request, status);
+		DbgPrint("Hit IOCTL_HID_SET_FEATURE... Didn't expect to get here.");
         return;
         
     case IOCTL_HID_GET_FEATURE:
@@ -193,8 +167,7 @@ Return Value:
         // Get a HID class feature report from a top-level collection of
         // a HID class device.
         //
-        status = HidFx2GetFeature(Request, &bytesReturned);
-        WdfRequestCompleteWithInformation(Request, status, bytesReturned);
+		DbgPrint("Hit IOCTL_HID_GET_FEATURE... Didn't expect to get here.");
         return;
 
 	case IOCTL_HID_WRITE_REPORT:
@@ -225,6 +198,7 @@ Return Value:
         // I/O requests.
         //
     default:
+		DbgPrint("Hit Not supported...");
         status = STATUS_NOT_SUPPORTED;
         break;
     }
@@ -234,7 +208,7 @@ Return Value:
     return;
 }
 
-
+#ifndef TEMPORARY
 NTSTATUS
 HidFx2SetFeature(
     IN WDFREQUEST Request
@@ -318,13 +292,10 @@ Return Value:
 	// The feature reports map directly to the command
 	// data that is sent down to the device.
 	//
-	if (transferPacket->reportId == SEVEN_SEGMENT_REPORT_ID)
+	if (transferPacket->reportId == 'a')
 	{
-        status = SendVendorCommand(
-            device, 
-            HIDFX2_SET_7SEGMENT_DISPLAY,
-            &featureUsage 
-            );
+		DbgPrint("Report ID...");
+		return STATUS_INVALID_DEVICE_REQUEST;
 	}
 	else if (transferPacket->reportId == BARGRAPH_REPORT_ID)
 	{
@@ -630,7 +601,8 @@ Return Value:
     TraceEvents(TRACE_LEVEL_VERBOSE, DBG_IOCTL, "GetVendorData Exit\n");
 
     return status;
-}
+} 
+#endif
 
 
 NTSTATUS

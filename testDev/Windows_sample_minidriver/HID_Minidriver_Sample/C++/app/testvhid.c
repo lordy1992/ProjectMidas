@@ -262,6 +262,7 @@ OpenDeviceInterface (
         return FALSE;
     }
 
+	printf("DevicePath : %s", deviceInterfaceDetailData->DevicePath);
     file = CreateFile ( deviceInterfaceDetailData->DevicePath,
                             GENERIC_READ,
                             0, // FILE_SHARE_READ | FILE_SHARE_READ |

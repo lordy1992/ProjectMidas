@@ -398,6 +398,8 @@ Return Value:
 }
 
 
+//TODO: This is likely where the actual setting of x/y mouse variables will take place
+// done so by reading a report, then manipulating the values at the provided memory locations of the report
 VOID
 HidFx2CompleteReadReport(
     WDFDEVICE Device
