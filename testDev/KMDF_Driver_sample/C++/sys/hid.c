@@ -29,6 +29,7 @@ Revision History:
 --*/
 
 #define TEMPORARY
+#define HARDCODED_HID_REPORT_DESCRIPTOR
 
 #include <hidusbfx2.h>
 

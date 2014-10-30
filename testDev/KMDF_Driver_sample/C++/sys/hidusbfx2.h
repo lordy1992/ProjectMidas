@@ -79,6 +79,8 @@ Revision History:
 
 #define INTERRUPT_ENDPOINT_INDEX     (0)
 
+#define MOUSE_REFRESH_PERIOD 8
+
 //
 // Misc definitions
 //
@@ -86,6 +88,7 @@ Revision History:
 
 typedef UCHAR HID_REPORT_DESCRIPTOR, *PHID_REPORT_DESCRIPTOR;
 
+#ifdef HARDCODED_HID_REPORT_DESCRIPTOR
 //
 // This is the default report descriptor for the Hid device provided
 // by the mini driver in response to IOCTL_HID_GET_REPORT_DESCRIPTOR.
@@ -134,6 +137,8 @@ CONST HID_DESCRIPTOR G_DefaultHidDescriptor = {
     { 0x22,   // descriptor type 
     sizeof(G_DefaultReportDescriptor) }  // total length of report descriptor
 };
+
+#endif //HARDCODED_HID_REPORT_DESCRIPTOR
 
 #include <pshpack1.h>
 //
@@ -245,7 +250,7 @@ HidFx2GetFeature(
     OUT PULONG BytesReturned
     );*/
 
-#define MOUSE_REFRESH_PERIOD 8
+
 EVT_WDF_TIMER HidMouseEvtTimerFunction;
 
 #endif   //_HIDUSBFX2_H_
