@@ -1,3 +1,5 @@
+// J^2 - Checked file for now.
+
 /*++
 
 Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -148,7 +150,6 @@ Return Value:
     WDFDEVICE                     hDevice;
     PDEVICE_EXTENSION             devContext = NULL;
     WDFQUEUE                      queue;
-    WDF_PNPPOWER_EVENT_CALLBACKS  pnpPowerCallbacks;
     WDF_TIMER_CONFIG              timerConfig;
     WDFTIMER                      timerHandle;
 
@@ -159,33 +160,14 @@ Return Value:
     TraceEvents(TRACE_LEVEL_INFORMATION, DBG_PNP,
         "HidFx2EvtDeviceAdd called\n");
 
+	/* J^2 TODO - took out as this may force our driver to be a "power policy owner" http://msdn.microsoft.com/en-us/library/windows/hardware/ff552359(v=vs.85).aspx
     //
     // Tell framework this is a filter driver. Filter drivers by default are  
     // not power policy owners. This works well for this driver because
     // HIDclass driver is the power policy owner for HID minidrivers.
     //
-    WdfFdoInitSetFilter(DeviceInit);
+	WdfFdoInitSetFilter(DeviceInit); */
 
-    //
-    // Initialize pnp-power callbacks, attributes and a context area for the device object.
-    //
-    //
-    WDF_PNPPOWER_EVENT_CALLBACKS_INIT(&pnpPowerCallbacks);
-
-    //
-    // For usb devices, PrepareHardware callback is the to place select the
-    // interface and configure the device.
-    //
-    pnpPowerCallbacks.EvtDevicePrepareHardware = HidFx2EvtDevicePrepareHardware;
-
-    //
-    // These two callbacks start and stop the wdfusb pipe continuous reader
-    // as we go in and out of the D0-working state.
-    //
-    pnpPowerCallbacks.EvtDeviceD0Entry = HidFx2EvtDeviceD0Entry;
-    pnpPowerCallbacks.EvtDeviceD0Exit  = HidFx2EvtDeviceD0Exit;
-
-    WdfDeviceInitSetPnpPowerEventCallbacks(DeviceInit, &pnpPowerCallbacks);
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_EXTENSION);
 
@@ -224,6 +206,7 @@ Return Value:
     //
     WDF_IO_QUEUE_CONFIG_INIT(&queueConfig, WdfIoQueueDispatchManual);
 
+	/* J^2 TODO - same as above about power management issues...
     //
     // This queue is used for requests that dont directly access the device. The
     // requests in this queue are serviced only when the device is in a fully
@@ -231,7 +214,7 @@ Return Value:
     // queue to park the requests since we dont care whether the device is idle
     // or fully powered up.
     //
-    queueConfig.PowerManaged = WdfFalse;
+    queueConfig.PowerManaged = WdfFalse; */
 
     status = WdfIoQueueCreate(hDevice,
                               &queueConfig,
@@ -245,29 +228,22 @@ Return Value:
         return status;
     }
 
-    //
-    // Create a timer to handle debouncing of switchpack 
-    //
-    WDF_TIMER_CONFIG_INIT(
-                          &timerConfig,
-                          HidFx2EvtTimerFunction
-                          );
-    timerConfig.AutomaticSerialization = FALSE;
+	// 
+	// Create a periodic timer to check/update mouse x/y values
+	//
+	WDF_TIMER_CONFIG_INIT_PERIODIC(&timerConfig, HidMouseEvtTimerFunction, MOUSE_REFRESH_PERIOD);
+	timerConfig.AutomaticSerialization = FALSE;
 
-    WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
-    attributes.ParentObject = hDevice;
-    status = WdfTimerCreate(
-                            &timerConfig,
-                            &attributes,
-                            &timerHandle
-                            );
-    if (!NT_SUCCESS(status)) {
-        TraceEvents(TRACE_LEVEL_ERROR, DBG_PNP,
-            "WdfTimerCreate failed status:0x%x\n", status);
-        return status;
-    }
+	WDF_OBJECT_ATTRIBUTES_INIT(&attributes);
+	attributes.ParentObject = hDevice;
+	status = WdfTimerCreate(&timerConfig, &attributes, &timerHandle);
+	if (!NT_SUCCESS(status)) {
+		TraceEvents(TRACE_LEVEL_ERROR, DBG_PNP,
+			"WdfTimerCreate failed 0x%x\n", status);
+		return status;
+	}
 
-    devContext->DebounceTimer = timerHandle;
+	devContext->RefreshTimer = timerHandle;
     return status;
 }
 

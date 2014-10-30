@@ -1,3 +1,4 @@
+// J^2 - Checked file for now.
 /*++
 
 Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -119,7 +120,6 @@ CONST  HID_REPORT_DESCRIPTOR           G_DefaultReportDescriptor[] = {
 	0xC0                             //END_COLLECTION
 };
 
-
 //
 // This is the default HID descriptor returned by the mini driver
 // in response to IOCTL_HID_GET_DEVICE_DESCRIPTOR. The size
@@ -135,6 +135,18 @@ CONST HID_DESCRIPTOR G_DefaultHidDescriptor = {
     sizeof(G_DefaultReportDescriptor) }  // total length of report descriptor
 };
 
+#include <pshpack1.h>
+//
+// input from device to system
+// TODO - change name.
+typedef struct _HIDFX2_INPUT_REPORT {
+
+	UCHAR ReportId;
+	UINT8 buttons;
+	INT8 x;
+	INT8 y;
+
+} HIDFX2_INPUT_REPORT, *PHIDFX2_INPUT_REPORT;
 
 typedef struct _HIDFX2_FEATURE_REPORT {
 	//
@@ -150,38 +162,12 @@ typedef struct _HIDFX2_FEATURE_REPORT {
 }HIDFX2_FEATURE_REPORT, *PHIDFX2_FEATURE_REPORT;
 #include <poppack.h>
 
-
 typedef struct _DEVICE_EXTENSION{
-
-	//
-	//WDF handles for USB Target 
-	//
-	WDFUSBDEVICE      UsbDevice;
-	WDFUSBINTERFACE   UsbInterface;
-	WDFUSBPIPE        InterruptPipe;
 
 	//
 	//Device descriptor for the USB device
 	//
 	WDFMEMORY DeviceDescriptor;
-
-	//
-	// Switch state.
-	//
-	UCHAR    CurrentSwitchState;
-
-	//
-	// This variable stores state for the swicth that got toggled most recently
-	// (the device returns the state of all the switches and not just the 
-	// one that got toggled).
-	//
-	UCHAR    LatestToggledSwitch;
-
-	//
-	// Interrupt endpoints sends switch state when first started 
-	// or when resuming from suspend. We need to ignore that data.
-	//
-	BOOLEAN  IsPowerUpSwitchState;
 
 	//
 	// WDF Queue for read IOCTLs from hidclass that get satisfied from 
@@ -190,41 +176,14 @@ typedef struct _DEVICE_EXTENSION{
 	WDFQUEUE   InterruptMsgQueue;
 
 	//
-	// Handle debouncing of switchpack
+	// Handle timed refresh of Mouse values
 	//
-	WDFTIMER DebounceTimer;
+	WDFTIMER RefreshTimer;
 
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 WDF_DECLARE_CONTEXT_TYPE_WITH_NAME(DEVICE_EXTENSION, GetDeviceContext)
 
-#include <pshpack1.h>
-//
-// input from device to system
-// TODO - change name.
-typedef struct _HIDFX2_INPUT_REPORT {
-
-	UCHAR ReportId;
-	UINT8 buttons;
-	INT8 x;
-	INT8 y;
-
-} HIDFX2_INPUT_REPORT, *PHIDFX2_INPUT_REPORT;
-
-
-typedef struct _HIDFX2_FEATURE_REPORT {
-    //
-    //Report ID for the collection
-    //
-    BYTE ReportId;
-
-    //
-    //one-byte feature data from 7-segment display or bar graph
-    //
-    BYTE FeatureData;
-
-}HIDFX2_FEATURE_REPORT, *PHIDFX2_FEATURE_REPORT;
-#include <poppack.h>
 
 //
 // driver routine declarations
@@ -263,24 +222,6 @@ HidFx2GetDeviceAttributes(
     IN WDFREQUEST Request
     );
 
-EVT_WDF_DEVICE_PREPARE_HARDWARE HidFx2EvtDevicePrepareHardware;
-
-EVT_WDF_DEVICE_D0_ENTRY HidFx2EvtDeviceD0Entry;
-
-EVT_WDF_DEVICE_D0_EXIT HidFx2EvtDeviceD0Exit;
-
-PCHAR
-DbgDevicePowerString(
-    IN WDF_POWER_DEVICE_STATE Type
-    );
-
-NTSTATUS
-HidFx2ConfigContReaderForInterruptEndPoint(
-    PDEVICE_EXTENSION DeviceContext
-    );
-
-EVT_WDF_USB_READER_COMPLETION_ROUTINE HidFx2EvtUsbInterruptPipeReadComplete;
-
 VOID
 HidFx2CompleteReadReport(
     WDFDEVICE Device
@@ -293,12 +234,7 @@ DbgHidInternalIoctlString(
     IN ULONG        IoControlCode
     );
 
-NTSTATUS
-HidFx2SendIdleNotification(
-    IN WDFREQUEST Request
-    );
-
-NTSTATUS
+/*NTSTATUS
 HidFx2SetFeature(
     IN WDFREQUEST Request
     );
@@ -307,39 +243,10 @@ NTSTATUS
 HidFx2GetFeature(
     IN WDFREQUEST Request,
     OUT PULONG BytesReturned
-    );
+    );*/
 
-EVT_WDF_IO_QUEUE_IO_CANCELED_ON_QUEUE HidFx2EvtIoCanceledOnQueue;
-
-NTSTATUS
-HidFx2GetSwitchState(
-    IN WDFDEVICE Device,
-    OUT PUCHAR SwitchState
-    );
-
-NTSTATUS
-SendVendorCommand(
-    IN WDFDEVICE Device,
-    IN UCHAR VendorCommand,
-    IN PUCHAR CommandData
-    );
-
-NTSTATUS
-GetVendorData(
-    IN WDFDEVICE Device,
-    IN UCHAR VendorCommand,
-    IN PUCHAR CommandData
-    );
-
-
-USBD_STATUS
-HidFx2ValidateConfigurationDescriptor(  
-    IN PUSB_CONFIGURATION_DESCRIPTOR ConfigDesc,
-    IN ULONG BufferLength,
-    _Inout_  PUCHAR *Offset
-    );
-
-EVT_WDF_TIMER HidFx2EvtTimerFunction;
+#define MOUSE_REFRESH_PERIOD 8
+EVT_WDF_TIMER HidMouseEvtTimerFunction;
 
 #endif   //_HIDUSBFX2_H_
 

@@ -1,3 +1,5 @@
+// J^2 - Checked file for now.
+
 /*++
 
 Copyright (c) Microsoft Corporation.  All rights reserved.
@@ -35,10 +37,8 @@ Revision History:
 #endif
 
 #ifdef ALLOC_PRAGMA
-    #pragma alloc_text( PAGE, HidFx2SetFeature)
-    #pragma alloc_text( PAGE, HidFx2GetFeature)
-    #pragma alloc_text( PAGE, SendVendorCommand)
-    #pragma alloc_text( PAGE, GetVendorData)
+    //#pragma alloc_text( PAGE, HidFx2SetFeature)
+    //#pragma alloc_text( PAGE, HidFx2GetFeature)
 #endif
 
 /*++
@@ -78,7 +78,6 @@ HidFx2EvtInternalDeviceControl(
     NTSTATUS            status = STATUS_SUCCESS;
     WDFDEVICE           device;
     PDEVICE_EXTENSION   devContext = NULL;
-    ULONG               bytesReturned = 0;
 
     UNREFERENCED_PARAMETER(OutputBufferLength);
     UNREFERENCED_PARAMETER(InputBufferLength);
@@ -86,6 +85,7 @@ HidFx2EvtInternalDeviceControl(
     device = WdfIoQueueGetDevice(Queue);
     devContext = GetDeviceContext(device);
 
+	DbgPrint("Debugging Ioctl: %s", DbgHidInternalIoctlString(IoControlCode));
     TraceEvents(TRACE_LEVEL_INFORMATION, DBG_IOCTL,
         "%s, Queue:0x%p, Request:0x%p\n",
         DbgHidInternalIoctlString(IoControlCode),
@@ -790,7 +790,6 @@ Return Value:
 {
     NTSTATUS                 status = STATUS_SUCCESS;
     PHID_DEVICE_ATTRIBUTES   deviceAttributes = NULL;
-    PUSB_DEVICE_DESCRIPTOR   usbDeviceDescriptor = NULL;
     PDEVICE_EXTENSION        deviceInfo = NULL;
 
     TraceEvents(TRACE_LEVEL_VERBOSE, DBG_IOCTL,
@@ -817,15 +816,10 @@ Return Value:
         return status;
     }
 
-    //
-    // Retrieve USB device descriptor saved in device context
-    //
-    usbDeviceDescriptor = WdfMemoryGetBuffer(deviceInfo->DeviceDescriptor, NULL);
-
     deviceAttributes->Size = sizeof (HID_DEVICE_ATTRIBUTES);
-    deviceAttributes->VendorID = usbDeviceDescriptor->idVendor;
-    deviceAttributes->ProductID = usbDeviceDescriptor->idProduct;;
-    deviceAttributes->VersionNumber = usbDeviceDescriptor->bcdDevice;
+	deviceAttributes->VendorID = 0x4A4C; //JL
+	deviceAttributes->ProductID = 0x4A48; // JH
+	deviceAttributes->VersionNumber = 0x4A4A; // JJ
 
     //
     // Report how many bytes were copied
@@ -834,109 +828,6 @@ Return Value:
 
     TraceEvents(TRACE_LEVEL_VERBOSE, DBG_IOCTL,
         "HidFx2GetDeviceAttributes Exit = 0x%x\n", status);
-    return status;
-}
-
-
-NTSTATUS
-HidFx2SendIdleNotification(
-    IN WDFREQUEST Request
-    )
-/*++
-
-Routine Description:
-
-    Pass down Idle notification request to lower driver
-
-Arguments:
-
-    Request - Pointer to Request object.
-
-Return Value:
-
-    NT status code.
-
---*/
-{
-    NTSTATUS                   status = STATUS_SUCCESS;
-    BOOLEAN                    sendStatus = FALSE;
-    WDF_REQUEST_SEND_OPTIONS   options;
-    WDFIOTARGET                nextLowerDriver;
-    WDFDEVICE                  device;  
-    PIO_STACK_LOCATION         currentIrpStack = NULL;
-    IO_STACK_LOCATION          nextIrpStack;
-
-    device = WdfIoQueueGetDevice(WdfRequestGetIoQueue(Request));
-    currentIrpStack = IoGetCurrentIrpStackLocation(WdfRequestWdmGetIrp(Request));
-
-    //
-    // Convert the request to corresponding USB Idle notification request
-    //
-    if (currentIrpStack->Parameters.DeviceIoControl.InputBufferLength < 
-        sizeof(HID_SUBMIT_IDLE_NOTIFICATION_CALLBACK_INFO)) {
-
-        status = STATUS_BUFFER_TOO_SMALL;
-        TraceEvents(TRACE_LEVEL_ERROR, DBG_IOCTL,
-            "DeviceIoControl.InputBufferLength too small, 0x%x\n", status);
-        return status;
-    }
-
-    ASSERT(sizeof(HID_SUBMIT_IDLE_NOTIFICATION_CALLBACK_INFO) 
-        == sizeof(USB_IDLE_CALLBACK_INFO));
-
-    #pragma warning(suppress :4127)  // conditional expression is constant warning
-    if (sizeof(HID_SUBMIT_IDLE_NOTIFICATION_CALLBACK_INFO) != sizeof(USB_IDLE_CALLBACK_INFO)) {
-
-        status = STATUS_INFO_LENGTH_MISMATCH;
-        TraceEvents(TRACE_LEVEL_ERROR, DBG_IOCTL,
-            "Incorrect DeviceIoControl.InputBufferLength, 0x%x\n", status);
-        return status;
-    }
-
-    //
-    // prepare next stack location
-    //
-    RtlZeroMemory(&nextIrpStack, sizeof(IO_STACK_LOCATION));
-    
-    nextIrpStack.MajorFunction = currentIrpStack->MajorFunction;
-    nextIrpStack.Parameters.DeviceIoControl.InputBufferLength =
-        currentIrpStack->Parameters.DeviceIoControl.InputBufferLength;
-    nextIrpStack.Parameters.DeviceIoControl.Type3InputBuffer =
-        currentIrpStack->Parameters.DeviceIoControl.Type3InputBuffer;
-    nextIrpStack.Parameters.DeviceIoControl.IoControlCode = 
-        IOCTL_INTERNAL_USB_SUBMIT_IDLE_NOTIFICATION;
-    nextIrpStack.DeviceObject = 
-        WdfIoTargetWdmGetTargetDeviceObject(WdfDeviceGetIoTarget(device));
-
-    //
-    // Format the I/O request for the driver's local I/O target by using the
-    // contents of the specified WDM I/O stack location structure.
-    //
-    WdfRequestWdmFormatUsingStackLocation(
-                                          Request,
-                                          &nextIrpStack
-                                          );
-
-    //
-    // Send the request down using Fire and forget option.
-    //
-    WDF_REQUEST_SEND_OPTIONS_INIT(
-                                  &options,
-                                  WDF_REQUEST_SEND_OPTION_SEND_AND_FORGET
-                                  );
-
-    nextLowerDriver = WdfDeviceGetIoTarget(device);
-    
-    sendStatus = WdfRequestSend(
-        Request,
-        nextLowerDriver,
-        &options
-        );
-
-    if (sendStatus == FALSE) {
-        status = STATUS_UNSUCCESSFUL;
-    }
-
     return status;
 }
 
