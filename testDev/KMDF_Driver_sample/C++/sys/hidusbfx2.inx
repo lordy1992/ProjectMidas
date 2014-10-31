@@ -37,13 +37,15 @@ CopyFilterDriver    = 12
 
 ; For XP and later
 [Vendor.NT$ARCH$]
-%hidusbfx2%         = hidusbfx2.Inst, USB\VID_0547&PID_1002
-%customCollection%  = customCollection.Inst, HID_DEVICE_UP:FF00_U:0001
+;%hidusbfx2%         = hidusbfx2.Inst, USB\VID_0547&PID_1002
+;%customCollection%  = customCollection.Inst, HID_DEVICE_UP:FF00_U:0001
+%hidusbfx2%         = hidusbfx2.Inst, root\MidasMouse
 
 ; For Win7 and later so that we can use inbox HID-KMDF mapper
 [Vendor.NT$ARCH$.6.1]
-%hidusbfx2%         = hidusbfx2.Inst.Win7, USB\VID_0547&PID_1002
-%customCollection%  = customCollection.Inst, HID_DEVICE_UP:FF00_U:0001
+;%hidusbfx2%         = hidusbfx2.Inst.Win7, USB\VID_0547&PID_1002
+;%customCollection%  = customCollection.Inst, HID_DEVICE_UP:FF00_U:0001
+%hidusbfx2%         = hidusbfx2.Inst.Win7, root\MidasMouse
 
 ;===============================================================
 ;   Install section for XP thru Vista
@@ -123,17 +125,17 @@ ServiceBinary  = %12%\hidusbfx2.sys
 ;   Custom Collection install section
 ; - Only a Null service is installed.
 ;===============================================================
-[customCollection.Inst.NT]
-; NULL section
-
-[customCollection.Inst.NT.HW]
-AddReg = customCollection.Inst.AddReg.NT.HW
-
-[customCollection.Inst.AddReg.NT.HW]
-HKR,,"SelectiveSuspendEnabled",0x00000001,0x1
-
-[customCollection.Inst.NT.Services]
-AddService = ,0x00000002,   ; NULL Service
+;[customCollection.Inst.NT]
+;; NULL section ; this line was already actually commented JHH
+;
+;[customCollection.Inst.NT.HW]
+;AddReg = customCollection.Inst.AddReg.NT.HW
+;
+;[customCollection.Inst.AddReg.NT.HW]
+;HKR,,"SelectiveSuspendEnabled",0x00000001,0x1
+;
+;[customCollection.Inst.NT.Services]
+;AddService = ,0x00000002,   ; NULL Service
 
 ;================================================================
 ; WDF Coinstaller installation
@@ -167,10 +169,10 @@ KmdfLibraryVersion = $KMDFVERSION$
 
 [Strings] 
 ;Localizable
-VENDOR              = "Vendor Name" 
-hidusbfx2           = "KMDF HID Minidriver for OSR USB-FX2 Device" 
-customCollection    = "HID Vendor-defined Collection for OSR USB-FX2"
-DISK_NAME           = "HID USB FX2 Device Sample Install Disk"
+VENDOR              = "Midas Development" 
+hidusbfx2           = "KMDF HID Minidriver for OSR Midas Mouse Device" 
+;customCollection    = "HID Vendor-defined Collection for OSR Midas Mouse"
+DISK_NAME           = "HID Midas Mouse Device Install Disk"
 hidkmdf.SVCDESC     = "Filter Driver Service for HID-KMDF Interface layer"
 
 ;Non-Localizable

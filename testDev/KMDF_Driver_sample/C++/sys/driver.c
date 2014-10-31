@@ -160,13 +160,13 @@ Return Value:
     TraceEvents(TRACE_LEVEL_INFORMATION, DBG_PNP,
         "HidFx2EvtDeviceAdd called\n");
 
-	/* J^2 TODO - took out as this may force our driver to be a "power policy owner" http://msdn.microsoft.com/en-us/library/windows/hardware/ff552359(v=vs.85).aspx
+	// J^2 TODO - took out as this may force our driver to be a "power policy owner" http://msdn.microsoft.com/en-us/library/windows/hardware/ff552359(v=vs.85).aspx
     //
     // Tell framework this is a filter driver. Filter drivers by default are  
     // not power policy owners. This works well for this driver because
     // HIDclass driver is the power policy owner for HID minidrivers.
     //
-	WdfFdoInitSetFilter(DeviceInit); */
+	WdfFdoInitSetFilter(DeviceInit);
 
 
     WDF_OBJECT_ATTRIBUTES_INIT_CONTEXT_TYPE(&attributes, DEVICE_EXTENSION);
