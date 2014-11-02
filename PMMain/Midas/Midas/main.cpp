@@ -20,10 +20,9 @@ int main(void) {
 			controller->setKeyCmd(kybdCmds::ZOOM_OUT);
 			//controller->setKeyChar('b');
 		}
-		INPUT ki_arr[10];
-		controller->getKeyInputArr(ki_arr, 10);
-		SendInput(controller->getKeyInputVec().size(), ki_arr, sizeof(INPUT));
-		cout << "looping with opposite commands..." << endl;
+		
+		int status = controller->sendData();
+		cout << "looping with opposite commands... status = " << status << endl;
 
 		Sleep(1000);
 	}

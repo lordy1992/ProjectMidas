@@ -34,9 +34,11 @@ public:
 
 	void setKeyChar(char c, bool releaseKeys = true);
 
+	int sendData();
+
 	std::vector<KEYBDINPUT> getKeyInputVec();
 
-	void getKeyInputArr(INPUT * ki_arr, int len_arr);
+	int getKeyInputArr(INPUT * ki_arr, int len_arr);
 
 private:
 	void inputCtrl();
