@@ -3,48 +3,27 @@
 
 #include <Windows.h>
 #include <vector>
-
-enum kybdCmds {
-	UNDO,
-	REDO,
-	ZOOM_IN,
-	ZOOM_OUT,
-	ZOOM_100,
-	ESCAPE,
-	ENTER,
-	TAB,
-	SWITCH_WIN_FORWARD,
-	SWITCH_WIN_REVERSE,
-	COPY,
-	PASTE,
-	CUT,
-	FILE_MENU,
-	NEW_BROWSER,
-	GOTO_ADDR_BAR,
-	LOCK_DESKTOP,
-	EDIT_MENU,
-	VIEW_MENU
-};
+#include "MidasCommon.h"
 
 class kybrdCtrl {
 public:
-	kybrdCtrl();
+    kybrdCtrl();
 
-	void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
+    void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
 
-	void setKeyChar(char c, bool releaseKeys = true);
+    void setKeyChar(char c, bool releaseKeys = true);
 
-	std::vector<KEYBDINPUT> getKeyInputVec();
+    std::vector<KEYBDINPUT> getKeyInputVec();
 
-	void getKeyInputArr(INPUT * ki_arr, int len_arr);
+    void getKeyInputArr(INPUT * ki_arr, int len_arr);
 
 private:
-	void inputCtrl();
+    void inputCtrl();
 
-	void setMirroredUpKeys();
+    void setMirroredUpKeys();
 
-	KEYBDINPUT ki;
-	std::vector<KEYBDINPUT> kiVec;
+    KEYBDINPUT ki;
+    std::vector<KEYBDINPUT> kiVec;
 };
 
 
