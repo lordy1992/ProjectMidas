@@ -24,6 +24,9 @@
     <ClCompile Include="SharedCommandData.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WearableDevice.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h">

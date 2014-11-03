@@ -11,7 +11,7 @@ public:
     SharedCommandData() : mouseRelativeCoordinates(), currentMode(MOUSE_MODE) {}
     void addCommand(commandData dat);
     bool tryAddCommand(commandData dat);
-    commandData consumeCommand();
+    bool consumeCommand(commandData& dat);
     bool tryConsumeCommand(commandData& outCommandData);
 
     void setRelativeCoordinates(point relativeCoordinates);
@@ -22,6 +22,8 @@ public:
     void setMode(midasMode mode);
     bool trySetMode(midasMode mode);
     midasMode getMode();
+
+    bool isCommandQueueEmpty();
 
 private:
     point mouseRelativeCoordinates;

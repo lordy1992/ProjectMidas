@@ -67,6 +67,7 @@
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
+    <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h" />

@@ -19,14 +19,15 @@ bool SharedCommandData::tryAddCommand(commandData dat)
     return locked;
 }
 
-commandData SharedCommandData::consumeCommand()
+bool SharedCommandData::consumeCommand(commandData& dat)
 {
+    if (commandQueue.empty()) return false;
     commandQueueMutex.lock();
-    commandData dat = commandQueue.front();
+    dat = commandQueue.front();
     commandQueue.pop();
     commandQueueMutex.unlock();
 
-    return dat;
+    return true;
 }
 
 bool SharedCommandData::tryConsumeCommand(commandData& outCommandData)
@@ -103,4 +104,9 @@ bool SharedCommandData::trySetMode(midasMode mode)
 midasMode SharedCommandData::getMode()
 {
     return currentMode;
+}
+
+bool SharedCommandData::isCommandQueueEmpty()
+{
+    return commandQueue.empty();
 }
