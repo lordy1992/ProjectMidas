@@ -4,49 +4,61 @@
 #include <Windows.h>
 #include <vector>
 
-enum kybdCmds {
-	UNDO,
-	REDO,
-	ZOOM_IN,
-	ZOOM_OUT,
-	ZOOM_100,
-	ESCAPE,
-	ENTER,
-	TAB,
-	SWITCH_WIN_FORWARD,
-	SWITCH_WIN_REVERSE,
-	COPY,
-	PASTE,
-	CUT,
-	FILE_MENU,
-	NEW_BROWSER,
-	GOTO_ADDR_BAR,
-	LOCK_DESKTOP,
-	EDIT_MENU,
-	VIEW_MENU
+enum kybdCmds 
+{
+    UNDO,
+    REDO,
+    ZOOM_IN,
+    ZOOM_OUT,
+    ZOOM_100,
+    ESCAPE,
+    ENTER,
+    TAB,
+    SWITCH_WIN_FORWARD,
+    SWITCH_WIN_REVERSE,
+    COPY,
+    PASTE,
+    CUT,
+    FILE_MENU,
+    NEW_BROWSER,
+    GOTO_ADDR_BAR,
+    //LOCK_DESKTOP,
+    EDIT_MENU,
+    VIEW_MENU,
+    WIN_HOME,
+    HIDE_APPS
 };
 
-class kybrdCtrl {
+class kybrdCtrl 
+{
 public:
-	kybrdCtrl();
+    kybrdCtrl();
 
-	void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
+    void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
 
-	void setKeyChar(char c, bool releaseKeys = true);
+    void setKeyChar(char c, bool releaseKeys = true);
 
-	int sendData();
+    int sendData();
 
-	std::vector<KEYBDINPUT> getKeyInputVec();
+    std::vector<KEYBDINPUT> getKeyInputVec();
 
-	int getKeyInputArr(INPUT * ki_arr, int len_arr);
+    int getKeyInputArr(INPUT * ki_arr, int len_arr);
 
 private:
-	void inputCtrl();
+    void inputCtrl();
 
-	void setMirroredUpKeys();
+    void inputLShift();
 
-	KEYBDINPUT ki;
-	std::vector<KEYBDINPUT> kiVec;
+    void inputAlt();
+
+    void inputWindows();
+
+    void inputVK(int vk);
+
+    void setMirroredUpKeys();
+
+    KEYBDINPUT ki;
+    std::vector<KEYBDINPUT> kiVec;
 };
 
 

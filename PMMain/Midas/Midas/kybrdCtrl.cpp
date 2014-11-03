@@ -1,143 +1,222 @@
 #include "kybrdCtrl.h"
+#include <iostream>
 
 kybrdCtrl::kybrdCtrl()
 {
-	this->kiVec.clear();
-	ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->kiVec.clear();
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
 }
 
 
 void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
-	this->kiVec.clear();
-	ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->kiVec.clear();
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
 
-	switch (kybdCmd) {
-	case UNDO:
-		inputCtrl();
-		ZeroMemory(&ki, sizeof(KEYBDINPUT));
-		this->ki.wVk = 0x5A; // 'Z' key
-		break;
-	case REDO:
-		inputCtrl();
-		ZeroMemory(&ki, sizeof(KEYBDINPUT));
-		this->ki.wVk = 0x59; // 'Y' key
-		break;
-	case ZOOM_IN:
-		inputCtrl();
-		ZeroMemory(&ki, sizeof(KEYBDINPUT));
-		this->ki.wVk = VK_OEM_PLUS;
-		break;
-	case ZOOM_OUT:
-		inputCtrl();
-		ZeroMemory(&ki, sizeof(KEYBDINPUT));
-		this->ki.wVk = VK_OEM_MINUS;
-		break;
-	case ZOOM_100:
-		break;
-	case ESCAPE:
-		break;
-	case ENTER:
-		break;
-	case TAB:
-		break;
-	case SWITCH_WIN_FORWARD:
-		break;
-	case SWITCH_WIN_REVERSE:
-		break;
-	case COPY:
-		break;
-	case PASTE:
-		break;
-	case CUT:
-		break;
-	case FILE_MENU:
-		break;
-	case NEW_BROWSER:
-		break;
-	case GOTO_ADDR_BAR:
-		break;
-	case LOCK_DESKTOP:
-		break;
-	case EDIT_MENU:
-		break;
-	case VIEW_MENU:
-		break;
-	}
+    switch (kybdCmd) 
+    {
+    case UNDO:
+        inputCtrl();
+        inputVK(0x5A); // 'Z' key
+        break;
+    case REDO:
+        inputCtrl();
+        inputVK(0x59); // 'Y' key
+        break;
+    case ZOOM_IN:
+        inputCtrl();
+        inputVK(VK_OEM_PLUS);
+        break;
+    case ZOOM_OUT:
+        inputCtrl();
+        inputVK(VK_OEM_MINUS);
+        break;
+    case ZOOM_100:
+        inputCtrl();
+        inputVK(0x30); // '0' key
+        break;
+    case ESCAPE:
+        inputVK(VK_ESCAPE);
+        break;
+    case ENTER:
+        inputVK(VK_RETURN);
+        break;
+    case TAB:
+        inputVK(VK_TAB);
+        break;
+    case SWITCH_WIN_FORWARD:
+        // THIS ONE IS NOT WORKING TODO
+        inputAlt();
+        inputVK(VK_TAB);
+        break;
+    case SWITCH_WIN_REVERSE:
+        // THIS ONE IS NOT WORKING TODO
+        inputAlt();
+        inputLShift();
+        inputVK(VK_TAB);
+        break;
+    case COPY:
+        inputCtrl();
+        inputVK(0x43); // 'C' key
+        this->ki.wScan = MapVirtualKey(0x43, MAPVK_VK_TO_VSC);
+        break;
+    case PASTE:
+        inputCtrl();
+        inputVK(0x56); // 'V' key
+        break;
+    case CUT:
+        inputCtrl();
+        inputVK(0x58); // 'X' key
+        break;
+    case FILE_MENU:
+        inputAlt();
+        inputVK(0x46); // 'F' key
+        break;
+    case NEW_BROWSER:
+        inputCtrl();
+        inputVK(0x4E); // 'N' key
+        break;
+    case GOTO_ADDR_BAR:
+        inputAlt();
+        inputVK(0x44); // 'D' key
+        break;
+    /*case LOCK_DESKTOP:
+        // THIS ONE IS NOT WORKING TODO
+        inputWindows();
+        ZeroMemory(&ki, sizeof(KEYBDINPUT));
+        inputVK(0x4C; // 'L' key
+        this->ki.wScan = MapVirtualKey(0x4C, MAPVK_VK_TO_VSC);
+        break;*/
+    case EDIT_MENU:
+        inputAlt();
+        inputVK(0x45); // 'E' key
+        break;
+    case VIEW_MENU:
+        inputAlt();
+        inputVK(0x56); // 'V' key
+        break;
+    case WIN_HOME:
+        inputWindows();
+        break;
+    case HIDE_APPS:
+        inputWindows();
+        inputVK(0x44); // 'D' key
+        break;
+    default:
+        break;
+    }
 
-	this->kiVec.push_back(ki);
-
-	// Ensure that all keys that were pressed down are now 'pressed up'
-	if (releaseKeys)
-		setMirroredUpKeys();
+    // Ensure that all keys that were pressed down are now 'pressed up'
+    if (releaseKeys)
+    {
+        setMirroredUpKeys();
+    }
 }
 
 void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
 {
-	this->kiVec.clear();
-	ZeroMemory(&ki, sizeof(KEYBDINPUT));
-	int cInt = int(c);
+    this->kiVec.clear();
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    int cInt = int(c);
 
-	this->ki.wScan = cInt;
-	this->ki.dwFlags = KEYEVENTF_UNICODE;
-	this->kiVec.push_back(ki);
+    this->ki.wScan = cInt;
+    this->ki.dwFlags = KEYEVENTF_UNICODE;
+    this->kiVec.push_back(ki);
 
-	if (releaseKeys)
-		setMirroredUpKeys();
+    if (releaseKeys)
+    {
+        setMirroredUpKeys();
+    }
 }
 
 int kybrdCtrl::sendData()
 {
-	// Make input array, much larger than any anticipated data will ever actually be.
-	int numKeys = this->kiVec.size();
-	INPUT* ki_arr = (INPUT*)malloc(sizeof(INPUT) * numKeys);
+    // Make input array, much larger than any anticipated data will ever actually be.
+    int numKeys = this->kiVec.size();
+    INPUT* kiArr = (INPUT*)malloc(sizeof(INPUT) * numKeys);
 
-	int status = getKeyInputArr(ki_arr, numKeys);
-	if (status == 0) {
-		SendInput(numKeys, ki_arr, sizeof(INPUT));
-	}
+    int status = getKeyInputArr(kiArr, numKeys);
+    if (status == 0)
+    {
+        int numSent = SendInput(numKeys, kiArr, sizeof(INPUT));
+        std::cout << "sent " << numSent << " key-presses of data" << std::endl;
+    }
 
-	free(ki_arr);
+    free(kiArr);
 
-	return status;
+    return status;
 }
 
 void kybrdCtrl::setMirroredUpKeys()
 {
-	int numKeysToMirror = this->kiVec.size();
-	for (int i = numKeysToMirror - 1; i >= 0; i--) {
-		this->ki = this->kiVec.at(i);
-		this->ki.dwFlags |= KEYEVENTF_KEYUP;
-		this->kiVec.push_back(ki);
-	}
+    int numKeysToMirror = this->kiVec.size();
+    for (int i = numKeysToMirror - 1; i >= 0; i--) 
+    {
+        this->ki = this->kiVec.at(i);
+        this->ki.dwFlags |= KEYEVENTF_KEYUP;
+        this->kiVec.push_back(ki);
+    }
 }
 
 void kybrdCtrl::inputCtrl()
 {
-	ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_CONTROL;
+    this->ki.wScan = MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC);
 
-	this->ki.wVk = VK_CONTROL;
+    this->kiVec.push_back(ki);
+}
 
-	this->kiVec.push_back(ki);
+void kybrdCtrl::inputLShift()
+{
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_LSHIFT;
+    this->ki.wScan = MapVirtualKey(VK_LSHIFT, MAPVK_VK_TO_VSC);
+
+    this->kiVec.push_back(ki);
+}
+
+void kybrdCtrl::inputAlt()
+{
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_MENU;
+    this->ki.wScan = MapVirtualKey(VK_MENU, MAPVK_VK_TO_VSC);
+
+    this->kiVec.push_back(ki);
+}
+
+void kybrdCtrl::inputWindows()
+{
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_LWIN;
+    this->ki.wScan = MapVirtualKey(VK_LWIN, MAPVK_VK_TO_VSC);
+
+    this->kiVec.push_back(ki);
+}
+
+void kybrdCtrl::inputVK(int vk)
+{
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = vk;
+    this->ki.wScan = MapVirtualKey(vk, MAPVK_VK_TO_VSC);
+
+    this->kiVec.push_back(ki);
 }
 
 std::vector<KEYBDINPUT> kybrdCtrl::getKeyInputVec()
 {
-	return this->kiVec;
+    return this->kiVec;
 }
 
 int kybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
 {
-	if (len_arr < this->kiVec.size()) {
-		//error
-		return -1;
-	}
+    if (len_arr < this->kiVec.size()) return -1;
 
-	for (int i = 0; i < this->kiVec.size(); i++)
-	{
-		ki_arr[i].type = INPUT_KEYBOARD;
-		ki_arr[i].ki = this->kiVec.at(i);
-	}
+    for (int i = 0; i < this->kiVec.size(); i++)
+    {
+        ki_arr[i].type = INPUT_KEYBOARD;
+        ki_arr[i].ki = this->kiVec.at(i);
+    }
 
-	return 0;
+    return 0;
 }
