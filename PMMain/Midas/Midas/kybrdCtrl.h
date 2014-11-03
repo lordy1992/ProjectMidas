@@ -3,31 +3,7 @@
 
 #include <Windows.h>
 #include <vector>
-
-enum kybdCmds 
-{
-    UNDO,
-    REDO,
-    ZOOM_IN,
-    ZOOM_OUT,
-    ZOOM_100,
-    ESCAPE,
-    ENTER,
-    TAB,
-    SWITCH_WIN_FORWARD,
-    SWITCH_WIN_REVERSE,
-    COPY,
-    PASTE,
-    CUT,
-    FILE_MENU,
-    NEW_BROWSER,
-    GOTO_ADDR_BAR,
-    //LOCK_DESKTOP,
-    EDIT_MENU,
-    VIEW_MENU,
-    WIN_HOME,
-    HIDE_APPS
-};
+#include "MidasCommon.h"
 
 class kybrdCtrl 
 {

@@ -21,9 +21,21 @@
     <ClCompile Include="kybrdCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SharedCommandData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MidasCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedCommandData.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WearableDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

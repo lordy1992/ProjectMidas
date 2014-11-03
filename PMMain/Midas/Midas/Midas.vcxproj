@@ -66,9 +66,13 @@
   <ItemGroup>
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SharedCommandData.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h" />
+    <ClInclude Include="MidasCommon.h" />
+    <ClInclude Include="SharedCommandData.h" />
+    <ClInclude Include="WearableDevice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
