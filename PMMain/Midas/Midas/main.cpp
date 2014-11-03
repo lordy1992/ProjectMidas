@@ -28,7 +28,6 @@ int main(void) {
         Sleep(1000);
     }
 
-
     // MANUAL TEST 2
     cout << "Running Midas Input Control, please use 'w'/'a'/'s'/'d' to control mouse movement, or \"exit\" to leave." << endl;
 

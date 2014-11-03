@@ -86,6 +86,22 @@ void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
         setMirroredUpKeys();
 }
 
+int kybrdCtrl::sendData()
+{
+	// Make input array, much larger than any anticipated data will ever actually be.
+	int numKeys = this->kiVec.size();
+	INPUT* ki_arr = (INPUT*)malloc(sizeof(INPUT) * numKeys);
+
+	int status = getKeyInputArr(ki_arr, numKeys);
+	if (status == 0) {
+		SendInput(numKeys, ki_arr, sizeof(INPUT));
+	}
+
+	free(ki_arr);
+
+	return status;
+}
+
 void kybrdCtrl::setMirroredUpKeys()
 {
     int numKeysToMirror = this->kiVec.size();
@@ -110,18 +126,18 @@ std::vector<KEYBDINPUT> kybrdCtrl::getKeyInputVec()
     return this->kiVec;
 }
 
-void kybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
+int kybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
 {
-    if (len_arr < this->kiVec.size()) {
-        //TODO - exception?
-        return;
-    }
+	if (len_arr < this->kiVec.size()) {
+		//error
+		return -1;
+	}
 
-    for (int i = 0; i < this->kiVec.size(); i++)
-    {
-        ki_arr[i].type = INPUT_KEYBOARD;
-        ki_arr[i].ki = this->kiVec.at(i);
-    }
+	for (int i = 0; i < this->kiVec.size(); i++)
+	{
+		ki_arr[i].type = INPUT_KEYBOARD;
+		ki_arr[i].ki = this->kiVec.at(i);
+	}
 
-    return;
+	return 0;
 }
