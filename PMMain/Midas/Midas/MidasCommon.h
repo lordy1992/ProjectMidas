@@ -25,7 +25,9 @@ enum kybdCmds {
     GOTO_ADDR_BAR,
     LOCK_DESKTOP,
     EDIT_MENU,
-    VIEW_MENU
+    VIEW_MENU,
+    WIN_HOME,
+    HIDE_APPS
 };
 
 enum mouseCmds {

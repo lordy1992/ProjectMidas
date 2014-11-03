@@ -5,7 +5,8 @@
 #include <vector>
 #include "MidasCommon.h"
 
-class kybrdCtrl {
+class kybrdCtrl 
+{
 public:
     kybrdCtrl();
 
@@ -13,14 +14,22 @@ public:
 
     void setKeyChar(char c, bool releaseKeys = true);
 
-	int sendData();
+    int sendData();
 
-	std::vector<KEYBDINPUT> getKeyInputVec();
+    std::vector<KEYBDINPUT> getKeyInputVec();
 
-	int getKeyInputArr(INPUT * ki_arr, int len_arr);
+    int getKeyInputArr(INPUT * ki_arr, int len_arr);
 
 private:
     void inputCtrl();
+
+    void inputLShift();
+
+    void inputAlt();
+
+    void inputWindows();
+
+    void inputVK(int vk);
 
     void setMirroredUpKeys();
 
