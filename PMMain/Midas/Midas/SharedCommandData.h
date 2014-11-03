@@ -8,7 +8,7 @@
 class SharedCommandData
 {
 public:
-    SharedCommandData() : mouseRelativeCoordinates() { }
+    SharedCommandData() : mouseRelativeCoordinates(), currentMode(MOUSE_MODE) {}
     void addCommand(commandData dat);
     bool tryAddCommand(commandData dat);
     commandData consumeCommand();
@@ -19,9 +19,14 @@ public:
     point getRelativeCoordinates();
     bool tryGetRelativeCoordinates(point& outRelativeCoordinates);
 
+    void setMode(midasMode mode);
+    bool trySetMode(midasMode mode);
+    midasMode getMode();
+
 private:
     point mouseRelativeCoordinates;
     std::queue<commandData> commandQueue;
+    midasMode currentMode;
     std::mutex commandQueueMutex;
     std::mutex relativeCoordinatesMutex;
 };

@@ -33,6 +33,13 @@ enum mouseCmds {
     RIGHT_CLICK
 };
 
+enum midasMode {
+    LOCK_MODE,
+    MOUSE_MODE,
+    KEYBOARD_MODE,
+    GESTURE_MODE
+};
+
 struct commandData {
     commandType type;
     union {
