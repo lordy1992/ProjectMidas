@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define TEST_WEARABLE_DEVICE
+#define KEYBOARD_CONTROL_TEST
 
 #ifdef TEST_WEARABLE_DEVICE
 
@@ -80,12 +80,21 @@ int main(void) {
 
     kybrdCtrl * controller = new kybrdCtrl();
 
-    //keybd_event(VK_LWIN, 0x5b, 0, 0);
+    while (1) {
+        keybd_event(VK_MENU, 0, 0, 0);// MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), 0, 0);
+        Sleep(10);
+        //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), 0, 0);
         //keybd_event(0x44, 0x20, 0, 0);
         //keybd_event(0x44, 0x20, KEYEVENTF_KEYUP, 0); 
-    //keybd_event(0x4C, MapVirtualKey(0x4C, MAPVK_VK_TO_VSC), 0, 0);
-    //keybd_event(0x4C, MapVirtualKey(0x4C, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
-    //keybd_event(VK_LWIN, 0x5b, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_TAB, 0, 0, 0);// MapVirtualKey(0x4C, VK_TAB), 0, 0);
+        Sleep(100);
+        keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0);// MapVirtualKey(0x4C, VK_TAB), KEYEVENTF_KEYUP, 0);
+        Sleep(10);
+        //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);// MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
+
+        Sleep(1000);
+    }
 
     //while (1) {}
 
