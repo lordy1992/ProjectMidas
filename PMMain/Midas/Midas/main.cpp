@@ -75,6 +75,8 @@ int main() {
 
 #ifdef KEYBOARD_CONTROL_TEST
 int main(void) {
+    // new code :)
+
     // MANUAL TEST 1
     cout << "hijacking test main..." << endl;
 
