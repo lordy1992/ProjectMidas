@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define KEYBOARD_CONTROL_TEST
+#define TEST_WEARABLE_DEVICE
 
 #ifdef TEST_WEARABLE_DEVICE
 
@@ -56,15 +56,21 @@ int main() {
     // Kick off device thread
     startWearableDeviceListener(testDevice);
 
-    while (true) {
-        if (sharedData.isCommandQueueEmpty() && testDevice->isDone()) break;
+    while (true) 
+    {
+        if (!sharedData.isCommandQueueEmpty()) 
+        {
+            commandData nextCmd;
+            while (!sharedData.consumeCommand(nextCmd));
+            point nextPnt = sharedData.getRelativeCoordinates();
 
-        commandData nextCmd;
-        while(!sharedData.consumeCommand(nextCmd));
-        point nextPnt = sharedData.getRelativeCoordinates();
-
-        cout << "Command: " << (nextCmd.type == MOUSE_COMMAND ? nextCmd.mouse : nextCmd.kbd)
-            << ", Coords: (" << nextPnt.x << ", " << nextPnt.y << ")" << endl;
+            cout << "Command: " << (nextCmd.type == MOUSE_COMMAND ? nextCmd.mouse : nextCmd.kbd)
+                << ", Coords: (" << nextPnt.x << ", " << nextPnt.y << ")" << endl;
+        }
+        else 
+        {
+            if (testDevice->isDone()) break;
+        }
     }
 
     system("PAUSE");
