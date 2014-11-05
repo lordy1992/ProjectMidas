@@ -46,14 +46,14 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         break;
     case SWITCH_WIN_FORWARD:
         // THIS ONE IS NOT WORKING TODO
-        //inputAlt();
-        inputWindows();
+        inputAlt();
+        //inputWindows(); // hijack test
         inputVK(VK_TAB);
         break;
     case SWITCH_WIN_REVERSE:
         // THIS ONE IS NOT WORKING TODO
-        //inputAlt();
-        inputWindows();
+        inputAlt();
+        //inputWindows(); // hijack test
         inputLShift();
         inputVK(VK_TAB);
         break;

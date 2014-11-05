@@ -81,36 +81,22 @@ int main(void) {
     kybrdCtrl * controller = new kybrdCtrl();
 
     while (1) {
-        keybd_event(VK_MENU, 0, 0, 0);// MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), 0, 0);
+        keybd_event(VK_MENU, MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), 0, 0);
         Sleep(10);
         //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), 0, 0);
         //keybd_event(0x44, 0x20, 0, 0);
         //keybd_event(0x44, 0x20, KEYEVENTF_KEYUP, 0); 
-        keybd_event(VK_TAB, 0, 0, 0);// MapVirtualKey(0x4C, VK_TAB), 0, 0);
+        keybd_event(VK_TAB, MapVirtualKey(VK_TAB, MAPVK_VSC_TO_VK), 0, 0);
         Sleep(100);
-        keybd_event(VK_TAB, 0, KEYEVENTF_KEYUP, 0);// MapVirtualKey(0x4C, VK_TAB), KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_TAB, MapVirtualKey(VK_TAB, MAPVK_VSC_TO_VK), KEYEVENTF_KEYUP, 0);
         Sleep(10);
         //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
-        keybd_event(VK_MENU, 0, KEYEVENTF_KEYUP, 0);// MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_MENU, MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
 
         Sleep(1000);
-    }
+        cout << "still going..." << endl;
+    } 
 
-    //while (1) {}
-
-    /*controller->setKeyCmd(kybdCmds::HIDE_APPS);
-    int status = controller->sendData();
-    cout << "status = " << status << endl;
-
-    Sleep(2000);
-
-    controller->setKeyCmd(kybdCmds::WIN_HOME);
-    status = controller->sendData();
-    cout << "status = " << status << endl; */
-
-
-    string blah;
-    cin >> blah;
 
     int count = 0;
     while (true) {
