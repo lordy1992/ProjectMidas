@@ -4,11 +4,16 @@
 #include <mutex>
 #include <queue>
 #include "MidasCommon.h"
+#include "Filter.h"
 
-class SharedCommandData
+#define COMMAND_INPUT "command"
+#define COORD_INPUT "relative_coordinates"
+#define MODE_INPUT "mode"
+
+class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData() : mouseRelativeCoordinates(), currentMode(MOUSE_MODE) {}
+    SharedCommandData() : Filter(), mouseRelativeCoordinates(), currentMode(MOUSE_MODE) {}
     void addCommand(commandData dat);
     bool tryAddCommand(commandData dat);
     bool consumeCommand(commandData& dat);
@@ -24,6 +29,7 @@ public:
     midasMode getMode();
 
     bool isCommandQueueEmpty();
+    void process();
 
 private:
     point mouseRelativeCoordinates;
@@ -31,6 +37,10 @@ private:
     midasMode currentMode;
     std::mutex commandQueueMutex;
     std::mutex relativeCoordinatesMutex;
+
+    void extractCommand(boost::any value);
+    void extractPoint(boost::any value);
+    void extractMode(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

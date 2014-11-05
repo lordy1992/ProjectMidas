@@ -19,7 +19,7 @@ void FilterPipeline::startPipeline(filterDataMap input)
         {
             break;
         }
-        else if (currentFilter->getFilterStatus() == filterStatus::ERROR)
+        else if (currentFilter->getFilterStatus() == filterStatus::FILTER_ERROR)
         {
             // TODO: Handle error
             break;

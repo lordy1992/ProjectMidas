@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include "kybrdCtrl.h"
 #include "WearableDevice.h"
+#include "FilterPipeline.h"
 #include <vector>
 #include <thread>
 
@@ -12,44 +13,88 @@ using namespace std;
 
 #ifdef TEST_WEARABLE_DEVICE
 
-class TestWearableClass : public WearableDevice {
+class TestFilter : public Filter {
 public:
-    TestWearableClass(SharedCommandData* sharedCommandData) : WearableDevice(sharedCommandData), done(false) {
+    void process()
+    {
+        filterDataMap input = Filter::getInput();
+        int cmd = boost::any_cast<int>(input["cmd"]);
         commandData command;
-        command.type = KEYBOARD_COMMAND;
-        command.kbd = UNDO;
-        commandList.push_back(command);
 
-        command.type = KEYBOARD_COMMAND;
-        command.kbd = COPY;
-        commandList.push_back(command);
+        if (cmd == 0)
+        {
+            command.type = KEYBOARD_COMMAND;
+            command.kbd = UNDO;
+        }
+        else if (cmd == 1)
+        {
+            command.type = KEYBOARD_COMMAND;
+            command.kbd = COPY;
+        }
+        else
+        {
+            command.type = MOUSE_COMMAND;
+            command.mouse = LEFT_CLICK;
+        }
 
-        command.type = MOUSE_COMMAND;
-        command.mouse = LEFT_CLICK;
-        commandList.push_back(command);
+        filterDataMap output;
+        output[COMMAND_INPUT] = command;
+        Filter::setOutput(output);
+    }
+};
+
+class TestWearableClass : public WearableDevice 
+{
+public:
+    TestWearableClass(SharedCommandData* sharedCommandData) : WearableDevice(sharedCommandData), done(false) 
+    {
+        commandFilter = new TestFilter();
+        commandList.push_back(0);
+        commandList.push_back(1);
+        commandList.push_back(2);
     }
 
-    void runDeviceLoop() {
-        vector<commandData>::iterator it;
+    ~TestWearableClass()
+    {
+        delete commandFilter;
+    }
 
-        WearableDevice::sharedData.setRelativeCoordinates(point(100, 50));
-        for (it = commandList.begin(); it != commandList.end(); it++) {
-            WearableDevice::sharedData.addCommand(*it);
+    void runDeviceLoop() 
+    {
+        FilterPipeline commandPipeline, coordPipeline;
+        vector<int>::iterator it;
+
+        commandPipeline.registerFilter(commandFilter);
+        commandPipeline.registerFilter(WearableDevice::sharedData);
+
+        coordPipeline.registerFilter(WearableDevice::sharedData);
+        
+        filterDataMap coordInput, commandInput;
+        coordInput[COORD_INPUT] = point(100, 50);
+
+        coordPipeline.startPipeline(coordInput);
+        for (it = commandList.begin(); it != commandList.end(); it++) 
+        {
+            commandInput["cmd"] = *it;
+            commandPipeline.startPipeline(commandInput);
             this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
         
-        WearableDevice::sharedData.setRelativeCoordinates(point(10, 10));
+        coordInput[COORD_INPUT] = point(10, 10);
+        coordPipeline.startPipeline(coordInput);
 
         done = true;
     }
     
     bool isDone() { return done; }
 private:
-    vector<commandData> commandList;
+    vector<int> commandList;
     bool done;
+    Filter* commandFilter;
 };
 
-int main() {
+int main() 
+{
     SharedCommandData sharedData;
     TestWearableClass* testDevice = new TestWearableClass(&sharedData);
 

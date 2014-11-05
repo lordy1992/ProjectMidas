@@ -5,8 +5,8 @@
 class FilterPipeline
 {
 public:
-    FilterPipeline();
-    ~FilterPipeline();
+    FilterPipeline() { }
+    ~FilterPipeline() { }
     
     void registerFilter(Filter* filter);
     void startPipeline(filterDataMap input);

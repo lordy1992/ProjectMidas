@@ -34,3 +34,13 @@ void Filter::setFilterError(filterError error)
 {
     this->error = error;
 }
+
+filterDataMap Filter::getInput()
+{
+    return inputData;
+}
+
+void Filter::setOutput(filterDataMap output)
+{
+    outputData = output;
+}

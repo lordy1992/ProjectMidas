@@ -110,3 +110,70 @@ bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
 }
+
+void SharedCommandData::process()
+{
+    filterDataMap input = Filter::getInput();
+    Filter::setFilterError(filterError::NO_FILTER_ERROR);
+    Filter::setFilterStatus(filterStatus::END_CHAIN);
+
+    if (input.find(COMMAND_INPUT) != input.end())
+    {
+        boost::any value = input[COMMAND_INPUT];
+        extractCommand(value);
+    }
+    
+    if (input.find(COORD_INPUT) != input.end())
+    {
+        boost::any value = input[COORD_INPUT];
+        extractPoint(value);
+    }
+
+    if (input.find(MODE_INPUT) != input.end())
+    {
+        boost::any value = input[MODE_INPUT];
+        extractMode(value);
+    }
+}
+
+void SharedCommandData::extractCommand(boost::any value)
+{
+    if (value.type() != typeid(commandData)) 
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        commandData data = boost::any_cast<commandData>(value);
+        addCommand(data);
+    }
+}
+
+void SharedCommandData::extractPoint(boost::any value)
+{
+    if (value.type() != typeid(point))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        point relativeCoordinates = boost::any_cast<point>(value);
+        setRelativeCoordinates(relativeCoordinates);
+    }
+}
+
+void SharedCommandData::extractMode(boost::any value)
+{
+    if (value.type() != typeid(midasMode))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        midasMode mode = boost::any_cast<midasMode>(value);
+        setMode(mode);
+    }
+}

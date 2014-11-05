@@ -5,7 +5,7 @@
 
 enum class filterError
 {
-    NO_ERROR,
+    NO_FILTER_ERROR,
     INVALID_INPUT,
     PROCESSING_ERROR
 };
@@ -14,7 +14,7 @@ enum class filterStatus
 {
     OK,  /* Successful case */
     END_CHAIN,  /* End the pipeline after this filter, no output */
-    ERROR  /* An error occurred in the filter, check the error field for 
+    FILTER_ERROR  /* An error occurred in the filter, check the error field for 
             * specific errors. */
 };
 
@@ -23,8 +23,8 @@ typedef std::map<std::string, boost::any> filterDataMap;
 class Filter
 {
 public:
-    Filter();
-    ~Filter();
+    Filter() { }
+    ~Filter() { }
 
     virtual void process() = 0;
     
@@ -35,13 +35,14 @@ public:
     filterError getFilterError();
 
 protected:
-    filterDataMap inputData;
-    filterDataMap outputData;
-
+    filterDataMap getInput();
+    void setOutput(filterDataMap output);
     void setFilterStatus(filterStatus status);
     void setFilterError(filterError error);
 
 private:
+    filterDataMap inputData;
+    filterDataMap outputData;
     filterStatus status;
     filterError error;
 };
