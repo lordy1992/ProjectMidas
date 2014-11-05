@@ -70,16 +70,22 @@
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="FilterPipeline.cpp" />
     <ClCompile Include="kybrdCtrl.cpp" />
+    <ClCompile Include="KybrdCtrlTest.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseCtrl.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
+    <ClCompile Include="SharedCommandDataTest.cpp" />
     <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterPipeline.h" />
     <ClInclude Include="kybrdCtrl.h" />
+    <ClInclude Include="KybrdCtrlTest.h" />
     <ClInclude Include="MidasCommon.h" />
+    <ClInclude Include="MouseCtrl.h" />
     <ClInclude Include="SharedCommandData.h" />
+    <ClInclude Include="SharedCommandDataTest.h" />
     <ClInclude Include="WearableDevice.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

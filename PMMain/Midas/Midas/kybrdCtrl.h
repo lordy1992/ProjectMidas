@@ -1,5 +1,5 @@
-#ifndef KEYBOARD_CONTROLLER_H
-#define KEYBOARD_CONTROLLER_H
+#ifndef _KEYBOARD_CONTROLLER_H
+#define _KEYBOARD_CONTROLLER_H
 
 #include <Windows.h>
 #include <vector>
@@ -35,7 +35,8 @@ private:
 
     KEYBDINPUT ki;
     std::vector<KEYBDINPUT> kiVec;
+    bool kiWillReleaseKeys;
 };
 
 
-#endif
+#endif /* _KEYBOARD_CONTROLLER_H */
