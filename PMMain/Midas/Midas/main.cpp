@@ -35,7 +35,7 @@ public:
         WearableDevice::sharedData.setRelativeCoordinates(point(100, 50));
         for (it = commandList.begin(); it != commandList.end(); it++) {
             WearableDevice::sharedData.addCommand(*it);
-           // this_thread::sleep_for(std::chrono::milliseconds(1000));
+            this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
         
         WearableDevice::sharedData.setRelativeCoordinates(point(10, 10));
