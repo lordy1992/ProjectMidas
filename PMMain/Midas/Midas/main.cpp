@@ -8,7 +8,7 @@
 
 using namespace std;
 
-#define TEST_WEARABLE_DEVICE
+#define KEYBOARD_CONTROL_TEST
 
 #ifdef TEST_WEARABLE_DEVICE
 
@@ -80,28 +80,23 @@ int main(void) {
 
     kybrdCtrl * controller = new kybrdCtrl();
 
-    //keybd_event(VK_LWIN, 0x5b, 0, 0);
+    while (1) {
+        keybd_event(VK_MENU, MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), 0, 0);
+        Sleep(10);
+        //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), 0, 0);
         //keybd_event(0x44, 0x20, 0, 0);
         //keybd_event(0x44, 0x20, KEYEVENTF_KEYUP, 0); 
-    //keybd_event(0x4C, MapVirtualKey(0x4C, MAPVK_VK_TO_VSC), 0, 0);
-    //keybd_event(0x4C, MapVirtualKey(0x4C, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
-    //keybd_event(VK_LWIN, 0x5b, KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_TAB, MapVirtualKey(VK_TAB, MAPVK_VSC_TO_VK), 0, 0);
+        Sleep(100);
+        keybd_event(VK_TAB, MapVirtualKey(VK_TAB, MAPVK_VSC_TO_VK), KEYEVENTF_KEYUP, 0);
+        Sleep(10);
+        //keybd_event(VK_CONTROL, MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
+        keybd_event(VK_MENU, MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
 
-    //while (1) {}
+        Sleep(1000);
+        cout << "still going..." << endl;
+    } 
 
-    /*controller->setKeyCmd(kybdCmds::HIDE_APPS);
-    int status = controller->sendData();
-    cout << "status = " << status << endl;
-
-    Sleep(2000);
-
-    controller->setKeyCmd(kybdCmds::WIN_HOME);
-    status = controller->sendData();
-    cout << "status = " << status << endl; */
-
-
-    string blah;
-    cin >> blah;
 
     int count = 0;
     while (true) {
