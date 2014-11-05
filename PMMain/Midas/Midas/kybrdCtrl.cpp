@@ -5,11 +5,13 @@ kybrdCtrl::kybrdCtrl()
 {
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    kiWillReleaseKeys = false;
 }
 
 
 void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
+    this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
 
@@ -46,14 +48,14 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         break;
     case SWITCH_WIN_FORWARD:
         // THIS ONE IS NOT WORKING TODO
-        //inputAlt();
-        inputWindows();
+        inputAlt();
+        //inputWindows(); // hijack test
         inputVK(VK_TAB);
         break;
     case SWITCH_WIN_REVERSE:
         // THIS ONE IS NOT WORKING TODO
-        //inputAlt();
-        inputWindows();
+        inputAlt();
+        //inputWindows(); // hijack test
         inputLShift();
         inputVK(VK_TAB);
         break;
@@ -82,13 +84,13 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         inputAlt();
         inputVK(0x44); // 'D' key
         break;
-    /*case LOCK_DESKTOP:
+    case LOCK_DESKTOP:
         // THIS ONE IS NOT WORKING TODO
         inputWindows();
         ZeroMemory(&ki, sizeof(KEYBDINPUT));
-        inputVK(0x4C; // 'L' key
+        inputVK(0x4C); // 'L' key
         this->ki.wScan = MapVirtualKey(0x4C, MAPVK_VK_TO_VSC);
-        break;*/
+        break;
     case EDIT_MENU:
         inputAlt();
         inputVK(0x45); // 'E' key
@@ -117,6 +119,7 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 
 void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
 {
+    this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     int cInt = int(c);
@@ -132,7 +135,7 @@ void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
 }
 
 int kybrdCtrl::sendData()
-{
+{    
     // Make input array, much larger than any anticipated data will ever actually be.
     int numKeys = this->kiVec.size();
     INPUT* kiArr = (INPUT*)malloc(sizeof(INPUT) * numKeys);
@@ -140,8 +143,26 @@ int kybrdCtrl::sendData()
     int status = getKeyInputArr(kiArr, numKeys);
     if (status == 0)
     {
-        int numSent = SendInput(numKeys, kiArr, sizeof(INPUT));
-        std::cout << "sent " << numSent << " key-presses of data" << std::endl;
+        if (this->kiWillReleaseKeys) 
+        {
+            if (numKeys % 2 != 0)
+            {
+                // error - all pushes should be matched with releases if this code is to execute.
+                return -2;
+            }
+            // send push key data first, delay, then send releases. This reduces issues with commands like "alt-tab" and "win-'l'"
+            int numSent = SendInput(numKeys/2, kiArr, sizeof(INPUT));
+            std::cout << "sent " << numSent << " key-presses of data" << std::endl;
+            Sleep(20); // 20 ms should do it
+            numSent = SendInput(numKeys/2, kiArr + (numKeys/2), sizeof(INPUT));
+            std::cout << "sent " << numSent << " key-presses of data" << std::endl;
+        }
+        else
+        {
+            // send all key data at once
+            int numSent = SendInput(numKeys, kiArr, sizeof(INPUT));
+            std::cout << "sent " << numSent << " key-presses of data" << std::endl;
+        }
     }
 
     free(kiArr);

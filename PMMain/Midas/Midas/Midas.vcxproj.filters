@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{f8d798bc-958e-42ba-a45a-ec0017272e6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Header Files">
+      <UniqueIdentifier>{36301a55-547c-4ce0-9184-9b6a1d7babae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Source Files">
+      <UniqueIdentifier>{93c5a20c-d710-48f3-a6ce-4fb6ba333d05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -27,6 +36,15 @@
     <ClCompile Include="WearableDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MouseCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="KybrdCtrlTest.cpp">
+      <Filter>Test\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedCommandDataTest.cpp">
+      <Filter>Test\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h">
@@ -40,6 +58,15 @@
     </ClInclude>
     <ClInclude Include="WearableDevice.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCtrl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="KybrdCtrlTest.h">
+      <Filter>Test\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedCommandDataTest.h">
+      <Filter>Test\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
