@@ -68,12 +68,14 @@
   <ItemGroup>
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="MouseCtrl.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
     <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h" />
     <ClInclude Include="MidasCommon.h" />
+    <ClInclude Include="MouseCtrl.h" />
     <ClInclude Include="SharedCommandData.h" />
     <ClInclude Include="WearableDevice.h" />
   </ItemGroup>

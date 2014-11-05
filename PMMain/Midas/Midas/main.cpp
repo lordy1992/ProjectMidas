@@ -80,6 +80,7 @@ int main(void) {
 
     kybrdCtrl * controller = new kybrdCtrl();
 
+    /*int count2 = 0;
     while (1) {
         keybd_event(VK_MENU, MapVirtualKey(VK_RMENU, MAPVK_VK_TO_VSC), 0, 0);
         Sleep(10);
@@ -95,7 +96,13 @@ int main(void) {
 
         Sleep(1000);
         cout << "still going..." << endl;
-    } 
+
+        if (count2++ % 6 == 0) 
+        {
+            controller->setKeyCmd(kybdCmds::LOCK_DESKTOP);
+            controller->sendData();
+        }
+    } */
 
 
     int count = 0;

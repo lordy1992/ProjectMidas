@@ -32,7 +32,12 @@ enum kybdCmds {
 
 enum mouseCmds {
     LEFT_CLICK,
-    RIGHT_CLICK
+    RIGHT_CLICK,
+    MIDDLE_CLICK,
+    MOVE_LEFT,
+    MOVE_RIGHT,
+    MOVE_UP,
+    MOVE_DOWN
 };
 
 enum midasMode {
@@ -55,4 +60,4 @@ struct point {
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
 };
 
-#endif
+#endif /* _MIDAS_COMMON_H */
