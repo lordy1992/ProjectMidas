@@ -44,11 +44,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <UACUIAccess>true</UACUIAccess>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <UACUIAccess>false</UACUIAccess>
+      <UACExecutionLevel>AsInvoker</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>Certificate.bat $(Platform) $(Configuration)</Command>
@@ -69,6 +70,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Filter.cpp" />
+    <ClCompile Include="FilterPipeline.cpp" />
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="KybrdCtrlTest.cpp" />
     <ClCompile Include="main.cpp" />
@@ -78,6 +81,8 @@
     <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Filter.h" />
+    <ClInclude Include="FilterPipeline.h" />
     <ClInclude Include="kybrdCtrl.h" />
     <ClInclude Include="KybrdCtrlTest.h" />
     <ClInclude Include="MidasCommon.h" />

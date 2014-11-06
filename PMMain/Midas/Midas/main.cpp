@@ -12,12 +12,12 @@
 
 using namespace std;
 
-#define KEYBOARD_CONTROL_TEST
+#define TEST_WEARABLE_DEVICE
 
 int main() {
 
 #ifdef TEST_WEARABLE_DEVICE
-    SharedCommandData_test::testQueue();
+    SharedCommandDataTest::testQueue();
 #endif
 
 #ifdef KEYBOARD_CONTROL_TEST
