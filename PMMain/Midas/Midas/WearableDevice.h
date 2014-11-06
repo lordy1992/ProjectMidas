@@ -9,11 +9,11 @@ void startWearableDeviceListener(WearableDevice* wearableDevice);
 
 class WearableDevice {
 public:
-    WearableDevice(SharedCommandData* sharedCommandData) : sharedData(*sharedCommandData) { }
+    WearableDevice(SharedCommandData* sharedCommandData) : sharedData(sharedCommandData) { }
     virtual void runDeviceLoop() = 0;
 
 protected:
-    SharedCommandData& sharedData;
+    SharedCommandData* sharedData;
 };
 
 #endif /* _WEARABLE_DEVICE_H */

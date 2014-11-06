@@ -36,6 +36,11 @@
     <ClCompile Include="WearableDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilterPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>Source Files</Filter>
     <ClCompile Include="MouseCtrl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -59,6 +64,11 @@
     <ClInclude Include="WearableDevice.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="FilterPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Header Files</Filter>
     <ClInclude Include="MouseCtrl.h">
       <Filter>Header Files</Filter>
     </ClInclude>

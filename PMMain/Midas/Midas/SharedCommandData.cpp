@@ -43,39 +43,39 @@ bool SharedCommandData::tryConsumeCommand(commandData& outCommandData)
     return locked;
 }
 
-void SharedCommandData::setRelativeCoordinates(point relativeCoordinates)
+void SharedCommandData::setVelocity(point velocity)
 {
-    relativeCoordinatesMutex.lock();
-    mouseRelativeCoordinates = relativeCoordinates;
-    relativeCoordinatesMutex.unlock();
+    velocityMutex.lock();
+    mouseVelocity = velocity;
+    velocityMutex.unlock();
 }
 
-bool SharedCommandData::trySetRelativeCoordinates(point relativeCoordinates)
+bool SharedCommandData::trySetVelocity(point velocity)
 {
-    bool locked = relativeCoordinatesMutex.try_lock();
+    bool locked = velocityMutex.try_lock();
     if (locked) {
-        mouseRelativeCoordinates = relativeCoordinates;
-        relativeCoordinatesMutex.unlock();
+        mouseVelocity = velocity;
+        velocityMutex.unlock();
     }
 
     return locked;
 }
 
-point SharedCommandData::getRelativeCoordinates()
+point SharedCommandData::getVelocity()
 {
-    relativeCoordinatesMutex.lock();
-    point relativeCoordinates = mouseRelativeCoordinates;
-    relativeCoordinatesMutex.unlock();
+    velocityMutex.lock();
+    point velocity = mouseVelocity;
+    velocityMutex.unlock();
 
-    return relativeCoordinates;
+    return velocity;
 }
 
-bool SharedCommandData::tryGetRelativeCoordinates(point& outRelativeCoordinates)
+bool SharedCommandData::tryGetVelocity(point& outVelocity)
 {
-    bool locked = relativeCoordinatesMutex.try_lock();
+    bool locked = velocityMutex.try_lock();
     if (locked) {
-        outRelativeCoordinates = mouseRelativeCoordinates;
-        relativeCoordinatesMutex.unlock();
+        outVelocity = mouseVelocity;
+        velocityMutex.unlock();
     }
 
     return locked;
@@ -109,4 +109,71 @@ midasMode SharedCommandData::getMode()
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
+}
+
+void SharedCommandData::process()
+{
+    filterDataMap input = Filter::getInput();
+    Filter::setFilterError(filterError::NO_FILTER_ERROR);
+    Filter::setFilterStatus(filterStatus::END_CHAIN);
+
+    if (input.find(COMMAND_INPUT) != input.end())
+    {
+        boost::any value = input[COMMAND_INPUT];
+        extractCommand(value);
+    }
+    
+    if (input.find(VELOCITY_INPUT) != input.end())
+    {
+        boost::any value = input[VELOCITY_INPUT];
+        extractPoint(value);
+    }
+
+    if (input.find(MODE_INPUT) != input.end())
+    {
+        boost::any value = input[MODE_INPUT];
+        extractMode(value);
+    }
+}
+
+void SharedCommandData::extractCommand(boost::any value)
+{
+    if (value.type() != typeid(commandData)) 
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        commandData data = boost::any_cast<commandData>(value);
+        addCommand(data);
+    }
+}
+
+void SharedCommandData::extractPoint(boost::any value)
+{
+    if (value.type() != typeid(point))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        point velocity = boost::any_cast<point>(value);
+        setVelocity(velocity);
+    }
+}
+
+void SharedCommandData::extractMode(boost::any value)
+{
+    if (value.type() != typeid(midasMode))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        midasMode mode = boost::any_cast<midasMode>(value);
+        setMode(mode);
+    }
 }
