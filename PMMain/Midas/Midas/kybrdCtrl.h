@@ -5,10 +5,10 @@
 #include <vector>
 #include "MidasCommon.h"
 
-class kybrdCtrl 
+class KybrdCtrl 
 {
 public:
-    kybrdCtrl();
+    KybrdCtrl();
 
     void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
 

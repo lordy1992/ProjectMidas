@@ -17,7 +17,7 @@ void KybrdCtrlTest::testLock(void)
 
 void KybrdCtrlTest::testAltTab(void)
 {
-    kybrdCtrl * controller = new kybrdCtrl();
+    KybrdCtrl * controller = new KybrdCtrl();
 
     int count = 0;
     while (true) {

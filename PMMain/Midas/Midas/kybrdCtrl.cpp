@@ -1,7 +1,7 @@
 #include "kybrdCtrl.h"
 #include <iostream>
 
-kybrdCtrl::kybrdCtrl()
+KybrdCtrl::KybrdCtrl()
 {
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
@@ -9,7 +9,7 @@ kybrdCtrl::kybrdCtrl()
 }
 
 
-void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
+void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
     this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
@@ -113,7 +113,7 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
     }
 }
 
-void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
+void KybrdCtrl::setKeyChar(char c, bool releaseKeys)
 {
     this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
@@ -130,7 +130,7 @@ void kybrdCtrl::setKeyChar(char c, bool releaseKeys)
     }
 }
 
-int kybrdCtrl::sendData()
+int KybrdCtrl::sendData()
 {    
     // Make input array, much larger than any anticipated data will ever actually be.
     int numKeys = this->kiVec.size();
@@ -166,7 +166,7 @@ int kybrdCtrl::sendData()
     return status;
 }
 
-void kybrdCtrl::setMirroredUpKeys()
+void KybrdCtrl::setMirroredUpKeys()
 {
     int numKeysToMirror = this->kiVec.size();
     for (int i = numKeysToMirror - 1; i >= 0; i--) 
@@ -177,7 +177,7 @@ void kybrdCtrl::setMirroredUpKeys()
     }
 }
 
-void kybrdCtrl::inputCtrl()
+void KybrdCtrl::inputCtrl()
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = VK_CONTROL;
@@ -186,7 +186,7 @@ void kybrdCtrl::inputCtrl()
     this->kiVec.push_back(ki);
 }
 
-void kybrdCtrl::inputLShift()
+void KybrdCtrl::inputLShift()
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = VK_LSHIFT;
@@ -195,7 +195,7 @@ void kybrdCtrl::inputLShift()
     this->kiVec.push_back(ki);
 }
 
-void kybrdCtrl::inputAlt()
+void KybrdCtrl::inputAlt()
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = VK_MENU;
@@ -204,7 +204,7 @@ void kybrdCtrl::inputAlt()
     this->kiVec.push_back(ki);
 }
 
-void kybrdCtrl::inputWindows()
+void KybrdCtrl::inputWindows()
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = VK_LWIN;
@@ -213,7 +213,7 @@ void kybrdCtrl::inputWindows()
     this->kiVec.push_back(ki);
 }
 
-void kybrdCtrl::inputVK(int vk)
+void KybrdCtrl::inputVK(int vk)
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = vk;
@@ -222,12 +222,12 @@ void kybrdCtrl::inputVK(int vk)
     this->kiVec.push_back(ki);
 }
 
-std::vector<KEYBDINPUT> kybrdCtrl::getKeyInputVec()
+std::vector<KEYBDINPUT> KybrdCtrl::getKeyInputVec()
 {
     return this->kiVec;
 }
 
-int kybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
+int KybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
 {
     if (len_arr < this->kiVec.size()) return -1;
 
