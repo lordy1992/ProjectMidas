@@ -47,22 +47,19 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         inputVK(VK_TAB);
         break;
     case SWITCH_WIN_FORWARD:
-        // THIS ONE IS NOT WORKING TODO
+        // This only works if uiAccess is set to True.
         inputAlt();
-        //inputWindows(); // hijack test
         inputVK(VK_TAB);
         break;
     case SWITCH_WIN_REVERSE:
-        // THIS ONE IS NOT WORKING TODO
+        // This only works if uiAccess is set to True.
         inputAlt();
-        //inputWindows(); // hijack test
         inputLShift();
         inputVK(VK_TAB);
         break;
     case COPY:
         inputCtrl();
         inputVK(0x43); // 'C' key
-        this->ki.wScan = MapVirtualKey(0x43, MAPVK_VK_TO_VSC);
         break;
     case PASTE:
         inputCtrl();
@@ -89,7 +86,6 @@ void kybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         inputWindows();
         ZeroMemory(&ki, sizeof(KEYBDINPUT));
         inputVK(0x4C); // 'L' key
-        this->ki.wScan = MapVirtualKey(0x4C, MAPVK_VK_TO_VSC);
         break;
     case EDIT_MENU:
         inputAlt();
