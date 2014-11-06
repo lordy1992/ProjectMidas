@@ -50,6 +50,9 @@
       <UACUIAccess>true</UACUIAccess>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
+    <PostBuildEvent>
+      <Command>Certificate.bat $(Platform) $(Configuration)</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -82,6 +85,9 @@
     <ClInclude Include="SharedCommandData.h" />
     <ClInclude Include="SharedCommandDataTest.h" />
     <ClInclude Include="WearableDevice.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Certificate.bat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

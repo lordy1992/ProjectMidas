@@ -22,6 +22,9 @@
     <Filter Include="Test\Source Files">
       <UniqueIdentifier>{93c5a20c-d710-48f3-a6ce-4fb6ba333d05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{1b973e23-28bf-41e4-8306-41e03b1f9cae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -68,5 +71,10 @@
     <ClInclude Include="SharedCommandDataTest.h">
       <Filter>Test\Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Certificate.bat">
+      <Filter>Scripts</Filter>
+    </None>
   </ItemGroup>
 </Project>
