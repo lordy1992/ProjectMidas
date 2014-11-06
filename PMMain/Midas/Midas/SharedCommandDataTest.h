@@ -66,7 +66,7 @@ public:
         coordPipeline.registerFilter(WearableDevice::sharedData);
 
         filterDataMap coordInput, commandInput;
-        coordInput[COORD_INPUT] = point(100, 50);
+        coordInput[VELOCITY_INPUT] = point(100, 50);
 
         coordPipeline.startPipeline(coordInput);
         for (it = commandList.begin(); it != commandList.end(); it++)
@@ -76,7 +76,7 @@ public:
             this_thread::sleep_for(std::chrono::milliseconds(1000));
         }
 
-        coordInput[COORD_INPUT] = point(10, 10);
+        coordInput[VELOCITY_INPUT] = point(10, 10);
         coordPipeline.startPipeline(coordInput);
 
         done = true;

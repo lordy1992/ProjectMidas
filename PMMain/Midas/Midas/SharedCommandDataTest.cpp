@@ -14,7 +14,7 @@ void SharedCommandDataTest::testQueue(void)
         {
             commandData nextCmd;
             while (!sharedData.consumeCommand(nextCmd));
-            point nextPnt = sharedData.getRelativeCoordinates();
+            point nextPnt = sharedData.getVelocity();
 
             cout << "Command: " << (nextCmd.type == MOUSE_COMMAND ? nextCmd.mouse : nextCmd.kbd)
                 << ", Coords: (" << nextPnt.x << ", " << nextPnt.y << ")" << endl;

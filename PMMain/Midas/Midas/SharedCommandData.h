@@ -7,22 +7,22 @@
 #include "Filter.h"
 
 #define COMMAND_INPUT "command"
-#define COORD_INPUT "relative_coordinates"
+#define VELOCITY_INPUT "velocity"
 #define MODE_INPUT "mode"
 
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData() : Filter(), mouseRelativeCoordinates(), currentMode(MOUSE_MODE) {}
+    SharedCommandData() : Filter(), mouseVelocity(), currentMode(MOUSE_MODE) {}
     void addCommand(commandData dat);
     bool tryAddCommand(commandData dat);
     bool consumeCommand(commandData& dat);
     bool tryConsumeCommand(commandData& outCommandData);
 
-    void setRelativeCoordinates(point relativeCoordinates);
-    bool trySetRelativeCoordinates(point relativeCoordinates);
-    point getRelativeCoordinates();
-    bool tryGetRelativeCoordinates(point& outRelativeCoordinates);
+    void setVelocity(point velocity);
+    bool trySetVelocity(point velocity);
+    point getVelocity();
+    bool tryGetVelocity(point& outVelocity);
 
     void setMode(midasMode mode);
     bool trySetMode(midasMode mode);
@@ -32,11 +32,11 @@ public:
     void process();
 
 private:
-    point mouseRelativeCoordinates;
+    point mouseVelocity;
     std::queue<commandData> commandQueue;
     midasMode currentMode;
     std::mutex commandQueueMutex;
-    std::mutex relativeCoordinatesMutex;
+    std::mutex velocityMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);

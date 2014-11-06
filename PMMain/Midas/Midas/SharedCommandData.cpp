@@ -43,39 +43,39 @@ bool SharedCommandData::tryConsumeCommand(commandData& outCommandData)
     return locked;
 }
 
-void SharedCommandData::setRelativeCoordinates(point relativeCoordinates)
+void SharedCommandData::setVelocity(point velocity)
 {
-    relativeCoordinatesMutex.lock();
-    mouseRelativeCoordinates = relativeCoordinates;
-    relativeCoordinatesMutex.unlock();
+    velocityMutex.lock();
+    mouseVelocity = velocity;
+    velocityMutex.unlock();
 }
 
-bool SharedCommandData::trySetRelativeCoordinates(point relativeCoordinates)
+bool SharedCommandData::trySetVelocity(point velocity)
 {
-    bool locked = relativeCoordinatesMutex.try_lock();
+    bool locked = velocityMutex.try_lock();
     if (locked) {
-        mouseRelativeCoordinates = relativeCoordinates;
-        relativeCoordinatesMutex.unlock();
+        mouseVelocity = velocity;
+        velocityMutex.unlock();
     }
 
     return locked;
 }
 
-point SharedCommandData::getRelativeCoordinates()
+point SharedCommandData::getVelocity()
 {
-    relativeCoordinatesMutex.lock();
-    point relativeCoordinates = mouseRelativeCoordinates;
-    relativeCoordinatesMutex.unlock();
+    velocityMutex.lock();
+    point velocity = mouseVelocity;
+    velocityMutex.unlock();
 
-    return relativeCoordinates;
+    return velocity;
 }
 
-bool SharedCommandData::tryGetRelativeCoordinates(point& outRelativeCoordinates)
+bool SharedCommandData::tryGetVelocity(point& outVelocity)
 {
-    bool locked = relativeCoordinatesMutex.try_lock();
+    bool locked = velocityMutex.try_lock();
     if (locked) {
-        outRelativeCoordinates = mouseRelativeCoordinates;
-        relativeCoordinatesMutex.unlock();
+        outVelocity = mouseVelocity;
+        velocityMutex.unlock();
     }
 
     return locked;
@@ -123,9 +123,9 @@ void SharedCommandData::process()
         extractCommand(value);
     }
     
-    if (input.find(COORD_INPUT) != input.end())
+    if (input.find(VELOCITY_INPUT) != input.end())
     {
-        boost::any value = input[COORD_INPUT];
+        boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
     }
 
@@ -159,8 +159,8 @@ void SharedCommandData::extractPoint(boost::any value)
     }
     else
     {
-        point relativeCoordinates = boost::any_cast<point>(value);
-        setRelativeCoordinates(relativeCoordinates);
+        point velocity = boost::any_cast<point>(value);
+        setVelocity(velocity);
     }
 }
 

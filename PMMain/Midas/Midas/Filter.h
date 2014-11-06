@@ -12,10 +12,10 @@ enum class filterError
 
 enum class filterStatus
 {
-    OK,  /* Successful case */
-    END_CHAIN,  /* End the pipeline after this filter, no output */
-    FILTER_ERROR  /* An error occurred in the filter, check the error field for 
-            * specific errors. */
+    OK,             /* Successful case */
+    END_CHAIN,      /* End the pipeline after this filter, no output */
+    FILTER_ERROR    /* An error occurred in the filter, check the error field for 
+                     * specific errors. */
 };
 
 typedef std::map<std::string, boost::any> filterDataMap;
