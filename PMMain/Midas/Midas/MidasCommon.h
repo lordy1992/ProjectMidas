@@ -27,7 +27,8 @@ enum kybdCmds {
     EDIT_MENU,
     VIEW_MENU,
     WIN_HOME,
-    HIDE_APPS
+    HIDE_APPS,
+    CONTROL
 };
 
 enum mouseCmds {
@@ -37,7 +38,11 @@ enum mouseCmds {
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
-    MOVE_DOWN
+    MOVE_DOWN,
+    SCROLL_LEFT,
+    SCROLL_RIGHT,
+    SCROLL_UP,
+    SCROLL_DOWN
 };
 
 enum midasMode {

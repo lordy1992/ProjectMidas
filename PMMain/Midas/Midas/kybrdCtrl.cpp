@@ -102,6 +102,9 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         inputWindows();
         inputVK(0x44); // 'D' key
         break;
+    case CONTROL:
+        inputCtrl();
+        break;
     default:
         break;
     }

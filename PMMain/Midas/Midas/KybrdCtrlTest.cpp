@@ -22,12 +22,12 @@ void KybrdCtrlTest::testAltTab(void)
     int count = 0;
     while (true) {
         if (count++ % 2 == 0) {
-            //controller->setKeyCmd(kybdCmds::ZOOM_IN);
+            controller->setKeyCmd(kybdCmds::ZOOM_IN);
             //controller->setKeyChar('a');
-            controller->setKeyCmd(kybdCmds::SWITCH_WIN_FORWARD);
+            //controller->setKeyCmd(kybdCmds::SWITCH_WIN_FORWARD);
         }
         else {
-            //controller->setKeyCmd(kybdCmds::ZOOM_OUT);
+            controller->setKeyCmd(kybdCmds::ZOOM_OUT);
             //controller->setKeyChar('b');
             //controller->setKeyCmd(kybdCmds::SWITCH_WIN_REVERSE);
         }
