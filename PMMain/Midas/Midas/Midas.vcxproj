@@ -77,6 +77,7 @@
     <ClCompile Include="KybrdCtrlTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseCtrl.cpp" />
+    <ClCompile Include="MouseCtrlTest.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
     <ClCompile Include="SharedCommandDataTest.cpp" />
     <ClCompile Include="WearableDevice.cpp" />
@@ -84,6 +85,7 @@
   <ItemGroup>
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterPipeline.h" />
+    <ClInclude Include="MouseCtrlTest.h" />
     <ClInclude Include="kybrdCtrl.h" />
     <ClInclude Include="KybrdCtrlTest.h" />
     <ClInclude Include="MidasCommon.h" />
