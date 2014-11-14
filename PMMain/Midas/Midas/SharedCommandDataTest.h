@@ -82,6 +82,11 @@ public:
         done = true;
     }
 
+    int getDeviceError()
+    {
+        return 0;
+    }
+
     bool isDone() { return done; }
 private:
     vector<int> commandList;
