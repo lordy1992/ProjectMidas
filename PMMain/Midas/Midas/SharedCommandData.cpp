@@ -81,31 +81,6 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
-void SharedCommandData::setMode(midasMode mode)
-{
-    commandQueueMutex.lock();
-    currentMode = mode;
-    commandQueue.empty();
-    commandQueueMutex.unlock();
-}
-
-bool SharedCommandData::trySetMode(midasMode mode)
-{
-    bool locked = commandQueueMutex.try_lock();
-    if (locked) {
-        currentMode = mode;
-        commandQueue.empty();
-        commandQueueMutex.unlock();
-    }
-
-    return locked;
-}
-
-midasMode SharedCommandData::getMode()
-{
-    return currentMode;
-}
-
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
@@ -134,6 +109,20 @@ void SharedCommandData::process()
         boost::any value = input[MODE_INPUT];
         extractMode(value);
     }
+}
+
+void SharedCommandData::empty()
+{
+    commandQueueMutex.lock();
+    commandQueue.empty();
+    commandQueueMutex.unlock();
+}
+
+void SharedCommandData::tryEmpty()
+{
+    commandQueueMutex.try_lock();
+    commandQueue.empty();
+    commandQueueMutex.unlock();
 }
 
 void SharedCommandData::extractCommand(boost::any value)

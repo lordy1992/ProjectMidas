@@ -57,6 +57,9 @@
     <ClCompile Include="MyoDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MouseCtrlTest.cpp">
+      <Filter>Test\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="kybrdCtrl.h">
@@ -88,6 +91,9 @@
     </ClInclude>
     <ClInclude Include="MyoDevice.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCtrlTest.h">
+      <Filter>Test\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
