@@ -103,12 +103,6 @@ void SharedCommandData::process()
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
     }
-
-    if (input.find(MODE_INPUT) != input.end())
-    {
-        boost::any value = input[MODE_INPUT];
-        extractMode(value);
-    }
 }
 
 void SharedCommandData::empty()
@@ -150,19 +144,5 @@ void SharedCommandData::extractPoint(boost::any value)
     {
         point velocity = boost::any_cast<point>(value);
         setVelocity(velocity);
-    }
-}
-
-void SharedCommandData::extractMode(boost::any value)
-{
-    if (value.type() != typeid(midasMode))
-    {
-        Filter::setFilterError(filterError::INVALID_INPUT);
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
-    }
-    else
-    {
-        midasMode mode = boost::any_cast<midasMode>(value);
-        setMode(mode);
     }
 }

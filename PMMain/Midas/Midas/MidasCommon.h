@@ -3,7 +3,8 @@
 
 enum commandType {
     KEYBOARD_COMMAND,
-    MOUSE_COMMAND
+    MOUSE_COMMAND,
+    UNKNOWN_COMMAND
 };
 
 enum kybdCmds {

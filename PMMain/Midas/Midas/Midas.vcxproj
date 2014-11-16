@@ -133,6 +133,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AveragingFilter.cpp" />
+    <ClCompile Include="ControlState.cpp" />
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="FilterPipeline.cpp" />
     <ClCompile Include="GestureFilter.cpp" />
@@ -147,6 +149,8 @@
     <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AveragingFilter.h" />
+    <ClInclude Include="ControlState.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterPipeline.h" />
     <ClInclude Include="MouseCtrlTest.h" />
