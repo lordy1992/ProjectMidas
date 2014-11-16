@@ -147,7 +147,7 @@ int KybrdCtrl::sendData()
             if (numKeys % 2 != 0)
             {
                 // error - all pushes should be matched with releases if this code is to execute.
-                return -2;
+                return kybdStatus::N_PRESSES_MATCH_RELEASES;
             }
             // send push key data first, delay, then send releases. This reduces issues with commands like "alt-tab" and "win-'l'"
             int numSent = SendInput(numKeys/2, kiArr, sizeof(INPUT));
@@ -232,7 +232,7 @@ std::vector<KEYBDINPUT> KybrdCtrl::getKeyInputVec()
 
 int KybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
 {
-    if (len_arr < this->kiVec.size()) return -1;
+    if (len_arr < this->kiVec.size()) return ARRAY_TO_SMALL;
 
     for (int i = 0; i < this->kiVec.size(); i++)
     {
@@ -240,5 +240,5 @@ int KybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
         ki_arr[i].ki = this->kiVec.at(i);
     }
 
-    return 0;
+    return kybdStatus::SUCCESS;
 }

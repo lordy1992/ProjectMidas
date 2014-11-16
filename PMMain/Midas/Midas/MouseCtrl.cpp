@@ -1,24 +1,24 @@
 #include "MouseCtrl.h"
-#include <time.h>
 #include <iostream>
+#include <time.h>
 
 MouseCtrl::MouseCtrl()
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
-    lastMouseMovement = clock();
+    lastMouseMovement = clock() * (1000 / CLOCKS_PER_SEC);
     lastMouseScroll = lastMouseMovement;
-    minMovementTimeDelta = 10; // default arbitrarily to 5 ms gaps.
-    std::cout << "time on mouseCtrlCreate = " << lastMouseMovement << std::endl;
+    minMovementTimeDelta = 1;//DEFAULT_MIN_MOVE_TIME;
+    //std::cout << "time on mouseCtrlCreate = " << lastMouseMovement << std::endl;
 }
 
-void MouseCtrl::setMinMovementTimeDelta(time_t delta)
+void MouseCtrl::setMinMovementTimeDelta(DWORD delta)
 {
     minMovementTimeDelta = delta;
 }
 
 void MouseCtrl::setScrollRate(int rate)
 {
-    if (rate < -120 || rate > 120)
+    if (rate < -WHEEL_DELTA || rate > WHEEL_DELTA)
     {
         scrollRate = DEFAULT_SCROLL_RATE; 
     } 
@@ -28,17 +28,12 @@ void MouseCtrl::setScrollRate(int rate)
     }
 }
 
-/*
- * Use Note: If desired to click and hold, simply set "releaseIfClick" to false. THEN,
- * to stop holding, call this function again with the same mouse click, but set "releaseIfClick"
- * to true.
- */
 void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
-    time_t currentTime = clock();
-    time_t deltaTimeMove = currentTime - lastMouseMovement;
-    time_t deltaTimeScroll = currentTime - lastMouseScroll;
+    DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
+    DWORD deltaTimeMove = currentTime - lastMouseMovement;
+    DWORD deltaTimeScroll = currentTime - lastMouseScroll;
 
     switch (mouseCmd)
     {
@@ -91,11 +86,16 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
         mi.dwFlags == MOUSEEVENTF_MOVE)
     {
         // Not enough time has passed to move the mouse again
+        if (deltaTimeMove > 0)
+        {
+            //std::cout << "delta not high enough: " << deltaTimeMove << std::endl;
+        }
         return;
     }
     else
     {
         lastMouseMovement = currentTime;
+        //std::cout << "updating lastMouseMovement to: " << lastMouseMovement << std::endl;
     }
 
     if (deltaTimeScroll < SCROLL_MIN_TIME &&
@@ -115,7 +115,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
     in->mi = mi;
     SendInput(1, in, sizeof(INPUT));
 
-    if (releaseIfClick) 
+    if (releaseIfClick)
     {
         ZeroMemory(&mi, sizeof(MOUSEINPUT));
         switch (mouseCmd)

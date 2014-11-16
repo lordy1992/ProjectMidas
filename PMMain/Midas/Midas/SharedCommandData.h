@@ -13,7 +13,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData() : Filter(), mouseVelocity(), currentMode(MOUSE_MODE) {}
+    SharedCommandData() : Filter(), mouseVelocity() {}
     void addCommand(commandData dat);
     bool tryAddCommand(commandData dat);
     bool consumeCommand(commandData& dat);
@@ -24,17 +24,15 @@ public:
     point getVelocity();
     bool tryGetVelocity(point& outVelocity);
 
-    void setMode(midasMode mode);
-    bool trySetMode(midasMode mode);
-    midasMode getMode();
-
     bool isCommandQueueEmpty();
     void process();
+
+    void empty();
+    void tryEmpty();
 
 private:
     point mouseVelocity;
     std::queue<commandData> commandQueue;
-    midasMode currentMode;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
 

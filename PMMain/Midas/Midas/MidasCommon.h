@@ -52,6 +52,12 @@ enum midasMode {
     GESTURE_MODE
 };
 
+enum kybdStatus {
+    SUCCESS,
+    ARRAY_TO_SMALL,
+    N_PRESSES_MATCH_RELEASES
+};
+
 struct commandData {
     commandType type;
     union {
