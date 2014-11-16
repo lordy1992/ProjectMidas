@@ -21,74 +21,68 @@ void AveragingFilter::process()
 {
     filterDataMap input = Filter::getInput();
 
-    float quatX = boost::any_cast<float>(input["quatDataX"]);
-    float quatY = boost::any_cast<float>(input["quatDataY"]);
-    float quatZ = boost::any_cast<float>(input["quatDataZ"]);
-    float quatW = boost::any_cast<float>(input["quatDataW"]);
-    float accelX = boost::any_cast<float>(input["accelDataX"]);
-    float accelY = boost::any_cast<float>(input["accelDataY"]);
-    float accelZ = boost::any_cast<float>(input["accelDataZ"]);
-    float gyroX = boost::any_cast<float>(input["gyroDataX"]);
-    float gyroY = boost::any_cast<float>(input["gyroDataY"]);
-    float gyroZ = boost::any_cast<float>(input["gyroDataZ"]);
+    float quatX  = boost::any_cast<float>(input[QUAT_DATA_X ]);
+    float quatY  = boost::any_cast<float>(input[QUAT_DATA_Y ]);
+    float quatZ  = boost::any_cast<float>(input[QUAT_DATA_Z ]);
+    float quatW  = boost::any_cast<float>(input[QUAT_DATA_W ]);
+    float accelX = boost::any_cast<float>(input[ACCEL_DATA_X]);
+    float accelY = boost::any_cast<float>(input[ACCEL_DATA_Y]);
+    float accelZ = boost::any_cast<float>(input[ACCEL_DATA_Z]);
+    float gyroX  = boost::any_cast<float>(input[GYRO_DATA_X ]);
+    float gyroY  = boost::any_cast<float>(input[GYRO_DATA_Y ]);
+    float gyroZ  = boost::any_cast<float>(input[GYRO_DATA_Z ]);
 
-    insertAvgElement(quatX, quatXQueue);    
-    insertAvgElement(quatY, quatYQueue);
-    insertAvgElement(quatZ, quatZQueue);
-    insertAvgElement(quatW, quatWQueue);
-    insertAvgElement(accelX,accelXQueue);
-    insertAvgElement(accelY,accelYQueue);
-    insertAvgElement(accelZ,accelZQueue);
-    insertAvgElement(gyroX, gyroXQueue);
-    insertAvgElement(gyroY, gyroYQueue);
-    insertAvgElement(gyroZ, gyroZQueue);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    if (cmd == 0)
-    {
-        command.type = KEYBOARD_COMMAND;
-        command.kbd = UNDO;
-    }
-    else if (cmd == 1)
-    {
-        command.type = KEYBOARD_COMMAND;
-        command.kbd = COPY;
-    }
-    else
-    {
-        command.type = MOUSE_COMMAND;
-        command.mouse = LEFT_CLICK;
-    }
+    insertAvgElement(quatX, quatXDeque);    
+    insertAvgElement(quatY, quatYDeque);
+    insertAvgElement(quatZ, quatZDeque);
+    insertAvgElement(quatW, quatWDeque);
+    insertAvgElement(accelX,accelXDeque);
+    insertAvgElement(accelY,accelYDeque);
+    insertAvgElement(accelZ,accelZDeque);
+    insertAvgElement(gyroX, gyroXDeque);
+    insertAvgElement(gyroY, gyroYDeque);
+    insertAvgElement(gyroZ, gyroZDeque);
 
     filterDataMap output;
-    output[COMMAND_INPUT] = command;
+
+    output[QUAT_DATA_X]  = calcAvg(quatXDeque);
+    output[QUAT_DATA_Y]  = calcAvg(quatYDeque);
+    output[QUAT_DATA_Z]  = calcAvg(quatZDeque);
+    output[QUAT_DATA_W]  = calcAvg(quatWDeque);
+    output[ACCEL_DATA_X] = calcAvg(accelXDeque);
+    output[ACCEL_DATA_Y] = calcAvg(accelYDeque);
+    output[ACCEL_DATA_Z] = calcAvg(accelZDeque);
+    output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
+    output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
+    output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
+
     Filter::setOutput(output);
 }
 
-void AveragingFilter::insertAvgElement(float elem, std::queue<float>q)
+void AveragingFilter::insertAvgElement(float elem, std::deque<float>dq)
 {
-    q.push(elem);
-    while (q.size() > avgCount) {
+    dq.push_back(elem);
+    while (dq.size() > avgCount) {
         // discard element so that average is only based on
         // avgCount elements.
-        q.pop();
+        dq.pop_back();
     }
 }
 
-float AveragingFilter::calcAvg(std::queue<float>q)
+float AveragingFilter::calcAvg(std::deque<float>dq)
 {
-    return -1; // TODO.
+    float sum = 0;
+    float denom = dq.size();
+    if (denom == 0)
+    {
+        return 0;
+    }
+    
+    std::deque<float>::iterator it = dq.begin();
+    while (it != dq.end())
+    {
+        sum += *it++;
+    }
+
+    return sum / denom;
 }

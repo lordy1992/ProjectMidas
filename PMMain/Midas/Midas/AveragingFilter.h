@@ -2,9 +2,19 @@
 #define _AVERAGING_FILTER_H
 
 #include "Filter.h"
-#include <queue>
+#include <deque>
 
 #define DEFAULT_AVG_COUNT 20
+#define QUAT_DATA_X "quatDataX"
+#define QUAT_DATA_Y "quatDataY"
+#define QUAT_DATA_Z "quatDataZ"
+#define QUAT_DATA_W "quatDataW"
+#define ACCEL_DATA_X "accelDataX"
+#define ACCEL_DATA_Y "accelDataY"
+#define ACCEL_DATA_Z "accelDataZ"
+#define GYRO_DATA_X "gyroDataX"
+#define GYRO_DATA_Y "gyroDataY"
+#define GYRO_DATA_Z "gyroDataZ"
 
 class AveragingFilter : public Filter
 {
@@ -22,21 +32,21 @@ public:
 private:
     unsigned int avgCount;
 
-    void insertAvgElement(float elem, std::queue<float>q);
+    void insertAvgElement(float elem, std::deque<float>dq);
 
-    float calcAvg(std::queue<float>q);
+    float calcAvg(std::deque<float>dq);
 
     //Arrays to store the avg data.
-    std::queue<float> quatXQueue;
-    std::queue<float> quatYQueue;
-    std::queue<float> quatZQueue;
-    std::queue<float> quatWQueue;
-    std::queue<float> accelXQueue;
-    std::queue<float> accelYQueue;
-    std::queue<float> accelZQueue;
-    std::queue<float> gyroXQueue;
-    std::queue<float> gyroYQueue;
-    std::queue<float> gyroZQueue;
+    std::deque<float> quatXDeque;
+    std::deque<float> quatYDeque;
+    std::deque<float> quatZDeque;
+    std::deque<float> quatWDeque;
+    std::deque<float> accelXDeque;
+    std::deque<float> accelYDeque;
+    std::deque<float> accelZDeque;
+    std::deque<float> gyroXDeque;
+    std::deque<float> gyroYDeque;
+    std::deque<float> gyroZDeque;
 };
 
 #endif /* _AVERAGING_FILTER_H */
