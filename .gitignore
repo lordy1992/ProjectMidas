@@ -12,6 +12,8 @@
 *.so
 *.dylib
 *.dll
+!myo32.dll
+!myo64.dll
 
 # Fortran module files
 *.mod
@@ -21,6 +23,8 @@
 *.la
 *.a
 *.lib
+!myo32.lib
+!myo64.lib
 
 # Executables
 *.exe
