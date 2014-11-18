@@ -17,6 +17,7 @@ void GestureFilter::process()
     myo::Pose::Type gesture = boost::any_cast<myo::Pose::Type>(input["gesture"]);
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
+    Filter::setFilterStatus(filterStatus::OK);
 
     if (gesture != lastPoseType)
     {
@@ -81,4 +82,6 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
     {
         command.type = UNKNOWN_COMMAND;
     }
+
+    return command;
 }

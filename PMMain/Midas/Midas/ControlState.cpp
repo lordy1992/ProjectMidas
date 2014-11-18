@@ -27,6 +27,7 @@ bool ControlState::trySetMode(midasMode mode)
     // the SharedCommandData integrity.
     currentMode = mode;
     SCDHandle->tryEmpty();
+    return true;
 }
 
 midasMode ControlState::getMode()

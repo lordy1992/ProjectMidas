@@ -1,6 +1,7 @@
 #ifndef _GESTURE_FILTER_H
 #define _GESTURE_FILTER_H
 
+#include "myo\myo.hpp"
 #include "ControlState.h"
 #include "Filter.h"
 
