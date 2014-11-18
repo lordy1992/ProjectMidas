@@ -1,7 +1,6 @@
 // Copyright (C) 2013-2014 Thalmic Labs Inc.
 // Distributed under the Myo SDK license agreement. See LICENSE.txt for details.
-#ifndef MYO_CXX_DEVICELISTENER_HPP
-#define MYO_CXX_DEVICELISTENER_HPP
+#pragma once
 
 #include <stdint.h>
 
@@ -56,10 +55,10 @@ public:
     virtual void onDisconnect(Myo* myo, uint64_t timestamp) {}
 
     /// Called when a paired Myo recognizes that it is on an arm.
-    virtual void onArmRecognized(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) {}
+    virtual void onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) {}
 
     /// Called when a paired Myo is moved or removed from the arm.
-    virtual void onArmLost(Myo* myo, uint64_t timestamp) {}
+    virtual void onArmUnsync(Myo* myo, uint64_t timestamp) {}
 
     /// Called when a paired Myo has provided a new pose.
     virtual void onPose(Myo* myo, uint64_t timestamp, Pose pose) {}
@@ -85,5 +84,3 @@ public:
 };
 
 } // namespace myo
-
-#endif // MYO_CXX_DEVICELISTENER_HPP

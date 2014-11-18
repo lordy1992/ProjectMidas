@@ -8,7 +8,6 @@
 
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
-#define MODE_INPUT "mode"
 
 class SharedCommandData : public Filter
 {
@@ -38,7 +37,6 @@ private:
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-    void extractMode(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

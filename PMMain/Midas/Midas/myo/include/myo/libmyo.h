@@ -136,8 +136,8 @@ typedef enum {
     libmyo_event_unpaired, ///< Successfully unpaired from a Myo.
     libmyo_event_connected, ///< A Myo has successfully connected.
     libmyo_event_disconnected, ///< A Myo has been disconnected.
-    libmyo_event_arm_recognized, ///< A Myo has recognized that it is now on an arm.
-    libmyo_event_arm_lost, ///< A Myo has been moved or removed from the arm.
+    libmyo_event_arm_synced, ///< A Myo has recognized that it is now on an arm with the sync gesture successfully performed.
+    libmyo_event_arm_unsynced, ///< A Myo has been moved or removed from the arm.
     libmyo_event_orientation, ///< Orientation data has been received.
     libmyo_event_pose, ///< A change in pose has been detected. @see libmyo_pose_t.
     libmyo_event_rssi, ///< An RSSI value has been received.
@@ -167,6 +167,12 @@ typedef enum {
     libmyo_version_hardware_rev, ///< Hardware revision.
 } libmyo_version_component_t;
 
+/// Hardware revisions.
+typedef enum {
+    libmyo_hardware_rev_c = 1, ///< Alpha units
+    libmyo_hardware_rev_d = 2, ///< Consumer units
+} libmyo_hardware_rev_t;
+
 /// Retrieve the Myo armband's firmware version from this event.
 /// Valid for libmyo_event_paired and libmyo_event_connected events.
 LIBMYO_EXPORT
@@ -180,7 +186,7 @@ typedef enum {
 } libmyo_arm_t;
 
 /// Retrieve the arm associated with an event.
-/// Valid for libmyo_event_arm_recognized events only.
+/// Valid for libmyo_event_arm_synced events only.
 LIBMYO_EXPORT
 libmyo_arm_t libmyo_event_get_arm(libmyo_event_t event);
 
@@ -193,7 +199,7 @@ typedef enum {
 
 /// Retrieve the x-direction associated with an event.
 /// The x-direction specifies which way Myo's +x axis is pointing relative to the user's arm.
-/// Valid for libmyo_event_arm_recognized events only.
+/// Valid for libmyo_event_arm_synced events only.
 LIBMYO_EXPORT
 libmyo_x_direction_t libmyo_event_get_x_direction(libmyo_event_t event);
 

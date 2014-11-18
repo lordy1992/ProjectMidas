@@ -7,6 +7,7 @@
 #include <vector>
 #include <thread>
 #include "SharedCommandData.h"
+#include "MyoDevice.h"
 
 #include "SharedCommandDataTest.h"
 #include "KybrdCtrlTest.h"
@@ -14,7 +15,7 @@
 
 using namespace std;
 
-#define MOUSE_CONTROL_TEST
+#define MYO_POSE_FILTER_TEST
 
 int main() {
 
@@ -53,6 +54,34 @@ int main() {
     MouseCtrlTest::testScrollZoomMouse(WHEEL_DELTA * 5, 10);
     Sleep(500);
     MouseCtrlTest::testScrollZoomMouse(WHEEL_DELTA * 5, 20);
+
+#endif
+
+#ifdef MYO_POSE_FILTER_TEST
+    SharedCommandData sharedData;
+    ControlState controlState(&sharedData);
+    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
+
+    // Kick off device thread
+    startWearableDeviceListener(myoDevice);
+
+    while (true)
+    {
+        if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
+
+        commandData nextCmd;
+        if (sharedData.consumeCommand(nextCmd))
+        {
+            if (nextCmd.mouse == LEFT_CLICK)
+            {
+                cout << "Received a left click." << endl;
+            }
+            else if (nextCmd.mouse == RIGHT_CLICK)
+            {
+                cout << "Received a right click." << endl;
+            }
+        }
+    }
 
 #endif
 
