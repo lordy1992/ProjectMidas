@@ -30,13 +30,14 @@ public:
     unsigned int getAvgCount() const;
 
 private:
-    unsigned int avgCount;
-
     void insertAvgElement(float elem, std::deque<float>dq);
 
     float calcAvg(std::deque<float>dq);
 
-    //Arrays to store the avg data.
+    unsigned int avgCount;
+
+    //Arrays to store the avg data. -- TODO - when we get Filter
+    //  Many-to-one working, genericize this to just filtering one float
     std::deque<float> quatXDeque;
     std::deque<float> quatYDeque;
     std::deque<float> quatZDeque;
