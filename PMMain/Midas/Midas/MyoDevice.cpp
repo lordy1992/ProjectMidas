@@ -31,7 +31,7 @@ void MyoDevice::runDeviceLoop()
     posePipeline.registerFilter(&gestureFilter);
     posePipeline.registerFilter(WearableDevice::sharedData);
 
-    AveragingFilter averagingFilter;
+    AveragingFilter averagingFilter(5);
     MyoTranslationFilter translationFilter(state);
     orientationPipeline.registerFilter(&averagingFilter);
     orientationPipeline.registerFilter(&translationFilter);

@@ -51,8 +51,8 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
     float deltaPitch = pitch - basePitch;
     float deltaYaw = yaw - baseYaw;
 
-    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_ANGLE) : std::max(-1.0f, deltaPitch / MAX_ANGLE);
-    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_ANGLE) : std::max(-1.0f, deltaYaw / MAX_ANGLE);
+    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_PITCH_ANGLE) : std::max(-1.0f, deltaPitch / MAX_PITCH_ANGLE);
+    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_YAW_ANGLE) : std::max(-1.0f, deltaYaw / MAX_YAW_ANGLE);
 
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
@@ -60,7 +60,7 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w)
 {
     //TODO - Likely need to base this off of R/L hand, and orientation
-    return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)

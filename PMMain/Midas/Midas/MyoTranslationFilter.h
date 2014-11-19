@@ -10,7 +10,8 @@
 #define INPUT_QUATERNION_W "quatDataW"
 
 // Testing Constants -- Modify until seems reasonable
-#define MAX_ANGLE 1.04719755f /* Maximum delta angle in radians */
+#define MAX_PITCH_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
+#define MAX_YAW_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 
 class MyoTranslationFilter : public Filter
 {

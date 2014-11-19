@@ -5,15 +5,13 @@
 MouseCtrl::MouseCtrl()
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
-    lastMouseMovement = clock() * (1000 / CLOCKS_PER_SEC);
-    lastMouseScroll = lastMouseMovement;
-    minMovementTimeDelta = 1;//DEFAULT_MIN_MOVE_TIME;
+    lastMouseMoveX = clock() * (1000 / CLOCKS_PER_SEC);
+    lastMouseMoveY = lastMouseMoveX;
+    lastMouseScroll = lastMouseMoveX;
+    minMoveXTimeDelta = DEFAULT_MIN_MOVE_TIME;
+    minMoveYTimeDelta = DEFAULT_MIN_MOVE_TIME;
+    scrollRate = DEFAULT_SCROLL_RATE;
     //std::cout << "time on mouseCtrlCreate = " << lastMouseMovement << std::endl;
-}
-
-void MouseCtrl::setMinMovementTimeDelta(DWORD delta)
-{
-    minMovementTimeDelta = delta;
 }
 
 void MouseCtrl::setScrollRate(int rate)
@@ -28,11 +26,26 @@ void MouseCtrl::setScrollRate(int rate)
     }
 }
 
-void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
+void MouseCtrl::setMinMoveXTimeDelta(unsigned int rate)
+{
+    int moveXRate = min(rate, 100);
+
+    minMoveXTimeDelta = MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA);
+}
+
+void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
+{
+    int moveYRate = min(rate, 100);
+
+    minMoveYTimeDelta = MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA);
+}
+
+void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRateIfMove)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
     DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
-    DWORD deltaTimeMove = currentTime - lastMouseMovement;
+    DWORD deltaTimeXMove = currentTime - lastMouseMoveX;
+    DWORD deltaTimeYMove = currentTime - lastMouseMoveY;
     DWORD deltaTimeScroll = currentTime - lastMouseScroll;
 
     switch (mouseCmd)
@@ -47,18 +60,42 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
         mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
         break;
     case mouseCmds::MOVE_LEFT:
+        if (deltaTimeXMove < minMoveXTimeDelta)
+            return;
+        else
+            lastMouseMoveX = currentTime;
+        if (mouseRateIfMove >= 0) 
+            setMinMoveXTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dx = -1;
         break;
     case mouseCmds::MOVE_RIGHT:
+        if (deltaTimeXMove < minMoveXTimeDelta)
+            return;
+        else
+            lastMouseMoveX = currentTime;
+        if (mouseRateIfMove >= 0) 
+            setMinMoveXTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dx = 1;
         break;
     case mouseCmds::MOVE_UP:
+        if (deltaTimeYMove < minMoveYTimeDelta)
+            return;
+        else
+            lastMouseMoveY = currentTime;
+        if (mouseRateIfMove >= 0) 
+            setMinMoveYTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dy = -1; // negative moves up.
         break;
     case mouseCmds::MOVE_DOWN:
+        if (deltaTimeYMove < minMoveYTimeDelta)
+            return;
+        else
+            lastMouseMoveY = currentTime;
+        if (mouseRateIfMove >= 0) 
+            setMinMoveYTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dy = 1;
         break;
@@ -82,21 +119,27 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick)
         break;
     }
 
-    if (deltaTimeMove < minMovementTimeDelta &&
-        mi.dwFlags == MOUSEEVENTF_MOVE)
-    {
-        // Not enough time has passed to move the mouse again
-        if (deltaTimeMove > 0)
-        {
-            //std::cout << "delta not high enough: " << deltaTimeMove << std::endl;
-        }
-        return;
-    }
-    else
-    {
-        lastMouseMovement = currentTime;
-        //std::cout << "updating lastMouseMovement to: " << lastMouseMovement << std::endl;
-    }
+    //TODO - assert if mi.dx != 0, then mi.dy == 0
+
+    //if (mi.dwFlags == MOUSEEVENTF_MOVE && 
+    //    ((lastMouseMoveX < minMoveXTimeDelta && mi.dx != 0) ||
+    //    (lastMouseMoveY < minMoveYTimeDelta && mi.dy != 0))
+    //    )
+    //{
+    //    // Not enough time has passed to move the mouse again
+    //    return;
+    //}
+    //else
+    //{
+    //    if (mi.dx != 0)
+    //    {
+    //        lastMouseMoveX = currentTime;
+    //    }
+    //    if (mi.dy != 0)
+    //    {
+    //        lastMouseMoveY = currentTime;
+    //    }
+    //}
 
     if (deltaTimeScroll < SCROLL_MIN_TIME &&
         (mi.dwFlags == MOUSEEVENTF_WHEEL ||
