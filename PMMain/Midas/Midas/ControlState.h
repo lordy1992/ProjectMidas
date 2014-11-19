@@ -14,6 +14,7 @@
 class ControlState
 {
 public:
+
     /**
      * The constructor for ControlState.
      * The contructor must have a handle on the SharedCommandData so that 

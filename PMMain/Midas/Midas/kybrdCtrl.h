@@ -11,7 +11,9 @@
 class KybrdCtrl 
 {
 public:
+    /* Basic Construction/Destruction */
     KybrdCtrl();
+    ~KybrdCtrl();
 
     /**
      * This function configures the keyboard controller state based on high-level commands, such as

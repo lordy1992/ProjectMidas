@@ -13,6 +13,10 @@ MouseCtrl::MouseCtrl()
     scrollRate = DEFAULT_SCROLL_RATE;
 }
 
+MouseCtrl::~MouseCtrl()
+{
+}
+
 void MouseCtrl::setScrollRate(int rate)
 {
     if (rate < -WHEEL_DELTA || rate > WHEEL_DELTA)

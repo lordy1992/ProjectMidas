@@ -8,6 +8,8 @@
 #define GESTURE_INPUT "gesture"
 
 /**
+ * Consult Filter.h for concepts regarding Filters.
+ * 
  * A filter specific to the Myo armband that handles changing the application
  * state when a certain gesture is performed, and translates from Myo gestures
  * to mouse and keyboard commands. Furthermore, helps to prevent against false 

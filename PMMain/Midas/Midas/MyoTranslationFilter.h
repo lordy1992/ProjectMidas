@@ -14,6 +14,7 @@
 #define MAX_YAW_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 
 /**
+ * Consult Filter.h for concepts regarding Filters.
  * Handles translating from Myo orientation data to mouse movement information.
  */
 class MyoTranslationFilter : public Filter

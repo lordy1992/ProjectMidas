@@ -10,6 +10,7 @@
 class FilterPipeline
 {
 public:
+    /* Basic Construction/Destruction */
     FilterPipeline() { }
     ~FilterPipeline() { }
     

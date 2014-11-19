@@ -18,7 +18,9 @@
 class MouseCtrl
 {
 public:
+    /* Basic Construction/Destruction */
     MouseCtrl();
+    ~MouseCtrl();
 
     /**
      * Sets the scroll rate to control speed and direction.
@@ -60,10 +62,14 @@ private:
 
     /**
      * Sets the fields of the MOUSEINPUT that will be sent to Windows.
+     * @param mouseCmd The mouse command to be executed
      */
     void setMouseInputVars(mouseCmds mouseCmd);
 
+    // Mouse Input 
     MOUSEINPUT mi;
+
+    // Time Stamps used to limit move and scroll speed.
     DWORD lastMouseMoveX;
     DWORD lastMouseMoveY;
     DWORD lastMouseScroll;

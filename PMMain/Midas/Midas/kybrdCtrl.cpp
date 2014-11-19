@@ -8,6 +8,9 @@ KybrdCtrl::KybrdCtrl()
     kiWillReleaseKeys = false;
 }
 
+KybrdCtrl::~KybrdCtrl()
+{
+}
 
 void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
