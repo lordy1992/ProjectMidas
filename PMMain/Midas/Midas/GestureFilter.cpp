@@ -14,7 +14,7 @@ GestureFilter::~GestureFilter()
 void GestureFilter::process()
 {
     filterDataMap input = Filter::getInput();
-    myo::Pose::Type gesture = boost::any_cast<myo::Pose::Type>(input["gesture"]);
+    myo::Pose::Type gesture = boost::any_cast<myo::Pose::Type>(input[GESTURE_INPUT]);
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);

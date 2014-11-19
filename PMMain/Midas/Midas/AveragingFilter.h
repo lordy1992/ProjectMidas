@@ -30,9 +30,9 @@ public:
     unsigned int getAvgCount() const;
 
 private:
-    void insertAvgElement(float elem, std::deque<float>dq);
+    void insertAvgElement(float elem, std::deque<float>& dq);
 
-    float calcAvg(std::deque<float>dq);
+    float calcAvg(std::deque<float>& dq);
 
     unsigned int avgCount;
 

@@ -50,6 +50,6 @@ private:
     unsigned int durationInMilliseconds;
     std::string appIdentifier;
     ControlState* state;
-    FilterPipeline posePipeline;
+    FilterPipeline posePipeline, orientationPipeline;
 };
 

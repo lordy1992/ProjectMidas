@@ -65,6 +65,7 @@ int main() {
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
+    time_t beginTime = clock();
     while (true)
     {
         if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
@@ -80,6 +81,13 @@ int main() {
             {
                 cout << "Received a right click." << endl;
             }
+        }
+
+        if (clock() - beginTime >= 1000)
+        {
+            point unitVelocity = sharedData.getVelocity();
+            cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << endl;
+            beginTime = clock();
         }
     }
 

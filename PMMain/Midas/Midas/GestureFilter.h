@@ -5,6 +5,8 @@
 #include "ControlState.h"
 #include "Filter.h"
 
+#define GESTURE_INPUT "gesture"
+
 class GestureFilter : public Filter
 {
 public:

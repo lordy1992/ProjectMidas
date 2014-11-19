@@ -59,17 +59,17 @@ void AveragingFilter::process()
     Filter::setOutput(output);
 }
 
-void AveragingFilter::insertAvgElement(float elem, std::deque<float>dq)
+void AveragingFilter::insertAvgElement(float elem, std::deque<float>& dq)
 {
     dq.push_back(elem);
     while (dq.size() > avgCount) {
         // discard element so that average is only based on
         // avgCount elements.
-        dq.pop_back();
+        dq.pop_front();
     }
 }
 
-float AveragingFilter::calcAvg(std::deque<float>dq)
+float AveragingFilter::calcAvg(std::deque<float>& dq)
 {
     float sum = 0;
     float denom = dq.size();
