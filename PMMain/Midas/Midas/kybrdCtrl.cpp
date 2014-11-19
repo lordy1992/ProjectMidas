@@ -233,14 +233,14 @@ std::vector<KEYBDINPUT> KybrdCtrl::getKeyInputVec()
     return this->kiVec;
 }
 
-int KybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
+int KybrdCtrl::getKeyInputArr(INPUT * kiArr, int lenArr)
 {
-    if (len_arr < this->kiVec.size()) return ARRAY_TO_SMALL;
+    if (lenArr < this->kiVec.size()) return ARRAY_TOO_SMALL;
 
     for (int i = 0; i < this->kiVec.size(); i++)
     {
-        ki_arr[i].type = INPUT_KEYBOARD;
-        ki_arr[i].ki = this->kiVec.at(i);
+        kiArr[i].type = INPUT_KEYBOARD;
+        kiArr[i].ki = this->kiVec.at(i);
     }
 
     return kybdStatus::SUCCESS;

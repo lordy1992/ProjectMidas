@@ -16,7 +16,7 @@
 #define GYRO_DATA_Y "gyroDataY"
 #define GYRO_DATA_Z "gyroDataZ"
 
-/*
+/**
  * Consult Filter.h for concepts regarding Filters.
  * 
  * The purpose of this filter is to take Accelerometer,
@@ -36,39 +36,38 @@ public:
     AveragingFilter(unsigned int avgCount);
     ~AveragingFilter();
 
-    /* 
-     * Implement pure virtual func.
-     * Purpose: 
-     *      Access data from Inputs, average the data
+    /**
+     * Access data from Inputs, average the data
      * based on avgCount, and current state, then
      * output the averaged value.
      */
     void process();
 
-    /* Setter */
+    /** 
+     * Setter 
+     */
     void setAvgCount(unsigned int avgCount);
 
-    /* Accessor */
+    /** 
+     * Accessor 
+     */
     unsigned int getAvgCount() const;
 
 private:
-    /*
-     * Input:
-     *      elem - a float to be added to deque
-     *      dq -  a deque containing <= avgCount floats
-     * Purpose:
-     *      Inject elem into dq and if necessary, pop 
-     *      front of dq to ensure only max avgCount elements
+    /**
+     * Inject elem into dq and if necessary, pop
+     * front of dq to ensure only max avgCount elements
+     *
+     * @param elem - a float to be added to deque
+     * @param dq -  a deque containing <= avgCount floats      
      */
     void insertAvgElement(float elem, std::deque<float>& dq);
 
-    /*
-     * Input:
-     *      dq - a deque containing <= avgCount floats
-     * Output:
-     *      float - the average of the contents of the deque            
-     * Purpose:
-     *      calculate the average of the contents in the deque.
+    /**
+     * Calculate the average of the contents in the deque.
+     *
+     * @param dq - a deque containing <= avgCount floats
+     * @return float - the average of the contents of the deque                  
      */
     float calcAvg(std::deque<float>& dq);
 

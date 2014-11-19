@@ -12,6 +12,9 @@
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
 #define MOVE_RATE_DEADZONE 5
 
+/**
+ * Handles sending mouse data to Windows.
+ */
 class MouseCtrl
 {
 public:
@@ -19,51 +22,47 @@ public:
     MouseCtrl();
     ~MouseCtrl();
 
-    /*
-     * Input: 
-     *      rate - value from -WHEEL_DELTA to WHEEL_DELTA dictating portion of a scroll click
-     * will happen when the "scrollwheel is moved"
-     * Purpose: 
-     *      set Scroll Rate to control speed/direction.
+    /**
+     * Sets the scroll rate to control speed and direction.
+     *
+     * @param rate The rate of scrolling, between -120 and 120. A negative
+     * value represents a downward scroll, positive is upward.
      */
     void setScrollRate(int rate);
 
-    /* 
-     * Input: 
-     *      rate - value from -100 to 100 dictating velocity X should move.
-     * Purpose: 
-     *      set minMoveXTimeDelta
+    /**
+     * Sets the rate at which the cursor should move in the X axis.
+     *
+     * @param rate The rate of cursor movement in the X axis, between
+     * -100 and 100.
      */
     void setMinMoveXTimeDelta(unsigned int rate);
 
-    /*
-    * Input: 
-    *       rate - value from -100 to 100 dictating velocity Y should move.
-    * Purpose:
-    *       set minMoveYTimeDelta
-    */
+    /**
+     * Sets the rate at which the cursor should move in the Y axis.
+     *
+     * @param rate The rate of cursor movement in the Y axis, between -100 and 100.
+     */
     void setMinMoveYTimeDelta(unsigned int rate);
 
-    /*
-     * Inputs:
-     *      mouseCmd - the mouse command to be executed
-     *      releaseIfClick - bool dictating that if the cmd is a click, it will also release
-     *      mosueRateIfMove - int that if >= 0 and <= 100 sets the rate at which the mouse will move
-     * Purpose:
-     *      Configure the mouse command to be executed and have the command executed.
-     * Use Note: If desired to click and hold, simply set "releaseIfClick" to false. THEN,
-     * to stop holding, call this function again with the same mouse click, but set "releaseIfClick"
-     * to true.
+    /**
+     * Sends a mouse command to the OS. This includes movement commands. If releaseIfClick is true,
+     * any click event will be followed by a release of the same button. The mouseRateIfMove parameter
+     * sets the rate of the mouse movement if it is nonnegative. If the user would like to "Click and Hold",
+     * the releaseIfClick parameter should be set to false; then, sendCommand can be called again with 
+     * releaseIfClick set to false, to release the click.
+     *
+     * @param mouseCmd The mouse command to send.
+     * @param releaseIfClick If this is true, any button clicks are followed by a release.
+     * @param mouseRateIfMove The new rate of the mouse movement.
      */
     void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = -1);
 
 private:
 
-    /*
-     * Inputs:
-     *      mouseCmd - the mouse command to be executed
-     * Purpose:
-     *      Helper function to configure the MOUSEINPUT values in a modularized fashion
+    /**
+     * Sets the fields of the MOUSEINPUT that will be sent to Windows.
+     * @param mouseCmd The mouse command to be executed
      */
     void setMouseInputVars(mouseCmds mouseCmd);
 
