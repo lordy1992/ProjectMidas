@@ -1,6 +1,7 @@
 // Copyright (C) 2013-2014 Thalmic Labs Inc.
 // Distributed under the Myo SDK license agreement. See LICENSE.txt for details.
-#pragma once
+#ifndef MYO_CXX_DEVICELISTENER_HPP
+#define MYO_CXX_DEVICELISTENER_HPP
 
 #include <stdint.h>
 
@@ -84,3 +85,5 @@ public:
 };
 
 } // namespace myo
+
+#endif // MYO_CXX_DEVICELISTENER_HPP

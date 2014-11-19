@@ -59,10 +59,12 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 
 float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w)
 {
-    return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    //TODO - Likely need to base this off of R/L hand, and orientation
+    return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)
 {
-    return atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+    //TODO - Likely need to base this off of R/L hand, and orientation
+    return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 }

@@ -61,6 +61,7 @@ int main() {
     SharedCommandData sharedData;
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
+    MouseCtrl* mouseCtrl = new MouseCtrl();
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
@@ -76,16 +77,36 @@ int main() {
             if (nextCmd.mouse == LEFT_CLICK)
             {
                 cout << "Received a left click." << endl;
+                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK);
             }
             else if (nextCmd.mouse == RIGHT_CLICK)
             {
                 cout << "Received a right click." << endl;
+                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK);
             }
+        }
+
+        point unitVelocity = sharedData.getVelocity();
+        mouseCtrl->setMinMovementTimeDelta(6); // TODO -- TEMP
+        if (unitVelocity.x > 10)
+        {
+            mouseCtrl->sendCommand(mouseCmds::MOVE_RIGHT);
+        }
+        else if (unitVelocity.x < -10)
+        {
+            mouseCtrl->sendCommand(mouseCmds::MOVE_LEFT);
+        }
+        if (unitVelocity.y > 10)
+        {
+            mouseCtrl->sendCommand(mouseCmds::MOVE_UP);
+        }
+        else if (unitVelocity.y < -10)
+        {
+            mouseCtrl->sendCommand(mouseCmds::MOVE_DOWN);
         }
 
         if (clock() - beginTime >= 1000)
         {
-            point unitVelocity = sharedData.getVelocity();
             cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << endl;
             beginTime = clock();
         }
