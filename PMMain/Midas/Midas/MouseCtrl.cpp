@@ -60,40 +60,24 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
         mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
         break;
     case mouseCmds::MOVE_LEFT:
-        if (deltaTimeXMove < minMoveXTimeDelta)
-            return;
-        else
-            lastMouseMoveX = currentTime;
         if (mouseRateIfMove >= 0) 
             setMinMoveXTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dx = -1;
         break;
     case mouseCmds::MOVE_RIGHT:
-        if (deltaTimeXMove < minMoveXTimeDelta)
-            return;
-        else
-            lastMouseMoveX = currentTime;
         if (mouseRateIfMove >= 0) 
             setMinMoveXTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dx = 1;
         break;
     case mouseCmds::MOVE_UP:
-        if (deltaTimeYMove < minMoveYTimeDelta)
-            return;
-        else
-            lastMouseMoveY = currentTime;
         if (mouseRateIfMove >= 0) 
             setMinMoveYTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
         mi.dy = -1; // negative moves up.
         break;
     case mouseCmds::MOVE_DOWN:
-        if (deltaTimeYMove < minMoveYTimeDelta)
-            return;
-        else
-            lastMouseMoveY = currentTime;
         if (mouseRateIfMove >= 0) 
             setMinMoveYTimeDelta(mouseRateIfMove);
         mi.dwFlags = MOUSEEVENTF_MOVE;
@@ -121,25 +105,25 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
 
     //TODO - assert if mi.dx != 0, then mi.dy == 0
 
-    //if (mi.dwFlags == MOUSEEVENTF_MOVE && 
-    //    ((lastMouseMoveX < minMoveXTimeDelta && mi.dx != 0) ||
-    //    (lastMouseMoveY < minMoveYTimeDelta && mi.dy != 0))
-    //    )
-    //{
-    //    // Not enough time has passed to move the mouse again
-    //    return;
-    //}
-    //else
-    //{
-    //    if (mi.dx != 0)
-    //    {
-    //        lastMouseMoveX = currentTime;
-    //    }
-    //    if (mi.dy != 0)
-    //    {
-    //        lastMouseMoveY = currentTime;
-    //    }
-    //}
+    if (mi.dwFlags == MOUSEEVENTF_MOVE && 
+        ((deltaTimeXMove < minMoveXTimeDelta && mi.dx != 0) ||
+        (deltaTimeYMove < minMoveYTimeDelta && mi.dy != 0))
+        )
+    {
+        // Not enough time has passed to move the mouse again
+        return;
+    }
+    else
+    {
+        if (mi.dx != 0)
+        {
+            lastMouseMoveX = currentTime;
+        }
+        if (mi.dy != 0)
+        {
+            lastMouseMoveY = currentTime;
+        }
+    }
 
     if (deltaTimeScroll < SCROLL_MIN_TIME &&
         (mi.dwFlags == MOUSEEVENTF_WHEEL ||
