@@ -5,109 +5,98 @@
 #include <vector>
 #include "MidasCommon.h"
 
+/**
+ * Handles sending keyboard command data to Windows OS.
+ */
 class KybrdCtrl 
 {
 public:
     KybrdCtrl();
 
-    /*
-    Input: 
-        KeybdCmd: The command to configure the Keyboard Controller state to.
-        releaseKeys: Boolean to state if all keys pressed should be released.
-            ex - inputting Copy would either result in (Ctrl down, '+' down, 
-            Ctrl up, '+' up) or just (Ctrl down, '+' down)
-    Output:
-        none.
-    Purpose:
-        Use this function to configure a Keyboard Controller. Once configured, 
-        sedData() can be called to execute the command.
-    */
+    /**
+     * This function configures the keyboard controller state based on high-level commands, such as
+     * Copy with no key release (which results in a keyboard state of Ctrl + 'c' pressed). Once 
+     * the keyboard command is set, it can be executed by calling sendData(). If releaseKeys is true,
+     * the keyboard command consists of a key press followed by a release of the same key(s). Otherwise,
+     * the key(s) is (or are) pressed down and never released.
+     *
+     * @param keybdCmd The high-level command to the keyboard.
+     * @param releaseKeys If this is true, the key(s) will be released after being pressed. Otherwise, 
+     * it (or they) will just be pressed.
+     */
     void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
 
-    /*
-    Input: 
-        c: The character to be pressed - any character is acceptable, as it will
-        be used as an UNICODE character.
-        releaseKeys: Boolean to state if character pressed should be released.
-    Output:
-        none.
-    Purpose:
-        Use this function to configure a Keyboard Controller. Once configured, 
-        sedData() can be called to execute the command.
-    */
+    /**
+     * This function configures the keyboard controller state based on a single character
+     * key. It results in a key press of a single character, c. If releaseKeys is true, the 
+     * key press will be followed by a key release. This command sets the keyboard command, but 
+     * to execute the command the user must call sendData().
+     *
+     * @param c The character to be pressed. This is not confined to ASCII, as this
+     * character will be treated as a UNICODE character.
+     * @param releaseKeys If this is true, the key press will be followed by a release. Otherwise,
+     * it will just cause a key press.
+     */
     void setKeyChar(char c, bool releaseKeys = true);
 
-    /*
-    Input:
-        none.
-    Output:
-        integer represending status of the action, as per kybdStatus.
-    Purpose:
-        Use this function to execute the configuration of the Keyboard Controller,
-        by actually sending the data to Windows.
-    */
+    /**
+     * This executes the keyboard commands set for the keyboard controller by sending the
+     * data to Windows.
+     *
+     * @return An integer representing the status of the action, as per kybdStatus.
+     */
     int sendData();
 
-    /*
-    Input:
-        none.
-    Output:
-        returns the kiVec, in case caller needs it.
-    Purpose:
-        Allow caller to have access to kiVec. Should be used with caution.
-    */
+    /**
+     * Returns the vector of keyboard inputs. Should be used with caution.
+     *
+     * @return The kiVec, vector of keyboard inputs.
+     */
     std::vector<KEYBDINPUT> getKeyInputVec();
 
-    /*
-    Input:
-        ki_arr: Pre-allocated array, to be populated with INPUT values,
-            based on kiVec. This array MUST be at least as large as kiVec,
-            or else the function returns an ARRAY_TO_SMALL error.
-        len_arr: length of the ki_arr.
-    Output:
-        returns the kiVec, in case caller needs it.
-    Purpose:
-        Use this functino to populate a pre-allocated INPUT array. This array
-        can be used to utilize Windows API calls to actually send INPUT data.
-    */
-    int getKeyInputArr(INPUT * ki_arr, int len_arr);
+    /**
+     * Populates a pre-allocated INPUT array. This array can be used to utilize Windows
+     * API calls to send the INPUT data.
+     *
+     * @param kiArr A pre-allocated array to be populated with INPUT values, from the
+     * vector of keyboard inputs formed through setting commands in the keyboard controller. This
+     * array must be at least as large as the vector of commands or the function will return an
+     * ARRAY_TOO_SMALL error.
+     * @param lenArr The length of the supplied array.
+     */
+    int getKeyInputArr(INPUT * kiArr, int lenArr);
 
 private:
-    /*
-    Purpose: 
-        Input a Control command into kiVec.
-    */
+    /**
+     * Inputs a CTRL key command into the vector of keyboard commands.
+     */
     void inputCtrl();
 
-    /*
-    Purpose: 
-        Input a Left Shift command into kiVec.
+    /**
+    * Inputs a Left SHIFT key command into the vector of keyboard commands.
     */
     void inputLShift();
 
-    /*
-    Purpose: 
-        Input an Alt command into kiVec.
+    /**
+    * Inputs an ALT key command into the vector of keyboard commands.
     */
     void inputAlt();
 
-    /*
-    Purpose: 
-        Input a Windows-key command into kiVec.
+    /**
+    * Inputs a Windows key command into the vector of keyboard commands.
     */
     void inputWindows();
 
-    /*
-    Purpose: 
-        Input a virtual key code to kiVec, populating the wVK and wVScan values
-        of the KEYBDINPUT properly.
+    /**
+    * Inputs a virtual key code into the vector of keyboard commands.
     */
     void inputVK(int vk);
 
-    /*
-    Purpose: 
-        Go through kiVec, appending the mirror of the current contents, making
-        all keys be RELEASED, rather than pressed in the new half.
+    /**
+    * Appends the 'mirror' of each key currently in the vector of keyboard commands.
+    * The 'mirror' of a key in the keyboard command vector is the same key, released 
+    * instead of pressed. This method enforces that every key is released after it is 
+    * pressed, in the correct order.
     */
     void setMirroredUpKeys();
 
