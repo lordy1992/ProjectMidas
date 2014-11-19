@@ -8,7 +8,7 @@
 #define DEFAULT_MIN_MOVE_TIME 10
 #define DEFAULT_SCROLL_RATE 1 //Default to slow rate.
 #define SCROLL_MIN_TIME 5
-#define MAX_MOVE_TIME_DELTA 30 //large enough ms delay between moving a pixel is pretty slow.
+#define MAX_MOVE_TIME_DELTA 40 //large enough ms delay between moving a pixel is pretty slow.
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
 #define MOVE_RATE_DEADZONE 5
 

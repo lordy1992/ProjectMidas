@@ -114,13 +114,65 @@ void MyoDevice::MyoCallbacks::onOrientationData(Myo* myo, uint64_t timestamp, co
     parent.orientationPipeline.startPipeline(input);
 }
 
+void MyoDevice::MyoCallbacks::onAccelerometerData(Myo* myo, uint64_t timestamp, const Vector3<float>& accel)
+{
+    filterDataMap input;
+    input[ACCEL_DATA_X] = accel.x();
+    input[ACCEL_DATA_X] = accel.y();
+    input[ACCEL_DATA_X] = accel.z();
+
+    // The following is junk data. The averaging filter should be modified so
+    // that it doesn't deal with the data so specifically.
+    input[QUAT_DATA_X] = 0.0f;
+    input[QUAT_DATA_Y] = 0.0f;
+    input[QUAT_DATA_Z] = 0.0f;
+    input[QUAT_DATA_W] = 0.0f;
+    input[GYRO_DATA_X] = 0.0f;
+    input[GYRO_DATA_Y] = 0.0f;
+    input[GYRO_DATA_Z] = 0.0f;
+
+    //parent.orientationPipeline.startPipeline(input); //TODO - solve race condition and enable this
+}
+
+void MyoDevice::MyoCallbacks::onGyroscopeData(Myo* myo, uint64_t timestamp, const Vector3<float>& gyro) 
+{
+    filterDataMap input;
+    input[GYRO_DATA_X] = gyro.x();
+    input[GYRO_DATA_Y] = gyro.y();
+    input[GYRO_DATA_Z] = gyro.z();
+
+    // The following is junk data. The averaging filter should be modified so
+    // that it doesn't deal with the data so specifically.
+    input[QUAT_DATA_X] = 0.0f;
+    input[QUAT_DATA_Y] = 0.0f;
+    input[QUAT_DATA_Z] = 0.0f;
+    input[QUAT_DATA_W] = 0.0f;
+    input[ACCEL_DATA_X] = 0.0f;
+    input[ACCEL_DATA_X] = 0.0f;
+    input[ACCEL_DATA_X] = 0.0f;
+
+    //parent.orientationPipeline.startPipeline(input); //TODO - solve race condition and enable this
+}
+
 // TODO: Implement
-void MyoDevice::MyoCallbacks::onPair(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { }
-void MyoDevice::MyoCallbacks::onUnpair(Myo* myo, uint64_t timestamp) { }
-void MyoDevice::MyoCallbacks::onConnect(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { }
-void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) { }
-void MyoDevice::MyoCallbacks::onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { }
-void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) { }
-void MyoDevice::MyoCallbacks::onAccelerometerData(Myo* myo, uint64_t timestamp, const Vector3<float>& accel) { }
-void MyoDevice::MyoCallbacks::onGyroscopeData(Myo* myo, uint64_t timestamp, const Vector3<float>& gyro) { }
-void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) { }
+void MyoDevice::MyoCallbacks::onPair(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { 
+    std::cout << "on pair." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onUnpair(Myo* myo, uint64_t timestamp) { 
+    std::cout << "on unpair." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onConnect(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { 
+    std::cout << "on connect." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) { 
+    std::cout << "on disconnect." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { 
+    std::cout << "on arm sync." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) { 
+    std::cout << "on arm unsync." << std::endl; 
+}
+void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) { 
+    std::cout << "on rssi." << std::endl; 
+}

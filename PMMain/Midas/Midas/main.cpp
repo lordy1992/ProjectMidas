@@ -67,6 +67,7 @@ int main() {
     startWearableDeviceListener(myoDevice);
 
     time_t beginTime = clock();
+    commandData prevCmd;
     while (true)
     {
         if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
@@ -77,12 +78,12 @@ int main() {
             if (nextCmd.mouse == LEFT_CLICK)
             {
                 cout << "Received a left click." << endl;
-                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK);
+                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
             }
             else if (nextCmd.mouse == RIGHT_CLICK)
             {
                 cout << "Received a right click." << endl;
-                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK);
+                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
             }
         }
 
@@ -109,6 +110,7 @@ int main() {
             cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << endl;
             beginTime = clock();
         }
+        prevCmd = nextCmd;
     }
 
 #endif
