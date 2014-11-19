@@ -112,11 +112,17 @@ void SharedCommandData::empty()
     commandQueueMutex.unlock();
 }
 
-void SharedCommandData::tryEmpty()
+bool SharedCommandData::tryEmpty()
 {
-    commandQueueMutex.try_lock();
-    commandQueue.empty();
-    commandQueueMutex.unlock();
+    bool locked = commandQueueMutex.try_lock();
+
+    if (locked)
+    {
+        commandQueue.empty();
+        commandQueueMutex.unlock();
+    }
+
+    return locked;
 }
 
 void SharedCommandData::extractCommand(boost::any value)
