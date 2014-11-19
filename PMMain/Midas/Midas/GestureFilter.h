@@ -10,6 +10,7 @@
 class GestureFilter : public Filter
 {
 public:
+    /* Basic Construction/Destruction */
     GestureFilter(ControlState* controlState, clock_t timeDel);
     ~GestureFilter();
 

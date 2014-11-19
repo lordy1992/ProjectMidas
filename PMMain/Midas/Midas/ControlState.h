@@ -8,6 +8,7 @@
 class ControlState
 {
 public:
+    /* Basic Construction/Destruction */
     ControlState(SharedCommandData* SCDHandle);
     ~ControlState();
 

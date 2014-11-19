@@ -8,7 +8,9 @@
 class KybrdCtrl 
 {
 public:
+    /* Basic Construction/Destruction */
     KybrdCtrl();
+    ~KybrdCtrl();
 
     /*
     Input: 

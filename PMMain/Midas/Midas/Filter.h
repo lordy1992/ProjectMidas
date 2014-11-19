@@ -23,6 +23,7 @@ typedef std::map<std::string, boost::any> filterDataMap;
 class Filter
 {
 public:
+    /* Basic Construction/Destruction */
     Filter() { }
     ~Filter() { }
 
