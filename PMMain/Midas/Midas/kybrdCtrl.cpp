@@ -8,6 +8,9 @@ KybrdCtrl::KybrdCtrl()
     kiWillReleaseKeys = false;
 }
 
+KybrdCtrl::~KybrdCtrl()
+{
+}
 
 void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
@@ -102,6 +105,9 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         inputWindows();
         inputVK(0x44); // 'D' key
         break;
+    case CONTROL:
+        inputCtrl();
+        break;
     default:
         break;
     }
@@ -144,7 +150,7 @@ int KybrdCtrl::sendData()
             if (numKeys % 2 != 0)
             {
                 // error - all pushes should be matched with releases if this code is to execute.
-                return -2;
+                return kybdStatus::N_PRESSES_MATCH_RELEASES;
             }
             // send push key data first, delay, then send releases. This reduces issues with commands like "alt-tab" and "win-'l'"
             int numSent = SendInput(numKeys/2, kiArr, sizeof(INPUT));
@@ -227,15 +233,15 @@ std::vector<KEYBDINPUT> KybrdCtrl::getKeyInputVec()
     return this->kiVec;
 }
 
-int KybrdCtrl::getKeyInputArr(INPUT * ki_arr, int len_arr)
+int KybrdCtrl::getKeyInputArr(INPUT * kiArr, int lenArr)
 {
-    if (len_arr < this->kiVec.size()) return -1;
+    if (lenArr < this->kiVec.size()) return ARRAY_TOO_SMALL;
 
     for (int i = 0; i < this->kiVec.size(); i++)
     {
-        ki_arr[i].type = INPUT_KEYBOARD;
-        ki_arr[i].ki = this->kiVec.at(i);
+        kiArr[i].type = INPUT_KEYBOARD;
+        kiArr[i].ki = this->kiVec.at(i);
     }
 
-    return 0;
+    return kybdStatus::SUCCESS;
 }
