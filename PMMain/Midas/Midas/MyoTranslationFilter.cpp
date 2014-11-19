@@ -1,5 +1,6 @@
 #include "MyoTranslationFilter.h"
 #include <cmath>
+#include <iostream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
     : controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0)
@@ -26,15 +27,25 @@ void MyoTranslationFilter::process()
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
+        std::cout << "Entering Mouse Mode." << std::endl;
         basePitch = pitch;
         baseYaw = yaw;
     }
 
-    previousMode = controlStateHandle->getMode();
-
     if (controlStateHandle->getMode() != MOUSE_MODE)
     {
-        Filter::setFilterStatus(filterStatus::END_CHAIN);
+        if (previousMode == MOUSE_MODE)
+        {
+            std::cout << "Leaving Mouse Mode." << std::endl;
+            filterDataMap outputToSharedCommandData;
+            point mouseUnitVelocity = point(0, 0);
+            outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
+            Filter::setOutput(outputToSharedCommandData);
+        }
+        else
+        {
+            Filter::setFilterStatus(filterStatus::END_CHAIN);
+        }
     }
     else
     {
@@ -44,6 +55,8 @@ void MyoTranslationFilter::process()
 
         Filter::setOutput(outputToSharedCommandData);
     }
+
+    previousMode = controlStateHandle->getMode();
 }
 
 point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
@@ -51,8 +64,8 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
     float deltaPitch = pitch - basePitch;
     float deltaYaw = yaw - baseYaw;
 
-    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_ANGLE) : std::max(-1.0f, deltaPitch / MAX_ANGLE);
-    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_ANGLE) : std::max(-1.0f, deltaYaw / MAX_ANGLE);
+    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_PITCH_ANGLE) : std::max(-1.0f, deltaPitch / MAX_PITCH_ANGLE);
+    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_YAW_ANGLE) : std::max(-1.0f, deltaYaw / MAX_YAW_ANGLE);
 
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
@@ -60,7 +73,7 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w)
 {
     //TODO - Likely need to base this off of R/L hand, and orientation
-    return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)

@@ -2,43 +2,43 @@
 #include "kybrdCtrl.h"
 #include <time.h>
 
-void MouseCtrlTest::testMouseSquare(int loopSize, DWORD minDelta)
-{
-    cout << "Welcome to the Mouse Ctrl Test. The mouse will now go in a square autonomously." << endl;
-    
-    MouseCtrl *mc = new MouseCtrl();
-    mc->setMinMovementTimeDelta(minDelta);
-
-    DWORD t1 = clock() * (1000 / CLOCKS_PER_SEC);
-    DWORD t2 = clock() * (1000 / CLOCKS_PER_SEC);
-    while (t2 - t1 < minDelta*loopSize)
-    {
-        mc->sendCommand(mouseCmds::MOVE_UP);
-        t2 = clock() * (1000 / CLOCKS_PER_SEC);
-    }
-    t1 = t2;
-    while (t2 - t1 < minDelta*loopSize)
-    {
-        mc->sendCommand(mouseCmds::MOVE_RIGHT);
-        t2 = clock() * (1000 / CLOCKS_PER_SEC);
-    }
-    t1 = t2;
-    while (t2 - t1 < minDelta*loopSize)
-    {
-        mc->sendCommand(mouseCmds::MOVE_DOWN);
-        t2 = clock() * (1000 / CLOCKS_PER_SEC);
-    }
-    t1 = t2;
-    while (t2 - t1 < minDelta*loopSize)
-    {
-        mc->sendCommand(mouseCmds::MOVE_LEFT);
-        t2 = clock() * (1000 / CLOCKS_PER_SEC);
-    }
-
-    delete mc; mc = NULL;
-
-    cout << "test. Thank you." << CLOCKS_PER_SEC << endl;
-}
+//void MouseCtrlTest::testMouseSquare(int loopSize, DWORD minDelta)
+//{
+//    cout << "Welcome to the Mouse Ctrl Test. The mouse will now go in a square autonomously." << endl;
+//    
+//    MouseCtrl *mc = new MouseCtrl();
+//    mc->setMinMovementTimeDelta(minDelta);
+//
+//    DWORD t1 = clock() * (1000 / CLOCKS_PER_SEC);
+//    DWORD t2 = clock() * (1000 / CLOCKS_PER_SEC);
+//    while (t2 - t1 < minDelta*loopSize)
+//    {
+//        mc->sendCommand(mouseCmds::MOVE_UP);
+//        t2 = clock() * (1000 / CLOCKS_PER_SEC);
+//    }
+//    t1 = t2;
+//    while (t2 - t1 < minDelta*loopSize)
+//    {
+//        mc->sendCommand(mouseCmds::MOVE_RIGHT);
+//        t2 = clock() * (1000 / CLOCKS_PER_SEC);
+//    }
+//    t1 = t2;
+//    while (t2 - t1 < minDelta*loopSize)
+//    {
+//        mc->sendCommand(mouseCmds::MOVE_DOWN);
+//        t2 = clock() * (1000 / CLOCKS_PER_SEC);
+//    }
+//    t1 = t2;
+//    while (t2 - t1 < minDelta*loopSize)
+//    {
+//        mc->sendCommand(mouseCmds::MOVE_LEFT);
+//        t2 = clock() * (1000 / CLOCKS_PER_SEC);
+//    }
+//
+//    delete mc; mc = NULL;
+//
+//    cout << "test. Thank you." << CLOCKS_PER_SEC << endl;
+//}
 
 void MouseCtrlTest::testScrollMouseSquare(int loopSize, int scrollRate)
 {
