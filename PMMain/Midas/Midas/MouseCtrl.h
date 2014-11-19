@@ -8,13 +8,16 @@
 #define DEFAULT_MIN_MOVE_TIME 10
 #define DEFAULT_SCROLL_RATE 1 //Default to slow rate.
 #define SCROLL_MIN_TIME 5
-#define MAX_MOVE_TIME_DELTA 20 //20 ms delay between moving a pixel is pretty slow. TODO: lets see if it's slow enough.
+#define MAX_MOVE_TIME_DELTA 30 //large enough ms delay between moving a pixel is pretty slow.
+#define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
+#define MOVE_RATE_DEADZONE 5
 
 class MouseCtrl
 {
 public:
     MouseCtrl();
 
+    // set Scroll Rate to control speed/direction.
     void setScrollRate(int rate);
 
     // value from -100 to 100 dictating velocity X should move.
@@ -31,6 +34,9 @@ public:
     void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = -1);
 
 private:
+
+    void setMouseInputVars(mouseCmds mouseCmd);
+
     MOUSEINPUT mi;
     DWORD lastMouseMoveX;
     DWORD lastMouseMoveY;
