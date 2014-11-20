@@ -22,6 +22,28 @@ void GestureFilter::process()
     if (gesture != lastPoseType)
     {
         // The user's gesture has changed.
+        if (gesture == myo::Pose::rest)
+        {
+            filterDataMap outputToSharedCommandData;
+            commandData command;
+            command.type = MOUSE_COMMAND;
+
+            if (lastPoseType == myo::Pose::fist)
+            {
+                command.mouse = LEFT_RELEASE;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+                Filter::setOutput(outputToSharedCommandData);
+                return;
+            }
+            else if (lastPoseType == myo::Pose::fingersSpread)
+            {
+                command.mouse = RIGHT_RELEASE;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+                Filter::setOutput(outputToSharedCommandData);
+                return;
+            }
+        }
+
         lastPoseType = gesture;
         lastTime = clock();
     }
