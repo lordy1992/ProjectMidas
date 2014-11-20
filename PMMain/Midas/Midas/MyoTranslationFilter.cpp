@@ -26,7 +26,7 @@ void MyoTranslationFilter::process()
     Filter::setFilterStatus(filterStatus::OK);
 
     float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
-    float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
+    float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
@@ -99,9 +99,9 @@ float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, fl
     else
     {
         //std::cout << "Arm or xDirection unknown." << std::endl;
+        // Default - arbitrarily chosen.
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
-
-    return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)
