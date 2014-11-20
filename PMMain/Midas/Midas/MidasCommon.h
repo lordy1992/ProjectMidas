@@ -54,7 +54,10 @@ enum mouseCmds {
     SCROLL_LEFT,
     SCROLL_RIGHT,
     SCROLL_UP,
-    SCROLL_DOWN
+    SCROLL_DOWN,
+    LEFT_RELEASE,
+    RIGHT_RELEASE,
+    MIDDLE_RELEASE
 };
 
 /**
