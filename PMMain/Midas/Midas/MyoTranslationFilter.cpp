@@ -19,11 +19,14 @@ void MyoTranslationFilter::process()
     float quatZ = boost::any_cast<float>(input[INPUT_QUATERNION_Z]);
     float quatW = boost::any_cast<float>(input[INPUT_QUATERNION_W]);
 
+    myo::Arm arm = boost::any_cast<myo::Arm>(input[INPUT_ARM]);
+    myo::XDirection xDirection = boost::any_cast<myo::XDirection>(input[INPUT_X_DIRECTION]);
+
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
 
-    float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW);
-    float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
+    float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
+    float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
@@ -70,14 +73,39 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
 
-float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w)
+float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection)
 {
     //TODO - Likely need to base this off of R/L hand, and orientation
+    if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardElbow)
+    {
+        //std::cout << "arm left and xDirection towardElbow" << std::endl;
+        return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardElbow)
+    {
+        //std::cout << "arm right and xDirection towardElbow" << std::endl;
+        return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardWrist)
+    {
+        //std::cout << "arm left and xDirection towardWrist" << std::endl;
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardWrist)
+    {
+        //std::cout << "arm right and xDirection towardWrist" << std::endl;
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    } 
+    else
+    {
+        //std::cout << "Arm or xDirection unknown." << std::endl;
+    }
+
     return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)
 {
-    //TODO - Likely need to base this off of R/L hand, and orientation
+    // Indifferent to arm/xDirection, unlike pitch.
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 }

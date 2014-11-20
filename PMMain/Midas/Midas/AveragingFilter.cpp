@@ -1,4 +1,5 @@
 #include "AveragingFilter.h"
+#include "myo\myo.hpp"
 
 
 AveragingFilter::AveragingFilter() : avgCount(DEFAULT_AVG_COUNT) {}
@@ -32,6 +33,9 @@ void AveragingFilter::process()
     float gyroY  = boost::any_cast<float>(input[GYRO_DATA_Y ]);
     float gyroZ  = boost::any_cast<float>(input[GYRO_DATA_Z ]);
 
+    myo::Arm arm = boost::any_cast<myo::Arm>(input[INPUT_ARM]);
+    myo::XDirection xDirection = boost::any_cast<myo::XDirection>(input[INPUT_X_DIRECTION]);
+
     insertAvgElement(quatX, quatXDeque);    
     insertAvgElement(quatY, quatYDeque);
     insertAvgElement(quatZ, quatZDeque);
@@ -55,6 +59,8 @@ void AveragingFilter::process()
     output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
     output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
     output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
+    output[INPUT_ARM] = arm;
+    output[INPUT_X_DIRECTION] = xDirection;
 
     Filter::setOutput(output);
 }

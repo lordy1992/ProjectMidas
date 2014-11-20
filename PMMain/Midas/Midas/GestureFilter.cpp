@@ -70,11 +70,11 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
     commandData command;
     command.type = MOUSE_COMMAND;
 
-    if (pose == myo::Pose::fist)
+    if (pose == MYO_GESTURE_LEFT_CLICK)
     {
         command.mouse = LEFT_CLICK;
     }
-    else if (pose == myo::Pose::fingersSpread)
+    else if (pose == MYO_GESTURE_RIGHT_CLICK)
     {
         command.mouse = RIGHT_CLICK;
     }
