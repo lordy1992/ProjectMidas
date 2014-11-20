@@ -36,3 +36,9 @@
 *.opensdf
 *.sdf
 *.suo
+
+PMMain/Midas/Debug/
+PMMain/Midas/Midas/Debug/
+
+# Comment this if you want to add anything to testDev directory. But for now, leave in gitignore!
+testDev/
