@@ -28,14 +28,14 @@ void GestureFilter::process()
             commandData command;
             command.type = MOUSE_COMMAND;
 
-            if (lastPoseType == myo::Pose::fist)
+            if (lastPoseType == MYO_GESTURE_LEFT_MOUSE)
             {
                 command.mouse = LEFT_RELEASE;
                 outputToSharedCommandData[COMMAND_INPUT] = command;
                 Filter::setOutput(outputToSharedCommandData);
                 return;
             }
-            else if (lastPoseType == myo::Pose::fingersSpread)
+            else if (lastPoseType == MYO_GESTURE_RIGHT_MOUSE)
             {
                 command.mouse = RIGHT_RELEASE;
                 outputToSharedCommandData[COMMAND_INPUT] = command;
@@ -92,11 +92,11 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
     commandData command;
     command.type = MOUSE_COMMAND;
 
-    if (pose == myo::Pose::fist)
+    if (pose == MYO_GESTURE_LEFT_MOUSE)
     {
         command.mouse = LEFT_CLICK;
     }
-    else if (pose == myo::Pose::fingersSpread)
+    else if (pose == MYO_GESTURE_RIGHT_MOUSE)
     {
         command.mouse = RIGHT_CLICK;
     }

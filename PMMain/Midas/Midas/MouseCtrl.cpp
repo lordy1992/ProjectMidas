@@ -174,11 +174,11 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd)
         break;
     case mouseCmds::SCROLL_UP:
         mi.dwFlags = MOUSEEVENTF_WHEEL;
-        mi.mouseData = scrollRate; // RANGE IS FROM -120 to +120 - WHEEL_DELTA = 120, which is one "wheel click"
+        mi.mouseData = scrollRate; // RANGE IS FROM -120 to +120 : WHEEL_DELTA = 120, which is one "wheel click"
         break;
     case mouseCmds::SCROLL_DOWN:
         mi.dwFlags = MOUSEEVENTF_WHEEL;
-        mi.mouseData = -scrollRate; // RANGE IS FROM -120 to +120 - WHEEL_DELTA = 120, which is one "wheel click"
+        mi.mouseData = -scrollRate; // RANGE IS FROM -120 to +120 : WHEEL_DELTA = 120, which is one "wheel click"
         break;
     }
 }

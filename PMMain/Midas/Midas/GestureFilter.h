@@ -6,6 +6,8 @@
 #include "Filter.h"
 
 #define GESTURE_INPUT "gesture"
+#define MYO_GESTURE_RIGHT_MOUSE myo::Pose::fingersSpread
+#define MYO_GESTURE_LEFT_MOUSE myo::Pose::fist
 
 /**
  * Consult Filter.h for concepts regarding Filters.
