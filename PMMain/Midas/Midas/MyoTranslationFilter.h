@@ -75,6 +75,17 @@ private:
     */
     point getMouseUnitVelocity(float pitch, float yaw);
 
+    /**
+    * Calculates the delta (in radians) between a base angle and a 
+    * current angle, with respect to a ring. The pupose is to ensure that wrapping
+    * around the 0 radian section of the ring has no effect on the output
+    * which should safely range from -pi to +pi.
+    *
+    * @param current The current angle (in radians) that is being compared
+    * @param base The base angle (in radians) that is being compared against
+    */
+    static float calcRingDelta(float current, float base);
+
     ControlState* controlStateHandle;
     midasMode previousMode;
     float basePitch, baseYaw;

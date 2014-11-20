@@ -1,5 +1,5 @@
 #include "MyoTranslationFilter.h"
-#include <cmath>
+#include <math.h>
 #include <iostream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
@@ -64,8 +64,9 @@ void MyoTranslationFilter::process()
 
 point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 {
-    float deltaPitch = pitch - basePitch;
-    float deltaYaw = yaw - baseYaw;
+    // Data is on range -180 to +180. convert to 0-360.
+    float deltaPitch = calcRingDelta(pitch + M_PI, basePitch + M_PI);
+    float deltaYaw = calcRingDelta(yaw + M_PI, baseYaw + M_PI); 
 
     float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_PITCH_ANGLE) : std::max(-1.0f, deltaPitch / MAX_PITCH_ANGLE);
     float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_YAW_ANGLE) : std::max(-1.0f, deltaYaw / MAX_YAW_ANGLE);
@@ -108,4 +109,39 @@ float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, floa
 {
     // Indifferent to arm/xDirection, unlike pitch.
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+}
+
+float MyoTranslationFilter::calcRingDelta(float current, float base)
+{
+    // Assert angles are within range of a circle
+    if (current >= 2 * M_PI || base >= 2 * M_PI || current <=  0 || base <= 0)
+    {
+        return 0.0;
+    }
+
+    float delta = 0.0;
+    if (current >= base)
+    {
+        if (current - base <= M_PI)
+        {
+            delta = current - base;
+        }
+        else
+        {
+            delta = -((2*M_PI - current) + base);
+        }
+    }
+    else
+    {
+        if (base - current <= M_PI)
+        {
+            delta = current - base;
+        }
+        else
+        {
+            delta = (2*M_PI - base) + current;
+        }
+    }
+
+    return delta;
 }
