@@ -30,7 +30,6 @@ void MyoTranslationFilter::process()
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
-        std::cout << "Entering Mouse Mode." << std::endl;
         basePitch = pitch;
         baseYaw = yaw;
     }
@@ -39,7 +38,6 @@ void MyoTranslationFilter::process()
     {
         if (previousMode == MOUSE_MODE)
         {
-            std::cout << "Leaving Mouse Mode." << std::endl;
             filterDataMap outputToSharedCommandData;
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
