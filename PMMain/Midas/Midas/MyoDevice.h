@@ -6,6 +6,8 @@
 
 #define DEFAULT_FIND_MYO_TIMEOUT 1000
 #define DEFAULT_MYO_DURATION_MS 1000/20
+#define DEFAULT_MYO_ARM myo::Arm::armUnknown
+#define DEFAULT_MYO_XDIR myo::XDirection::xDirectionUnknown
 
 using namespace myo;
 
@@ -79,6 +81,9 @@ private:
         void onDisconnect(Myo* myo, uint64_t timestamp);
         void onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection);
         void onArmUnsync(Myo* myo, uint64_t timestamp);
+        // For SDK <= 5, use these 2 arm callbacks.
+        void onArmRecognized(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { onArmSync(myo, timestamp, arm, xDirection); }
+        void onArmLost(Myo* myo, uint64_t timestamp) { onArmUnsync(myo, timestamp); }
         void onPose(Myo* myo, uint64_t timestamp, Pose pose);
         void onOrientationData(Myo* myo, uint64_t timestamp, const Quaternion<float>& rotation);
         void onAccelerometerData(Myo* myo, uint64_t timestamp, const Vector3<float>& accel);
@@ -94,5 +99,8 @@ private:
     std::string appIdentifier;
     ControlState* state;
     FilterPipeline posePipeline, orientationPipeline;
+
+    Arm arm;
+    XDirection xDirection;
 };
 

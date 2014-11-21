@@ -5,7 +5,7 @@
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
-        durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState)
+    durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), xDirection(DEFAULT_MYO_XDIR)
 {
 }
 
@@ -102,6 +102,9 @@ void MyoDevice::MyoCallbacks::onOrientationData(Myo* myo, uint64_t timestamp, co
     input[QUAT_DATA_Z] = rotation.z();
     input[QUAT_DATA_W] = rotation.w();
 
+    input[INPUT_ARM] = parent.arm;
+    input[INPUT_X_DIRECTION] = parent.xDirection;
+
     // The following is junk data. The averaging filter should be modified so
     // that it doesn't deal with the data so specifically.
     input[ACCEL_DATA_X] = 0.0f;
@@ -168,9 +171,13 @@ void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) {
     std::cout << "on disconnect." << std::endl; 
 }
 void MyoDevice::MyoCallbacks::onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { 
+    parent.arm = arm;
+    parent.xDirection = xDirection;
     std::cout << "on arm sync." << std::endl; 
 }
 void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) { 
+    parent.arm = Arm::armUnknown;
+    parent.xDirection = XDirection::xDirectionUnknown;
     std::cout << "on arm unsync." << std::endl; 
 }
 void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) { 

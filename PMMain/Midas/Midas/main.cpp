@@ -78,11 +78,21 @@ int main() {
             if (nextCmd.mouse == LEFT_CLICK)
             {
                 cout << "Received a left click." << endl;
-                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
+                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, false);
             }
             else if (nextCmd.mouse == RIGHT_CLICK)
             {
                 cout << "Received a right click." << endl;
+                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, false);
+            }
+            else if (nextCmd.mouse == LEFT_RELEASE)
+            {
+                cout << "Received a left release." << endl;
+                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
+            }
+            else if (nextCmd.mouse == RIGHT_RELEASE)
+            {
+                cout << "Received a right release." << endl;
                 mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
             }
         }

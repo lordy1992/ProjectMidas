@@ -15,6 +15,10 @@
 #define GYRO_DATA_X "gyroDataX"
 #define GYRO_DATA_Y "gyroDataY"
 #define GYRO_DATA_Z "gyroDataZ"
+// TODO - These should not actually be here. Once Many to one filters are implemented,
+// Remove from this filter, as they are simply being passed through....
+#define INPUT_ARM "arm"
+#define INPUT_X_DIRECTION "xDirection"
 
 /**
  * Consult Filter.h for concepts regarding Filters.
