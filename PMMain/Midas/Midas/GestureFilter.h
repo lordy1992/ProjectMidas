@@ -41,6 +41,73 @@ public:
     void process();
 
 private:
+
+    /**
+    */
+    class StateHandler
+    {
+    public:
+        /**
+        * The constructor for the StateHandler. It takes a reference to its parent,
+        * so that it can call it's parent's functions.
+        *
+        * @param parent A handle to the parent of the StateHandler - a GestureFilter
+        */
+        StateHandler(GestureFilter& parent);
+        ~StateHandler();
+
+        /** 
+        * An enumeration of all possible sequences that can be executed from various
+        * states
+        */
+        enum class activeSequence
+        {
+            UNLOCK,
+            LOCK,
+            MOUSE_TO_GEST,
+            GEST_TO_MOUSE,
+            MOUSE_TO_KYBRD,
+            KYBRD_TO_MOUSE,
+            NONE
+        };
+
+        /**
+        * Update the state of Midas, given a recieved gesture.
+        * 
+        * @param gesture This is the current recorded gesture being used to determine if the state 
+        * will change.
+        * @return Returns true if the state has been changed, and false otherwise.
+        */
+        bool updateState(myo::Pose::Type gesture);
+    private:
+        GestureFilter& parent;
+
+        // Gesture sequences required to change states
+        static std::vector<myo::Pose::Type> unlockSequence;
+        static std::vector<myo::Pose::Type> lockSequence;
+        static std::vector<myo::Pose::Type> mouseToGestureSequence;
+        static std::vector<myo::Pose::Type> gestureToMouseSequence;
+        static std::vector<myo::Pose::Type> mouseToKeyboardSequence;
+        static std::vector<myo::Pose::Type> keyboardToMouseSequence;
+
+        // Gesture sequence completion value - represents how far into a gesture sequence
+        // the user is. Ranges from 0 to max(sequence length - 1) of allowable sequences from
+        // any given state.
+        unsigned int sequenceCount;
+
+        // Indicates the sequence which is actively being attempted to be completed.
+        activeSequence activeSeq;
+
+        // Base timestamp used to calculate transitions
+        clock_t stateTransBaseTime;
+        // Transition timeout value. For example, if to change a state,
+        // the user is required to perform "wave in, wave out, pinky-to-thumb", 
+        // then when a wave in is recorded, the user has up to "stateTransMaxDeltaTime"
+        // milliseconds to perform a wave out, or else the whole process needs to be repeated.
+        clock_t stateTransMaxDeltaTime;
+    };
+
+
     /**
      * Translates gestures into corresponding mouse and keyboard commands.
      *
@@ -52,7 +119,7 @@ private:
     ControlState* controlStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
-
+    StateHandler stateHandler;
 };
 
 #endif /* _GESTURE_FILTER_H */

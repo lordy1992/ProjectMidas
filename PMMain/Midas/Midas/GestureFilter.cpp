@@ -3,7 +3,7 @@
 #include <time.h>
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(myo::Pose::rest),
-    lastTime(0), controlStateHandle(controlState)
+    lastTime(0), controlStateHandle(controlState), stateHandler(*this)
 {
 }
 
@@ -52,28 +52,18 @@ void GestureFilter::process()
     {
         // The user has held the same gesture for a long enough
         // period of time.
-        if (gesture == myo::Pose::thumbToPinky)
+
+        if (stateHandler.updateState(gesture))
         {
-            // Lock <--> Unlock gesture.
-            midasMode currentState = controlStateHandle->getMode();
-
-            if (currentState == LOCK_MODE)
-            {
-                controlStateHandle->setMode(MOUSE_MODE);
-            }
-            else
-            {
-                controlStateHandle->setMode(LOCK_MODE);
-            }
-
+            // State changed. Alert pipeline that filter chain is done.
             Filter::setFilterStatus(filterStatus::END_CHAIN);
         }
         else
         {
-            // Not the state-change pose
+            // No state change. Pass data along pipeline
             filterDataMap outputToSharedCommandData;
             commandData sendData = translateGesture(gesture);
-
+        
             if (sendData.type == UNKNOWN_COMMAND)
             {
                 Filter::setFilterStatus(filterStatus::END_CHAIN);
@@ -106,4 +96,80 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
     }
 
     return command;
+}
+
+GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent)
+{
+    unlockSequence.push_back(myo::Pose::thumbToPinky);
+    lockSequence.push_back(myo::Pose::thumbToPinky);
+
+    // None of the following modes actually have functionality, so their 
+    // state transition sequences are arbitrary and incomplete. TODO.
+    mouseToGestureSequence.push_back(myo::Pose::fingersSpread);
+    gestureToMouseSequence.push_back(myo::Pose::fingersSpread);
+    mouseToKeyboardSequence.push_back(myo::Pose::fingersSpread);
+    keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
+
+    sequenceCount = 0;
+    activeSeq = activeSequence::None;
+}
+
+GestureFilter::StateHandler::~StateHandler()
+{
+}
+
+bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
+{
+    midasMode currentState = parent.controlStateHandle->getMode();
+    
+    // determine which gesture must be completed to progress through a sequence.
+    myo::Pose::Type gestureToProgress = myo::Pose::Type::rest;
+
+    if (currentState == LOCK_MODE)
+    {
+        // Can only unlock from this state
+        if (activeSeq == activeSequence::UNLOCK)
+        {
+            gestureToProgress = unlockSequence.at(sequenceCount);
+        }
+        else
+        {
+
+        }
+    }
+    else if (currentState == MOUSE_MODE)
+    {
+
+    }
+    else if (currentState == GESTURE_MODE)
+    {
+
+    }
+    else if (currentState == KEYBOARD_MODE)
+    {
+
+    }
+        
+    if (gesture == myo::Pose::thumbToPinky)
+    {
+        // Lock <--> Unlock gesture.
+        if (currentState == LOCK_MODE)
+        {
+            parent.controlStateHandle->setMode(MOUSE_MODE);
+        }
+        else
+        {
+            parent.controlStateHandle->setMode(LOCK_MODE);
+        }
+
+        return true;
+    }
+    else
+    {
+        // Not the state-change pose
+        return false;
+    }
+
+    // Return default that state has not changed.
+    return false;
 }
