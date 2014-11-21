@@ -91,7 +91,6 @@ void MyoDevice::MyoCallbacks::onPose(Myo* myo, uint64_t timestamp, Pose pose)
     filterDataMap input;
     input[GESTURE_INPUT] = pose.type();
 
-    std::cout << "onPose." << std::endl;
     parent.posePipeline.startPipeline(input);
 }
 

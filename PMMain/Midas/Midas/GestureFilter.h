@@ -111,10 +111,6 @@ private:
         std::vector<myo::Pose::Type> mouseToKeyboardSequence;
         std::vector<myo::Pose::Type> keyboardToMouseSequence;
 
-        // Flag to ensure that user hits rest pose inbetween other poses, so that states
-        // cannot jitter back and forth if the same pose switches between them.
-        bool restBetweenPoses;
-
         // Gesture sequence completion value - represents how far into a gesture sequence
         // the user is. Ranges from 0 to max(sequence length - 1) of allowable sequences from
         // any given state.

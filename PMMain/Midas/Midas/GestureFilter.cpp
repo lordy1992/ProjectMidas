@@ -19,7 +19,7 @@ void GestureFilter::process()
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
 
-    if (gesture != lastPoseType)
+    if (gesture != lastPoseType)// && controlStateHandle->getMode() != midasMode::LOCK_MODE)
     {
         // The user's gesture has changed.
         if (gesture == myo::Pose::rest)
@@ -53,7 +53,6 @@ void GestureFilter::process()
         // The user has held the same gesture for a long enough
         // period of time.
 
-        std::cout << "calling UpdateState" << std::endl;
         if (stateHandler.updateState(gesture))
         {
             // State changed. Alert pipeline that filter chain is done.
@@ -61,19 +60,26 @@ void GestureFilter::process()
         }
         else
         {
-            // No state change. Pass data along pipeline
-            filterDataMap outputToSharedCommandData;
-            commandData sendData = translateGesture(gesture);
-        
-            if (sendData.type == UNKNOWN_COMMAND)
-            {
-                Filter::setFilterStatus(filterStatus::END_CHAIN);
-            }
-            else
-            {
-                outputToSharedCommandData[COMMAND_INPUT] = sendData;
-                Filter::setOutput(outputToSharedCommandData);
-            }
+            //if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
+            //{
+                // No state change. Pass data along pipeline
+                filterDataMap outputToSharedCommandData;
+                commandData sendData = translateGesture(gesture);
+
+                if (sendData.type == UNKNOWN_COMMAND)
+                {
+                    Filter::setFilterStatus(filterStatus::END_CHAIN);
+                }
+                else
+                {
+                    outputToSharedCommandData[COMMAND_INPUT] = sendData;
+                    Filter::setOutput(outputToSharedCommandData);
+                }
+            //}
+            //else
+            //{
+            //    Filter::setFilterStatus(filterStatus::END_CHAIN);
+            //}
         }
     }
 }
@@ -105,8 +111,6 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     unlockSequence.push_back(myo::Pose::waveIn);
     unlockSequence.push_back(myo::Pose::waveOut);
     lockSequence.push_back(myo::Pose::thumbToPinky);
-    //lockSequence.push_back(myo::Pose::waveIn);
-    //lockSequence.push_back(myo::Pose::waveOut);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
@@ -119,7 +123,6 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
     activeSeq = activeSequence::NONE;
-    restBetweenPoses = true;
 }
 
 GestureFilter::StateHandler::~StateHandler()
@@ -130,7 +133,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 {
     if (gesture == myo::Pose::Type::rest)
     {
-        restBetweenPoses = true;
+        return false;
     }
 
     midasMode currentState = parent.controlStateHandle->getMode();
@@ -141,33 +144,23 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
     if (activeSeq != activeSequence::NONE)
     {
-        if (restBetweenPoses == false)
-        {
-            // Early exit until a user has rested between poses. This stops states from 
-            // jittering back and forth if they have the same gesture to enter/exit.
-            return false;
-        }
-
         if (now - stateProgressBaseTime > stateProgressMaxDeltaTime)
         {
-            std::cout << "timed out!" << std::endl;
-            // reset and return if a sequence timed out.
+            std::cout << "timed out of previous sequence attempt." << std::endl;
+            // reset and pass through to rest of updateState check.
             activeSeq = activeSequence::NONE;
             sequenceCount = 0;
-            return false;
         }
     }
 
-    std::cout << "about to enter mode check..." << std::endl;
     if (currentState == LOCK_MODE)
     {
         // Can only unlock from this locked state
         if (activeSeq == activeSequence::UNLOCK)
         {
-            std::cout << "sequenceCount " << sequenceCount << " size unlock: " << unlockSequence.size() <<  std::endl;
             if (gesture == unlockSequence.at(sequenceCount))
             {
-                std::cout << "In lockMode, progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
+                //std::cout << "In lockMode, progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
                 sequenceCount++;
                 stateProgressBaseTime = now;
             }
@@ -179,7 +172,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
             if (gesture == unlockSequence.at(0))
             {
                 // Activated a sequence
-                std::cout << "In lockMode, started progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
+                //std::cout << "In lockMode, started progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
                 activeSeq = activeSequence::UNLOCK;
                 sequenceCount++;
                 stateProgressBaseTime = now;
@@ -191,7 +184,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
             }
         }
 
-        if (sequenceCount == unlockSequence.size() && restBetweenPoses)
+        if (sequenceCount == unlockSequence.size())
         {
             // Succeeded in completing unlock sequence
             nextMode = MOUSE_MODE;
@@ -200,7 +193,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     }
     else if (currentState == MOUSE_MODE)
     {
-        std::cout << "sequenceCount in MOUSE_MODE " << sequenceCount << "size lock: " << lockSequence.size() << std::endl;
+        //std::cout << "sequenceCount in MOUSE_MODE " << sequenceCount << "size lock: " << lockSequence.size() << std::endl;
         if (activeSeq == activeSequence::LOCK && gesture == lockSequence.at(sequenceCount))
         {
             sequenceCount++;
@@ -244,19 +237,19 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         }
 
-        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size() && restBetweenPoses)
+        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size())
         {
             // Succeeded in completing lock sequence
             nextMode = LOCK_MODE;
             willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_GEST && sequenceCount == mouseToGestureSequence.size() && restBetweenPoses)
+        else if (activeSeq == activeSequence::MOUSE_TO_GEST && sequenceCount == mouseToGestureSequence.size())
         {
             // Succeeded in completing mouse to gesture sequence
             nextMode = GESTURE_MODE;
             willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && sequenceCount == mouseToKeyboardSequence.size() && restBetweenPoses)
+        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && sequenceCount == mouseToKeyboardSequence.size())
         {
             // Succeeded in completing mouse to keyboard sequence
             nextMode = KEYBOARD_MODE;
@@ -278,7 +271,6 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         parent.controlStateHandle->setMode(nextMode);
         activeSeq = activeSequence::NONE;
         sequenceCount = 0;
-        restBetweenPoses = false;
         return true;
     }
 
