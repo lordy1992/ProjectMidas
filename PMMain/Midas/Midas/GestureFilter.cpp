@@ -113,7 +113,7 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
 
     sequenceCount = 0;
     activeSeq = activeSequence::NONE;
-    restBetweenPoses = false;
+    restBetweenPoses = true;
 }
 
 GestureFilter::StateHandler::~StateHandler()
@@ -129,7 +129,8 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
     midasMode currentState = parent.controlStateHandle->getMode();
     
-    bool didTransition = false;
+    bool willTransition = false;
+    midasMode nextMode = midasMode::LOCK_MODE;
     clock_t now = clock();
 
     if (activeSeq != activeSequence::NONE)
@@ -138,6 +139,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         {
             // Early exit until a user has rested between poses. This stops states from 
             // jittering back and forth if they have the same gesture to enter/exit.
+            std::cout << "haven't rested between poses - early exit" << std::endl;
             return false;
         }
 
@@ -165,7 +167,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         {
             // Attempting to start a legal sequence.
             // Only one possible sequence to get out of locked state.
-            if (gesture = unlockSequence.at(0))
+            if (gesture == unlockSequence.at(0))
             {
                 // Activated a sequence
                 activeSeq = activeSequence::UNLOCK;
@@ -179,11 +181,11 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
             }
         }
 
-        if (sequenceCount == unlockSequence.size())
+        if (sequenceCount == unlockSequence.size() && restBetweenPoses)
         {
             // Succeeded in completing unlock sequence
-            parent.controlStateHandle->setMode(MOUSE_MODE);
-            didTransition = true;
+            nextMode = MOUSE_MODE;
+            willTransition = true;
         }
     }
     else if (currentState == MOUSE_MODE)
@@ -208,17 +210,17 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
             // Attempting to start a legal sequence.
             sequenceCount++;
             stateProgressBaseTime = now;
-            if (gesture = lockSequence.at(0))
+            if (gesture == lockSequence.at(0))
             {
                 // Activated a sequence
                 activeSeq = activeSequence::LOCK;   
             }
-            else if (gesture = mouseToGestureSequence.at(0))
+            else if (gesture == mouseToGestureSequence.at(0))
             {
                 // Activated a sequence
                 activeSeq = activeSequence::MOUSE_TO_GEST;
             }
-            else if (gesture = mouseToKeyboardSequence.at(0))
+            else if (gesture == mouseToKeyboardSequence.at(0))
             {
                 // Activated a sequence
                 activeSeq = activeSequence::MOUSE_TO_KYBRD;
@@ -231,23 +233,23 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         }
 
-        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size())
+        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size() && restBetweenPoses)
         {
             // Succeeded in completing lock sequence
-            parent.controlStateHandle->setMode(LOCK_MODE);
-            didTransition = true;
+            nextMode = LOCK_MODE;
+            willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_GEST && sequenceCount == mouseToGestureSequence.size())
+        else if (activeSeq == activeSequence::MOUSE_TO_GEST && sequenceCount == mouseToGestureSequence.size() && restBetweenPoses)
         {
             // Succeeded in completing mouse to gesture sequence
-            parent.controlStateHandle->setMode(GESTURE_MODE);
-            didTransition = true;
+            nextMode = GESTURE_MODE;
+            willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && sequenceCount == mouseToKeyboardSequence.size())
+        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && sequenceCount == mouseToKeyboardSequence.size() && restBetweenPoses)
         {
             // Succeeded in completing mouse to keyboard sequence
-            parent.controlStateHandle->setMode(KEYBOARD_MODE);
-            didTransition = true;
+            nextMode = KEYBOARD_MODE;
+            willTransition = true;
         }
     }
     else if (currentState == GESTURE_MODE)
@@ -260,8 +262,9 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     }
 
     // Reset if succeeded in transition
-    if (didTransition)
+    if (willTransition)
     {
+        parent.controlStateHandle->setMode(nextMode);
         activeSeq = activeSequence::NONE;
         sequenceCount = 0;
         restBetweenPoses = false;
@@ -269,29 +272,4 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     }
 
     return false;
-
-    // --------------- OLD , yet functional logic.
-        
- //   if (gesture == myo::Pose::thumbToPinky)
- //   {
- //       // Lock <--> Unlock gesture.
- //       if (currentState == LOCK_MODE)
- //       {
- //           parent.controlStateHandle->setMode(MOUSE_MODE);
- //       }
- //       else
- //       {
- //           parent.controlStateHandle->setMode(LOCK_MODE);
- //       }
- //
- //       return true;
- //   }
- //   else
- //   {
- //       // Not the state-change pose
- //       return false;
- //   }
- //
- //   // Return default that state has not changed.
- //   return false;
 }
