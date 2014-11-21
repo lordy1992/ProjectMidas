@@ -60,8 +60,8 @@ void GestureFilter::process()
         }
         else
         {
-            //if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
-            //{
+            if (controlStateHandle->getMode() != midasMode::LOCK_MODE) // TODO - make this work as desired!
+            {
                 // No state change. Pass data along pipeline
                 filterDataMap outputToSharedCommandData;
                 commandData sendData = translateGesture(gesture);
@@ -75,11 +75,11 @@ void GestureFilter::process()
                     outputToSharedCommandData[COMMAND_INPUT] = sendData;
                     Filter::setOutput(outputToSharedCommandData);
                 }
-            //}
-            //else
-            //{
-            //    Filter::setFilterStatus(filterStatus::END_CHAIN);
-            //}
+            }
+            else
+            {
+                Filter::setFilterStatus(filterStatus::END_CHAIN);
+            }
         }
     }
 }
@@ -111,14 +111,18 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     unlockSequence.push_back(myo::Pose::waveIn);
     unlockSequence.push_back(myo::Pose::waveOut);
     lockSequence.push_back(myo::Pose::thumbToPinky);
+    lockSequence.push_back(myo::Pose::waveOut);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
-
-    // mouseToGestureSequence.push_back(myo::Pose::fingersSpread);
-    // gestureToMouseSequence.push_back(myo::Pose::fingersSpread);
-    // mouseToKeyboardSequence.push_back(myo::Pose::fingersSpread);
-    // keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
+    mouseToGestureSequence.push_back(myo::Pose::thumbToPinky);
+    mouseToGestureSequence.push_back(myo::Pose::fingersSpread);
+    gestureToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    gestureToMouseSequence.push_back(myo::Pose::fingersSpread);
+    mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
+    mouseToKeyboardSequence.push_back(myo::Pose::waveIn);
+    keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    keyboardToMouseSequence.push_back(myo::Pose::waveIn);
 
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
@@ -268,6 +272,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     // Reset if succeeded in transition
     if (willTransition)
     {
+        std::cout << "Transitioning to " << nextMode << std::endl;
         parent.controlStateHandle->setMode(nextMode);
         activeSeq = activeSequence::NONE;
         sequenceCount = 0;
