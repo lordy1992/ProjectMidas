@@ -83,12 +83,14 @@ private:
         GestureFilter& parent;
 
         // Gesture sequences required to change states
-        static std::vector<myo::Pose::Type> unlockSequence;
-        static std::vector<myo::Pose::Type> lockSequence;
-        static std::vector<myo::Pose::Type> mouseToGestureSequence;
-        static std::vector<myo::Pose::Type> gestureToMouseSequence;
-        static std::vector<myo::Pose::Type> mouseToKeyboardSequence;
-        static std::vector<myo::Pose::Type> keyboardToMouseSequence;
+        std::vector<myo::Pose::Type> unlockSequence;
+        std::vector<myo::Pose::Type> lockSequence;
+        std::vector<myo::Pose::Type> mouseToGestureSequence;
+        std::vector<myo::Pose::Type> gestureToMouseSequence;
+        std::vector<myo::Pose::Type> mouseToKeyboardSequence;
+        std::vector<myo::Pose::Type> keyboardToMouseSequence;
+
+        bool restBetweenPoses;
 
         // Gesture sequence completion value - represents how far into a gesture sequence
         // the user is. Ranges from 0 to max(sequence length - 1) of allowable sequences from
@@ -99,12 +101,13 @@ private:
         activeSequence activeSeq;
 
         // Base timestamp used to calculate transitions
-        clock_t stateTransBaseTime;
+        clock_t stateProgressBaseTime;
+
         // Transition timeout value. For example, if to change a state,
         // the user is required to perform "wave in, wave out, pinky-to-thumb", 
         // then when a wave in is recorded, the user has up to "stateTransMaxDeltaTime"
         // milliseconds to perform a wave out, or else the whole process needs to be repeated.
-        clock_t stateTransMaxDeltaTime;
+        clock_t stateProgressMaxDeltaTime; // JHH TODO - make getter/setter for this quickly.
     };
 
 
