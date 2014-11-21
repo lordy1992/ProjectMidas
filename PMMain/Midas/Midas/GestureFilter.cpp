@@ -53,6 +53,7 @@ void GestureFilter::process()
         // The user has held the same gesture for a long enough
         // period of time.
 
+        std::cout << "calling UpdateState" << std::endl;
         if (stateHandler.updateState(gesture))
         {
             // State changed. Alert pipeline that filter chain is done.
@@ -104,6 +105,8 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     unlockSequence.push_back(myo::Pose::waveIn);
     unlockSequence.push_back(myo::Pose::waveOut);
     lockSequence.push_back(myo::Pose::thumbToPinky);
+    //lockSequence.push_back(myo::Pose::waveIn);
+    //lockSequence.push_back(myo::Pose::waveOut);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
@@ -155,11 +158,13 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         }
     }
 
+    std::cout << "about to enter mode check..." << std::endl;
     if (currentState == LOCK_MODE)
     {
         // Can only unlock from this locked state
         if (activeSeq == activeSequence::UNLOCK)
         {
+            std::cout << "sequenceCount " << sequenceCount << " size unlock: " << unlockSequence.size() <<  std::endl;
             if (gesture == unlockSequence.at(sequenceCount))
             {
                 std::cout << "In lockMode, progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
@@ -195,6 +200,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     }
     else if (currentState == MOUSE_MODE)
     {
+        std::cout << "sequenceCount in MOUSE_MODE " << sequenceCount << "size lock: " << lockSequence.size() << std::endl;
         if (activeSeq == activeSequence::LOCK && gesture == lockSequence.at(sequenceCount))
         {
             sequenceCount++;
@@ -277,4 +283,14 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     }
 
     return false;
+}
+
+void GestureFilter::StateHandler::setStateProgressMaxDeltaTime(clock_t newTime)
+{
+    stateProgressBaseTime = newTime;
+}
+
+clock_t GestureFilter::StateHandler::getStateProgressMaxDeltaTime(void)
+{
+    return stateProgressBaseTime;
 }

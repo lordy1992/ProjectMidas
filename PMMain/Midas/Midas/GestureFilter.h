@@ -8,7 +8,7 @@
 #define GESTURE_INPUT "gesture"
 #define MYO_GESTURE_RIGHT_MOUSE myo::Pose::fingersSpread
 #define MYO_GESTURE_LEFT_MOUSE myo::Pose::fist
-#define DEFAULT_PROG_MAX_DELTA 1000
+#define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
 /**
  * Consult Filter.h for concepts regarding Filters.
@@ -44,6 +44,11 @@ public:
 private:
 
     /**
+    * Helper class that handles the state transitions of Midas, based on gesture input.
+    * It looks at what gestures the user is supplying, in what order, and how frequently,
+    * in order to determine when and how state changes should occur. The state changing
+    * sequences can be found in the sequence vector member variables, initialized in 
+    * constructor.
     */
     class StateHandler
     {
@@ -106,6 +111,8 @@ private:
         std::vector<myo::Pose::Type> mouseToKeyboardSequence;
         std::vector<myo::Pose::Type> keyboardToMouseSequence;
 
+        // Flag to ensure that user hits rest pose inbetween other poses, so that states
+        // cannot jitter back and forth if the same pose switches between them.
         bool restBetweenPoses;
 
         // Gesture sequence completion value - represents how far into a gesture sequence
