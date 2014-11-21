@@ -101,6 +101,8 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
 GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent)
 {
     unlockSequence.push_back(myo::Pose::thumbToPinky);
+    unlockSequence.push_back(myo::Pose::waveIn);
+    unlockSequence.push_back(myo::Pose::waveOut);
     lockSequence.push_back(myo::Pose::thumbToPinky);
 
     // None of the following modes actually have functionality, so their 
@@ -112,6 +114,7 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     // keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
 
     sequenceCount = 0;
+    stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
     activeSeq = activeSequence::NONE;
     restBetweenPoses = true;
 }
@@ -139,12 +142,12 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         {
             // Early exit until a user has rested between poses. This stops states from 
             // jittering back and forth if they have the same gesture to enter/exit.
-            std::cout << "haven't rested between poses - early exit" << std::endl;
             return false;
         }
 
         if (now - stateProgressBaseTime > stateProgressMaxDeltaTime)
         {
+            std::cout << "timed out!" << std::endl;
             // reset and return if a sequence timed out.
             activeSeq = activeSequence::NONE;
             sequenceCount = 0;
@@ -159,6 +162,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         {
             if (gesture == unlockSequence.at(sequenceCount))
             {
+                std::cout << "In lockMode, progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
                 sequenceCount++;
                 stateProgressBaseTime = now;
             }
@@ -170,6 +174,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
             if (gesture == unlockSequence.at(0))
             {
                 // Activated a sequence
+                std::cout << "In lockMode, started progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
                 activeSeq = activeSequence::UNLOCK;
                 sequenceCount++;
                 stateProgressBaseTime = now;

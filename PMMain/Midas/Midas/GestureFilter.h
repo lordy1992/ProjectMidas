@@ -8,6 +8,7 @@
 #define GESTURE_INPUT "gesture"
 #define MYO_GESTURE_RIGHT_MOUSE myo::Pose::fingersSpread
 #define MYO_GESTURE_LEFT_MOUSE myo::Pose::fist
+#define DEFAULT_PROG_MAX_DELTA 1000
 
 /**
  * Consult Filter.h for concepts regarding Filters.
@@ -79,6 +80,21 @@ private:
         * @return Returns true if the state has been changed, and false otherwise.
         */
         bool updateState(myo::Pose::Type gesture);
+
+        /**
+        * Modifier.
+        *
+        * @param newTime The new stateProgressMaxDeltaTime.
+        */
+        void setStateProgressMaxDeltaTime(clock_t newTime);
+
+        /**
+        * Accessor.
+        *
+        * @return Value of stateProgressMaxDeltaTime.
+        */
+        clock_t getStateProgressMaxDeltaTime(void);
+
     private:
         GestureFilter& parent;
 
@@ -107,7 +123,7 @@ private:
         // the user is required to perform "wave in, wave out, pinky-to-thumb", 
         // then when a wave in is recorded, the user has up to "stateTransMaxDeltaTime"
         // milliseconds to perform a wave out, or else the whole process needs to be repeated.
-        clock_t stateProgressMaxDeltaTime; // JHH TODO - make getter/setter for this quickly.
+        clock_t stateProgressMaxDeltaTime;
     };
 
 
