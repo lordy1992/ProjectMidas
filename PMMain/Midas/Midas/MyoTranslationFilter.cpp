@@ -1,5 +1,5 @@
 #include "MyoTranslationFilter.h"
-#include <cmath>
+#include <math.h>
 #include <iostream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
@@ -19,10 +19,13 @@ void MyoTranslationFilter::process()
     float quatZ = boost::any_cast<float>(input[INPUT_QUATERNION_Z]);
     float quatW = boost::any_cast<float>(input[INPUT_QUATERNION_W]);
 
+    myo::Arm arm = boost::any_cast<myo::Arm>(input[INPUT_ARM]);
+    myo::XDirection xDirection = boost::any_cast<myo::XDirection>(input[INPUT_X_DIRECTION]);
+
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
 
-    float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW);
+    float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
@@ -61,8 +64,9 @@ void MyoTranslationFilter::process()
 
 point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 {
-    float deltaPitch = pitch - basePitch;
-    float deltaYaw = yaw - baseYaw;
+    // Data is on range -180 to +180. convert to 0-360.
+    float deltaPitch = calcRingDelta(pitch + M_PI, basePitch + M_PI);
+    float deltaYaw = calcRingDelta(yaw + M_PI, baseYaw + M_PI); 
 
     float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_PITCH_ANGLE) : std::max(-1.0f, deltaPitch / MAX_PITCH_ANGLE);
     float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_YAW_ANGLE) : std::max(-1.0f, deltaYaw / MAX_YAW_ANGLE);
@@ -70,14 +74,74 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
 
-float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w)
+float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection)
 {
     //TODO - Likely need to base this off of R/L hand, and orientation
-    return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardElbow)
+    {
+        //std::cout << "arm left and xDirection towardElbow" << std::endl;
+        return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardElbow)
+    {
+        //std::cout << "arm right and xDirection towardElbow" << std::endl;
+        return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardWrist)
+    {
+        //std::cout << "arm left and xDirection towardWrist" << std::endl;
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
+    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardWrist)
+    {
+        //std::cout << "arm right and xDirection towardWrist" << std::endl;
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    } 
+    else
+    {
+        //std::cout << "Arm or xDirection unknown." << std::endl;
+        // Default - arbitrarily chosen.
+        return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
+    }
 }
 
 float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, float w)
 {
-    //TODO - Likely need to base this off of R/L hand, and orientation
+    // Indifferent to arm/xDirection, unlike pitch.
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+}
+
+float MyoTranslationFilter::calcRingDelta(float current, float base)
+{
+    // Assert angles are within range of a circle
+    if (current >= 2 * M_PI || base >= 2 * M_PI || current <=  0 || base <= 0)
+    {
+        return 0.0;
+    }
+
+    float delta = 0.0;
+    if (current >= base)
+    {
+        if (current - base <= M_PI)
+        {
+            delta = current - base;
+        }
+        else
+        {
+            delta = -((2*M_PI - current) + base);
+        }
+    }
+    else
+    {
+        if (base - current <= M_PI)
+        {
+            delta = current - base;
+        }
+        else
+        {
+            delta = (2*M_PI - base) + current;
+        }
+    }
+
+    return delta;
 }

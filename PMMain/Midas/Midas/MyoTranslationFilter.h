@@ -3,11 +3,14 @@
 
 #include "Filter.h"
 #include "ControlState.h"
+#include "myo\myo.hpp"
 
 #define INPUT_QUATERNION_X "quatDataX"
 #define INPUT_QUATERNION_Y "quatDataY"
 #define INPUT_QUATERNION_Z "quatDataZ"
 #define INPUT_QUATERNION_W "quatDataW"
+#define INPUT_ARM "arm"
+#define INPUT_X_DIRECTION "xDirection"
 
 // Testing Constants -- Modify until seems reasonable
 #define MAX_PITCH_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
@@ -36,18 +39,22 @@ public:
 
 private:
     /**
-     * Calculate the 'pitch' angle from the supplied quaternion, consisting of x, y, z and w.
+     * Calculate the 'pitch' angle from the supplied quaternion, consisting of x, y, z and w,
+     * and infer sign based on arm and xDirection.
      *
      * @param x The x coordinate of the quaternion.
      * @param y The y coordinate of the quaternion.
      * @param z The z coordinate of the quaternion.
      * @param w The w coordinate of the quaternion.
+     * @param arm The arm of the user, which is accounted for by sign of calculated Pitch.
+     * @param xDirection The xDirection of the user, which is accounted for by sign of calculated Pitch.
      * @return Returns the 'pitch' angle, in radians.
      */
-    float getPitchFromQuaternion(float x, float y, float z, float w);
+    float getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection);
 
     /**
     * Calculate the 'yaw' angle from the supplied quaternion, consisting of x, y, z and w.
+    * Unlike pitch, yaw is indifferent to arm/xDirection of Myo.
     *
     * @param x The x coordinate of the quaternion.
     * @param y The y coordinate of the quaternion.
@@ -67,6 +74,17 @@ private:
     * and y being the percent of the total velocity along the y axis.
     */
     point getMouseUnitVelocity(float pitch, float yaw);
+
+    /**
+    * Calculates the delta (in radians) between a base angle and a 
+    * current angle, with respect to a ring. The pupose is to ensure that wrapping
+    * around the 0 radian section of the ring has no effect on the output
+    * which should safely range from -pi to +pi.
+    *
+    * @param current The current angle (in radians) that is being compared
+    * @param base The base angle (in radians) that is being compared against
+    */
+    static float calcRingDelta(float current, float base);
 
     ControlState* controlStateHandle;
     midasMode previousMode;

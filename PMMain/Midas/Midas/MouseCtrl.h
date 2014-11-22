@@ -50,7 +50,7 @@ public:
      * any click event will be followed by a release of the same button. The mouseRateIfMove parameter
      * sets the rate of the mouse movement if it is nonnegative. If the user would like to "Click and Hold",
      * the releaseIfClick parameter should be set to false; then, sendCommand can be called again with 
-     * releaseIfClick set to false, to release the click.
+     * releaseIfClick set to true, to release the click.
      *
      * @param mouseCmd The mouse command to send.
      * @param releaseIfClick If this is true, any button clicks are followed by a release.
