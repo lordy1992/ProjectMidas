@@ -125,14 +125,10 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     mouseToKeyboardSequence.push_back(myo::Pose::fingersSpread);
     mouseToKeyboardSequence.push_back(myo::Pose::fist);
     mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
-    //mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
-    //mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
     
     keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
     keyboardToMouseSequence.push_back(myo::Pose::fist);
     keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
-    //keyboardToMouseSequence.push_back(myo::Pose::waveOut);
-    //keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
 
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
@@ -171,15 +167,8 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     switch (currentState)
     {
     case(LOCK_MODE) :
-        if (((activeSeq & activeSequence::UNLOCK) != activeSequence::NONE) && sequenceCount < unlockSequence.size() && gesture == unlockSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::UNLOCK;
-        }
+        checkProgressInSequence(activeSequence::UNLOCK, unlockSequence, gesture, progressSeq, now);
+        
         if (activeSeq == activeSequence::NONE)
         {
             // Attempting to start a legal sequence.
@@ -212,33 +201,9 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(MOUSE_MODE) :
-        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::LOCK;
-        }
-        if (((activeSeq & activeSequence::MOUSE_TO_GEST) != activeSequence::NONE) && sequenceCount < mouseToGestureSequence.size() && gesture == mouseToGestureSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::MOUSE_TO_GEST;
-        }
-        if (((activeSeq & activeSequence::MOUSE_TO_KYBRD) != activeSequence::NONE) && sequenceCount < mouseToKeyboardSequence.size() && gesture == mouseToKeyboardSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::MOUSE_TO_KYBRD;
-        }
+        checkProgressInSequence(activeSequence::LOCK, lockSequence, gesture, progressSeq, now);
+        checkProgressInSequence(activeSequence::MOUSE_TO_GEST, mouseToGestureSequence, gesture, progressSeq, now);
+        checkProgressInSequence(activeSequence::MOUSE_TO_KYBRD, mouseToKeyboardSequence, gesture, progressSeq, now);
         
         if (activeSeq == activeSequence::NONE)
         {
@@ -292,24 +257,9 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(GESTURE_MODE) :
-        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::LOCK;
-        }
-        if (((activeSeq & activeSequence::GEST_TO_MOUSE) != activeSequence::NONE) && sequenceCount < gestureToMouseSequence.size() && gesture == gestureToMouseSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::GEST_TO_MOUSE;
-        }
+        checkProgressInSequence(activeSequence::LOCK, lockSequence, gesture, progressSeq, now);
+        checkProgressInSequence(activeSequence::GEST_TO_MOUSE, gestureToMouseSequence, gesture, progressSeq, now);
+        
         if (activeSeq == activeSequence::NONE)
         {
             // Attempting to start a legal sequence.
@@ -352,24 +302,9 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(KEYBOARD_MODE) :
-        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::LOCK;
-        }
-        if (((activeSeq & activeSequence::KYBRD_TO_MOUSE) != activeSequence::NONE) && sequenceCount < keyboardToMouseSequence.size() && gesture == keyboardToMouseSequence.at(sequenceCount))
-        {
-            progressSeq = true;
-            stateProgressBaseTime = now;
-        }
-        else
-        {
-            activeSeq = activeSeq & ~activeSequence::KYBRD_TO_MOUSE;
-        }
+        checkProgressInSequence(activeSequence::LOCK, lockSequence, gesture, progressSeq, now);
+        checkProgressInSequence(activeSequence::KYBRD_TO_MOUSE, keyboardToMouseSequence, gesture, progressSeq, now);
+        
         if (activeSeq == activeSequence::NONE)
         {
             // Attempting to start a legal sequence.
@@ -455,3 +390,21 @@ bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, 
 
     return false;
 }
+
+void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
+    myo::Pose::Type gesture, bool& progressSeq, clock_t now)
+{
+    if (((activeSeq & desiredSeq) != activeSequence::NONE) &&
+        sequenceCount < sequence.size() && 
+        gesture == sequence.at(sequenceCount))
+    {
+        progressSeq = true;
+        stateProgressBaseTime = now;
+    }
+    else
+    {
+        // Take desired sequence flag out of mask, since it's gesture was missed in the sequence.
+        activeSeq = activeSeq & ~desiredSeq;
+    }
+}
+

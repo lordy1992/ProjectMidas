@@ -128,6 +128,9 @@ private:
         bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
             myo::Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition);
 
+        void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
+            myo::Pose::Type gesture, bool& progressSeq, clock_t now);
+
         GestureFilter& parent;
 
         // Gesture sequences required to change states
