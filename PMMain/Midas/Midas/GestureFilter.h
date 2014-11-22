@@ -125,9 +125,8 @@ private:
         clock_t getStateProgressMaxDeltaTime(void);
 
     private:
-        bool GestureFilter::StateHandler::satisfyStateChange(activeSequence activeSeq, activeSequence desiredSeq,
-            unsigned int sequenceCount, std::vector<myo::Pose::Type> lockSequence, myo::Pose::Type gesture,
-            midasMode desiredMode, midasMode& nextMode, bool& willTransition);
+        bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
+            myo::Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition);
 
         GestureFilter& parent;
 
