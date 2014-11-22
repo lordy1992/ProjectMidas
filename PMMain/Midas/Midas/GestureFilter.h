@@ -11,6 +11,45 @@
 #define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
 /**
+* An enumeration of all possible sequences that can be executed from various
+* states. This MUST be in binary values, as more than sequence could be active.
+* This allows for sequences to vary by only their final value, and still be valid.
+*/
+enum class activeSequence
+{
+    NONE = 1,
+    UNLOCK = 2,
+    LOCK = 4,
+    MOUSE_TO_GEST = 8,
+    GEST_TO_MOUSE = 16,
+    MOUSE_TO_KYBRD = 32,
+    KYBRD_TO_MOUSE = 64
+};
+
+/**
+* Overloading logical OR, so that activeSequence can be used as a mask, such that
+* more than one sequence can be started, and they can all be uniquely identified!
+*/
+inline activeSequence operator|(activeSequence a, activeSequence b)
+{
+    return static_cast<activeSequence>(static_cast<unsigned int>(a) | static_cast<unsigned int>(b));
+}
+
+/**
+* Overloading logical AND, so that activeSequence can be used as a mask, such that
+* more than one sequence can be started, and they can all be uniquely identified!
+*/
+inline activeSequence operator&(activeSequence a, activeSequence b)
+{
+    return static_cast<activeSequence>(static_cast<unsigned int>(a)& static_cast<unsigned int>(b));
+}
+
+inline activeSequence operator~(activeSequence a)
+{
+    return static_cast<activeSequence>(~static_cast<unsigned int>(a));
+}
+
+/**
  * Consult Filter.h for concepts regarding Filters.
  * 
  * A filter specific to the Myo armband that handles changing the application
@@ -62,21 +101,6 @@ private:
         StateHandler(GestureFilter& parent);
         ~StateHandler();
 
-        /** 
-        * An enumeration of all possible sequences that can be executed from various
-        * states
-        */
-        enum class activeSequence
-        {
-            UNLOCK,
-            LOCK,
-            MOUSE_TO_GEST,
-            GEST_TO_MOUSE,
-            MOUSE_TO_KYBRD,
-            KYBRD_TO_MOUSE,
-            NONE
-        };
-
         /**
         * Update the state of Midas, given a recieved gesture.
         * 
@@ -101,6 +125,10 @@ private:
         clock_t getStateProgressMaxDeltaTime(void);
 
     private:
+        bool GestureFilter::StateHandler::satisfyStateChange(activeSequence activeSeq, activeSequence desiredSeq,
+            unsigned int sequenceCount, std::vector<myo::Pose::Type> lockSequence, myo::Pose::Type gesture,
+            midasMode desiredMode, midasMode& nextMode, bool& willTransition);
+
         GestureFilter& parent;
 
         // Gesture sequences required to change states

@@ -122,11 +122,17 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
     gestureToMouseSequence.push_back(myo::Pose::fingersSpread);
     gestureToMouseSequence.push_back(myo::Pose::thumbToPinky);
     
-    mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
+    mouseToKeyboardSequence.push_back(myo::Pose::fingersSpread);
+    mouseToKeyboardSequence.push_back(myo::Pose::fist);
     mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
+    //mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
+    //mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
     
-    keyboardToMouseSequence.push_back(myo::Pose::waveOut);
+    keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
+    keyboardToMouseSequence.push_back(myo::Pose::fist);
     keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    //keyboardToMouseSequence.push_back(myo::Pose::waveOut);
+    //keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
 
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
@@ -147,6 +153,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     midasMode currentState = parent.controlStateHandle->getMode();
     
     bool willTransition = false;
+    bool progressSeq = false;
     midasMode nextMode = midasMode::LOCK_MODE;
     clock_t now = clock();
 
@@ -165,35 +172,44 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
     {
     case(LOCK_MODE) :
         // Can only unlock from this locked state
-        if (activeSeq == activeSequence::UNLOCK)
+        if (((activeSeq & activeSequence::UNLOCK) != activeSequence::NONE))
         {
             if (gesture == unlockSequence.at(sequenceCount))
             {
-                //std::cout << "In lockMode, progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
-                sequenceCount++;
-                stateProgressBaseTime = now;
-            }
-        }
-        else
-        {
-            // Attempting to start a legal sequence.
-            // Only one possible sequence to get out of locked state.
-            if (gesture == unlockSequence.at(0))
-            {
-                // Activated a sequence
-                //std::cout << "In lockMode, started progressed to unlock - sequenceCount: " << sequenceCount << std::endl;
-                activeSeq = activeSequence::UNLOCK;
-                sequenceCount++;
+                progressSeq = true;
                 stateProgressBaseTime = now;
             }
             else
             {
+                activeSeq = activeSeq & ~activeSequence::UNLOCK;
+            }
+        }
+        if (activeSeq == activeSequence::NONE)
+        {
+            // Attempting to start a legal sequence.
+            // Only one possible sequence to get out of locked state.
+            progressSeq = true;
+            if (gesture == unlockSequence.at(0))
+            {
+                // Activated a sequence
+                activeSeq = activeSeq | activeSequence::UNLOCK;
+                stateProgressBaseTime = now;
+            }
+            
+            if (activeSeq == activeSequence::NONE)
+            {
                 // Failed to activate a sequence
+                progressSeq = false;
                 sequenceCount = 0;
             }
         }
 
-        if (sequenceCount == unlockSequence.size())
+        if (progressSeq)
+        {
+            sequenceCount++;
+        }
+
+        if (sequenceCount == unlockSequence.size()) // TODO - conform this statement to all other blocks!
         {
             // Succeeded in completing unlock sequence
             std::cout << "Entering Mouse Mode." << std::endl;
@@ -203,64 +219,81 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(MOUSE_MODE) :
-        if (activeSeq == activeSequence::LOCK && gesture == lockSequence.at(sequenceCount))
+        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
         {
-            sequenceCount++;
-            stateProgressBaseTime = now;
-        }
-        else if (activeSeq == activeSequence::MOUSE_TO_GEST && gesture == mouseToGestureSequence.at(sequenceCount))
-        {
-            sequenceCount++;
-            stateProgressBaseTime = now;
-        }
-        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && gesture == mouseToKeyboardSequence.at(sequenceCount))
-        {
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
         }
         else
         {
+            activeSeq = activeSeq & ~activeSequence::LOCK;
+        }
+        if (((activeSeq & activeSequence::MOUSE_TO_GEST) != activeSequence::NONE) && sequenceCount < mouseToGestureSequence.size() && gesture == mouseToGestureSequence.at(sequenceCount))
+        {
+            progressSeq = true;
+            stateProgressBaseTime = now;
+        }
+        else
+        {
+            activeSeq = activeSeq & ~activeSequence::MOUSE_TO_GEST;
+        }
+        if (((activeSeq & activeSequence::MOUSE_TO_KYBRD) != activeSequence::NONE) && sequenceCount < mouseToKeyboardSequence.size() && gesture == mouseToKeyboardSequence.at(sequenceCount))
+        {
+            progressSeq = true;
+            stateProgressBaseTime = now;
+        }
+        else
+        {
+            activeSeq = activeSeq & ~activeSequence::MOUSE_TO_KYBRD;
+        }
+        
+        if (activeSeq == activeSequence::NONE)
+        {
             // Attempting to start a legal sequence.
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
             if (gesture == lockSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::LOCK;
+                activeSeq = activeSeq | activeSequence::LOCK;
             }
-            else if (gesture == mouseToGestureSequence.at(0)) // TODO - FIX THIS -- CURRENTLY THIS WILL NOT ALLOW 2 PATTERNS WITH IDENTICAL FIRST SIGNALS TO FUNCTION.
+            if (gesture == mouseToGestureSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::MOUSE_TO_GEST;
+                activeSeq = activeSeq | activeSequence::MOUSE_TO_GEST;
             }
-            else if (gesture == mouseToKeyboardSequence.at(0))
+            if (gesture == mouseToKeyboardSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::MOUSE_TO_KYBRD;
+                activeSeq = activeSeq | activeSequence::MOUSE_TO_KYBRD;
             }
-            else
+            
+            if (activeSeq == activeSequence::NONE)
             {
                 // Failed to activate a sequence
+                progressSeq = false;
                 sequenceCount = 0;
             }
-
         }
 
-        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size())
+        if (progressSeq)
+        {
+            sequenceCount++;
+        }
+
+        if (satisfyStateChange(activeSeq, activeSequence::LOCK, sequenceCount, lockSequence, gesture, LOCK_MODE, nextMode, willTransition))
         {
             // Succeeded in completing lock sequence
             std::cout << "Entering Lock Mode." << std::endl;
-            nextMode = LOCK_MODE;
-            willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_GEST && sequenceCount == mouseToGestureSequence.size())
+        if (((activeSeq & activeSequence::MOUSE_TO_GEST) != activeSequence::NONE) && sequenceCount == mouseToGestureSequence.size())
         {
             // Succeeded in completing mouse to gesture sequence
             std::cout << "Entering Gesture Mode." << std::endl;
             nextMode = GESTURE_MODE;
             willTransition = true;
         }
-        else if (activeSeq == activeSequence::MOUSE_TO_KYBRD && sequenceCount == mouseToKeyboardSequence.size())
+        if (((activeSeq & activeSequence::MOUSE_TO_KYBRD) != activeSequence::NONE) && sequenceCount == mouseToKeyboardSequence.size())
         {
             // Succeeded in completing mouse to keyboard sequence
             std::cout << "Entering Keyboard Mode." << std::endl;
@@ -270,48 +303,63 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(GESTURE_MODE) :
-        if (activeSeq == activeSequence::LOCK && gesture == lockSequence.at(sequenceCount))
+        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
         {
-            sequenceCount++;
-            stateProgressBaseTime = now;
-        }
-        else if (activeSeq == activeSequence::GEST_TO_MOUSE && gesture == gestureToMouseSequence.at(sequenceCount))
-        {
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
         }
         else
         {
+            activeSeq = activeSeq & ~activeSequence::LOCK;
+        }
+        if (((activeSeq & activeSequence::GEST_TO_MOUSE) != activeSequence::NONE) && sequenceCount < gestureToMouseSequence.size() && gesture == gestureToMouseSequence.at(sequenceCount))
+        {
+            progressSeq = true;
+            stateProgressBaseTime = now;
+        }
+        else
+        {
+            activeSeq = activeSeq & ~activeSequence::GEST_TO_MOUSE;
+        }
+        if (activeSeq == activeSequence::NONE)
+        {
             // Attempting to start a legal sequence.
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
             if (gesture == lockSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::LOCK;
+                activeSeq = activeSeq | activeSequence::LOCK;
             }
-            else if (gesture == gestureToMouseSequence.at(0)) // TODO - FIX THIS -- CURRENTLY THIS WILL NOT ALLOW 2 PATTERNS WITH IDENTICAL FIRST SIGNALS TO FUNCTION.
+            if (gesture == gestureToMouseSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::GEST_TO_MOUSE;
+                activeSeq = activeSeq | activeSequence::GEST_TO_MOUSE;
             }
-            else
+            
+            if (activeSeq == activeSequence::NONE)
             {
                 // Failed to activate a sequence
+                progressSeq = false;
                 sequenceCount = 0;
             }
         }
 
-        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size())
+        if (progressSeq)
+        {
+            sequenceCount++;
+        }
+
+        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount == lockSequence.size())
         {
             // Succeeded in completing lock sequence
             std::cout << "Entering Lock Mode." << std::endl;
             nextMode = LOCK_MODE;
             willTransition = true;
         }
-        else if (activeSeq == activeSequence::GEST_TO_MOUSE && sequenceCount == gestureToMouseSequence.size())
+        if (((activeSeq & activeSequence::GEST_TO_MOUSE) != activeSequence::NONE) && sequenceCount == gestureToMouseSequence.size())
         {
-            // Succeeded in completing mouse to gesture sequence
+            // Succeeded in completing gesture to mouse sequence
             std::cout << "Entering Mouse Mode." << std::endl;
             nextMode = MOUSE_MODE;
             willTransition = true;
@@ -319,48 +367,63 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
 
         break;
     case(KEYBOARD_MODE) :
-        if (activeSeq == activeSequence::LOCK && gesture == lockSequence.at(sequenceCount))
+        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
         {
-            sequenceCount++;
-            stateProgressBaseTime = now;
-        }
-        else if (activeSeq == activeSequence::KYBRD_TO_MOUSE && gesture == keyboardToMouseSequence.at(sequenceCount))
-        {
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
         }
         else
         {
+            activeSeq = activeSeq & ~activeSequence::LOCK;
+        }
+        if (((activeSeq & activeSequence::KYBRD_TO_MOUSE) != activeSequence::NONE) && sequenceCount < keyboardToMouseSequence.size() && gesture == keyboardToMouseSequence.at(sequenceCount))
+        {
+            progressSeq = true;
+            stateProgressBaseTime = now;
+        }
+        else
+        {
+            activeSeq = activeSeq & ~activeSequence::KYBRD_TO_MOUSE;
+        }
+        if (activeSeq == activeSequence::NONE)
+        {
             // Attempting to start a legal sequence.
-            sequenceCount++;
+            progressSeq = true;
             stateProgressBaseTime = now;
             if (gesture == lockSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::LOCK;
+                activeSeq = activeSeq | activeSequence::LOCK;
             }
-            else if (gesture == keyboardToMouseSequence.at(0)) // TODO - FIX THIS -- CURRENTLY THIS WILL NOT ALLOW 2 PATTERNS WITH IDENTICAL FIRST SIGNALS TO FUNCTION.
+            if (gesture == keyboardToMouseSequence.at(0))
             {
                 // Activated a sequence
-                activeSeq = activeSequence::KYBRD_TO_MOUSE;
+                activeSeq = activeSeq | activeSequence::KYBRD_TO_MOUSE;
             }
-            else
+            
+            if (activeSeq == activeSequence::NONE)
             {
                 // Failed to activate a sequence
+                progressSeq = false;
                 sequenceCount = 0;
             }
         }
 
-        if (activeSeq == activeSequence::LOCK && sequenceCount == lockSequence.size())
+        if (progressSeq)
+        {
+            sequenceCount++;
+        }
+
+        if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount == lockSequence.size())
         {
             // Succeeded in completing lock sequence
             std::cout << "Entering Lock Mode." << std::endl;
             nextMode = LOCK_MODE;
             willTransition = true;
         }
-        else if (activeSeq == activeSequence::KYBRD_TO_MOUSE && sequenceCount == keyboardToMouseSequence.size())
+        if (((activeSeq & activeSequence::KYBRD_TO_MOUSE) != activeSequence::NONE) && sequenceCount == keyboardToMouseSequence.size())
         {
-            // Succeeded in completing mouse to gesture sequence
+            // Succeeded in completing keyboard to mosue sequence
             std::cout << "Entering Mouse Mode." << std::endl;
             nextMode = MOUSE_MODE;
             willTransition = true;
@@ -375,6 +438,7 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         std::cout << "Transitioning to " << nextMode << std::endl;
         parent.controlStateHandle->setMode(nextMode);
         activeSeq = activeSequence::NONE;
+        progressSeq = false;
         sequenceCount = 0;
         return true;
     }
@@ -390,4 +454,21 @@ void GestureFilter::StateHandler::setStateProgressMaxDeltaTime(clock_t newTime)
 clock_t GestureFilter::StateHandler::getStateProgressMaxDeltaTime(void)
 {
     return stateProgressBaseTime;
+}
+
+bool GestureFilter::StateHandler::satisfyStateChange(activeSequence activeSeq, activeSequence desiredSeq,
+    unsigned int sequenceCount, std::vector<myo::Pose::Type> lockSequence, myo::Pose::Type gesture,
+    midasMode desiredMode, midasMode& nextMode, bool& willTransition)
+{
+    // Ensure current sequence is following the desired sequence to change states to, and that
+    // all elements have been matched, and specifically, the last element is a match
+    // -- This last check is to enable patterns to only differ by their last pose.
+    if (((activeSeq & desiredSeq) != activeSequence::NONE) &&
+        (sequenceCount == lockSequence.size()) &&
+        (gesture == lockSequence.at(sequenceCount - 1))
+        )
+    {
+        nextMode = LOCK_MODE;
+        willTransition = true;
+    }
 }
