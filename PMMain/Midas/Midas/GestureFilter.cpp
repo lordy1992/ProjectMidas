@@ -211,54 +211,6 @@ bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
         }
 
         break;
-        ///////////////////////////////////////////////////////////////////////////////////////
-        // Can only unlock from this locked state
-       //if (((activeSeq & activeSequence::UNLOCK) != activeSequence::NONE))
-       //{
-       //    if (gesture == unlockSequence.at(sequenceCount))
-       //    {
-       //        progressSeq = true;
-       //        stateProgressBaseTime = now;
-       //    }
-       //    else
-       //    {
-       //        activeSeq = activeSeq & ~activeSequence::UNLOCK;
-       //    }
-       //}
-       //if (activeSeq == activeSequence::NONE)
-       //{
-       //    // Attempting to start a legal sequence.
-       //    // Only one possible sequence to get out of locked state.
-       //    progressSeq = true;
-       //    if (gesture == unlockSequence.at(0))
-       //    {
-       //        // Activated a sequence
-       //        activeSeq = activeSeq | activeSequence::UNLOCK;
-       //        stateProgressBaseTime = now;
-       //    }
-       //    
-       //    if (activeSeq == activeSequence::NONE)
-       //    {
-       //        // Failed to activate a sequence
-       //        progressSeq = false;
-       //        sequenceCount = 0;
-       //    }
-       //}
-       //
-       //if (progressSeq)
-       //{
-       //    sequenceCount++;
-       //}
-       //
-       //if (sequenceCount == unlockSequence.size()) // TODO - conform this statement to all other blocks!
-       //{
-       //    // Succeeded in completing unlock sequence
-       //    std::cout << "Entering Mouse Mode." << std::endl;
-       //    nextMode = MOUSE_MODE;
-       //    willTransition = true;
-       //}
-       //
-       //break;
     case(MOUSE_MODE) :
         if (((activeSeq & activeSequence::LOCK) != activeSequence::NONE) && sequenceCount < lockSequence.size() && gesture == lockSequence.at(sequenceCount))
         {
