@@ -109,26 +109,22 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
 {
     unlockSequence.push_back(myo::Pose::thumbToPinky);
     unlockSequence.push_back(myo::Pose::waveIn);
-    unlockSequence.push_back(myo::Pose::waveOut);
-
+    
     lockSequence.push_back(myo::Pose::thumbToPinky);
-    lockSequence.push_back(myo::Pose::waveIn);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
-    mouseToGestureSequence.push_back(myo::Pose::fingersSpread);
-    mouseToGestureSequence.push_back(myo::Pose::thumbToPinky);
+    mouseToGestureSequence.push_back(myo::Pose::waveIn);
+    mouseToGestureSequence.push_back(myo::Pose::waveOut);
     
-    gestureToMouseSequence.push_back(myo::Pose::fingersSpread);
-    gestureToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    gestureToMouseSequence.push_back(myo::Pose::waveIn);
+    gestureToMouseSequence.push_back(myo::Pose::waveOut);
     
-    mouseToKeyboardSequence.push_back(myo::Pose::fingersSpread);
-    mouseToKeyboardSequence.push_back(myo::Pose::fist);
-    mouseToKeyboardSequence.push_back(myo::Pose::thumbToPinky);
+    mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
+    mouseToKeyboardSequence.push_back(myo::Pose::waveIn);
     
-    keyboardToMouseSequence.push_back(myo::Pose::fingersSpread);
-    keyboardToMouseSequence.push_back(myo::Pose::fist);
-    keyboardToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    keyboardToMouseSequence.push_back(myo::Pose::waveOut);
+    keyboardToMouseSequence.push_back(myo::Pose::waveIn);
 
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
