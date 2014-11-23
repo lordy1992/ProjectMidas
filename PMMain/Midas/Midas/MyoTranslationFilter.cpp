@@ -103,7 +103,7 @@ float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, floa
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 }
 
-int testFunc(int tempTest)
+int MyoTranslationFilter::testFunc(int tempTest)
 {
     return tempTest + 1;
 }

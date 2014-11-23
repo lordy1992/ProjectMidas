@@ -5,8 +5,6 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 
-int testFunc(int tempTest);
-
 #define INPUT_QUATERNION_X "quatDataX"
 #define INPUT_QUATERNION_Y "quatDataY"
 #define INPUT_QUATERNION_Z "quatDataZ"
@@ -38,6 +36,8 @@ public:
      * percent of the total mouse velocity along both the x and y axes. 
      */
     void process();
+
+    int testFunc(int tempTest);
 
 private:
     /**
