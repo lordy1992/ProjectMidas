@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{81E2C2FB-0D2C-407D-93E3-468B79561804}</ProjectGuid>
-    <RootNamespace>MidasTest</RootNamespace>
+    <ProjectGuid>{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}</ProjectGuid>
+    <RootNamespace>MidasLib</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -38,22 +38,16 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(IncludePath);$(ProjectDir)\..\Midas\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\Midas\myo\include\</IncludePath>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(ProjectDir)\..\Midas\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\Midas\myo\include\</AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\Midas\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)..\Midas\myo\lib;$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>myo32.lib;gtestd.lib;gtest_main-mdd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <SubSystem>Console</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -71,12 +65,38 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="unitTest1.cpp" />
+    <ClInclude Include="..\Midas\AveragingFilter.h" />
+    <ClInclude Include="..\Midas\ControlState.h" />
+    <ClInclude Include="..\Midas\Filter.h" />
+    <ClInclude Include="..\Midas\FilterPipeline.h" />
+    <ClInclude Include="..\Midas\GestureFilter.h" />
+    <ClInclude Include="..\Midas\kybrdCtrl.h" />
+    <ClInclude Include="..\Midas\KybrdCtrlTest.h" />
+    <ClInclude Include="..\Midas\MidasCommon.h" />
+    <ClInclude Include="..\Midas\MouseCtrl.h" />
+    <ClInclude Include="..\Midas\MouseCtrlTest.h" />
+    <ClInclude Include="..\Midas\MyoDevice.h" />
+    <ClInclude Include="..\Midas\MyoTranslationFilter.h" />
+    <ClInclude Include="..\Midas\SharedCommandData.h" />
+    <ClInclude Include="..\Midas\SharedCommandDataTest.h" />
+    <ClInclude Include="..\Midas\WearableDevice.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MidasLib\MidasLib.vcxproj">
-      <Project>{ccdec793-12ed-4941-87fb-ce69aff28cbd}</Project>
-    </ProjectReference>
+    <ClCompile Include="..\Midas\AveragingFilter.cpp" />
+    <ClCompile Include="..\Midas\ControlState.cpp" />
+    <ClCompile Include="..\Midas\Filter.cpp" />
+    <ClCompile Include="..\Midas\FilterPipeline.cpp" />
+    <ClCompile Include="..\Midas\GestureFilter.cpp" />
+    <ClCompile Include="..\Midas\kybrdCtrl.cpp" />
+    <ClCompile Include="..\Midas\KybrdCtrlTest.cpp" />
+    <ClCompile Include="..\Midas\main.cpp" />
+    <ClCompile Include="..\Midas\MouseCtrl.cpp" />
+    <ClCompile Include="..\Midas\MouseCtrlTest.cpp" />
+    <ClCompile Include="..\Midas\MyoDevice.cpp" />
+    <ClCompile Include="..\Midas\MyoTranslationFilter.cpp" />
+    <ClCompile Include="..\Midas\SharedCommandData.cpp" />
+    <ClCompile Include="..\Midas\SharedCommandDataTest.cpp" />
+    <ClCompile Include="..\Midas\WearableDevice.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,9 +6,8 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Midas", "Midas\Midas.vcxproj", "{C09B4F72-1850-4195-B5AC-1B169E682019}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasTest", "MidasTest\MidasTest.vcxproj", "{81E2C2FB-0D2C-407D-93E3-468B79561804}"
-	ProjectSection(ProjectDependencies) = postProject
-		{C09B4F72-1850-4195-B5AC-1B169E682019} = {C09B4F72-1850-4195-B5AC-1B169E682019}
-	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasLib", "MidasLib\MidasLib.vcxproj", "{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +31,12 @@ Global
 		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.ActiveCfg = Release|Win32
 		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.Build.0 = Release|Win32
 		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|x64.ActiveCfg = Release|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|Win32.ActiveCfg = Debug|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|Win32.Build.0 = Debug|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|x64.ActiveCfg = Debug|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Release|Win32.ActiveCfg = Release|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Release|Win32.Build.0 = Release|Win32
+		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
