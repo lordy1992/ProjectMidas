@@ -51,7 +51,8 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
     DWORD deltaTimeYMove = currentTime - lastMouseMoveY;
     DWORD deltaTimeScroll = currentTime - lastMouseScroll;
 
-    setMouseInputVars(mouseCmd);
+
+    setMouseInputVars(mouseCmd, mouseRateIfMove);
 
     // Handle Early exit cases if moving mouse
     if (mi.dwFlags == MOUSEEVENTF_MOVE 
@@ -133,8 +134,27 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
     delete in; in = NULL;
 }
 
-void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd)
+void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
 {
+    if (mouseCmd == MOVE_HOR && mouseRateIfMove < 0)
+    {
+        mouseCmd = MOVE_LEFT;
+    }
+    else if (mouseCmd == MOVE_HOR && mouseRateIfMove >= 0)
+    {
+        mouseCmd = MOVE_RIGHT;
+    }
+    else if (mouseCmd == MOVE_VERT && mouseRateIfMove < 0)
+    {
+        mouseCmd = MOVE_DOWN;
+    }
+    else if (mouseCmd == MOVE_VERT && mouseRateIfMove >= 0)
+    {
+        mouseCmd = MOVE_UP;
+    }
+
+    mouseRateIfMove = abs(mouseRateIfMove);
+
     switch (mouseCmd)
     {
     case mouseCmds::LEFT_CLICK:

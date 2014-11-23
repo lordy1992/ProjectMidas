@@ -10,7 +10,7 @@
 #define SCROLL_MIN_TIME 5
 #define MAX_MOVE_TIME_DELTA 40 //large enough ms delay between moving a pixel is pretty slow.
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
-#define MOVE_RATE_DEADZONE 5
+#define MOVE_RATE_DEADZONE 10
 
 /**
  * Handles sending mouse data to Windows.
@@ -56,15 +56,17 @@ public:
      * @param releaseIfClick If this is true, any button clicks are followed by a release.
      * @param mouseRateIfMove The new rate of the mouse movement.
      */
-    void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = -1);
+    void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = 0);
 
 private:
 
     /**
      * Sets the fields of the MOUSEINPUT that will be sent to Windows.
      * @param mouseCmd The mouse command to be executed
+     * @param mouseRateIfMove The rate from -100 to 100 a mouse should move.
+     * This determines velocity. This value gets normalized to absolute value.
      */
-    void setMouseInputVars(mouseCmds mouseCmd);
+    void setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove);
 
     // Mouse Input 
     MOUSEINPUT mi;

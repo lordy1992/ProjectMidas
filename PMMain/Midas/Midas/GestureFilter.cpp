@@ -2,6 +2,8 @@
 #include "myo\myo.hpp"
 #include <time.h>
 
+// TODO: Refactor cases to modularize into seperate handler functions!
+
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(myo::Pose::rest),
     lastTime(0), controlStateHandle(controlState), stateHandler(*this)
 {
@@ -60,7 +62,7 @@ void GestureFilter::process()
         }
         else
         {
-            if (controlStateHandle->getMode() != midasMode::LOCK_MODE) // TODO - make this work as desired!
+            if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
             {
                 // No state change. Pass data along pipeline
                 filterDataMap outputToSharedCommandData;

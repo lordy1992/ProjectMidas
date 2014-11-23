@@ -98,21 +98,13 @@ int main() {
         }
 
         point unitVelocity = sharedData.getVelocity();
-        if (unitVelocity.x > 10)
+        if (unitVelocity.x != 0)
         {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_RIGHT, true, unitVelocity.x);
+            mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
         }
-        else if (unitVelocity.x < -10)
+        if (unitVelocity.y != 0)
         {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_LEFT, true, -unitVelocity.x);
-        }
-        if (unitVelocity.y > 10)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_UP, true, unitVelocity.y);
-        }
-        else if (unitVelocity.y < -10)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_DOWN, true, -unitVelocity.y);
+            mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
         }
 
         if (clock() - beginTime >= 1000)

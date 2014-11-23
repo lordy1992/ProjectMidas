@@ -51,6 +51,8 @@ enum mouseCmds {
     MOVE_RIGHT,
     MOVE_UP,
     MOVE_DOWN,
+    MOVE_HOR,
+    MOVE_VERT,
     SCROLL_LEFT,
     SCROLL_RIGHT,
     SCROLL_UP,
