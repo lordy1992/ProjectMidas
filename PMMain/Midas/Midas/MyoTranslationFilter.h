@@ -5,6 +5,8 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 
+int testFunc(int tempTest);
+
 #define INPUT_QUATERNION_X "quatDataX"
 #define INPUT_QUATERNION_Y "quatDataY"
 #define INPUT_QUATERNION_Z "quatDataZ"

@@ -10,7 +10,7 @@ using namespace std;
 class MouseCtrlTest
 {
 public:
-    static void testMouseSquare(int loopSize, DWORD minDelta);
+    static void testMouseSquare(DWORD mouseRate);
 
     static void testScrollMouseSquare(int loopSize, int scrollRate);
 

@@ -25,7 +25,7 @@ int main() {
 
 #ifdef KEYBOARD_CONTROL_TEST
     KybrdCtrlTest::testLock();
-    KybrdCtrlTest::testAltTab();
+    KybrdCtrlTest::testZoomInOut();
 #endif
 
 #ifdef MOUSE_CONTROL_TEST
@@ -33,9 +33,9 @@ int main() {
 
     Sleep(3000);
 
-    MouseCtrlTest::testMouseSquare(300, 8); // slower
-    MouseCtrlTest::testMouseSquare(300, 4); // med
-    MouseCtrlTest::testMouseSquare(300, 1); // fast
+    MouseCtrlTest::testMouseSquare(25); // slower
+    MouseCtrlTest::testMouseSquare(50); // med
+    MouseCtrlTest::testMouseSquare(100); // fast
     
     cout << "Starting Scroll Mouse Square (up/down for now) tests" << endl;
     Sleep(1000);
