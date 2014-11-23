@@ -5,6 +5,8 @@
 
 //This should pass.
 TEST(MyoTranslationFilterTest1, testFuncTest) {
+    // Name = testFuncTest
+    // Test Class = MyoTranslationFilterTest1
     MyoTranslationFilter *mtf = new MyoTranslationFilter(NULL);
 
     EXPECT_EQ(1, 1);

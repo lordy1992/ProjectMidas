@@ -37,6 +37,11 @@
 *.sdf
 *.suo
 
+# Visual Studio temporary/debug files.
+*.idb
+*.pdb
+
+
 PMMain/Midas/Debug/
 PMMain/Midas/Midas/Debug/
 

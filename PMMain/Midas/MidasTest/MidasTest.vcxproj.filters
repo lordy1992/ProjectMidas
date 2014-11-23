@@ -18,5 +18,8 @@
     <ClCompile Include="unitTest1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MyoTranslationFilter_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

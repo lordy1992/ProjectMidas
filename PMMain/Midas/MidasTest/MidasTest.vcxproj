@@ -71,6 +71,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="MyoTranslationFilter_Test.cpp" />
     <ClCompile Include="unitTest1.cpp" />
   </ItemGroup>
   <ItemGroup>
