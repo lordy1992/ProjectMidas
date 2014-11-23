@@ -37,6 +37,20 @@ public:
      */
     void process();
 
+    /**
+    * Calculates the delta (in radians) between a base angle and a
+    * current angle, with respect to a ring. The pupose is to ensure that wrapping
+    * around the 0 radian section of the ring has no effect on the output
+    * which should safely range from -pi to +pi.
+    *
+    * @param current The current angle (in radians) that is being compared (from 0 - 2pi rad)
+    * @param base The base angle (in radians) that is being compared against
+    * @return a value from -pi to +pi representing the delta between two input angles
+    */
+    static float calcRingDelta(float current, float base);
+
+    int testFunc(int tempTest);
+
 private:
     /**
      * Calculate the 'pitch' angle from the supplied quaternion, consisting of x, y, z and w,
@@ -74,18 +88,6 @@ private:
     * and y being the percent of the total velocity along the y axis.
     */
     point getMouseUnitVelocity(float pitch, float yaw);
-
-    /**
-    * Calculates the delta (in radians) between a base angle and a 
-    * current angle, with respect to a ring. The pupose is to ensure that wrapping
-    * around the 0 radian section of the ring has no effect on the output
-    * which should safely range from -pi to +pi.
-    *
-    * @param current The current angle (in radians) that is being compared
-    * @param base The base angle (in radians) that is being compared against
-    * @return a value from -pi to +pi representing the delta between two input angles
-    */
-    static float calcRingDelta(float current, float base);
 
     ControlState* controlStateHandle;
     midasMode previousMode;

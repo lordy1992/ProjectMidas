@@ -2,6 +2,8 @@
 #include "myo\myo.hpp"
 #include <time.h>
 
+// TODO: Refactor cases to modularize into seperate handler functions!
+
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(myo::Pose::rest),
     lastTime(0), controlStateHandle(controlState), stateHandler(*this)
 {
@@ -60,7 +62,7 @@ void GestureFilter::process()
         }
         else
         {
-            if (controlStateHandle->getMode() != midasMode::LOCK_MODE) // TODO - make this work as desired!
+            if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
             {
                 // No state change. Pass data along pipeline
                 filterDataMap outputToSharedCommandData;
@@ -109,16 +111,16 @@ GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent
 {
     unlockSequence.push_back(myo::Pose::thumbToPinky);
     unlockSequence.push_back(myo::Pose::waveIn);
+    unlockSequence.push_back(myo::Pose::waveOut);
     
+    lockSequence.push_back(myo::Pose::waveIn);
     lockSequence.push_back(myo::Pose::thumbToPinky);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
-    mouseToGestureSequence.push_back(myo::Pose::waveIn);
-    mouseToGestureSequence.push_back(myo::Pose::waveOut);
+    mouseToGestureSequence.push_back(myo::Pose::thumbToPinky);
     
-    gestureToMouseSequence.push_back(myo::Pose::waveIn);
-    gestureToMouseSequence.push_back(myo::Pose::waveOut);
+    gestureToMouseSequence.push_back(myo::Pose::thumbToPinky);
     
     mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
     mouseToKeyboardSequence.push_back(myo::Pose::waveIn);

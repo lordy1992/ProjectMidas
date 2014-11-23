@@ -25,7 +25,7 @@ int main() {
 
 #ifdef KEYBOARD_CONTROL_TEST
     KybrdCtrlTest::testLock();
-    KybrdCtrlTest::testAltTab();
+    KybrdCtrlTest::testZoomInOut();
 #endif
 
 #ifdef MOUSE_CONTROL_TEST
@@ -33,9 +33,9 @@ int main() {
 
     Sleep(3000);
 
-    MouseCtrlTest::testMouseSquare(300, 8); // slower
-    MouseCtrlTest::testMouseSquare(300, 4); // med
-    MouseCtrlTest::testMouseSquare(300, 1); // fast
+    MouseCtrlTest::testMouseSquare(25); // slower
+    MouseCtrlTest::testMouseSquare(50); // med
+    MouseCtrlTest::testMouseSquare(100); // fast
     
     cout << "Starting Scroll Mouse Square (up/down for now) tests" << endl;
     Sleep(1000);
@@ -98,21 +98,13 @@ int main() {
         }
 
         point unitVelocity = sharedData.getVelocity();
-        if (unitVelocity.x > 10)
+        if (unitVelocity.x != 0)
         {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_RIGHT, true, unitVelocity.x);
+            mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
         }
-        else if (unitVelocity.x < -10)
+        if (unitVelocity.y != 0)
         {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_LEFT, true, -unitVelocity.x);
-        }
-        if (unitVelocity.y > 10)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_UP, true, unitVelocity.y);
-        }
-        else if (unitVelocity.y < -10)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_DOWN, true, -unitVelocity.y);
+            mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
         }
 
         if (clock() - beginTime >= 1000)

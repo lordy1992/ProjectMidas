@@ -15,7 +15,7 @@ void KybrdCtrlTest::testLock(void)
     keybd_event(VK_LWIN, MapVirtualKey(VK_LWIN, MAPVK_VK_TO_VSC), KEYEVENTF_KEYUP, 0);
 }
 
-void KybrdCtrlTest::testAltTab(void)
+void KybrdCtrlTest::testZoomInOut(void)
 {
     KybrdCtrl * controller = new KybrdCtrl();
 

@@ -12,7 +12,7 @@ class KybrdCtrlTest
 public:
     static void testLock(void);
 
-    static void testAltTab(void);
+    static void testZoomInOut(void);
 };
 
 #endif /* _KYBRD_CTRL_TEST */
