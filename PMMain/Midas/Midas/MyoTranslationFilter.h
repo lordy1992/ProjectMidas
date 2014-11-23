@@ -83,6 +83,7 @@ private:
     *
     * @param current The current angle (in radians) that is being compared
     * @param base The base angle (in radians) that is being compared against
+    * @return a value from -pi to +pi representing the delta between two input angles
     */
     static float calcRingDelta(float current, float base);
 

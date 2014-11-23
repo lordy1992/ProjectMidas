@@ -30,7 +30,6 @@ void MyoTranslationFilter::process()
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
-        std::cout << "Entering Mouse Mode." << std::endl;
         basePitch = pitch;
         baseYaw = yaw;
     }
@@ -39,7 +38,6 @@ void MyoTranslationFilter::process()
     {
         if (previousMode == MOUSE_MODE)
         {
-            std::cout << "Leaving Mouse Mode." << std::endl;
             filterDataMap outputToSharedCommandData;
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
@@ -76,30 +74,24 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 
 float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection)
 {
-    //TODO - Likely need to base this off of R/L hand, and orientation
     if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardElbow)
     {
-        //std::cout << "arm left and xDirection towardElbow" << std::endl;
         return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
     else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardElbow)
     {
-        //std::cout << "arm right and xDirection towardElbow" << std::endl;
         return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
     else if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardWrist)
     {
-        //std::cout << "arm left and xDirection towardWrist" << std::endl;
         return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
     else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardWrist)
     {
-        //std::cout << "arm right and xDirection towardWrist" << std::endl;
         return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     } 
     else
     {
-        //std::cout << "Arm or xDirection unknown." << std::endl;
         // Default - arbitrarily chosen.
         return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
