@@ -25,6 +25,8 @@
 *.lib
 !myo32.lib
 !myo64.lib
+!gtestd.lib
+!gtest_main-mdd.lib
 
 # Executables
 *.exe
