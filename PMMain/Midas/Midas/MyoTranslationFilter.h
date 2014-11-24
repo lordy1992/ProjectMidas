@@ -5,6 +5,16 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 
+#ifdef USE_SIMULATOR
+#include "MyoSimIncludes.hpp"
+#endif
+
+#ifdef USE_SIMULATOR
+using namespace myoSim;
+#else
+using namespace myo;
+#endif
+
 #define INPUT_QUATERNION_X "quatDataX"
 #define INPUT_QUATERNION_Y "quatDataY"
 #define INPUT_QUATERNION_Z "quatDataZ"
@@ -62,7 +72,7 @@ private:
      * @param xDirection The xDirection of the user, which is accounted for by sign of calculated Pitch.
      * @return Returns the 'pitch' angle, in radians.
      */
-    float getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection);
+    float getPitchFromQuaternion(float x, float y, float z, float w, Arm arm, XDirection xDirection);
 
     /**
     * Calculate the 'yaw' angle from the supplied quaternion, consisting of x, y, z and w.
