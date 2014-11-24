@@ -103,16 +103,10 @@ float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, floa
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
 }
 
-int MyoTranslationFilter::testFunc(int tempTest)
-{
-    return tempTest + 1;
-}
-
-
 float MyoTranslationFilter::calcRingDelta(float current, float base)
 {
-    // Assert angles are within range of a circle
-    if (current >= 2 * M_PI || base >= 2 * M_PI || current <=  0 || base <= 0)
+    // Assert angles are within range of a circle [0, 2Pi)
+    if (current >= 2 * M_PI || base >= 2 * M_PI || current <  0 || base < 0)
     {
         return 0.0;
     }

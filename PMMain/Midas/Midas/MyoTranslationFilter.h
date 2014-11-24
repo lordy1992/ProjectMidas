@@ -49,8 +49,6 @@ public:
     */
     static float calcRingDelta(float current, float base);
 
-    int testFunc(int tempTest);
-
 private:
     /**
      * Calculate the 'pitch' angle from the supplied quaternion, consisting of x, y, z and w,
