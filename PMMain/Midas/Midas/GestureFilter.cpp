@@ -106,6 +106,8 @@ commandData GestureFilter::translateGesture(Pose::Type pose)
     return command;
 }
 
+
+//NOTE - IF THESE SEQUENCES ARE CHANGED, GestureFilter_Test must be changed as well!
 GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent)
 {
     unlockSequence.push_back(Pose::thumbToPinky);

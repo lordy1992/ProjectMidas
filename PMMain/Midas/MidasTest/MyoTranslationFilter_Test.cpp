@@ -36,7 +36,7 @@ TEST(MyoTranslationFilterTest1, calcRingDeltaInvalid) {
     delete mtf;
 }
 
-TEST(MyoTranslationFilterTest1, calcRingDeltaValid) {
+TEST(MyoTranslationFilterTest2, calcRingDeltaValid) {
     MyoTranslationFilter *mtf = new MyoTranslationFilter(NULL);
 
     float tolerance = 0.001;
