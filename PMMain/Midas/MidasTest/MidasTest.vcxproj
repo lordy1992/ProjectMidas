@@ -71,7 +71,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AveragingFiter_Test.cpp" />
+    <ClCompile Include="ControlState_Test.cpp" />
+    <ClCompile Include="FilterPipeline_Test.cpp" />
+    <ClCompile Include="GestureFilter_Test.cpp" />
+    <ClCompile Include="KybrdCtrl_Test.cpp" />
+    <ClCompile Include="MouseCtrl_Test.cpp" />
+    <ClCompile Include="MyoDevice_Test.cpp" />
     <ClCompile Include="MyoTranslationFilter_Test.cpp" />
+    <ClCompile Include="SharedCommandData_Test.cpp" />
     <ClCompile Include="unitTest1.cpp" />
   </ItemGroup>
   <ItemGroup>
