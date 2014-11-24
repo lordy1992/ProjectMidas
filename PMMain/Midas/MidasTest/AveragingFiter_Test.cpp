@@ -10,7 +10,7 @@ TEST(AverageFilterTest1, constructor) {
     delete af;
 }
 
-TEST(AverageFilterTest1, processBasics) {
+TEST(AverageFilterTest2, processBasics) {
     AveragingFilter *af = new AveragingFilter();
 
     int avgCount = af->getAvgCount();
@@ -48,7 +48,7 @@ TEST(AverageFilterTest1, processBasics) {
     delete af;
 }
 
-TEST(AverageFilterTest1, processAdvanced) {
+TEST(AverageFilterTest3, processAdvanced) {
     AveragingFilter *af = new AveragingFilter();
 
     int avgCount = af->getAvgCount();
