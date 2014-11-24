@@ -17,6 +17,16 @@ using namespace std;
 
 #define MYO_POSE_FILTER_TEST
 
+#ifdef USE_SIMULATOR
+#include "MyoSimIncludes.hpp"
+#endif
+
+#ifdef USE_SIMULATOR
+using namespace myoSim;
+#else
+using namespace myo;
+#endif
+
 int main() {
 
 #ifdef TEST_WEARABLE_DEVICE

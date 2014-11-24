@@ -1,3 +1,4 @@
+#define NOMINMAX
 #include "MyoTranslationFilter.h"
 #include <math.h>
 #include <iostream>
@@ -19,8 +20,8 @@ void MyoTranslationFilter::process()
     float quatZ = boost::any_cast<float>(input[INPUT_QUATERNION_Z]);
     float quatW = boost::any_cast<float>(input[INPUT_QUATERNION_W]);
 
-    myo::Arm arm = boost::any_cast<myo::Arm>(input[INPUT_ARM]);
-    myo::XDirection xDirection = boost::any_cast<myo::XDirection>(input[INPUT_X_DIRECTION]);
+    Arm arm = boost::any_cast<Arm>(input[INPUT_ARM]);
+    XDirection xDirection = boost::any_cast<XDirection>(input[INPUT_X_DIRECTION]);
 
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
@@ -72,21 +73,21 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
 
-float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w, myo::Arm arm, myo::XDirection xDirection)
+float MyoTranslationFilter::getPitchFromQuaternion(float x, float y, float z, float w, Arm arm, XDirection xDirection)
 {
-    if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardElbow)
+    if (arm == Arm::armLeft && xDirection == XDirection::xDirectionTowardElbow)
     {
         return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
-    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardElbow)
+    else if (arm == Arm::armRight && xDirection == XDirection::xDirectionTowardElbow)
     {
         return asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
-    else if (arm == myo::Arm::armLeft && xDirection == myo::XDirection::xDirectionTowardWrist)
+    else if (arm == Arm::armLeft && xDirection == XDirection::xDirectionTowardWrist)
     {
         return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     }
-    else if (arm == myo::Arm::armRight && xDirection == myo::XDirection::xDirectionTowardWrist)
+    else if (arm == Arm::armRight && xDirection == XDirection::xDirectionTowardWrist)
     {
         return -asin(std::max(-1.0f, std::min(1.0f, 2.0f * (w * y - z * x))));
     } 

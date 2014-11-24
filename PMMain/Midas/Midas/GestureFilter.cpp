@@ -1,10 +1,9 @@
 #include "GestureFilter.h"
-#include "myo\myo.hpp"
 #include <time.h>
 
 // TODO: Refactor cases to modularize into seperate handler functions!
 
-GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(myo::Pose::rest),
+GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
     lastTime(0), controlStateHandle(controlState), stateHandler(*this)
 {
 }
@@ -16,7 +15,7 @@ GestureFilter::~GestureFilter()
 void GestureFilter::process()
 {
     filterDataMap input = Filter::getInput();
-    myo::Pose::Type gesture = boost::any_cast<myo::Pose::Type>(input[GESTURE_INPUT]);
+    Pose::Type gesture = boost::any_cast<Pose::Type>(input[GESTURE_INPUT]);
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
@@ -24,7 +23,7 @@ void GestureFilter::process()
     if (gesture != lastPoseType)
     {
         // The user's gesture has changed.
-        if (gesture == myo::Pose::rest && controlStateHandle->getMode() != midasMode::LOCK_MODE)
+        if (gesture == Pose::rest && controlStateHandle->getMode() != midasMode::LOCK_MODE)
         {
             filterDataMap outputToSharedCommandData;
             commandData command;
@@ -86,7 +85,7 @@ void GestureFilter::process()
     }
 }
 
-commandData GestureFilter::translateGesture(myo::Pose::Type pose)
+commandData GestureFilter::translateGesture(Pose::Type pose)
 {
     commandData command;
     command.type = MOUSE_COMMAND;
@@ -109,24 +108,24 @@ commandData GestureFilter::translateGesture(myo::Pose::Type pose)
 
 GestureFilter::StateHandler::StateHandler(GestureFilter& parent) : parent(parent)
 {
-    unlockSequence.push_back(myo::Pose::thumbToPinky);
-    unlockSequence.push_back(myo::Pose::waveIn);
-    unlockSequence.push_back(myo::Pose::waveOut);
+    unlockSequence.push_back(Pose::thumbToPinky);
+    unlockSequence.push_back(Pose::waveIn);
+    unlockSequence.push_back(Pose::waveOut);
     
-    lockSequence.push_back(myo::Pose::waveIn);
-    lockSequence.push_back(myo::Pose::thumbToPinky);
+    lockSequence.push_back(Pose::waveIn);
+    lockSequence.push_back(Pose::thumbToPinky);
 
     // None of the following modes actually have functionality, so their 
     // state transition sequences are arbitrary and incomplete. TODO.
-    mouseToGestureSequence.push_back(myo::Pose::thumbToPinky);
+    mouseToGestureSequence.push_back(Pose::thumbToPinky);
     
-    gestureToMouseSequence.push_back(myo::Pose::thumbToPinky);
+    gestureToMouseSequence.push_back(Pose::thumbToPinky);
     
-    mouseToKeyboardSequence.push_back(myo::Pose::waveOut);
-    mouseToKeyboardSequence.push_back(myo::Pose::waveIn);
+    mouseToKeyboardSequence.push_back(Pose::waveOut);
+    mouseToKeyboardSequence.push_back(Pose::waveIn);
     
-    keyboardToMouseSequence.push_back(myo::Pose::waveOut);
-    keyboardToMouseSequence.push_back(myo::Pose::waveIn);
+    keyboardToMouseSequence.push_back(Pose::waveOut);
+    keyboardToMouseSequence.push_back(Pose::waveIn);
 
     sequenceCount = 0;
     stateProgressMaxDeltaTime = DEFAULT_PROG_MAX_DELTA;
@@ -137,9 +136,9 @@ GestureFilter::StateHandler::~StateHandler()
 {
 }
 
-bool GestureFilter::StateHandler::updateState(myo::Pose::Type gesture)
+bool GestureFilter::StateHandler::updateState(Pose::Type gesture)
 {
-    if (gesture == myo::Pose::Type::rest)
+    if (gesture == Pose::Type::rest)
     {
         return false;
     }
@@ -370,8 +369,8 @@ clock_t GestureFilter::StateHandler::getStateProgressMaxDeltaTime(void)
     return stateProgressBaseTime;
 }
 
-bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
-    myo::Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition)
+bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<Pose::Type> sequence,
+    Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition)
 {
     // Ensure current sequence is following the desired sequence to change states to, and that
     // all elements have been matched, and specifically, the last element is a match
@@ -389,8 +388,8 @@ bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, 
     return false;
 }
 
-void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
-    myo::Pose::Type gesture, bool& progressSeq, clock_t now)
+void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<Pose::Type> sequence,
+    Pose::Type gesture, bool& progressSeq, clock_t now)
 {
     if (((activeSeq & desiredSeq) != activeSequence::NONE) &&
         sequenceCount < sequence.size() && 
