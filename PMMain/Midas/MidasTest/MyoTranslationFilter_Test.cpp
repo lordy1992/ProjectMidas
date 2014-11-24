@@ -22,8 +22,6 @@ TEST(MyoTranslationFilterTest1, calcRingDeltaInvalid) {
     // Test Class = MyoTranslationFilterTest1
     MyoTranslationFilter *mtf = new MyoTranslationFilter(NULL);
 
-    // JORDEN TODO - input IN RADIANSSSSS!!!
-
     //Invalid inputs - default return 0.
     EXPECT_FLOAT_EQ(0.0, mtf->calcRingDelta(degToRad(-1.0), degToRad(90.0)));
     EXPECT_FLOAT_EQ(0.0, mtf->calcRingDelta(degToRad(90.0), degToRad(-1.0)));
@@ -34,6 +32,8 @@ TEST(MyoTranslationFilterTest1, calcRingDeltaInvalid) {
     EXPECT_FLOAT_EQ(0.0, mtf->calcRingDelta(degToRad(361.0), degToRad(361.0)));
 
     EXPECT_FLOAT_EQ(0.0, mtf->calcRingDelta(degToRad(360.0), degToRad(180.0)));
+
+    delete mtf;
 }
 
 TEST(MyoTranslationFilterTest1, calcRingDeltaValid) {
@@ -65,4 +65,5 @@ TEST(MyoTranslationFilterTest1, calcRingDeltaValid) {
     ASSERT_NEAR(degToRad(1.0), mtf->calcRingDelta(degToRad(0.0), degToRad(359.0)), tolerance);
     ASSERT_NEAR(degToRad(179.0), mtf->calcRingDelta(degToRad(178.0), degToRad(359.0)), tolerance);
 
+    delete mtf;
 }
