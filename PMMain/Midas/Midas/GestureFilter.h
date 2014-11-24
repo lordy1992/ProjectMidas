@@ -5,9 +5,19 @@
 #include "ControlState.h"
 #include "Filter.h"
 
+#ifdef USE_SIMULATOR
+#include "MyoSimIncludes.hpp"
+#endif
+
+#ifdef USE_SIMULATOR
+using namespace myoSim;
+#else
+using namespace myo;
+#endif
+
 #define GESTURE_INPUT "gesture"
-#define MYO_GESTURE_RIGHT_MOUSE myo::Pose::fingersSpread
-#define MYO_GESTURE_LEFT_MOUSE myo::Pose::fist
+#define MYO_GESTURE_RIGHT_MOUSE Pose::fingersSpread
+#define MYO_GESTURE_LEFT_MOUSE Pose::fist
 #define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
 /**
@@ -108,7 +118,7 @@ private:
         * will change.
         * @return Returns true if the state has been changed, and false otherwise.
         */
-        bool updateState(myo::Pose::Type gesture);
+        bool updateState(Pose::Type gesture);
 
         /**
         * Modifier.
@@ -125,21 +135,21 @@ private:
         clock_t getStateProgressMaxDeltaTime(void);
 
     private:
-        bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
-            myo::Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition);
+        bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<Pose::Type> sequence,
+            Pose::Type gesture, midasMode desiredMode, midasMode& nextMode, bool& willTransition);
 
-        void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<myo::Pose::Type> sequence,
-            myo::Pose::Type gesture, bool& progressSeq, clock_t now);
+        void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desiredSeq, std::vector<Pose::Type> sequence,
+            Pose::Type gesture, bool& progressSeq, clock_t now);
 
         GestureFilter& parent;
 
         // Gesture sequences required to change states
-        std::vector<myo::Pose::Type> unlockSequence;
-        std::vector<myo::Pose::Type> lockSequence;
-        std::vector<myo::Pose::Type> mouseToGestureSequence;
-        std::vector<myo::Pose::Type> gestureToMouseSequence;
-        std::vector<myo::Pose::Type> mouseToKeyboardSequence;
-        std::vector<myo::Pose::Type> keyboardToMouseSequence;
+        std::vector<Pose::Type> unlockSequence;
+        std::vector<Pose::Type> lockSequence;
+        std::vector<Pose::Type> mouseToGestureSequence;
+        std::vector<Pose::Type> gestureToMouseSequence;
+        std::vector<Pose::Type> mouseToKeyboardSequence;
+        std::vector<Pose::Type> keyboardToMouseSequence;
 
         // Gesture sequence completion value - represents how far into a gesture sequence
         // the user is. Ranges from 0 to max(sequence length - 1) of allowable sequences from
@@ -165,9 +175,9 @@ private:
      *
      * @param pose The pose to translate into a command.
      */
-    commandData translateGesture(myo::Pose::Type pose);
+    commandData translateGesture(Pose::Type pose);
 
-    myo::Pose::Type lastPoseType;
+    Pose::Type lastPoseType;
     ControlState* controlStateHandle;
     clock_t timeDelta;
     clock_t lastTime;

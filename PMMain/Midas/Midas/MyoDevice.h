@@ -4,12 +4,21 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 
+#ifdef USE_SIMULATOR
+#include "MyoSimIncludes.hpp"
+#endif
+
+#ifdef USE_SIMULATOR
+using namespace myoSim;
+#else
+using namespace myo;
+#endif
+
 #define DEFAULT_FIND_MYO_TIMEOUT 1000
 #define DEFAULT_MYO_DURATION_MS 1000/20
-#define DEFAULT_MYO_ARM myo::Arm::armUnknown
-#define DEFAULT_MYO_XDIR myo::XDirection::xDirectionUnknown
+#define DEFAULT_MYO_ARM Arm::armUnknown
+#define DEFAULT_MYO_XDIR XDirection::xDirectionUnknown
 
-using namespace myo;
 
 /**
  * Handles the Myo device, collecting the data using the Myo API, and converting the data
