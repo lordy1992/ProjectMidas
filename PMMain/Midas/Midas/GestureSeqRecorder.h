@@ -103,9 +103,10 @@ public:
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequence seq);
 
-    // return UNEXPECT_STATE_CHANGE if state changed while active sequences open. This is unexpected
-    // behaviour, so should stop all sequences and return immediately.
-    SequenceStatus ensureSameState();
+    // Track state information when attempting to start a sequence. Then ensure 
+    // that state isn't altered until the end of a sequence, or else something
+    // has become corrupt, so cleanup and return an error.
+    SequenceStatus ensureSameState(ControlState state);
 
     SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
@@ -119,6 +120,7 @@ private:
     // are timed out.
     std::list<sequenceInfo*> activeSequences;
 
+    // State info from when a sequence that has size >1 is started.
     midasMode prevState;
 
     // Base timestamp used to calculate transitions

@@ -49,15 +49,25 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
 SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
+
     if (activeSequences.size() != 0)
     {
+        status = ensureSameState(state);
+        if (status != SequenceStatus::SUCCESS)
+        {
+            goto endProgress;
+        }
+
         status = progressActiveSequences(gesture, state, response);
     }
     else
     {
         status = findActivation(gesture, state, response);
+        
+        prevState = state.getMode();
     }
 
+    endProgress:
     if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
     { 
         // if the response is not NONE, a sequence has completed. Therefore all
@@ -90,9 +100,11 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequence s
     //TODO
 }
 
-SequenceStatus GestureSeqRecorder::ensureSameState()
+SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
 {
     //TODO
+
+    return SequenceStatus::UNEXPECT_STATE_CHANGE;
 }
 
 SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
