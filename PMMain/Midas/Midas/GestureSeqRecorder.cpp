@@ -15,6 +15,12 @@ GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), prog
 GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime) : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()) 
 {
     seqMapPerMode = new sequenceMapPerMode();
+
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    {
+        midasMode mm = static_cast<midasMode>(midasModeInt);
+        (*seqMapPerMode)[mm] = new sequenceList();
+    }
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
@@ -53,12 +59,10 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
     if (activeSequences.size() != 0)
     {
         status = ensureSameState(state);
-        if (status != SequenceStatus::SUCCESS)
+        if (status == SequenceStatus::SUCCESS)
         {
-            goto endProgress;
-        }
-
-        status = progressActiveSequences(gesture, state, response);
+            status = progressActiveSequences(gesture, state, response);
+        }       
     }
     else
     {
@@ -67,7 +71,6 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
         prevState = state.getMode();
     }
 
-    endProgress:
     if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
     { 
         // if the response is not NONE, a sequence has completed. Therefore all
@@ -133,7 +136,7 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 //  ex: seq1 = a,b,c. seq2 = a,b,c,d,e. There is no way to tell if seq1
                 //  has been executed, or if seq2 is partially done. Therefore DO NOT
                 //  REGISTER.
-                return SequenceStatus::CONFLICTING_SEQUENCE;
+                return SequenceStatus::CONFLICTING_SEQUENCE; // JORDEN TODO - this is wrong. Fix this. This is bailing if first element matches. worng.
             }
         }
         // else don't care. Can't be in conflict, or else would have already returned
@@ -176,7 +179,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
     for (it = activeSequences.begin(); it != activeSequences.end(); it++)
     {
         unsigned int seqProg = (*it)->progress;
-        if (gesture == (*it)->seq.at(seqProg))
+        if ((seqProg < (*it)->seq.size()) &&  (gesture == (*it)->seq.at(seqProg)))
         {
             (*it)->progress++;
             if ((*it)->progress == (*it)->seq.size())
@@ -193,7 +196,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
         {
             // TODO - verify that this is legal. MAY need to use a different structure than a list if it's not.
             (*it)->progress = 0;
-            activeSequences.remove((*it));
+            activeSequences.remove(*it); // Jeremy's comment: generally todo - create a copy of the list, iterate through the copy, remove from the real list.
         }
     }
 
