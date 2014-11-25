@@ -365,12 +365,12 @@ bool GestureFilter::StateHandler::updateState(Pose::Type gesture)
 
 void GestureFilter::StateHandler::setStateProgressMaxDeltaTime(clock_t newTime)
 {
-    stateProgressBaseTime = newTime;
+    stateProgressMaxDeltaTime = newTime;
 }
 
 clock_t GestureFilter::StateHandler::getStateProgressMaxDeltaTime(void)
 {
-    return stateProgressBaseTime;
+    return stateProgressMaxDeltaTime;
 }
 
 bool GestureFilter::StateHandler::satisfyStateChange(activeSequence desiredSeq, std::vector<Pose::Type> sequence,

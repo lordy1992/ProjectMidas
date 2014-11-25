@@ -81,10 +81,12 @@ public:
     SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response); // reminder -- {.... if (response.responseType != NONE) {clearAllActiveSequences();} }
 
     /**
-    * Called to update progressBaseTime, so that a sequence can be cleared if 
-    * timed out, without an asynchronous gesture update.
+    * Called to check against progressBaseTime if any sequences are active, so that a 
+    // sequence can be cleared if timed out, without an asynchronous gesture update.
     */
-    void updateProgressBaseTime();
+    void checkProgressBaseTime();
+
+    void emptyActiveSequences();
 
     /**
     * Modifier.

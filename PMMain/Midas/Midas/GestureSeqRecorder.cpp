@@ -73,26 +73,46 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
         // if the response is not NONE, a sequence has completed. Therefore all
         // active sequences must be cleared so that all valid sequences can potentially
         // be started.
-        activeSequences.clear();
+        emptyActiveSequences();
     }
 
     return status;
 }
 
 
-void GestureSeqRecorder::updateProgressBaseTime()
+void GestureSeqRecorder::checkProgressBaseTime()
 {
-    //TODO
+    clock_t now = clock();
+
+    if (now - progressBaseTime > progressMaxDeltaTime && (activeSequences.size() > 0))
+    {
+        std::cout << "timed out of previous sequence attempt." << std::endl;
+        
+        emptyActiveSequences();
+    }
+}
+
+void GestureSeqRecorder::emptyActiveSequences()
+{
+    // Reset all sequence info sequence stat info, and clear all references
+    // to them.
+    std::list<sequenceInfo*>::iterator it;
+    for (it = activeSequences.begin(); it != activeSequences.end(); it++)
+    {
+        (*it)->progress = 0;
+    }
+
+    activeSequences.clear();
 }
 
 void GestureSeqRecorder::setProgressMaxDeltaTime(clock_t newTime)
 {
-    progressBaseTime = newTime;
+    progressMaxDeltaTime = newTime;
 }
 
 clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
 {
-    return progressBaseTime;
+    return progressMaxDeltaTime;
 }
 
 SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequence seq)
@@ -102,9 +122,15 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequence s
 
 SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
 {
-    //TODO
+    if (prevState != state.getMode())
+    {
+        // Try and recover from corruption by resetting prevState, and returning
+        // error.
+        prevState = state.getMode();
+        return SequenceStatus::UNEXPECT_STATE_CHANGE;
+    }
 
-    return SequenceStatus::UNEXPECT_STATE_CHANGE;
+    return SequenceStatus::SUCCESS;
 }
 
 SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
