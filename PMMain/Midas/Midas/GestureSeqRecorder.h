@@ -18,6 +18,8 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
+#define DEFAULT_PROG_MAX_DELTA 1000 // ms
+
 enum class SequenceStatus {
     SUCCESS,
     CONFLICTING_SEQUENCE,
@@ -65,6 +67,7 @@ class GestureSeqRecorder
 {
 public:
     GestureSeqRecorder();
+    GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime);
     ~GestureSeqRecorder();
 
     SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
@@ -92,7 +95,7 @@ public:
     clock_t getProgressMaxDeltaTime(void);
 
 private:
-    SequenceStatus checkLegalRegister(midasMode mode, sequence seq, sequenceResponse seqResponse);
+    SequenceStatus checkLegalRegister(midasMode mode, sequence seq);
 
     // return UNEXPECT_STATE_CHANGE if state changed while active sequences open. This is unexpected
     // behaviour, so should stop all sequences and return immediately.
