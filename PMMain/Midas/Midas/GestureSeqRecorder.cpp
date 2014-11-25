@@ -3,14 +3,28 @@
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())
 {
+    seqMapPerMode = new sequenceMapPerMode();
+
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    {
+        midasMode mm = static_cast<midasMode>(midasModeInt);
+        (*seqMapPerMode)[mm] = new sequenceList();
+    }
 }
 
 GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime) : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()) 
 {
+    seqMapPerMode = new sequenceMapPerMode();
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
 {
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    {
+        midasMode mm = static_cast<midasMode>(midasModeInt);
+        delete (*seqMapPerMode)[mm];
+    }
+    delete seqMapPerMode;
 }
 
 SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse)
@@ -21,8 +35,10 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
         return status;
     }
 
-    sequenceMap seqMap = seqMapPerMode[mode];
-    seqMapPerMode[mode]
+    sequenceList seqList = seqMapPerMode->at(mode);
+    
+    seqList.
+
 
 }
 

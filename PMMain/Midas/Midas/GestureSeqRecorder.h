@@ -51,17 +51,19 @@ struct sequenceResponse {
     };
 };
 
+typedef std::vector<Pose::Type> sequence;
+
 /**
 * Wrapper to tie state information to a sequence response.
 */
-struct responseInfo {
+struct sequenceInfo {
+    sequence seq;
     sequenceResponse sequenceResponse;
     unsigned int progress;
 };
 
-typedef std::vector<Pose::Type> sequence;
-typedef std::map<std::list<sequence>, responseInfo> sequenceMap;
-typedef std::map<midasMode, sequenceMap> sequenceMapPerMode;
+typedef std::list<sequenceInfo> sequenceList;
+typedef std::map<midasMode, sequenceList*> sequenceMapPerMode;
 
 class GestureSeqRecorder
 {
@@ -102,7 +104,7 @@ private:
     SequenceStatus ensureSameState();
 
     // Holds all registered sequenceResponses in a layered organization.
-    sequenceMapPerMode seqMapPerMode;
+    sequenceMapPerMode *seqMapPerMode;
 
     // Stores pointers to active sequences, so that progress can be tracked more efficiently.
     // Once ANY sequences are active, ONLY those sequences can potentially progress, until they 
