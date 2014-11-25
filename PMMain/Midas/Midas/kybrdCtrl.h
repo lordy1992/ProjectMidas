@@ -49,26 +49,26 @@ public:
      */
     int sendData();
 
+private:
     /**
-     * Returns the vector of keyboard inputs. Should be used with caution.
-     *
-     * @return The kiVec, vector of keyboard inputs.
-     */
+    * Returns the vector of keyboard inputs. Should be used with caution.
+    *
+    * @return The kiVec, vector of keyboard inputs.
+    */
     std::vector<KEYBDINPUT> getKeyInputVec();
 
     /**
-     * Populates a pre-allocated INPUT array. This array can be used to utilize Windows
-     * API calls to send the INPUT data.
-     *
-     * @param kiArr A pre-allocated array to be populated with INPUT values, from the
-     * vector of keyboard inputs formed through setting commands in the keyboard controller. This
-     * array must be at least as large as the vector of commands or the function will return an
-     * ARRAY_TOO_SMALL error.
-     * @param lenArr The length of the supplied array.
-     */
+    * Populates a pre-allocated INPUT array. This array can be used to utilize Windows
+    * API calls to send the INPUT data.
+    *
+    * @param kiArr A pre-allocated array to be populated with INPUT values, from the
+    * vector of keyboard inputs formed through setting commands in the keyboard controller. This
+    * array must be at least as large as the vector of commands or the function will return an
+    * ARRAY_TOO_SMALL error.
+    * @param lenArr The length of the supplied array.
+    */
     int getKeyInputArr(INPUT * kiArr, int lenArr);
 
-private:
     /**
      * Inputs a CTRL key command into the vector of keyboard commands.
      */

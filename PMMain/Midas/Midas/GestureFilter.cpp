@@ -14,6 +14,7 @@ GestureFilter::~GestureFilter()
 
 void GestureFilter::process()
 {
+    clock_t timeFromLastPose = 0;
     filterDataMap input = Filter::getInput();
     Pose::Type gesture = boost::any_cast<Pose::Type>(input[GESTURE_INPUT]);
     
@@ -46,10 +47,11 @@ void GestureFilter::process()
         }
 
         lastPoseType = gesture;
+        timeFromLastPose = clock() - lastTime;
         lastTime = clock();
     }
 
-    if (clock() - lastTime >= timeDelta)
+    if (timeFromLastPose >= timeDelta)
     {
         // The user has held the same gesture for a long enough
         // period of time.

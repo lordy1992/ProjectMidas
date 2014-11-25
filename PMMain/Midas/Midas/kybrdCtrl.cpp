@@ -237,7 +237,7 @@ int KybrdCtrl::getKeyInputArr(INPUT * kiArr, int lenArr)
 {
     if (lenArr < this->kiVec.size()) return ARRAY_TOO_SMALL;
 
-    for (int i = 0; i < this->kiVec.size(); i++)
+    for (unsigned int i = 0; i < this->kiVec.size(); i++)
     {
         kiArr[i].type = INPUT_KEYBOARD;
         kiArr[i].ki = this->kiVec.at(i);

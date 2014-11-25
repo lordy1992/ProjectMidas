@@ -40,7 +40,7 @@ void MouseCtrlTest::testMouseSquare(DWORD mouseRate)
     delete mc; mc = NULL;
 }
 
-void MouseCtrlTest::testScrollMouseSquare(int loopSize, int scrollRate)
+void MouseCtrlTest::testScrollMouseSquare(unsigned int loopSize, int scrollRate)
 {
     loopSize /= scrollRate; // This adjusts it so that the expected loopSize states how many scroll 'clicks' ACTUALLY should happen.
     cout << "Welcome to the Mouse Scroll Test. The mouse will scroll autonomously up/down. Sides not working." << endl;
@@ -99,7 +99,7 @@ void MouseCtrlTest::testScrollMouseSquare(int loopSize, int scrollRate)
     delete mc; mc = NULL;
 }
 
-void MouseCtrlTest::testScrollZoomMouse(int size, int scrollRate)
+void MouseCtrlTest::testScrollZoomMouse(unsigned int size, int scrollRate)
 {
     size /= scrollRate; // This adjusts it so that the expected loopSize states how many scroll 'clicks' ACTUALLY should happen.
     cout << "Welcome to the Mouse Scroll Test. The mouse will scroll autonomously up/down. Sides not working." << endl;
