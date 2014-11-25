@@ -122,7 +122,7 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
     unsigned int idx = 0;
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-        if (it->seq.size >= idx + 1)
+        if (it->seq.size() >= idx + 1)
         {
             // Sequence large enough to compare against.
             if (it->seq.at(idx) == seqInfo.seq.at(idx))
