@@ -72,20 +72,50 @@ typedef std::map<midasMode, sequenceList*> sequenceMapPerMode;
 class GestureSeqRecorder
 {
 public:
+    /**
+    * Constructors/Destructor
+    */
     GestureSeqRecorder();
     GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime);
     ~GestureSeqRecorder();
 
+    /**
+    * Register a sequence of gestures with this call. A registered sequence is associated with a 
+    * midasMode. When in that mode, any progression of gestures from the Myo will be compared
+    * to all associated and registered sequences, and if any are succesfully completed, the 
+    * registered sequenceResponse will be returned to the caller.
+    *
+    * @param mode The midasMode that the caller is registering the sequence against.
+    * @param seq The sequence (std::vector<Pose::Type>) of gestures to register
+    * @param seqResponse The desired response to activate if the sequence is recognized
+    * while in the registered mode.
+    * @return SequenceStatus associated status information to inform caller of success/lack there of
+    */
     SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
 
-    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response); // reminder -- {.... if (response.responseType != NONE) {clearAllActiveSequences();} }
+    /**
+    * Given a gesture, attempt to progress through any registered sequences, that match the mode
+    * of the controlState.
+    * 
+    * @param gesture The recorded gesture that is being used to compare with the registered sequences.
+    * @param state The ControlState handle to determine the current midasMode of the system, thereby 
+    * knowing which registered sequence list to search through.
+    * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
+    * means that no sequence was completed. However, if it's not NONE, it holds the response that
+    * was registered against the completed sequence.
+    * @return SequenceStatus associated status information to inform caller of success/lack there of
+    */ 
+    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
-    // sequence can be cleared if timed out, without an asynchronous gesture update.
+    * sequence can be cleared if timed out, without an asynchronous gesture update.
     */
     void checkProgressBaseTime();
 
+    /**
+    * Empty the references to sequences that were active, and set progress of each to 0.
+    */
     void emptyActiveSequences();
 
     /**
@@ -105,13 +135,33 @@ public:
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
-    // Track state information when attempting to start a sequence. Then ensure 
-    // that state isn't altered until the end of a sequence, or else something
-    // has become corrupt, so cleanup and return an error.
+    /**
+    * Track state information when attempting to start a sequence. Then ensure 
+    * that state isn't altered until the end of a sequence, or else something
+    * has become corrupt, so cleanup and return an error.
+    *
+    * @param state The state to verify the associated mode has persisted throughout 
+    * an active sequence cycle.
+    * @return SequenceStatus associated status information to inform caller of success/lack there of
+    */
     SequenceStatus ensureSameState(ControlState state);
 
+    /**
+    * Perform the duties of progressSequence, but optimized for the situation where one or more sequences
+    * have already been noted as active.
+    *
+    * @param x Same as progressSequence.
+    * @return x Same as progressSequence.
+    */
     SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
+    /**
+    * Perform the duties of progressSequence, but optimized for the situation where no sequence has yet
+    * been deemed active.
+    *
+    * @param x Same as progressSequence.
+    * @return x Same as progressSequence.
+    */
     SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     // Holds all registered sequenceResponses in a layered organization.
