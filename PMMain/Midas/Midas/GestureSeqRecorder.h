@@ -57,6 +57,10 @@ typedef std::vector<Pose::Type> sequence;
 * Wrapper to tie state information to a sequence response.
 */
 struct sequenceInfo {
+    sequenceInfo() {
+        progress = 0;
+    }
+
     sequence seq;
     sequenceResponse sequenceResponse;
     unsigned int progress;

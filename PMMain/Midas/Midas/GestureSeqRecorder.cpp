@@ -35,11 +35,15 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
         return status;
     }
 
-    sequenceList seqList = seqMapPerMode->at(mode);
+    sequenceList *seqList = (*seqMapPerMode)[mode];
     
-    seqList.
+    sequenceInfo seqInfo;
+    seqInfo.seq = seq;
+    seqInfo.sequenceResponse = seqResponse;
+    seqList->push_back(seqInfo);
 
-
+    seqList = NULL;
+    return SequenceStatus::SUCCESS;
 }
 
 SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
