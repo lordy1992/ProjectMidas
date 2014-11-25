@@ -70,6 +70,7 @@
     <ClInclude Include="..\Midas\Filter.h" />
     <ClInclude Include="..\Midas\FilterPipeline.h" />
     <ClInclude Include="..\Midas\GestureFilter.h" />
+    <ClInclude Include="..\Midas\GestureSeqRecorder.h" />
     <ClInclude Include="..\Midas\kybrdCtrl.h" />
     <ClInclude Include="..\Midas\KybrdCtrlTest.h" />
     <ClInclude Include="..\Midas\MidasCommon.h" />
@@ -87,6 +88,7 @@
     <ClCompile Include="..\Midas\Filter.cpp" />
     <ClCompile Include="..\Midas\FilterPipeline.cpp" />
     <ClCompile Include="..\Midas\GestureFilter.cpp" />
+    <ClCompile Include="..\Midas\GestureSeqRecorder.cpp" />
     <ClCompile Include="..\Midas\kybrdCtrl.cpp" />
     <ClCompile Include="..\Midas\KybrdCtrlTest.cpp" />
     <ClCompile Include="..\Midas\main.cpp" />
