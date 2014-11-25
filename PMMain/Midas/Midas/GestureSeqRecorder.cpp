@@ -175,8 +175,8 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
     }
     progressBaseTime = now;
 
-    std::list<sequenceInfo*>::iterator it;
-    for (it = activeSequences.begin(); it != activeSequences.end(); it++)
+    std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+    while (it != activeSequences.end())
     {
         unsigned int seqProg = (*it)->progress;
         if ((seqProg < (*it)->seq.size()) &&  (gesture == (*it)->seq.at(seqProg)))
@@ -191,12 +191,14 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
                 response = (*it)->sequenceResponse;
                 break;
             }
+            it++;
         }
         else
         {
-            // TODO - verify that this is legal. MAY need to use a different structure than a list if it's not.
             (*it)->progress = 0;
-            activeSequences.remove(*it); // Jeremy's comment: generally todo - create a copy of the list, iterate through the copy, remove from the real list.
+            std::list<sequenceInfo*>::iterator itCopy = it;
+            it++;
+            activeSequences.erase(itCopy);
         }
     }
 
