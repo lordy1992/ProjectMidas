@@ -114,10 +114,10 @@ private:
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;
 
-    // Stores pointers to active sequences, so that progress can be tracked more efficiently.
+    // Stores pointers to active sequenceInfos, so that progress can be tracked more efficiently.
     // Once ANY sequences are active, ONLY those sequences can potentially progress, until they 
     // are timed out.
-    std::list<sequence*> activeSequences;
+    std::list<sequenceInfo*> activeSequences;
 
     midasMode prevState;
 

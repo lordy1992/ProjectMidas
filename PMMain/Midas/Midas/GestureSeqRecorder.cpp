@@ -48,22 +48,25 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
 
 SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
+    SequenceStatus status = SequenceStatus::SUCCESS;
     if (activeSequences.size() != 0)
     {
-        progressActiveSequences(gesture, state, response);
+        status = progressActiveSequences(gesture, state, response);
     }
     else
     {
-        findActivation(gesture, state, response);
+        status = findActivation(gesture, state, response);
     }
 
-    if (response.responseType != ResponseType::NONE) 
+    if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
     { 
         // if the response is not NONE, a sequence has completed. Therefore all
         // active sequences must be cleared so that all valid sequences can potentially
         // be started.
         activeSequences.clear();
     }
+
+    return status;
 }
 
 
@@ -82,22 +85,57 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
     return progressBaseTime;
 }
 
-SequenceStatus checkLegalRegister(midasMode mode, sequence seq)
+SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequence seq)
 {
     //TODO
 }
 
-SequenceStatus ensureSameState()
+SequenceStatus GestureSeqRecorder::ensureSameState()
 {
     //TODO
 }
 
-SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     //TODO
 }
 
-SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
-    //TODO
+    SequenceStatus status = SequenceStatus::SUCCESS;
+    sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
+
+    // Loop through all possible sequences in this mode, and activate any that
+    // have a matching first gesture.
+    for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
+    {
+        if (it->seq.size() >= 0)
+        {
+            if (it->seq.at(0) == gesture) 
+            {
+                // found sequence to activate!
+
+                // 2 cases - If the sequence is only size one, then the response can be set, as the 
+                // sequence is complete. 
+                // NOTE: This is guarunteed to be the ONLY size one sequence that will match the input
+                // gesture, due to how sequences are registered. (it is a pre-condition for this function).
+                if (it->seq.size() == 1)
+                {
+                    response = it->sequenceResponse;
+                    status = SequenceStatus::SUCCESS;
+                    break;
+                } 
+                else
+                {
+                    it->progress++;
+                    // TODO ----- VERIFY that this actually persists with the correct memory 
+                    // address being pointed to by activeSequences
+                    activeSequences.push_back(&(*it));
+                }
+            }
+        }
+    }
+
+    seqList = NULL;
+    return status;
 }
