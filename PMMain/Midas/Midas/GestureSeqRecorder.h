@@ -107,6 +107,10 @@ private:
     // behaviour, so should stop all sequences and return immediately.
     SequenceStatus ensureSameState();
 
+    SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+
+    SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;
 

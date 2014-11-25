@@ -48,9 +48,14 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
 
 SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
-
-
-
+    if (activeSequences.size() != 0)
+    {
+        progressActiveSequences(gesture, state, response);
+    }
+    else
+    {
+        findActivation(gesture, state, response);
+    }
 
     if (response.responseType != ResponseType::NONE) 
     { 
@@ -64,7 +69,7 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
 
 void GestureSeqRecorder::updateProgressBaseTime()
 {
-
+    //TODO
 }
 
 void GestureSeqRecorder::setProgressMaxDeltaTime(clock_t newTime)
@@ -77,6 +82,22 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
     return progressBaseTime;
 }
 
-SequenceStatus checkLegalRegister(midasMode mode, sequence seq);
+SequenceStatus checkLegalRegister(midasMode mode, sequence seq)
+{
+    //TODO
+}
 
-SequenceStatus ensureSameState();
+SequenceStatus ensureSameState()
+{
+    //TODO
+}
+
+SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+{
+    //TODO
+}
+
+SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+{
+    //TODO
+}
