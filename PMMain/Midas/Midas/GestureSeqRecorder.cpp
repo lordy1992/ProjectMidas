@@ -29,17 +29,16 @@ GestureSeqRecorder::~GestureSeqRecorder()
 
 SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse)
 {
-    SequenceStatus status = checkLegalRegister(mode, seq);
+    sequenceInfo seqInfo;
+    seqInfo.seq = seq;
+    seqInfo.sequenceResponse = seqResponse;
+    SequenceStatus status = checkLegalRegister(mode, seqInfo);
     if (status != SequenceStatus::SUCCESS)
     {
         return status;
     }
 
     sequenceList *seqList = (*seqMapPerMode)[mode];
-    
-    sequenceInfo seqInfo;
-    seqInfo.seq = seq;
-    seqInfo.sequenceResponse = seqResponse;
     seqList->push_back(seqInfo);
 
     seqList = NULL;
@@ -116,9 +115,34 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
     return progressMaxDeltaTime;
 }
 
-SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequence seq)
+SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const
 {
-    //TODO
+    sequenceList *seqList = (*seqMapPerMode)[mode];
+
+    unsigned int idx = 0;
+    for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
+    {
+        if (it->seq.size >= idx + 1)
+        {
+            // Sequence large enough to compare against.
+            if (it->seq.at(idx) == seqInfo.seq.at(idx))
+            {
+                // Oh no! Overlap in sequence that is trying to be registered and
+                // a sequence that has already been registered against this mode. 
+                // Thus, it is NOT ALLOWED, as it would cause a logical inconsistency -
+                //  ex: seq1 = a,b,c. seq2 = a,b,c,d,e. There is no way to tell if seq1
+                //  has been executed, or if seq2 is partially done. Therefore DO NOT
+                //  REGISTER.
+                return SequenceStatus::CONFLICTING_SEQUENCE;
+            }
+        }
+        // else don't care. Can't be in conflict, or else would have already returned
+        idx++;
+    }
+
+    // Finally, the sequence has passed through the gauntlet, and has proven itself worthy
+    // of being a legal addition to the list of registered sequences.
+    return SequenceStatus::SUCCESS;
 }
 
 SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)

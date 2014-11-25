@@ -103,7 +103,7 @@ public:
     clock_t getProgressMaxDeltaTime(void);
 
 private:
-    SequenceStatus checkLegalRegister(midasMode mode, sequence seq);
+    SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
     // Track state information when attempting to start a sequence. Then ensure 
     // that state isn't altered until the end of a sequence, or else something
