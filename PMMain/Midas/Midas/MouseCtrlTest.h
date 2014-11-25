@@ -12,9 +12,9 @@ class MouseCtrlTest
 public:
     static void testMouseSquare(DWORD mouseRate);
 
-    static void testScrollMouseSquare(int loopSize, int scrollRate);
+    static void testScrollMouseSquare(unsigned int loopSize, int scrollRate);
 
-    static void testScrollZoomMouse(int size, int scrollRate);
+    static void testScrollZoomMouse(unsigned int size, int scrollRate);
 };
 
 #endif /* _MOUSE_CTRL_TEST */

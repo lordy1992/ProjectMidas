@@ -54,6 +54,10 @@ inline activeSequence operator&(activeSequence a, activeSequence b)
     return static_cast<activeSequence>(static_cast<unsigned int>(a)& static_cast<unsigned int>(b));
 }
 
+/**
+* Overloading logical NOT, so that activeSequence can be used as a mask, such that
+* more than one sequence can be started, and they can all be uniquely identified!
+*/
 inline activeSequence operator~(activeSequence a)
 {
     return static_cast<activeSequence>(~static_cast<unsigned int>(a));
