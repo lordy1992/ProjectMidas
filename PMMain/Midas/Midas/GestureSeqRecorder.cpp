@@ -125,22 +125,30 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
     unsigned int idx = 0;
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-        if (it->seq.size() >= idx + 1)
+
+        sequence compareSeq = it->seq;
+        for (sequence::iterator compareSeqIt = compareSeq.begin; compareSeqIt != compareSeq.end(); compareSeqIt++)
         {
-            // Sequence large enough to compare against.
-            if (it->seq.at(idx) == seqInfo.seq.at(idx))
-            {
-                // Oh no! Overlap in sequence that is trying to be registered and
-                // a sequence that has already been registered against this mode. 
-                // Thus, it is NOT ALLOWED, as it would cause a logical inconsistency -
-                //  ex: seq1 = a,b,c. seq2 = a,b,c,d,e. There is no way to tell if seq1
-                //  has been executed, or if seq2 is partially done. Therefore DO NOT
-                //  REGISTER.
-                return SequenceStatus::CONFLICTING_SEQUENCE; // JORDEN TODO - this is wrong. Fix this. This is bailing if first element matches. worng.
-            }
+            Pose::Type compareGest = *compareSeqIt;
+            if ()
         }
-        // else don't care. Can't be in conflict, or else would have already returned
-        idx++;
+
+        //if (it->seq.size() >= idx + 1)
+        //{
+        //    // Sequence large enough to compare against.
+        //    if (it->seq.at(idx) == seqInfo.seq.at(idx))
+        //    {
+        //        // Oh no! Overlap in sequence that is trying to be registered and
+        //        // a sequence that has already been registered against this mode. 
+        //        // Thus, it is NOT ALLOWED, as it would cause a logical inconsistency -
+        //        //  ex: seq1 = a,b,c. seq2 = a,b,c,d,e. There is no way to tell if seq1
+        //        //  has been executed, or if seq2 is partially done. Therefore DO NOT
+        //        //  REGISTER.
+        //        return SequenceStatus::CONFLICTING_SEQUENCE; // JORDEN TODO - this is wrong. Fix this. This is bailing if first element matches. worng.
+        //    }
+        //}
+        //// else don't care. Can't be in conflict, or else would have already returned
+        //idx++;
     }
 
     // Finally, the sequence has passed through the gauntlet, and has proven itself worthy
@@ -237,7 +245,7 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
                 {
                     it->progress++;
                     // TODO ----- VERIFY that this actually persists with the correct memory 
-                    // address being pointed to by activeSequences
+                    // address being pointed to by activeSequences - should be okay, as stated by Jorden and Jeremy.
                     activeSequences.push_back(&(*it));
                 }
             }
