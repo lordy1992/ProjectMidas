@@ -1,4 +1,5 @@
 #include "GestureSeqRecorder.h"
+#include "MyoCommon.h"
 
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())
@@ -237,6 +238,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
             activeSequences.erase(itCopy);
         }
     }
+    printStatus();
 
     return status;
 }
@@ -272,9 +274,8 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
                 else
                 {
                     it->progress++;
-                    // TODO ----- VERIFY that this actually persists with the correct memory 
-                    // address being pointed to by activeSequences - should be okay, as stated by Jorden and Jeremy.
                     activeSequences.push_back(&(*it));
+                    printStatus();
                 }
             }
         }
@@ -282,4 +283,42 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
 
     seqList = NULL;
     return status;
+}
+
+void GestureSeqRecorder::printStatus(bool verbose)
+{
+    if (verbose)
+    {
+        std::cout << "Active Sequences: " << std::endl;
+        std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+        while (it != activeSequences.end())
+        {
+            std::string activeSeqName = (*it)->sequenceResponse.responseName;
+            unsigned int progress = (*it)->progress;
+            unsigned int progressGoal = (*it)->seq.size();
+
+            std::cout << "name: " << activeSeqName << ", status" << progress << "/" << progressGoal;
+            if (progress < progressGoal - 1)
+            {
+                // more gestures to perform before completion
+                std::cout << ", next gesture: " << MyoCommon::PoseTypeToString((*it)->seq.at(progress + 1)) << std::endl;
+            }
+            std::cout << std::endl;
+
+            it++;
+        }
+    }
+    else
+    {
+        std::cout << "Active Sequences: ";
+        std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+        while (it != activeSequences.end())
+        {
+            std::string activeSeqName = (*it)->sequenceResponse.responseName;
+
+            std::cout << activeSeqName << ";";
+
+            it++;
+        }
+    }
 }

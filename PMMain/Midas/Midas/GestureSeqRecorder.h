@@ -41,6 +41,10 @@ enum class ResponseType {
 * GestureSeqRecorder to determine what action to take.
 */
 struct sequenceResponse {
+    sequenceResponse() {
+        responseName = "";
+    }
+
     ResponseType responseType;
 
     union responseAction
@@ -50,6 +54,8 @@ struct sequenceResponse {
         midasMode mode;
     };
     responseAction responseAction;
+
+    std::string responseName;
 };
 
 typedef std::vector<Pose::Type> sequence;
@@ -132,6 +138,18 @@ public:
     * @return Value of progressMaxDeltaTime.
     */
     clock_t getProgressMaxDeltaTime(void);
+
+    /**
+    * Print out a list of all active sequences, and possibly their progress,
+    * and next gesture required to proceed!
+    *
+    * @param verbose If true, prints progress and next gesture in sequence on top
+    * of active status.
+    *
+    * TODO: This is the beginning of the code which overlays graphically action
+    * data to the user. Just using printing temporarily.
+    */
+    void printStatus(bool verbose = false);
 
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;

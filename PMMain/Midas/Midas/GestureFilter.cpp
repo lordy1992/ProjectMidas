@@ -4,7 +4,7 @@
 // TODO: Refactor cases to modularize into seperate handler functions!
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), controlStateHandle(controlState), stateHandler(*this)
+    lastTime(0), controlStateHandle(controlState), stateHandler(*this), gestSeqRecorder(midasMode::LOCK_MODE, 1000)
 {
 }
 

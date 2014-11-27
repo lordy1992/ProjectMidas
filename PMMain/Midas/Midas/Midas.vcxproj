@@ -148,6 +148,7 @@
     <ClCompile Include="KybrdCtrlTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseCtrl.cpp" />
+    <ClCompile Include="MyoCommon.cpp" />
     <ClCompile Include="MyoDevice.cpp" />
     <ClCompile Include="MouseCtrlTest.cpp" />
     <ClCompile Include="MyoTranslationFilter.cpp" />
@@ -167,6 +168,7 @@
     <ClInclude Include="KybrdCtrlTest.h" />
     <ClInclude Include="MidasCommon.h" />
     <ClInclude Include="MouseCtrl.h" />
+    <ClInclude Include="MyoCommon.h" />
     <ClInclude Include="MyoDevice.h" />
     <ClInclude Include="MyoTranslationFilter.h" />
     <ClInclude Include="SharedCommandData.h" />

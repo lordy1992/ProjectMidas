@@ -4,6 +4,7 @@
 #include "myo\myo.hpp"
 #include "ControlState.h"
 #include "Filter.h"
+#include "GestureSeqRecorder.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -186,6 +187,8 @@ private:
     clock_t timeDelta;
     clock_t lastTime;
     StateHandler stateHandler;
+
+    GestureSeqRecorder gestSeqRecorder;
 };
 
 #endif /* _GESTURE_FILTER_H */
