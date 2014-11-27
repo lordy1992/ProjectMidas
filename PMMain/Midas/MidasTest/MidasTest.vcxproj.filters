@@ -42,5 +42,8 @@
     <ClCompile Include="SharedCommandData_Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GestureSeqRecorder_Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

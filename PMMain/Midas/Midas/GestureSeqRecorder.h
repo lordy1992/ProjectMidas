@@ -49,6 +49,7 @@ struct sequenceResponse {
         kybdCmds kybd;
         midasMode mode;
     };
+    responseAction responseAction;
 };
 
 typedef std::vector<Pose::Type> sequence;

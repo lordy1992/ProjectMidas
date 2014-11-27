@@ -120,35 +120,63 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
 
 SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const
 {
+    sequence seqInQuestion = seqInfo.seq;
     sequenceList *seqList = (*seqMapPerMode)[mode];
 
-    unsigned int idx = 0;
+    unsigned int compSeqIdx = 0;
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-
         sequence compareSeq = it->seq;
-        for (sequence::iterator compareSeqIt = compareSeq.begin; compareSeqIt != compareSeq.end(); compareSeqIt++)
+        bool conflict = false;
+        unsigned int gestureIdx = 0;
+
+        // loop through smaller of the two sequences, as that will determine if there is a conflict
+        // most efficiently
+        if (compareSeq.size() < seqInQuestion.size())
         {
-            Pose::Type compareGest = *compareSeqIt;
-            if ()
+            for (sequence::iterator compareSeqIt = compareSeq.begin(); compareSeqIt != compareSeq.end(); compareSeqIt++)
+            {
+                Pose::Type gestInQuestion = seqInQuestion.at(gestureIdx);
+                Pose::Type compareGest = *compareSeqIt;
+                if (gestInQuestion != compareGest)
+                {
+                    bool conflict = false;
+                    break;
+                }
+
+                gestureIdx++;
+                if (gestureIdx == compareSeq.size())
+                {
+                    // made it to the end of the comparison and didn't find any differences!
+                    conflict = true;
+                }
+            }
+        }
+        else
+        {
+            for (sequence::iterator seqInQIt = seqInQuestion.begin(); seqInQIt != seqInQuestion.end(); seqInQIt++)
+            {
+                Pose::Type gestInQuestion = *seqInQIt;
+                Pose::Type compareGest = compareSeq.at(gestureIdx);
+                if (gestInQuestion != compareGest)
+                {
+                    bool conflict = false;
+                    break;
+                }
+
+                gestureIdx++;
+                if (gestureIdx == seqInQuestion.size())
+                {
+                    // made it to the end of the comparison and didn't find any differences!
+                    conflict = true;
+                }
+            }
         }
 
-        //if (it->seq.size() >= idx + 1)
-        //{
-        //    // Sequence large enough to compare against.
-        //    if (it->seq.at(idx) == seqInfo.seq.at(idx))
-        //    {
-        //        // Oh no! Overlap in sequence that is trying to be registered and
-        //        // a sequence that has already been registered against this mode. 
-        //        // Thus, it is NOT ALLOWED, as it would cause a logical inconsistency -
-        //        //  ex: seq1 = a,b,c. seq2 = a,b,c,d,e. There is no way to tell if seq1
-        //        //  has been executed, or if seq2 is partially done. Therefore DO NOT
-        //        //  REGISTER.
-        //        return SequenceStatus::CONFLICTING_SEQUENCE; // JORDEN TODO - this is wrong. Fix this. This is bailing if first element matches. worng.
-        //    }
-        //}
-        //// else don't care. Can't be in conflict, or else would have already returned
-        //idx++;
+        if (conflict)
+        {
+            return SequenceStatus::CONFLICTING_SEQUENCE;
+        }
     }
 
     // Finally, the sequence has passed through the gauntlet, and has proven itself worthy
