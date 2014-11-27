@@ -38,24 +38,51 @@ TEST(gestSeqRecorder, basicRegisterAndRespond2)
 
     sequence seq1;
     seq1.push_back(Pose::Type::thumbToPinky);
+    seq1.push_back(Pose::Type::fingersSpread);
     sequenceResponse seqResp1;
     seqResp1.responseType = ResponseType::STATE_CHANGE;
     seqResp1.responseAction.mode = midasMode::GESTURE_MODE;
 
     SequenceStatus ss = gsr.registerSequence(midasMode::LOCK_MODE, seq1, seqResp1);
-
     ASSERT_EQ(ss, SequenceStatus::SUCCESS);
 
+    // Register second sequence, with different response info.
+    sequence seq2;
+    seq2.push_back(Pose::Type::thumbToPinky);
+    seq2.push_back(Pose::Type::fist);
+    sequenceResponse seqResp2;
+    seqResp2.responseType = ResponseType::STATE_CHANGE;
+    seqResp2.responseAction.mode = midasMode::GESTURE_MODE;
+
+    gsr.registerSequence(midasMode::LOCK_MODE, seq2, seqResp2);
+    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
+
+    // Activate each sequence and verify response
     SharedCommandData *scd = new SharedCommandData();
     ControlState cs = ControlState(scd);
     cs.setMode(midasMode::LOCK_MODE);
 
+    // Test first sequence
     sequenceResponse response;
     ss = gsr.progressSequence(Pose::Type::thumbToPinky, cs, response);
+    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
+    ASSERT_EQ(response.responseType, ResponseType::NONE);
+    ss = gsr.progressSequence(Pose::Type::fingersSpread, cs, response);
 
     ASSERT_EQ(ss, SequenceStatus::SUCCESS);
-    ASSERT_EQ(response.responseType, ResponseType::STATE_CHANGE);
-    ASSERT_EQ(response.responseAction.mode, midasMode::GESTURE_MODE);
+    ASSERT_EQ(response.responseType, seqResp1.responseType);
+    ASSERT_EQ(response.responseAction.mode, seqResp1.responseAction.mode);
+
+    // Test second sequence
+    ss = gsr.progressSequence(Pose::Type::thumbToPinky, cs, response);
+    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
+    ASSERT_EQ(response.responseType, ResponseType::NONE);
+    ss = gsr.progressSequence(Pose::Type::fist, cs, response);
+
+    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
+    ASSERT_EQ(response.responseType, seqResp2.responseType);
+    ASSERT_EQ(response.responseAction.mode, seqResp2.responseAction.mode);
+
 }
 
 // Register 2, size-1, unique sequences for the same mode. ensure success
