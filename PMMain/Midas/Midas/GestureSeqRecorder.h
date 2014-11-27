@@ -7,6 +7,8 @@
 #include <map>
 #include <vector>
 #include <list>
+#include <string>
+#include <iostream>
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"

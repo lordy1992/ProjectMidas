@@ -243,7 +243,7 @@ TEST(gestSeqRecorder, passRegister5)
     seqResp1.responseAction.mode = midasMode::GESTURE_MODE;
 
     SequenceStatus ss = SequenceStatus::INVALID_SEQUENCE;
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         ss = gsr.registerSequence(mm, seq1, seqResp1);
@@ -359,7 +359,7 @@ TEST(gestSeqRecorder, failRegisterCorner1)
     seqResp1.responseAction.mode = midasMode::GESTURE_MODE;
 
     SequenceStatus ss = SequenceStatus::INVALID_SEQUENCE;
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         ss = gsr.registerSequence(mm, seq1, seqResp1);
@@ -371,7 +371,7 @@ TEST(gestSeqRecorder, failRegisterCorner1)
     seq1.push_back(Pose::Type::thumbToPinky);
     // Re-register failing sequences (longer just to make it more interesting). Failures
     // should ensue.
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         ss = gsr.registerSequence(mm, seq1, seqResp1);
@@ -384,7 +384,7 @@ TEST(gestSeqRecorder, failRegisterCorner1)
     seq1.pop_back();
     // Re-register failing sequences (longer just to make it more interesting). Failures
     // should ensue.
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         ss = gsr.registerSequence(mm, seq1, seqResp1);
@@ -397,7 +397,7 @@ TEST(gestSeqRecorder, failRegisterCorner1)
     seq1.push_back(Pose::Type::thumbToPinky);
     // Re-register failing sequences (longer just to make it more interesting). Failures
     // should ensue.
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         ss = gsr.registerSequence(mm, seq1, seqResp1);

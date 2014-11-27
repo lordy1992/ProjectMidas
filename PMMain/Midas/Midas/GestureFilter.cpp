@@ -1,11 +1,15 @@
 #include "GestureFilter.h"
 #include <time.h>
+#include "MyoCommon.h"
 
 // TODO: Refactor cases to modularize into seperate handler functions!
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), controlStateHandle(controlState), stateHandler(*this), gestSeqRecorder(midasMode::LOCK_MODE, 1000)
+    lastTime(0), controlStateHandle(controlState), stateHandler(*this), gestSeqRecorder(midasMode::LOCK_MODE, 3000)
 {
+    registerMouseSequences();
+    registerKeyboardSequences();
+    registerStateSequences();
 }
 
 GestureFilter::~GestureFilter()
@@ -20,6 +24,17 @@ void GestureFilter::process()
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
+
+    // Note the gesture sequence recorder should handle ALL gesture events - not just states, as it is doing right now. TODO.
+    if (gesture != Pose::Type::rest)
+    {
+        sequenceResponse response;
+        SequenceStatus ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
+        if (response.responseType == ResponseType::STATE_CHANGE)
+        {
+            handleStateChange(response);
+        }
+    }
 
     if (gesture != lastPoseType)
     {
@@ -56,33 +71,25 @@ void GestureFilter::process()
         // The user has held the same gesture for a long enough
         // period of time.
 
-        if (stateHandler.updateState(gesture))
+        if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
         {
-            // State changed. Alert pipeline that filter chain is done.
-            Filter::setFilterStatus(filterStatus::END_CHAIN);
-        }
-        else
-        {
-            if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
-            {
-                // No state change. Pass data along pipeline
-                filterDataMap outputToSharedCommandData;
-                commandData sendData = translateGesture(gesture);
+            // No state change. Pass data along pipeline
+            filterDataMap outputToSharedCommandData;
+            commandData sendData = translateGesture(gesture);
 
-                if (sendData.type == UNKNOWN_COMMAND)
-                {
-                    Filter::setFilterStatus(filterStatus::END_CHAIN);
-                }
-                else
-                {
-                    outputToSharedCommandData[COMMAND_INPUT] = sendData;
-                    Filter::setOutput(outputToSharedCommandData);
-                }
-            }
-            else
+            if (sendData.type == UNKNOWN_COMMAND)
             {
                 Filter::setFilterStatus(filterStatus::END_CHAIN);
             }
+            else
+            {
+                outputToSharedCommandData[COMMAND_INPUT] = sendData;
+                Filter::setOutput(outputToSharedCommandData);
+            }
+        }
+        else
+        {
+            Filter::setFilterStatus(filterStatus::END_CHAIN);
         }
     }
 }
@@ -409,3 +416,100 @@ void GestureFilter::StateHandler::checkProgressInSequence(activeSequence desired
     }
 }
 
+void GestureFilter::registerMouseSequences(void)
+{
+
+}
+
+void GestureFilter::registerKeyboardSequences(void)
+{
+    // Nothing to register right now. Always could though :)
+}
+
+void GestureFilter::registerStateSequences(void)
+{
+    // Register sequence from lock to Mouse Mode
+    sequence lockToMouseSeq;
+    lockToMouseSeq.push_back(Pose::Type::thumbToPinky);
+    lockToMouseSeq.push_back(Pose::Type::waveIn);
+    lockToMouseSeq.push_back(Pose::Type::waveOut);
+    sequenceResponse lockToMouseResponse;
+    lockToMouseResponse.responseName = "Unlock";
+    lockToMouseResponse.responseType = ResponseType::STATE_CHANGE;
+    lockToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
+
+    SequenceStatus ss = gestSeqRecorder.registerSequence(midasMode::LOCK_MODE, lockToMouseSeq, lockToMouseResponse);
+
+    // Register sequence from Mouse Mode to Gesture Mode
+    sequence mouseToGestSeq;
+    mouseToGestSeq.push_back(Pose::Type::thumbToPinky);
+    sequenceResponse mouseToGestResponse;
+    mouseToGestResponse.responseName = "Mouse To Gesture";
+    mouseToGestResponse.responseType = ResponseType::STATE_CHANGE;
+    mouseToGestResponse.responseAction.mode = midasMode::GESTURE_MODE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToGestSeq, mouseToGestResponse);
+
+    // Register sequence from Mouse Mode to Keyboard Mode
+    sequence mouseToKybrdSeq;
+    mouseToKybrdSeq.push_back(Pose::Type::waveOut);
+    mouseToKybrdSeq.push_back(Pose::Type::waveIn);
+    sequenceResponse mouseToKybrdResponse;
+    mouseToKybrdResponse.responseName = "Mouse To Keyboard";
+    mouseToKybrdResponse.responseType = ResponseType::STATE_CHANGE;
+    mouseToKybrdResponse.responseAction.mode = midasMode::KEYBOARD_MODE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToKybrdSeq, mouseToKybrdResponse);
+
+    // Register sequence from Gesture Mode to Mouse Mode
+    sequence gestureToMouseSeq;
+    gestureToMouseSeq.push_back(Pose::Type::thumbToPinky);
+    sequenceResponse gestureToMouseResponse;
+    gestureToMouseResponse.responseName = "Gesture To Mouse";
+    gestureToMouseResponse.responseType = ResponseType::STATE_CHANGE;
+    gestureToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, gestureToMouseSeq, gestureToMouseResponse);
+
+    // Register sequence from Keyboard Mode to Mouse Mode
+    sequence kybrdToMouseSeq;
+    kybrdToMouseSeq.push_back(Pose::Type::waveOut);
+    kybrdToMouseSeq.push_back(Pose::Type::waveIn);
+    sequenceResponse kybrdToMouseResponse;
+    kybrdToMouseResponse.responseName = "Keyboard To Mouse";
+    kybrdToMouseResponse.responseType = ResponseType::STATE_CHANGE;
+    kybrdToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdToMouseSeq, kybrdToMouseResponse);
+
+    // Register sequence from ALL Modes to Lock Mode.
+    sequence toLockSeq;
+    toLockSeq.push_back(Pose::Type::waveIn);
+    toLockSeq.push_back(Pose::Type::thumbToPinky);
+    sequenceResponse toLockResponse;
+    toLockResponse.responseType = ResponseType::STATE_CHANGE;
+    toLockResponse.responseAction.mode = midasMode::LOCK_MODE;
+    // From Mouse:
+    toLockResponse.responseName = "Mouse To Lock";
+    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, toLockSeq, toLockResponse);
+    // From Gesture:
+    toLockResponse.responseName = "Gesture To Lock";
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toLockSeq, toLockResponse);
+    // From Keyboard:
+    toLockResponse.responseName = "Keyboard To Lock";
+    ss = gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse);
+}
+
+void GestureFilter::handleStateChange(sequenceResponse response)
+{
+    if (response.responseType != ResponseType::STATE_CHANGE)
+    {
+        // Should NOT have made it here
+        return;
+    }
+
+    std::cout << "Transitioning to state: " << response.responseAction.mode << std::endl;
+    controlStateHandle->setMode(response.responseAction.mode);
+    
+    return;
+}

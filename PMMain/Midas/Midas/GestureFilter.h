@@ -182,6 +182,12 @@ private:
      */
     commandData translateGesture(Pose::Type pose);
 
+    // registration functions. to be commented after integration success.
+    void registerMouseSequences(void);
+    void registerKeyboardSequences(void);
+    void registerStateSequences(void);
+    void handleStateChange(sequenceResponse response);
+
     Pose::Type lastPoseType;
     ControlState* controlStateHandle;
     clock_t timeDelta;

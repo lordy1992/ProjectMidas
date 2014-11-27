@@ -1,12 +1,11 @@
 #include "GestureSeqRecorder.h"
 #include "MyoCommon.h"
 
-
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
@@ -17,7 +16,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
@@ -26,7 +25,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 
 GestureSeqRecorder::~GestureSeqRecorder()
 {
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt != midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         delete (*seqMapPerMode)[mm];
@@ -78,6 +77,11 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
         // active sequences must be cleared so that all valid sequences can potentially
         // be started.
         emptyActiveSequences();
+
+        if (response.responseType != ResponseType::NONE)
+        {
+            std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
+        }
     }
 
     return status;
@@ -107,6 +111,7 @@ void GestureSeqRecorder::emptyActiveSequences()
     }
 
     activeSequences.clear();
+    std::cout << "Cleared Active Sequences." << std::endl;
 }
 
 void GestureSeqRecorder::setProgressMaxDeltaTime(clock_t newTime)
@@ -238,7 +243,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
             activeSequences.erase(itCopy);
         }
     }
-    printStatus();
+    printStatus(true);
 
     return status;
 }
@@ -275,7 +280,7 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
                 {
                     it->progress++;
                     activeSequences.push_back(&(*it));
-                    printStatus();
+                    printStatus(true);
                 }
             }
         }
@@ -297,11 +302,12 @@ void GestureSeqRecorder::printStatus(bool verbose)
             unsigned int progress = (*it)->progress;
             unsigned int progressGoal = (*it)->seq.size();
 
-            std::cout << "name: " << activeSeqName << ", status" << progress << "/" << progressGoal;
-            if (progress < progressGoal - 1)
+            std::cout << "name: \"" << activeSeqName << "\", Status: " << progress << "/" << progressGoal;
+            if (progress < progressGoal)
             {
-                // more gestures to perform before completion
-                std::cout << ", next gesture: " << MyoCommon::PoseTypeToString((*it)->seq.at(progress + 1)) << std::endl;
+                // more gestures to perform before completion - called RIGHT after progress is incremented, so print it's
+                // current value as the index... maybe change. TODO.
+                std::cout << ", Next Gesture: " << MyoCommon::PoseTypeToString((*it)->seq.at(progress)) << std::endl;
             }
             std::cout << std::endl;
 
