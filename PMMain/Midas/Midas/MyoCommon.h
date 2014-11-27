@@ -3,6 +3,7 @@
 
 #include "myo\myo.hpp"
 #include <string>
+#include <iostream>
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"

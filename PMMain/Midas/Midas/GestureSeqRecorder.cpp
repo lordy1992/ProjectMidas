@@ -307,7 +307,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
             {
                 // more gestures to perform before completion - called RIGHT after progress is incremented, so print it's
                 // current value as the index... maybe change. TODO.
-                std::cout << ", Next Gesture: " << MyoCommon::PoseTypeToString((*it)->seq.at(progress)) << std::endl;
+//                std::cout << ", Next Gesture: " << MyoCommon::PoseTypeToString((*it)->seq.at(progress)) << std::endl; // TODO -figure out why poseTypeToString causing errors then reintigrate. Wasn't causing an issue on Nov 26, but on Nov. 27, it is.
             }
             std::cout << std::endl;
 
