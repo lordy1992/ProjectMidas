@@ -3,7 +3,7 @@
 #include "MyoCommon.h"
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), controlStateHandle(controlState), gestSeqRecorder(midasMode::LOCK_MODE, 3000)
+    lastTime(0), controlStateHandle(controlState), gestSeqRecorder(midasMode::LOCK_MODE, SEQ_TIMEOUT_LENGTH)
 {
     registerMouseSequences();
     registerKeyboardSequences();
@@ -32,7 +32,6 @@ void GestureFilter::process()
         return;
     }
 
-    // Note the gesture sequence recorder should handle ALL gesture events - not just states, as it is doing right now. TODO.
     if (gesture != Pose::Type::rest)
     {
         // Handle state info first, as it is most important.
