@@ -2,8 +2,6 @@
 #include <time.h>
 #include "MyoCommon.h"
 
-// TODO: Refactor cases to modularize into seperate handler functions!
-
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
     lastTime(0), controlStateHandle(controlState), gestSeqRecorder(midasMode::LOCK_MODE, 3000)
 {
@@ -24,101 +22,83 @@ void GestureFilter::process()
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
+    Filter::clearOutput();
+
+    // First, filter based on "hold time" in a specific gesture.
+    timeFromLastPose = clock() - lastTime;
+    if (timeFromLastPose < timeDelta)
+    {
+        // early exit due to too frequent fluctuation
+        return;
+    }
 
     // Note the gesture sequence recorder should handle ALL gesture events - not just states, as it is doing right now. TODO.
     if (gesture != Pose::Type::rest)
     {
+        // Handle state info first, as it is most important.
         sequenceResponse response;
         SequenceStatus ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
         if (response.responseType == ResponseType::STATE_CHANGE)
         {
             handleStateChange(response);
         }
-    }
-
-    // TODO - port this to use the gestSeqRecorder
-    if (gesture != lastPoseType)
-    {
-        // The user's gesture has changed.
-        if (gesture == Pose::rest && controlStateHandle->getMode() != midasMode::LOCK_MODE)
+        else if (response.responseType == ResponseType::MOUSE_CMD)
         {
-            filterDataMap outputToSharedCommandData;
-            commandData command;
-            command.type = MOUSE_COMMAND;
-
-            if (lastPoseType == MYO_GESTURE_LEFT_MOUSE)
-            {
-                command.mouse = LEFT_RELEASE;
-                outputToSharedCommandData[COMMAND_INPUT] = command;
-                Filter::setOutput(outputToSharedCommandData);
-                return;
-            }
-            else if (lastPoseType == MYO_GESTURE_RIGHT_MOUSE)
-            {
-                command.mouse = RIGHT_RELEASE;
-                outputToSharedCommandData[COMMAND_INPUT] = command;
-                Filter::setOutput(outputToSharedCommandData);
-                return;
-            }
+            handleMouseCommand(response);
         }
-
-        lastPoseType = gesture;
-        timeFromLastPose = clock() - lastTime;
-        lastTime = clock();
-    }
-
-    if (timeFromLastPose >= timeDelta)
-    {
-        // The user has held the same gesture for a long enough
-        // period of time.
-
-        if (controlStateHandle->getMode() != midasMode::LOCK_MODE)
+        else if (response.responseType == ResponseType::KYBRD_CMD)
         {
-            // No state change. Pass data along pipeline
-            filterDataMap outputToSharedCommandData;
-            commandData sendData = translateGesture(gesture);
-
-            if (sendData.type == UNKNOWN_COMMAND)
-            {
-                Filter::setFilterStatus(filterStatus::END_CHAIN);
-            }
-            else
-            {
-                outputToSharedCommandData[COMMAND_INPUT] = sendData;
-                Filter::setOutput(outputToSharedCommandData);
-            }
+            handleKybrdCommand(response);
         }
         else
         {
+            // terminate filter pipeline, as nothing to add
             Filter::setFilterStatus(filterStatus::END_CHAIN);
         }
-    }
-}
-
-commandData GestureFilter::translateGesture(Pose::Type pose)
-{
-    commandData command;
-    command.type = MOUSE_COMMAND;
-
-    if (pose == MYO_GESTURE_LEFT_MOUSE)
-    {
-        command.mouse = LEFT_CLICK;
-    }
-    else if (pose == MYO_GESTURE_RIGHT_MOUSE)
-    {
-        command.mouse = RIGHT_CLICK;
+        lastResponseType = response.responseType;
     }
     else
     {
-        command.type = UNKNOWN_COMMAND;
+        if (lastResponseType == ResponseType::MOUSE_CMD)
+        {
+            handleMouseRelease();
+        }
+        else
+        {
+            // terminate filter pipeline, as nothing to add
+            Filter::setFilterStatus(filterStatus::END_CHAIN);
+        }
     }
 
-    return command;
+    lastPoseType = gesture;
+    lastTime = clock();
 }
 
 void GestureFilter::registerMouseSequences(void)
 {
+    // Register sequence to left click in mouse mode and gesture mode
+    sequence clickSeq;
+    clickSeq.push_back(MYO_GESTURE_LEFT_MOUSE);
+    sequenceResponse clickResp;
+    clickResp.responseName = "Left Click";
+    clickResp.responseType = ResponseType::MOUSE_CMD;
+    clickResp.responseAction.mouse = mouseCmds::LEFT_CLICK;
+    SequenceStatus ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
+    // Register sequence to right click in mouse mode and gesture mode
+    clickSeq.clear();
+    clickSeq.push_back(MYO_GESTURE_RIGHT_MOUSE);
+    clickResp.responseName = "Right Click";
+    clickResp.responseType = ResponseType::MOUSE_CMD;
+    clickResp.responseAction.mouse = mouseCmds::RIGHT_CLICK;
+    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+
+    if (ss != SequenceStatus::SUCCESS)
+    {
+        throw new std::exception("registerSequenceException");
+    }
 }
 
 void GestureFilter::registerKeyboardSequences(void)
@@ -198,6 +178,11 @@ void GestureFilter::registerStateSequences(void)
     // From Keyboard:
     toLockResponse.responseName = "Keyboard To Lock";
     ss = gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse);
+
+    if (ss != SequenceStatus::SUCCESS)
+    {
+        throw new std::exception("registerSequenceException");
+    }
 }
 
 void GestureFilter::handleStateChange(sequenceResponse response)
@@ -212,4 +197,59 @@ void GestureFilter::handleStateChange(sequenceResponse response)
     controlStateHandle->setMode(response.responseAction.mode);
     
     return;
+}
+
+void GestureFilter::handleMouseCommand(sequenceResponse response)
+{
+    if (controlStateHandle->getMode() == midasMode::MOUSE_MODE ||
+        controlStateHandle->getMode() == midasMode::GESTURE_MODE)
+    {
+        filterDataMap outputToSharedCommandData;
+        commandData command;
+        command.type = MOUSE_COMMAND;
+        command.mouse = response.responseAction.mouse;
+
+        outputToSharedCommandData[COMMAND_INPUT] = command;
+        Filter::setOutput(outputToSharedCommandData);
+    }
+}
+
+void GestureFilter::handleKybrdCommand(sequenceResponse response)
+{
+    if (controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
+    {
+        filterDataMap outputToSharedCommandData;
+        commandData command;
+        command.type = KEYBOARD_COMMAND;
+        command.kbd = response.responseAction.kybd;
+
+        outputToSharedCommandData[COMMAND_INPUT] = command;
+        Filter::setOutput(outputToSharedCommandData);
+    }
+}
+
+void GestureFilter::handleMouseRelease()
+{
+    if (controlStateHandle->getMode() == midasMode::MOUSE_MODE ||
+        controlStateHandle->getMode() == midasMode::GESTURE_MODE)
+    {
+        filterDataMap outputToSharedCommandData;
+        commandData command;
+        command.type = MOUSE_COMMAND;
+
+        if (lastPoseType == MYO_GESTURE_LEFT_MOUSE)
+        {
+            command.mouse = LEFT_RELEASE;
+            outputToSharedCommandData[COMMAND_INPUT] = command;
+            Filter::setOutput(outputToSharedCommandData);
+            return;
+        }
+        else if (lastPoseType == MYO_GESTURE_RIGHT_MOUSE)
+        {
+            command.mouse = RIGHT_RELEASE;
+            outputToSharedCommandData[COMMAND_INPUT] = command;
+            Filter::setOutput(outputToSharedCommandData);
+            return;
+        }
+    }
 }

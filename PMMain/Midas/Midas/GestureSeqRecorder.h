@@ -3,6 +3,7 @@
 
 #include "MidasCommon.h"
 #include "myo\myo.hpp"
+#include "MyoCommon.h"
 #include "ControlState.h"
 #include <map>
 #include <vector>

@@ -67,13 +67,18 @@ private:
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
     void handleStateChange(sequenceResponse response);
+    void handleMouseCommand(sequenceResponse response);
+    void handleKybrdCommand(sequenceResponse response);
+    void handleMouseRelease();
 
     Pose::Type lastPoseType;
+    
     ControlState* controlStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
+    ResponseType lastResponseType;
 };
 
 #endif /* _GESTURE_FILTER_H */
