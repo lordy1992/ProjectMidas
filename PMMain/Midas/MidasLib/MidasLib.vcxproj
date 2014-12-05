@@ -76,6 +76,7 @@
     <ClInclude Include="..\Midas\MidasCommon.h" />
     <ClInclude Include="..\Midas\MouseCtrl.h" />
     <ClInclude Include="..\Midas\MouseCtrlTest.h" />
+    <ClInclude Include="..\Midas\MyoCommon.h" />
     <ClInclude Include="..\Midas\MyoDevice.h" />
     <ClInclude Include="..\Midas\MyoTranslationFilter.h" />
     <ClInclude Include="..\Midas\SharedCommandData.h" />
@@ -94,6 +95,7 @@
     <ClCompile Include="..\Midas\main.cpp" />
     <ClCompile Include="..\Midas\MouseCtrl.cpp" />
     <ClCompile Include="..\Midas\MouseCtrlTest.cpp" />
+    <ClCompile Include="..\Midas\MyoCommon.cpp" />
     <ClCompile Include="..\Midas\MyoDevice.cpp" />
     <ClCompile Include="..\Midas\MyoTranslationFilter.cpp" />
     <ClCompile Include="..\Midas\SharedCommandData.cpp" />
