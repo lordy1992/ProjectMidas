@@ -15,19 +15,14 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-class MyoCommon
-{
-public:
-    MyoCommon();
-    ~MyoCommon();
 
-    /**
-    * Simple string conversion for Pose::Types to string.
-    *
-    * @param gesture The gesture to get toString() of.
-    * @return std::string The string equivelant of the input gesture.
-    */
-    static std::string PoseTypeToString(Pose::Type gesture);
-};
+/**
+* Simple string conversion for Pose::Types to string.
+*
+* @param gesture The gesture to get toString() of.
+* @return std::string The string equivelant of the input gesture.
+*/
+std::string PoseTypeToString(Pose::Type gesture);
+
 
 #endif /* _MYO_COMMON_H */

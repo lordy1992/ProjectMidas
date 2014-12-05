@@ -2,16 +2,7 @@
 #include "MyoCommon.h"
 
 
-MyoCommon::MyoCommon()
-{
-}
-
-
-MyoCommon::~MyoCommon()
-{
-}
-
-std::string MyoCommon::PoseTypeToString(Pose::Type gesture)
+std::string PoseTypeToString(Pose::Type gesture)
 {
     if (gesture == Pose::Type::fingersSpread)
     {
