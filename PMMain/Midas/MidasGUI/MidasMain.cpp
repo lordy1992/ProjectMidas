@@ -38,7 +38,7 @@ int midasMain(MidasThread *threadHandle) {
     threadHandle->emitInfo();
     Sleep(1000);
     threadHandle->threadEmitString("testString1");
-    //gMidasThread = threadHandle;
+    gMidasThread = threadHandle;
     Sleep(1000);
     threadHandle->threadEmitString("testString2");
 

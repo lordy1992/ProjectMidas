@@ -1,14 +1,17 @@
 #include "midasgui.h"
 #include <string>
 
-MidasGUI::MidasGUI(QThread *mainThread, QWidget *parent)
-    : mainThread(mainThread), QDialog(parent)
+MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
+    : QDialog(parent)
 {
     ui.setupUi(this);
 
+    this->mainThread = mainThread;
+
     connect(mainThread, SIGNAL(outputCount(int)), this, SLOT(handleCount(int)));
 
-    connect(mainThread, SIGNAL(emitString(std::str)), this, SLOT(displayMessage(std::str)));
+    qRegisterMetaType<std::string>("std::String");
+    connect(mainThread, SIGNAL(emitString(std::string)), this, SLOT(displayMessage(std::string)));
 }
 
 MidasGUI::~MidasGUI()

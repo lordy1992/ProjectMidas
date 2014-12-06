@@ -1,5 +1,4 @@
 #include "GestureSeqRecorder.h"
-#include "MidasThread.h"
 
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())

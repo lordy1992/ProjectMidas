@@ -23,7 +23,7 @@ private:
 signals:
     void outputCount(int);
 
-    void emitString(std::string str);
+    void emitString(std::string);
     
 };
 
