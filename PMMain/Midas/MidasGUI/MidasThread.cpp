@@ -18,7 +18,7 @@ void MidasThread::run()
     for (int i = 0; i < 100000; i++)
     {
         emit outputCount(i);
-        Sleep(100);
+        Sleep(25);
     }
 
     return;
