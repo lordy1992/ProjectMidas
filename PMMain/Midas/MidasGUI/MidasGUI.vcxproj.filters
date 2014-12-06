@@ -33,12 +33,21 @@
       <Extensions>cpp;moc</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="Source Files\Midas">
+      <UniqueIdentifier>{3a25d641-7a98-41ca-8b68-7c012727ae1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GUI">
+      <UniqueIdentifier>{aeec674d-b061-4608-8923-1b807fc77d00}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Midas">
+      <UniqueIdentifier>{d80aaf6d-aa14-4136-b1ba-51b6fa953c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GUI">
+      <UniqueIdentifier>{0036119a-6144-4b87-8a81-6727a347894a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="midasgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_midasgui.cpp">
@@ -50,33 +59,123 @@
     <ClCompile Include="GeneratedFiles\qrc_midasgui.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="MidasThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MidasThread.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_MidasThread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="midasgui.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="MidasThread.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="AveragingFilter.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlState.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterPipeline.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="GestureFilter.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="GestureSeqRecorder.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="kybrdCtrl.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="MidasMain.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseCtrl.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="MyoCommon.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="MyoDevice.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="MyoTranslationFilter.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="SharedCommandData.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="WearableDevice.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="midasgui.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="midasgui.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="midasgui.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="midasgui.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
     <CustomBuild Include="MidasThread.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Midas</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_midasgui.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AveragingFilter.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlState.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="FilterPipeline.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureFilter.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureSeqRecorder.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="kybrdCtrl.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MidasCommon.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MouseCtrl.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoCommon.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoDevice.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoTranslationFilter.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedCommandData.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="WearableDevice.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MidasMain.h">
+      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

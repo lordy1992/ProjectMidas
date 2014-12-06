@@ -13,6 +13,8 @@ public:
 
     void run();
 
+    void emitInfo();
+
 private:
 
 signals:

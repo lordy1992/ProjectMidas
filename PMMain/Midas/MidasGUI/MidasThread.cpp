@@ -1,4 +1,5 @@
 #include "MidasThread.h"
+#include "MidasMain.h"
 #include <qdebug.h>
 #include <Windows.h>
 
@@ -15,6 +16,8 @@ void MidasThread::run()
 {
     qDebug() << "running spawned thread.";
 
+    midasMain(this);
+
     for (int i = 0; i < 100000; i++)
     {
         emit outputCount(i);
@@ -22,4 +25,9 @@ void MidasThread::run()
     }
 
     return;
+}
+
+void MidasThread::emitInfo()
+{
+    emit outputCount(888);
 }
