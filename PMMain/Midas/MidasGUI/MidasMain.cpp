@@ -39,6 +39,7 @@ int midasMain(MidasThread *threadHandle) {
     Sleep(1000);
     threadHandle->threadEmitString("testString1");
     gMidasThread = threadHandle;
+    gThreadHandle = threadHandle;
     Sleep(1000);
     threadHandle->threadEmitString("testString2");
 
@@ -86,14 +87,12 @@ int midasMain(MidasThread *threadHandle) {
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
     MouseCtrl* mouseCtrl = new MouseCtrl();
 
-
-    // JHH TEST TODO:
-
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
     time_t beginTime = clock();
     commandData prevCmd;
+    int count = 0;
     while (true)
     {
         if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
@@ -139,6 +138,13 @@ int midasMain(MidasThread *threadHandle) {
             beginTime = clock();
         }
         prevCmd = nextCmd;
+
+        if (count % 100000 == 0)
+        {
+            threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
+            gMidasThread = threadHandle; // this isnt working, but i htink that's due to thread boundaries. so this needs to be properly coded. TODO
+        }
+        count++;
     }
 
 #endif

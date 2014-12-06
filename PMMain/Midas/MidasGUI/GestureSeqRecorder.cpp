@@ -1,4 +1,5 @@
 #include "GestureSeqRecorder.h"
+#include "MidasMain.h"
 
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())
@@ -315,9 +316,10 @@ void GestureSeqRecorder::printStatus(bool verbose)
             std::cout << std::endl;
             emitString += "\n";
 
-            if (gMidasThread)
+            if (gThreadHandle)
             {
-                gMidasThread->threadEmitString(emitString);
+                // TODO - figure out WHY this isnt working! This value is always null here....
+                gThreadHandle->threadEmitString(emitString);
             }
 
             it++;
