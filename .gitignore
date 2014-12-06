@@ -46,9 +46,14 @@
 
 PMMain/Midas/Debug/
 PMMain/Midas/Midas/Debug/
+PMMain/Midas/Win32/Debug/
 
 #Folder ONLY used for generated doxygen files. These should not be pushed!
 PMMain/Midas/doc/
 
 # Comment this if you want to add anything to testDev directory. But for now, leave in gitignore!
 testDev/
+
+#QT stuff
+PMMain/Midas/MidasGUI/Debug/
+PMMain/Midas/MidasGUI/GeneratedFiles/
