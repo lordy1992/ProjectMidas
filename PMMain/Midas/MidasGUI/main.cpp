@@ -1,19 +1,16 @@
 #include "midasgui.h"
-#include "GuiThread.h"
+#include "MidasThread.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    MidasGUI w;
 
-    GUIThread gui(&a, &w);
-    gui.start();
+    MidasThread midasThread;
+    midasThread.start();
 
-    //w.show();
-    //return a.exec();
+    MidasGUI w(&midasThread);
 
-    for (;;) {}
-
-    return 0;
+    w.show();
+    return a.exec();
 }

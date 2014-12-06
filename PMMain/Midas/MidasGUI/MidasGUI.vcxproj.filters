@@ -59,6 +59,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_GuiThread.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="MidasThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MidasThread.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MidasThread.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.h">
@@ -71,6 +80,9 @@
       <Filter>Resource Files</Filter>
     </CustomBuild>
     <CustomBuild Include="GuiThread.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MidasThread.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
