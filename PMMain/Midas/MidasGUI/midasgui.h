@@ -16,6 +16,9 @@ public:
 private:
     Ui::MidasGUIClass ui;
     QThread mainThread;
+
+private slots:
+    void handleCount(int count);
 };
 
 #endif // MIDASGUI_H

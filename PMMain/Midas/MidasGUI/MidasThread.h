@@ -14,6 +14,9 @@ public:
     void run();
 
 private:
+
+signals:
+    void outputCount(int);
     
 };
 

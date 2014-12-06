@@ -50,15 +50,6 @@
     <ClCompile Include="GeneratedFiles\qrc_midasgui.cpp">
       <Filter>Generated Files</Filter>
     </ClCompile>
-    <ClCompile Include="GuiThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_GuiThread.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_GuiThread.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
     <ClCompile Include="MidasThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -78,9 +69,6 @@
     </CustomBuild>
     <CustomBuild Include="midasgui.qrc">
       <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="GuiThread.h">
-      <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="MidasThread.h">
       <Filter>Header Files</Filter>
