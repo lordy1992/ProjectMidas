@@ -29,10 +29,18 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
+// TODO!!! TEMP only -- obtaining global handle on FIRST created MidasThread (ideally the only one) and using that to emitString.
+#include "GestureSeqRecorder.h"
+
 int midasMain(MidasThread *threadHandle) {
     std::cout << "starting Midas Main" << std::endl;
 
     threadHandle->emitInfo();
+    Sleep(1000);
+    threadHandle->threadEmitString("testString1");
+    //gMidasThread = threadHandle;
+    Sleep(1000);
+    threadHandle->threadEmitString("testString2");
 
 #ifdef TEST_WEARABLE_DEVICE
     SharedCommandDataTest::testQueue();

@@ -7,6 +7,8 @@ MidasGUI::MidasGUI(QThread *mainThread, QWidget *parent)
     ui.setupUi(this);
 
     connect(mainThread, SIGNAL(outputCount(int)), this, SLOT(handleCount(int)));
+
+    connect(mainThread, SIGNAL(emitString(std::str)), this, SLOT(displayMessage(std::str)));
 }
 
 MidasGUI::~MidasGUI()
@@ -17,4 +19,9 @@ MidasGUI::~MidasGUI()
 void MidasGUI::handleCount(int count)
 {
     ui.label->setText(QString::number(count));
+}
+
+void MidasGUI::displayMessage(std::string str)
+{
+    ui.label->setText(QString::fromStdString(str));
 }

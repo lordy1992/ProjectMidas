@@ -4,6 +4,7 @@
 #include <QtWidgets/QDialog>
 #include <qthread.h>
 #include "ui_midasgui.h"
+#include <string>
 
 class MidasGUI : public QDialog
 {
@@ -19,6 +20,7 @@ private:
 
 private slots:
     void handleCount(int count);
+    void displayMessage(std::string str);
 };
 
 #endif // MIDASGUI_H
