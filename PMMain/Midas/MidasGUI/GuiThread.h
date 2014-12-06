@@ -9,7 +9,7 @@ class GUIThread : public QThread
     Q_OBJECT
 
 public:
-    GUIThread(QObject *parent, QApplication *app, MidasGUI *window);
+    GUIThread(QApplication *app, MidasGUI *window);
     ~GUIThread();
 
     void run();
