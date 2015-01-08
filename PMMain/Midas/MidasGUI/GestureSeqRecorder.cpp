@@ -52,7 +52,7 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.responseType = ResponseType::NONE;
@@ -204,7 +204,7 @@ SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
 
@@ -249,7 +249,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];

@@ -119,7 +119,7 @@ public:
     * was registered against the completed sequence.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */ 
-    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -179,7 +179,7 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     /**
     * Perform the duties of progressSequence, but optimized for the situation where no sequence has yet
@@ -188,7 +188,7 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;

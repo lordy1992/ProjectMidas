@@ -1,5 +1,6 @@
 #include "midasgui.h"
 #include "MidasThread.h"
+#include "MouseIndicator.h"
 #include <QtWidgets/QApplication>
 
 int main(int argc, char *argv[])
@@ -9,8 +10,9 @@ int main(int argc, char *argv[])
     MidasThread midasThread;
     midasThread.start();
 
-    MidasGUI w(&midasThread);
-
+   // MidasGUI w(&midasThread);
+    MouseIndicator w;
+    
     w.show();
     return a.exec();
 }

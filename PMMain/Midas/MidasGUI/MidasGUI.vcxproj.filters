@@ -113,6 +113,12 @@
     <ClCompile Include="WearableDevice.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MouseIndicator.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="MouseIndicator.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -126,6 +132,9 @@
     </CustomBuild>
     <CustomBuild Include="MidasThread.h">
       <Filter>Header Files\Midas</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MouseIndicator.h">
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
