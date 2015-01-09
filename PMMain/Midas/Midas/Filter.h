@@ -103,6 +103,11 @@ protected:
     void setOutput(filterDataMap output);
 
     /**
+    * Clear the output of the filter.
+    */
+    void clearOutput(void);
+
+    /**
      * Set the status of the filter.
      *
      * @param status The status of the filter.

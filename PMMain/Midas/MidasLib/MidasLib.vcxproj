@@ -70,11 +70,13 @@
     <ClInclude Include="..\Midas\Filter.h" />
     <ClInclude Include="..\Midas\FilterPipeline.h" />
     <ClInclude Include="..\Midas\GestureFilter.h" />
+    <ClInclude Include="..\Midas\GestureSeqRecorder.h" />
     <ClInclude Include="..\Midas\kybrdCtrl.h" />
     <ClInclude Include="..\Midas\KybrdCtrlTest.h" />
     <ClInclude Include="..\Midas\MidasCommon.h" />
     <ClInclude Include="..\Midas\MouseCtrl.h" />
     <ClInclude Include="..\Midas\MouseCtrlTest.h" />
+    <ClInclude Include="..\Midas\MyoCommon.h" />
     <ClInclude Include="..\Midas\MyoDevice.h" />
     <ClInclude Include="..\Midas\MyoTranslationFilter.h" />
     <ClInclude Include="..\Midas\SharedCommandData.h" />
@@ -87,11 +89,13 @@
     <ClCompile Include="..\Midas\Filter.cpp" />
     <ClCompile Include="..\Midas\FilterPipeline.cpp" />
     <ClCompile Include="..\Midas\GestureFilter.cpp" />
+    <ClCompile Include="..\Midas\GestureSeqRecorder.cpp" />
     <ClCompile Include="..\Midas\kybrdCtrl.cpp" />
     <ClCompile Include="..\Midas\KybrdCtrlTest.cpp" />
     <ClCompile Include="..\Midas\main.cpp" />
     <ClCompile Include="..\Midas\MouseCtrl.cpp" />
     <ClCompile Include="..\Midas\MouseCtrlTest.cpp" />
+    <ClCompile Include="..\Midas\MyoCommon.cpp" />
     <ClCompile Include="..\Midas\MyoDevice.cpp" />
     <ClCompile Include="..\Midas\MyoTranslationFilter.cpp" />
     <ClCompile Include="..\Midas\SharedCommandData.cpp" />

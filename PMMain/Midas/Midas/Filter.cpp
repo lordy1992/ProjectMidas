@@ -44,3 +44,8 @@ void Filter::setOutput(filterDataMap output)
 {
     outputData = output;
 }
+
+void Filter::clearOutput(void)
+{
+    outputData = filterDataMap();
+}

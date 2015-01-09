@@ -143,10 +143,12 @@
     <ClCompile Include="Filter.cpp" />
     <ClCompile Include="FilterPipeline.cpp" />
     <ClCompile Include="GestureFilter.cpp" />
+    <ClCompile Include="GestureSeqRecorder.cpp" />
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="KybrdCtrlTest.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MouseCtrl.cpp" />
+    <ClCompile Include="MyoCommon.cpp" />
     <ClCompile Include="MyoDevice.cpp" />
     <ClCompile Include="MouseCtrlTest.cpp" />
     <ClCompile Include="MyoTranslationFilter.cpp" />
@@ -159,12 +161,14 @@
     <ClInclude Include="ControlState.h" />
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterPipeline.h" />
+    <ClInclude Include="GestureSeqRecorder.h" />
     <ClInclude Include="MouseCtrlTest.h" />
     <ClInclude Include="GestureFilter.h" />
     <ClInclude Include="kybrdCtrl.h" />
     <ClInclude Include="KybrdCtrlTest.h" />
     <ClInclude Include="MidasCommon.h" />
     <ClInclude Include="MouseCtrl.h" />
+    <ClInclude Include="MyoCommon.h" />
     <ClInclude Include="MyoDevice.h" />
     <ClInclude Include="MyoTranslationFilter.h" />
     <ClInclude Include="SharedCommandData.h" />
