@@ -73,9 +73,6 @@ int main() {
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
     MouseCtrl* mouseCtrl = new MouseCtrl();
 
-
-    // JHH TEST TODO:
-
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
