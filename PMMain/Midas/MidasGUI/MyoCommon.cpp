@@ -32,10 +32,6 @@ std::string PoseTypeToString(Pose::Type gesture)
     {
         return "unknown";
     }
-    else if (gesture == Pose::Type::reserved1)
-    {
-        return "reserved1";
-    }
     else
     {
         return "ErrorInMyoCommonToString";
