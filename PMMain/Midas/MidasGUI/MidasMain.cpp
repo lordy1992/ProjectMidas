@@ -126,10 +126,20 @@ int midasMain(MidasThread *threadHandle) {
         if (unitVelocity.x != 0)
         {
             mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
+            if (count % 1000 == 0)
+            {
+                // proof of concept - slowed down as to reduce buildup in signal buffer...
+                threadHandle->emitXVeloc(unitVelocity.x);
+            }
         }
         if (unitVelocity.y != 0)
         {
             mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
+            if (count % 1000 == 0)
+            {
+                // proof of concept - slowed down as to reduce buildup in signal buffer...
+                threadHandle->emitYVeloc(unitVelocity.y);
+            }
         }
 
         if (clock() - beginTime >= 1000)

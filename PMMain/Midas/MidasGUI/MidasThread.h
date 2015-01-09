@@ -24,6 +24,9 @@ signals:
     void outputCount(int);
 
     void emitString(std::string);
+
+    void emitXVeloc(int);
+    void emitYVeloc(int);
     
 };
 
