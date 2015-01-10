@@ -24,6 +24,8 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
     qRegisterMetaType<std::string>("std::String");
     connect(mainThread, SIGNAL(emitString(std::string)), this, SLOT(displayMessage(std::string)));
 
+    connect(mainThread, SIGNAL(emitStateString(std::string)), this, SLOT(displayStateMessage(std::string)));
+
 
     // now for a mockup of the real business!
     connect(mainThread, SIGNAL(emitXVeloc(int)), this, SLOT(handleXVeloc(int)));
@@ -43,6 +45,11 @@ void MidasGUI::handleCount(int count)
 void MidasGUI::displayMessage(std::string str)
 {
     ui.label->setText(QString::fromStdString(str));
+}
+
+void MidasGUI::displayStateMessage(std::string str)
+{
+    ui.label_2->setText(QString::fromStdString(str));
 }
 
 void MidasGUI::handleXVeloc(int veloc)

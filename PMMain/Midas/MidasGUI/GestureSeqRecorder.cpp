@@ -6,7 +6,7 @@ GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), prog
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
@@ -17,7 +17,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
@@ -26,7 +26,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 
 GestureSeqRecorder::~GestureSeqRecorder()
 {
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         delete (*seqMapPerMode)[mm];
@@ -34,11 +34,12 @@ GestureSeqRecorder::~GestureSeqRecorder()
     delete seqMapPerMode;
 }
 
-SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse)
+SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse, bool holdRequired)
 {
     sequenceInfo seqInfo;
     seqInfo.seq = seq;
     seqInfo.sequenceResponse = seqResponse;
+    seqInfo.holdRequired = holdRequired;
     SequenceStatus status = checkLegalRegister(mode, seqInfo);
     if (status != SequenceStatus::SUCCESS)
     {
@@ -52,7 +53,7 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.responseType = ResponseType::NONE;
@@ -74,6 +75,31 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
 
     if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
     { 
+        // if the response is not NONE, a sequence has completed. Therefore all
+        // active sequences must be cleared so that all valid sequences can potentially
+        // be started.
+        emptyActiveSequences();
+
+        if (response.responseType != ResponseType::NONE)
+        {
+            std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
+        }
+    }
+
+    return status;
+}
+
+SequenceStatus GestureSeqRecorder::handleRest(ControlState state, sequenceResponse& response)
+{
+    SequenceStatus status = SequenceStatus::SUCCESS;
+    response.responseType = ResponseType::NONE;
+
+    status = findRestSeq(state, response);
+
+    prevState = state.getMode();
+
+    if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
+    {
         // if the response is not NONE, a sequence has completed. Therefore all
         // active sequences must be cleared so that all valid sequences can potentially
         // be started.
@@ -127,6 +153,22 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
 
 SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const
 {
+    // TODO ! Critical TODO - checkLegalRegister must allow registration of "holdRequired sequences" as long as they dont conflict
+    // with other holdRequired ones, but not with regular ones! Thats the point.
+
+    if (seqInfo.holdRequired && seqInfo.seq.size() != 1)
+    {
+        // if hold is required, the size MUST be exactly 1
+        return SequenceStatus::INVALID_SEQUENCE;
+    }
+
+    if (seqInfo.seq.size() > 1 && seqInfo.seq.at(0) == Pose::Type::rest)
+    {
+        // if rest is being registered, it cannot be part of a sequence greater than size one. 
+        // Arbitrary rule, but will help with logistics.
+        return SequenceStatus::INVALID_SEQUENCE;
+    }
+
     sequence seqInQuestion = seqInfo.seq;
     sequenceList *seqList = (*seqMapPerMode)[mode];
 
@@ -204,7 +246,7 @@ SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
 
@@ -249,7 +291,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
@@ -273,6 +315,13 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
                 // gesture, due to how sequences are registered. (it is a pre-condition for this function).
                 if (it->seq.size() == 1)
                 {
+                    if (it->holdRequired == true)
+                    {
+                        // JHH TODO - Handle this! Need to wait X ms before returning the change state data.
+                        // possibly spawn thread to count? Other options? set a timestamp then check future times
+                        // for delta as in other spots? How?
+                    }
+
                     response = it->sequenceResponse;
                     status = SequenceStatus::SUCCESS;
                     break;
@@ -282,6 +331,40 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
                     it->progress++;
                     activeSequences.push_back(&(*it));
                     printStatus(true);
+                }
+            }
+        }
+    }
+
+    seqList = NULL;
+    return status;
+}
+
+SequenceStatus GestureSeqRecorder::findRestSeq(ControlState state, sequenceResponse& response)
+{
+    SequenceStatus status = SequenceStatus::SUCCESS;
+    sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
+
+    // Loop through all possible sequences in this mode, and activate any that
+    // have a matching first gesture.
+    for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
+    {
+        if (it->seq.size() >= 0)
+        {
+            if (it->seq.at(0) == Pose::Type::rest)
+            {
+                // found sequence to activate!
+                if (it->seq.size() == 1)
+                {
+                    response = it->sequenceResponse;
+                    status = SequenceStatus::SUCCESS;
+                    break;
+                }
+                else
+                {
+                    // recall rest sequences can ONLY be size 1.
+                    status = SequenceStatus::INVALID_SEQUENCE;
+                    break;
                 }
             }
         }

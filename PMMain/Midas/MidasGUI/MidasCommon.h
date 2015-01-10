@@ -65,12 +65,22 @@ enum mouseCmds {
 /**
  * This represents the state/mode of the application. Each mode has
  * different rules that must be enforced by each Midas device.
+ *
+ * NOTE: IF THIS IS CHANGED: any code that follows a similar format to
+ * (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
+ * NEEDS to be updated, or else errors can occur. For example, GestureSeqRecorder.cpp uses this type
+ * of code to loop through the midasModes.
  */
 enum midasMode {
     LOCK_MODE,      /**< The mouse is locked from movement. */
     MOUSE_MODE,     /**< The mouse is free to move around. */
     KEYBOARD_MODE,  /**< The user has opened the virtual keyboard. */
-    GESTURE_MODE    /**< Gesture sequences should result in specific keyboard commands. */
+    GESTURE_MODE,    /**< Gesture sequences should result in specific keyboard commands. */
+    GESTURE_HOLD_ONE, /**< In Gesture mode, specific gesture has been held */
+    GESTURE_HOLD_TWO,
+    GESTURE_HOLD_THREE,
+    GESTURE_HOLD_FOUR,
+    GESTURE_HOLD_FIVE
 };
 
 /**

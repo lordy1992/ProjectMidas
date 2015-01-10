@@ -17,6 +17,7 @@ public:
     void emitInfo();
 
     void threadEmitString(std::string str);
+    void threadEmitStateString(std::string str);
 
 private:
 
@@ -24,6 +25,7 @@ signals:
     void outputCount(int);
 
     void emitString(std::string);
+    void emitStateString(std::string);
 
     void emitXVeloc(int);
     void emitYVeloc(int);

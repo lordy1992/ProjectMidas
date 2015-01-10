@@ -36,3 +36,8 @@ void MidasThread::threadEmitString(std::string str)
 {
     emit emitString(str);
 }
+
+void MidasThread::threadEmitStateString(std::string str)
+{
+    emit emitStateString(str);
+}

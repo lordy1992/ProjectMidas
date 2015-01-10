@@ -78,6 +78,8 @@ struct sequenceInfo {
     sequence seq;
     sequenceResponse sequenceResponse;
     unsigned int progress;
+
+    bool holdRequired = false;
 };
 
 typedef std::list<sequenceInfo> sequenceList;
@@ -103,9 +105,10 @@ public:
     * @param seq The sequence (std::vector<Pose::Type>) of gestures to register
     * @param seqResponse The desired response to activate if the sequence is recognized
     * while in the registered mode.
+    * @param holdRequired States that the registration is in regard to a gesture that must be held.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */
-    SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
+    SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse, bool holdRequired = false);
 
     /**
     * Given a gesture, attempt to progress through any registered sequences, that match the mode
@@ -120,6 +123,8 @@ public:
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */ 
     SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+
+    SequenceStatus handleRest(ControlState state, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -189,6 +194,8 @@ private:
     * @return x Same as progressSequence.
     */
     SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+
+    SequenceStatus findRestSeq(ControlState state, sequenceResponse& response);
 
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;

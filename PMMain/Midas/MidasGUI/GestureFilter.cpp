@@ -1,5 +1,6 @@
 #include "GestureFilter.h"
 #include <time.h>
+#include <thread>
 #include "MyoCommon.h"
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
@@ -8,6 +9,10 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : time
     registerMouseSequences();
     registerKeyboardSequences();
     registerStateSequences();
+
+    // TODO - Setup constant callback function that sends signals to the gestSeqRecorder to indicate time, so that things like
+    // Hold sequences can be recognized, and sequence timeouts will be up to date.
+    setupCallbackThread(this);
 }
 
 GestureFilter::~GestureFilter()
@@ -32,41 +37,48 @@ void GestureFilter::process()
         return;
     }
 
+    sequenceResponse response;
+    SequenceStatus ss;
     if (gesture != Pose::Type::rest)
     {
         // Handle state info first, as it is most important.
-        sequenceResponse response;
-        SequenceStatus ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
-        if (response.responseType == ResponseType::STATE_CHANGE)
-        {
-            handleStateChange(response);
-        }
-        else if (response.responseType == ResponseType::MOUSE_CMD)
-        {
-            handleMouseCommand(response);
-        }
-        else if (response.responseType == ResponseType::KYBRD_CMD)
-        {
-            handleKybrdCommand(response);
-        }
-        else
+        ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
+        if (response.responseType == ResponseType::NONE)
         {
             // terminate filter pipeline, as nothing to add
             Filter::setFilterStatus(filterStatus::END_CHAIN);
         }
-        lastResponseType = response.responseType;
+        lastResponseType = response.responseType; // only care about non-rest responses.
     }
     else
     {
-        if (lastResponseType == ResponseType::MOUSE_CMD)
+        ss = gestSeqRecorder.handleRest(*controlStateHandle, response);
+        if (response.responseType == ResponseType::NONE)
         {
-            handleMouseRelease();
+            // No state stuff to do, so handle other special cases!
+            if (lastResponseType == ResponseType::MOUSE_CMD)
+            {
+                handleMouseRelease();
+            }
+            else
+            {
+                // terminate filter pipeline, as nothing to add
+                Filter::setFilterStatus(filterStatus::END_CHAIN);
+            }
         }
-        else
-        {
-            // terminate filter pipeline, as nothing to add
-            Filter::setFilterStatus(filterStatus::END_CHAIN);
-        }
+    }
+
+    if (response.responseType == ResponseType::STATE_CHANGE)
+    {
+        handleStateChange(response);
+    }
+    else if (response.responseType == ResponseType::MOUSE_CMD)
+    {
+        handleMouseCommand(response);
+    }
+    else if (response.responseType == ResponseType::KYBRD_CMD)
+    {
+        handleKybrdCommand(response);
     }
 
     lastPoseType = gesture;
@@ -182,6 +194,50 @@ void GestureFilter::registerStateSequences(void)
     {
         throw new std::exception("registerSequenceException");
     }
+
+    // Register sequence from Gesture Mode to Gesture Hold Modes
+    sequence toHoldGestSeq;
+    toHoldGestSeq.push_back(Pose::Type::thumbToPinky);
+    sequenceResponse toHoldGestResponse;
+    toHoldGestResponse.responseName = "Gesture to Hold Gesture X";
+    toHoldGestResponse.responseType = ResponseType::STATE_CHANGE;
+    toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_ONE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse, true);
+
+    toHoldGestSeq[0] = Pose::Type::fingersSpread;
+    toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_TWO;
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse, true);
+
+    toHoldGestSeq[0] = Pose::Type::fist;
+    toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_THREE;
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse, true);
+
+    toHoldGestSeq[0] = Pose::Type::waveIn;
+    toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FOUR;
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse, true);
+
+    toHoldGestSeq[0] = Pose::Type::waveOut;
+    toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FIVE;
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse, true);
+
+    // Don't check ss status, as its quite possible that one of these will be in conflict. THis section is 
+    // just intended to register up to five gesture hold sequences.
+
+    // Register sequences back to Gesture Mode from Gesture Hold Modes
+
+    sequence fromHoldGestSeq;
+    fromHoldGestSeq.push_back(Pose::Type::rest);
+    sequenceResponse fromHoldGestResponse;
+    fromHoldGestResponse.responseName = "Gesture from Hold Gesture X";
+    fromHoldGestResponse.responseType = ResponseType::STATE_CHANGE;
+    fromHoldGestResponse.responseAction.mode = midasMode::GESTURE_MODE;
+
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_ONE, fromHoldGestSeq, fromHoldGestResponse);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_TWO, fromHoldGestSeq, fromHoldGestResponse);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_THREE, fromHoldGestSeq, fromHoldGestResponse);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FOUR, fromHoldGestSeq, fromHoldGestResponse);
+    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FIVE, fromHoldGestSeq, fromHoldGestResponse);
 }
 
 void GestureFilter::handleStateChange(sequenceResponse response)
@@ -251,4 +307,19 @@ void GestureFilter::handleMouseRelease()
             return;
         }
     }
+}
+
+void setupCallbackThread(GestureFilter *gf)
+{
+    std::thread callbackThread(callbackThreadWrapper, gf);
+    callbackThread.detach();
+}
+
+void callbackThreadWrapper(GestureFilter *gf)
+{
+    std::chrono::milliseconds period(3000);// SLEEP_LEN);
+    do {
+        std::this_thread::sleep_for(period);
+        gf->getGestureSeqRecorder()->checkProgressBaseTime();
+    } while (true);
 }
