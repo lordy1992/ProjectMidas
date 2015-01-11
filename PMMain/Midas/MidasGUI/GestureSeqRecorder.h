@@ -27,6 +27,8 @@ using namespace myo;
 
 #define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
+#define REQ_HOLD_TIME 500 // ms
+
 enum class SequenceStatus {
     SUCCESS,
     CONFLICTING_SEQUENCE,
@@ -84,6 +86,12 @@ struct sequenceInfo {
 
 typedef std::list<sequenceInfo> sequenceList;
 typedef std::map<midasMode, sequenceList*> sequenceMapPerMode;
+
+typedef struct HoldGestData {
+    bool valid = false;
+    sequenceInfo seqInfo; 
+    int remainingTime = -1;
+} HoldGestData;
 
 class GestureSeqRecorder
 {
@@ -163,6 +171,17 @@ public:
     */
     void printStatus(bool verbose = false);
 
+    void decHoldGestDataTime(int delta);
+
+    /**
+    *
+    * TODO - populate this better, but:
+    * This function is used to see if the holdGestData is valid, and if so, update the remaining time
+    * and return an appropriate response if the timer expires
+    *
+    */
+    SequenceStatus holdSequenceStatus(sequenceResponse& response);
+
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
@@ -216,6 +235,10 @@ private:
     // then when a wave in is recorded, the user has up to "TransMaxDeltaTime"
     // milliseconds to perform a wave out, or else the whole process needs to be repeated.
     clock_t progressMaxDeltaTime;
+
+    // This will hold valid data only when there is a hold sequence occuring.
+    // Otherwise it will be invalid and therefore unusable.
+    HoldGestData holdGestData;
 };
 
 #endif /* _GESTURE_SEQ_RECORDER_H */

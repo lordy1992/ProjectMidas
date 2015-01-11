@@ -3,13 +3,16 @@
 #include <thread>
 #include "MyoCommon.h"
 
+ControlState* GestureFilter::controlStateHandle;
+
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), controlStateHandle(controlState), gestSeqRecorder(midasMode::LOCK_MODE, SEQ_TIMEOUT_LENGTH)
+    lastTime(0), gestSeqRecorder(midasMode::LOCK_MODE, SEQ_TIMEOUT_LENGTH)
 {
     registerMouseSequences();
     registerKeyboardSequences();
     registerStateSequences();
 
+    controlStateHandle = controlState;
     // TODO - Setup constant callback function that sends signals to the gestSeqRecorder to indicate time, so that things like
     // Hold sequences can be recognized, and sequence timeouts will be up to date.
     setupCallbackThread(this);
@@ -317,9 +320,32 @@ void setupCallbackThread(GestureFilter *gf)
 
 void callbackThreadWrapper(GestureFilter *gf)
 {
-    std::chrono::milliseconds period(3000);// SLEEP_LEN);
+    std::chrono::milliseconds period(SLEEP_LEN);
     do {
         std::this_thread::sleep_for(period);
         gf->getGestureSeqRecorder()->checkProgressBaseTime();
+
+        gf->getGestureSeqRecorder()->decHoldGestDataTime(SLEEP_LEN);
+
+        sequenceResponse response;
+        if (gf->getGestureSeqRecorder()->holdSequenceStatus(response) == SequenceStatus::SUCCESS)
+        {
+            if (response.responseType == ResponseType::STATE_CHANGE)
+            {
+                GestureFilter::handleStateChange(response);
+            }
+            //else if (response.responseType == ResponseType::MOUSE_CMD)
+            //{
+            //    handleMouseCommand(response);
+            //}
+            //else if (response.responseType == ResponseType::KYBRD_CMD)
+            //{
+            //    handleKybrdCommand(response);
+            //}
+            // TODO - figure out if this is necessary here... cant make work easily as functions
+            // cant simply be converted to static.
+        }
+          
+
     } while (true);
 }

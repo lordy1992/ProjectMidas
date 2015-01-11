@@ -91,6 +91,8 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 
 SequenceStatus GestureSeqRecorder::handleRest(ControlState state, sequenceResponse& response)
 {
+    holdGestData.valid = false; // Cannot be holding if a rest occurs. Set false.
+
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.responseType = ResponseType::NONE;
 
@@ -320,6 +322,11 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
                         // JHH TODO - Handle this! Need to wait X ms before returning the change state data.
                         // possibly spawn thread to count? Other options? set a timestamp then check future times
                         // for delta as in other spots? How?
+                        holdGestData.valid = true;
+                        holdGestData.remainingTime = REQ_HOLD_TIME;
+                        holdGestData.seqInfo = *it;
+                        status = SequenceStatus::SUCCESS;
+                        break;
                     }
 
                     response = it->sequenceResponse;
@@ -421,4 +428,24 @@ void GestureSeqRecorder::printStatus(bool verbose)
             it++;
         }
     }
+}
+
+SequenceStatus GestureSeqRecorder::holdSequenceStatus(sequenceResponse& response)
+{
+    response.responseType = ResponseType::NONE;
+
+    if (holdGestData.valid) 
+    {
+        if (holdGestData.remainingTime <= 0)
+        {
+            response = holdGestData.seqInfo.sequenceResponse;
+        }
+    }
+
+    return SequenceStatus::SUCCESS;
+}
+
+void GestureSeqRecorder::decHoldGestDataTime(int delta)
+{
+    holdGestData.remainingTime -= delta;
 }
