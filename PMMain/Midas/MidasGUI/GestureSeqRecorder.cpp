@@ -155,9 +155,6 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
 
 SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const
 {
-    // TODO ! Critical TODO - checkLegalRegister must allow registration of "holdRequired sequences" as long as they dont conflict
-    // with other holdRequired ones, but not with regular ones! Thats the point.
-
     if (seqInfo.holdRequired && seqInfo.seq.size() != 1)
     {
         // if hold is required, the size MUST be exactly 1
@@ -200,6 +197,14 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 {
                     // made it to the end of the comparison and didn't find any differences!
                     conflict = true;
+
+                    if (seqInfo.holdRequired != it->holdRequired)
+                    {
+                        // special case - if one sequence requires a hold and the other does not, then 
+                        // there is no conflict!
+                        conflict = false;
+                        break;
+                    }
                 }
             }
         }
@@ -220,6 +225,13 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 {
                     // made it to the end of the comparison and didn't find any differences!
                     conflict = true;
+                    if (seqInfo.holdRequired != it->holdRequired)
+                    {
+                        // special case - if one sequence requires a hold and the other does not, then 
+                        // there is no conflict!
+                        conflict = false;
+                        break;
+                    }
                 }
             }
         }

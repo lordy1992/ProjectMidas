@@ -318,6 +318,16 @@ void setupCallbackThread(GestureFilter *gf)
     callbackThread.detach();
 }
 
+// JHH TODO - problem at hand (Jan 10, 6:42 pm) - if two 1 pose transitions are registered
+// with the gestureSeqRecorder, then neither will be marked as conflicted <-- this part is good.
+// However, when seeing if any sequences are completed, there's no way of telling a 'tap' sequence
+// that it should wait to see if the user is holding, so it is immediately executed. 
+// 
+// To fix this, i will need to somehow record the second seqInfo somewhere and if there is this special case,
+// then IF the user lets go of the pose before the hold_time value, then it will execute the 'conflicting' response.
+
+// also, if theres a true conflict with prefixes (ex: waveIn (hold) vs waveIn, pinkyToThumb), then unpredictable
+// behaviour ensues, due to findActivation, so findActivation MUST BE FIXED....
 void callbackThreadWrapper(GestureFilter *gf)
 {
     std::chrono::milliseconds period(SLEEP_LEN);
