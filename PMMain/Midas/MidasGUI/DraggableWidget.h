@@ -3,15 +3,17 @@
 
 #include <QtWidgets/QWidget.h>
 
-class DraggableWidget
+class DraggableWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
-    DraggableWidget(QWidget *parent = 0);
+    DraggableWidget(QWidget *parent = 0, Qt::WindowFlags f = 0);
     ~DraggableWidget();
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
     
 private:
     QPoint position;
