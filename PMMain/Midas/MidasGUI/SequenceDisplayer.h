@@ -27,9 +27,8 @@ struct sequenceImageSet
 struct sequenceData
 {
     QLabel *seqLabel, *seqPosLabel;
-    int numSteps;
+    int numSteps, currentPos;
     std::vector<sequenceImageSet> sequenceImages;
-    std::vector<sequenceImageSet>::iterator currentPos;
 };
 
 // A grid with 5 columns, and a certain number of rows.

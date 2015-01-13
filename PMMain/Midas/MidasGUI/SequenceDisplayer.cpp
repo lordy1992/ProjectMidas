@@ -63,19 +63,22 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
 void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages)
 {
     sequenceData newSequence;
-    newSequence.currentPos = sequenceImages.begin();
-    newSequence.numSteps = sequenceImages.size();
+    newSequence.sequenceImages = sequenceImages;
+    newSequence.currentPos = 0;
+    newSequence.numSteps = newSequence.sequenceImages.size();
     newSequence.seqLabel = new QLabel(tr("%1").arg(QString(sequenceName.c_str())));
     formBoxLabel(newSequence.seqLabel);
     newSequence.seqPosLabel = new QLabel(tr("0 / %1").arg(newSequence.numSteps));
     formBoxLabel(newSequence.seqPosLabel);
 
     std::vector<sequenceImageSet>::iterator it;
-    for (it = sequenceImages.begin(); it != sequenceImages.end(); it++)
+    for (it = newSequence.sequenceImages.begin(); it != newSequence.sequenceImages.end(); it++)
     {
         it->currentImgLabel = new QLabel;
         formBoxLabel(it->currentImgLabel);
     }
+
+    sequenceNameToDataMap[sequenceName] = newSequence;
 }
 
 void SequenceDisplayer::formBoxLabel(QLabel *label)
@@ -101,7 +104,7 @@ void SequenceDisplayer::addSequenceWidgets()
         gridLayout->addWidget(seq.seqLabel, currRow, currCol++);
         gridLayout->addWidget(seq.seqPosLabel, currRow, currCol++);
         std::vector<sequenceImageSet>::iterator sequenceIt;
-        for (sequenceIt = seq.currentPos; 
+        for (sequenceIt = seq.sequenceImages.begin() + seq.currentPos; 
              sequenceIt != seq.sequenceImages.end() && currCol < 5; sequenceIt++)
         {
             QPixmap pixmap = sequenceIt->laterImage;
