@@ -1,9 +1,9 @@
 #ifndef MOUSE_INDICATOR_H
 #define MOUSE_INDICATOR_H
 
-#include <QtWidgets/QWidget.h>
+#include "DraggableWidget.h"
 
-class MouseIndicator : public QWidget
+class MouseIndicator : public DraggableWidget
 {
     Q_OBJECT
 
@@ -17,8 +17,6 @@ public:
 protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
-    void mousePressEvent(QMouseEvent *event);
-    void mouseMoveEvent(QMouseEvent *event);
 
 private:
     QPoint position, cursorPos;

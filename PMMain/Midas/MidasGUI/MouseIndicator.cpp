@@ -9,7 +9,7 @@
 #include <qmessagebox.h>
 
 MouseIndicator::MouseIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint), indWidth(widgetWidth), indHeight(widgetHeight),
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint), indWidth(widgetWidth), indHeight(widgetHeight),
     cursorPos(0, 0)
 {
     QTimer *timer = new QTimer(this);
@@ -37,24 +37,6 @@ MouseIndicator::MouseIndicator(int widgetWidth, int widgetHeight, QWidget *paren
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
     move(screen.right() - indWidth - 40, screen.bottom() - indHeight - 40);
-}
-
-void MouseIndicator::mousePressEvent(QMouseEvent *event)
-{
-    if (event->button() == Qt::LeftButton)
-    {
-        position = event->globalPos() - frameGeometry().topLeft();
-        event->accept();
-    }
-}
-
-void MouseIndicator::mouseMoveEvent(QMouseEvent *event)
-{
-    if (event->buttons() & Qt::LeftButton)
-    {
-        move(event->globalPos() - position);
-        event->accept();
-    }
 }
 
 void MouseIndicator::paintEvent(QPaintEvent *event)
@@ -117,9 +99,6 @@ void MouseIndicator::handleUpdateCursorPos(int percentX, int percentY)
         newY = rad * sin(angleInRads);
     }
 
-    char mystr[100] = "";
-    sprintf(mystr, "NewX: %d, NewY: %d", newX, newY);
-    QMessageBox::information(NULL, "Test", mystr);
     cursorPos.setX(newX);
     cursorPos.setY(newY);
 }
