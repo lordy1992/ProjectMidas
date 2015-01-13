@@ -327,7 +327,7 @@ void setupCallbackThread(GestureFilter *gf)
 // then IF the user lets go of the pose before the hold_time value, then it will execute the 'conflicting' response.
 
 // also, if theres a true conflict with prefixes (ex: waveIn (hold) vs waveIn, pinkyToThumb), then unpredictable
-// behaviour ensues, due to findActivation, so findActivation MUST BE FIXED....
+// behaviour ensues, due to findActivation, so findActivation MUST BE FIXED.... TODO
 void callbackThreadWrapper(GestureFilter *gf)
 {
     std::chrono::milliseconds period(SLEEP_LEN);
