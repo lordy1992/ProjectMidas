@@ -119,6 +119,15 @@
     <ClCompile Include="MouseIndicator.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_SequenceDisplayer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_SequenceDisplayer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="SequenceDisplayer.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -134,6 +143,9 @@
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
     <CustomBuild Include="MouseIndicator.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="SequenceDisplayer.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
