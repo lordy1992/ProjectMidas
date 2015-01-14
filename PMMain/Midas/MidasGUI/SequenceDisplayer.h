@@ -1,7 +1,7 @@
 #ifndef SEQUENCE_DISPLAYER_H
 #define SEQUENCE_DISPLAYER_H
 
-#include <QtWidgets/QWidget.h>
+#include "DraggableWidget.h"
 #include <QGridLayout.h>
 #include <string>
 #include <map>
@@ -32,7 +32,7 @@ struct sequenceData
 };
 
 // A grid with 5 columns, and a certain number of rows.
-class SequenceDisplayer : public QWidget
+class SequenceDisplayer : public DraggableWidget
 {
     Q_OBJECT
 

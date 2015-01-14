@@ -2,11 +2,12 @@
 #include <QImage.h>
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
 {
     gridLayout = new QGridLayout;
     setLayout(gridLayout);
 
+    setWindowOpacity(0.9);
     // Test code
     QImage image1(tr("tester1.bmp"));
     QImage image2(tr("tester2.bmp"));
