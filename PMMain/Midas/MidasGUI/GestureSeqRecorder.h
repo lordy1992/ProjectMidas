@@ -67,6 +67,11 @@ struct sequenceResponse {
     std::string responseName;
 };
 
+struct seqElement {
+    Pose::Type type;
+    bool holdRequired = false;
+};
+
 typedef std::vector<Pose::Type> sequence;
 
 /**
