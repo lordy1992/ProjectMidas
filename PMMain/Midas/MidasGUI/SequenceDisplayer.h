@@ -22,6 +22,7 @@ struct sequenceImageSet
 {
     QPixmap nextImage, laterImage;
     QLabel* currentImgLabel;
+    int actionTag;
 };
 
 struct sequenceData
@@ -41,9 +42,13 @@ public:
 
     // QPixmap uses implicit data sharing, so it is okay to pass around by value.
     void addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
+    void advanceSequences(int action);
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     void addSequenceWidgets();
+    void clearWidgets();
+    void clearRow(sequenceData seq);
     void formBoxLabel(QLabel *label);
     std::map<std::string, sequenceData> sequenceNameToDataMap;
     QGridLayout *gridLayout;

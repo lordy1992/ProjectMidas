@@ -128,14 +128,14 @@
     <ClCompile Include="SequenceDisplayer.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="DraggableWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_DraggableWidget.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_DraggableWidget.cpp">
       <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="DraggableWidget.cpp">
+      <Filter>Source Files\GUI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -158,7 +158,7 @@
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="DraggableWidget.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
