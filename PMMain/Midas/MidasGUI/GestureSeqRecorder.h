@@ -70,9 +70,23 @@ struct sequenceResponse {
 struct seqElement {
     Pose::Type type;
     bool holdRequired = false;
+
+    bool operator==(seqElement& e)
+    {
+        if (e.type == type && e.holdRequired == holdRequired)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    bool operator!=(seqElement& e)
+    {
+        return !(e == *this);
+    }
 };
 
-typedef std::vector<Pose::Type> sequence;
+typedef std::vector<seqElement> sequence;
 
 /**
 * Wrapper to tie state information to a sequence response.
@@ -85,18 +99,10 @@ struct sequenceInfo {
     sequence seq;
     sequenceResponse sequenceResponse;
     unsigned int progress;
-
-    bool holdRequired = false;
 };
 
 typedef std::list<sequenceInfo> sequenceList;
 typedef std::map<midasMode, sequenceList*> sequenceMapPerMode;
-
-typedef struct HoldGestData {
-    bool valid = false;
-    sequenceInfo seqInfo; 
-    int remainingTime = -1;
-} HoldGestData;
 
 class GestureSeqRecorder
 {
@@ -118,10 +124,9 @@ public:
     * @param seq The sequence (std::vector<Pose::Type>) of gestures to register
     * @param seqResponse The desired response to activate if the sequence is recognized
     * while in the registered mode.
-    * @param holdRequired States that the registration is in regard to a gesture that must be held.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */
-    SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse, bool holdRequired = false);
+    SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
 
     /**
     * Given a gesture, attempt to progress through any registered sequences, that match the mode
@@ -137,7 +142,20 @@ public:
     */ 
     SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
+    /**
+    * To handle tap/hold differentiation, this should be called to notify the SeqRecorder that a 
+    * certain amount of time has passed. If a certain amount of time passes while a user is holding
+    * a specific pose, then they are deemed to be holding it, otherwise they have tapped it.
+    * This function will either do nothing, decrement a timer if a sequence is active
+    *
+    * @param delta The amount of time in ms indicated to have passed.
+    * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
+    */
+    SequenceStatus progressSequenceTime(int delta);
+
     SequenceStatus handleRest(ControlState state, sequenceResponse& response);
+
+    SequenceStatus progressActiveHoldSequences(ControlState state, sequenceResponse& response)
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -176,16 +194,17 @@ public:
     */
     void printStatus(bool verbose = false);
 
-    void decHoldGestDataTime(int delta);
 
-    /**
-    *
-    * TODO - populate this better, but:
-    * This function is used to see if the holdGestData is valid, and if so, update the remaining time
-    * and return an appropriate response if the timer expires
-    *
-    */
-    SequenceStatus holdSequenceStatus(sequenceResponse& response);
+    //void decHoldGestDataTime(int delta);
+    //
+    ///**
+    //*
+    //* TODO - populate this better, but:
+    //* This function is used to see if the holdGestData is valid, and if so, update the remaining time
+    //* and return an appropriate response if the timer expires
+    //*
+    //*/
+    ////SequenceStatus holdSequenceStatus(sequenceResponse& response);
 
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
@@ -241,9 +260,9 @@ private:
     // milliseconds to perform a wave out, or else the whole process needs to be repeated.
     clock_t progressMaxDeltaTime;
 
-    // This will hold valid data only when there is a hold sequence occuring.
-    // Otherwise it will be invalid and therefore unusable.
-    HoldGestData holdGestData;
+    // Timer to hold the amount of time on each progression of a sequence, which 
+    // will determine if a user tapped a pose, or held it.
+    clock_t holdGestTimer;
 };
 
 #endif /* _GESTURE_SEQ_RECORDER_H */
