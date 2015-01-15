@@ -118,96 +118,47 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequenceTime(int delta)
+
+SequenceStatus GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
 {
+    // Provide response if hold is reached and cut off 'taps' if hold is reached
 
-}
-
-SequenceStatus GestureSeqRecorder::handleRest(ControlState state, sequenceResponse& response)
-{
-    SequenceStatus status = SequenceStatus::SUCCESS;
-    response.responseType = ResponseType::NONE;
-
-    if (activeSequences.size() != 0)
+    if (holdGestTimer - delta <= 0)
     {
-        status = ensureSameState(state);
-        if (status == SequenceStatus::SUCCESS)
+        // This call to progressSequenceTime indicates a 'hold'.
+        // Update activeSequences now.
+        std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+        while (it != activeSequences.end())
         {
-            status = progressActiveHoldSequences(state, response);
-        }
-    }
-    else
-    {
-        status = findRestSeq(state, response);
+            unsigned int seqProg = (*it)->progress;
 
-        prevState = state.getMode();
-    }
-
-    if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
-    {
-        // if the response is not NONE, a sequence has completed. Therefore all
-        // active sequences must be cleared so that all valid sequences can potentially
-        // be started.
-        emptyActiveSequences();
-
-        if (response.responseType != ResponseType::NONE)
-        {
-            std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
-        }
-    }
-
-    return status;
-}
-
-SequenceStatus GestureSeqRecorder::progressActiveHoldSequences(ControlState state, sequenceResponse& response)
-{
-    SequenceStatus status = SequenceStatus::SUCCESS;
-
-    bool poseWasHeld = (holdGestTimer > 0 ? false : true);
-
-    std::list<sequenceInfo*>::iterator it = activeSequences.begin();
-    while (it != activeSequences.end())
-    {
-        unsigned int seqProg = (*it)->progress;
-        if ((*it)->seq.at(seqProg).holdRequired)
-        {
-            if (poseWasHeld)
+            if (seqProg < (*it)->seq.size())
             {
-                if (seqProg == (*it)->seq.size() - 1)
+                // We just hit the "hold" state, handle accordingly
+                if (true == (*it)->seq.at(seqProg).holdRequired)
                 {
-                    // completed hold sequence! (by releasing the last hold)
-                    response = (*it)->sequenceResponse;
-                    break;
+                    (*it)->progress++;
+                    if ((*it)->progress == (*it)->seq.size())
+                    {
+                        // found a complete sequence!
+                        response = (*it)->sequenceResponse;
+                        break;
+                    }
                 }
                 else
                 {
-                    // increment progress so that the proper pose gets verified on the next called to progressActiveSequences
-                    (*it)->progress++;
+                    (*it)->progress = 0;
+                    std::list<sequenceInfo*>::iterator itCopy = it;
+                    activeSequences.erase(itCopy);
                 }
-            }
-            else
-            {
-                (*it)->progress = 0;
-                std::list<sequenceInfo*>::iterator itCopy = it; // also want to do this on callback func, so that sequence is cleared in real time (specially from GUI)  TODO
-                activeSequences.erase(itCopy);
+                it++;
             }
         }
-        else
-        {
-            if (poseWasHeld)
-            {
-                // clear the sequences that were supposed to hold at this step.
-                (*it)->progress = 0;
-                std::list<sequenceInfo*>::iterator itCopy = it;
-                activeSequences.erase(itCopy);
-            }
-            // else nothing, this is fine.
-        }
-        it++;
     }
 
-    return status;
+    holdGestTimer -= delta;
 }
+
 
 void GestureSeqRecorder::checkProgressBaseTime()
 {
@@ -345,115 +296,64 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
         emptyActiveSequences();
         return status;
     }
-    progressBaseTime = now;
+    if (gesture != Pose::rest)
+    {
+        // only update time if a new pose is input, as this flags intention 
+        // is to ensure that users progress through a sequence in relative haste.
+        progressBaseTime = now; 
+    }
 
     std::list<sequenceInfo*>::iterator it = activeSequences.begin();
     while (it != activeSequences.end())
     {
         unsigned int seqProg = (*it)->progress;
-        if ((*it)->seq.at(seqProg).holdRequired)
+
+        if (gesture == Pose::rest)
         {
-            // special case when holdRequired flag set. This means we need to check
-            // if the pose was held for long enough AND if the pose being transitioned
-            // into right now is the NEXT pose in the sequence (or if the held one was the 
-            // final value and the response should be returned)
-            ********************************************************************************************************************************************************************************
-            ////// I'm here so far! <-- Jorden TODO jan 13, 938 pm, I NEED to set ALL types of sequences as active when first hit, that was the whole point!!! ********************************************
-            // Then either the rest-gesture or timer acts as the chopping block ****************************************************************************************
-
-            if ((seqProg == (*it)->seq.size() - 1) &&
-                (gesture == (*it)->seq.at(seqProg).type))
+            // if this is NOT a 'hold' gesture, and the timer is still in the 'tapping range'
+            if (holdGestTimer > 0)
             {
-                // PROBLEM -- JORDEN , completion occurs on a REST, not a progress (as this clearly is...) !
-                // ... so... do nothing here... as ... this shouldnt happen...
-
-                // 01 13 15 txt vomit:
-                // should have it so that on the rest function, the progress is incremented (if it should)
-                // and that in this function, we're only CONFIRMING that the next gesture that's on the list is actually hit.
-                // this is because you MUST implicitely rest inbetween poses... so ... I suppose poseWasHeld is a silly metric here... should only care about 
-                // hold required. // Jorden TODO important. Need to handle this first. The code is a mess now... but, this is the requirement
-            }
-            if ((seqProg + 1 < (*it)->seq.size()) &&
-                (gesture == (*it)->seq.at(seqProg + 1).type))
-            {
-                (*it)->progress++;
-                holdGestTimer = REQ_HOLD_TIME; // reset count on any progression
-                if ((*it)->progress == (*it)->seq.size())
+                if ((seqProg < (*it)->seq.size()) &&
+                    (false == (*it)->seq.at(seqProg).holdRequired))
                 {
-                    // found a complete sequence!
-                    // NOTE: This is guaranteed to be the ONLY sequence that will match the input
-                    // gesture, due to how sequences are registered. (it is a pre-condition for this function).
-
-                    response = (*it)->sequenceResponse;
-                    break;
+                    // match! Progress forward :)
+                    (*it)->progress++;
+                    if ((*it)->progress == (*it)->seq.size())
+                    {
+                        // found a complete sequence!
+                        response = (*it)->sequenceResponse;
+                        break;
+                    }
                 }
-                it++;
+                else
+                {
+                    (*it)->progress = 0;
+                    std::list<sequenceInfo*>::iterator itCopy = it;
+                    activeSequences.erase(itCopy);
+                }
             }
-
-
-            // loop through all non-"holdRequired" sequences and cancel them TODO
-            // ...
-
+            else
+            {
+                // do nothing. This is handled in progressSequenceTime.
+            }
         }
         else
         {
-            // standard case
+            // Use non-rest Poses to determine if the correct pose is being
+            // performed to follow a sequence. If its not, remove it.
             if ((seqProg < (*it)->seq.size()) &&
                 (gesture == (*it)->seq.at(seqProg).type))
             {
-                (*it)->progress++;
                 holdGestTimer = REQ_HOLD_TIME; // reset count on any progression
-                if ((*it)->progress == (*it)->seq.size())
-                {
-                    // found a complete sequence!
-                    // NOTE: This is guaranteed to be the ONLY sequence that will match the input
-                    // gesture, due to how sequences are registered. (it is a pre-condition for this function).
-
-                    response = (*it)->sequenceResponse;
-                    break;
-                }
-                it++;
             }
             else
             {
                 (*it)->progress = 0;
                 std::list<sequenceInfo*>::iterator itCopy = it;
-                it++;
                 activeSequences.erase(itCopy);
             }
-
-            // loop through all "holdRequired" sequences and cancel them TODO
-            // ...
         }
-
-
-        ////////////////////////////////////
-
-        
-        if ((seqProg < (*it)->seq.size()) && 
-            (gesture == (*it)->seq.at(seqProg).type) &&
-            (poseWasHeld == (*it)->seq.at(seqProg).holdRequired))
-        {
-            (*it)->progress++;
-            holdGestTimer = REQ_HOLD_TIME; // reset count on any progression
-            if ((*it)->progress == (*it)->seq.size())
-            {
-                // found a complete sequence!
-                // NOTE: This is guaranteed to be the ONLY sequence that will match the input
-                // gesture, due to how sequences are registered. (it is a pre-condition for this function).
-
-                response = (*it)->sequenceResponse;
-                break;
-            }
-            it++;
-        }
-        else
-        {
-            (*it)->progress = 0;
-            std::list<sequenceInfo*>::iterator itCopy = it;
-            it++;
-            activeSequences.erase(itCopy);
-        }
+        it++;
     }
     printStatus(true);
 
@@ -472,90 +372,37 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
     // have a matching first gesture.
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-        if (it->seq.size() >= 0)
+        if ((it->seq.size() >= 0) && 
+            (it->seq.at(0).type == gesture))
         {
-            if (it->seq.at(0).type == gesture)
+            if (it->seq.at(0).type == Pose::rest)
             {
-                // found sequence to activate!
-
-                // 4 possible cases:
-                // 1) If the sequence is only size one and is not holdable, then the response can be 
-                // set, as the sequence is complete. 
-                // 2) If the sequence is only size one and IS holdable, it is not progressed, but is still
-                // placed on activeSequences, with holdGestTimer being reset
-                // 3) > size 1, not holdable: standard case; increment progress and put in active
-                // 4) > size 1, holdable: non-standard case; put in active, but don't increment
-                if (it->seq.size() == 1)
-                {
-                    if (it->seq.at(0).holdRequired == true)
-                    {
-                        activeSequences.push_back(&(*it));
-                        printStatus(true);
-                    }
-                    else
-                    {
-                        response = it->sequenceResponse;
-                        status = SequenceStatus::SUCCESS;
-                        break;
-                    }
-                } 
-                else
-                {
-                    if (it->seq.at(0).holdRequired == true)
-                    {
-                        activeSequences.push_back(&(*it));
-                        printStatus(true);
-                    }
-                    else
-                    {
-                        it->progress++;
-                        activeSequences.push_back(&(*it));
-                        printStatus(true);
-                    }
-                }
-
-                holdGestTimer = REQ_HOLD_TIME; // set count on any progression
-            }
-        }
-    }
-
-    seqList = NULL;
-    return status;
-}
-
-SequenceStatus GestureSeqRecorder::findRestSeq(ControlState state, sequenceResponse& response)
-{
-    SequenceStatus status = SequenceStatus::SUCCESS;
-    sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
-
-    // Loop through all possible sequences in this mode, and activate any that
-    // have a matching first gesture.
-    for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
-    {
-        if (it->seq.size() >= 0)
-        {
-            if (it->seq.at(0) == Pose::Type::rest)
-            {
-                // found sequence to activate!
+                // Special case. Rest can't be 'held'
                 if (it->seq.size() == 1)
                 {
                     response = it->sequenceResponse;
-                    status = SequenceStatus::SUCCESS;
-                    break;
                 }
                 else
                 {
                     // recall rest sequences can ONLY be size 1.
                     status = SequenceStatus::INVALID_SEQUENCE;
-                    break;
                 }
+                break;
             }
+
+            // found sequence to activate!
+            activeSequences.push_back(&(*it));
+            printStatus(true);
+
+            holdGestTimer = REQ_HOLD_TIME; // set count on any progression
         }
+        
     }
 
     seqList = NULL;
     return status;
 }
+
 
 void GestureSeqRecorder::printStatus(bool verbose)
 {
@@ -576,8 +423,8 @@ void GestureSeqRecorder::printStatus(bool verbose)
             {
                 // more gestures to perform before completion - called RIGHT after progress is incremented, so print it's
                 // current value as the index... maybe change. TODO.
-                std::cout << ", Next Gesture: " << PoseTypeToString((*it)->seq.at(progress));
-                emitString += ", Next Gesture: " + PoseTypeToString((*it)->seq.at(progress));
+                std::cout << ", Next Gesture: " << PoseTypeToString((*it)->seq.at(progress).type);
+                emitString += ", Next Gesture: " + PoseTypeToString((*it)->seq.at(progress).type);
             }
             std::cout << std::endl;
             emitString += "\n";
@@ -606,22 +453,123 @@ void GestureSeqRecorder::printStatus(bool verbose)
     }
 }
 
-SequenceStatus GestureSeqRecorder::holdSequenceStatus(sequenceResponse& response)
-{
-    response.responseType = ResponseType::NONE;
 
-    if (holdGestData.valid) 
-    {
-        if (holdGestData.remainingTime <= 0)
-        {
-            response = holdGestData.seqInfo.sequenceResponse;
-        }
-    }
+//SequenceStatus GestureSeqRecorder::findRestSeq(ControlState state, sequenceResponse& response)
+//{
+//    SequenceStatus status = SequenceStatus::SUCCESS;
+//    sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
+//
+//    // Loop through all possible sequences in this mode, and activate any that
+//    // have a matching first gesture.
+//    for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
+//    {
+//        if (it->seq.size() >= 0)
+//        {
+//            if (it->seq.at(0) == Pose::Type::rest)
+//            {
+//                // found sequence to activate!
+//                if (it->seq.size() == 1)
+//                {
+//                    response = it->sequenceResponse;
+//                    status = SequenceStatus::SUCCESS;
+//                    break;
+//                }
+//                else
+//                {
+//                    // recall rest sequences can ONLY be size 1.
+//                    status = SequenceStatus::INVALID_SEQUENCE;
+//                    break;
+//                }
+//            }
+//        }
+//    }
+//
+//    seqList = NULL;
+//    return status;
+//}
 
-    return SequenceStatus::SUCCESS;
-}
-
-void GestureSeqRecorder::decHoldGestDataTime(int delta)
-{
-    holdGestData.remainingTime -= delta;
-}
+//SequenceStatus GestureSeqRecorder::handleRest(ControlState state, sequenceResponse& response)
+//{
+//    SequenceStatus status = SequenceStatus::SUCCESS;
+//    response.responseType = ResponseType::NONE;
+//
+//    if (activeSequences.size() != 0)
+//    {
+//        status = ensureSameState(state);
+//        if (status == SequenceStatus::SUCCESS)
+//        {
+//            status = progressActiveHoldSequences(state, response);
+//        }
+//    }
+//    else
+//    {
+//        status = findRestSeq(state, response);
+//
+//        prevState = state.getMode();
+//    }
+//
+//    if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
+//    {
+//        // if the response is not NONE, a sequence has completed. Therefore all
+//        // active sequences must be cleared so that all valid sequences can potentially
+//        // be started.
+//        emptyActiveSequences();
+//
+//        if (response.responseType != ResponseType::NONE)
+//        {
+//            std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
+//        }
+//    }
+//
+//    return status;
+//}
+//
+//SequenceStatus GestureSeqRecorder::progressActiveHoldSequences(ControlState state, sequenceResponse& response)
+//{
+//    SequenceStatus status = SequenceStatus::SUCCESS;
+//
+//    bool poseWasHeld = (holdGestTimer > 0 ? false : true);
+//
+//    std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+//    while (it != activeSequences.end())
+//    {
+//        unsigned int seqProg = (*it)->progress;
+//        if ((*it)->seq.at(seqProg).holdRequired)
+//        {
+//            if (poseWasHeld)
+//            {
+//                if (seqProg == (*it)->seq.size() - 1)
+//                {
+//                    // completed hold sequence! (by releasing the last hold)
+//                    response = (*it)->sequenceResponse;
+//                    break;
+//                }
+//                else
+//                {
+//                    // increment progress so that the proper pose gets verified on the next called to progressActiveSequences
+//                    (*it)->progress++;
+//                }
+//            }
+//            else
+//            {
+//                (*it)->progress = 0;
+//                std::list<sequenceInfo*>::iterator itCopy = it; // also want to do this on callback func, so that sequence is cleared in real time (specially from GUI)  TODO
+//                activeSequences.erase(itCopy);
+//            }
+//        }
+//        else
+//        {
+//            if (poseWasHeld)
+//            {
+//                // clear the sequences that were supposed to hold at this step.
+//                (*it)->progress = 0;
+//                std::list<sequenceInfo*>::iterator itCopy = it;
+//                activeSequences.erase(itCopy);
+//            }
+//            // else nothing, this is fine.
+//        }
+//        it++;
+//    }
+//
+//    return status;
+//}

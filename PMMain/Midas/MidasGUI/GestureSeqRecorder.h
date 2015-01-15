@@ -68,6 +68,15 @@ struct sequenceResponse {
 };
 
 struct seqElement {
+    seqElement(Pose::Type type) {
+        type = type;
+        holdRequired = false;
+    }
+    seqElement(Pose::Type type, bool HR) {
+        type = type;
+        holdRequired = HR;
+    }
+
     Pose::Type type;
     bool holdRequired = false;
 
@@ -149,13 +158,16 @@ public:
     * This function will either do nothing, decrement a timer if a sequence is active
     *
     * @param delta The amount of time in ms indicated to have passed.
+    * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
+    * means that no sequence was completed. However, if it's not NONE, it holds the response that
+    * was registered against the completed sequence.
     * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
     */
-    SequenceStatus progressSequenceTime(int delta);
+    SequenceStatus progressSequenceTime(int delta, sequenceResponse& response);
 
     SequenceStatus handleRest(ControlState state, sequenceResponse& response);
 
-    SequenceStatus progressActiveHoldSequences(ControlState state, sequenceResponse& response)
+    SequenceStatus progressActiveHoldSequences(ControlState state, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
