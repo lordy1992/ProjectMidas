@@ -42,10 +42,10 @@ void GestureFilter::process()
 
     sequenceResponse response;
     SequenceStatus ss;
+    ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
     if (gesture != Pose::Type::rest)
     {
         // Handle state info first, as it is most important.
-        ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
         if (response.responseType == ResponseType::NONE)
         {
             // terminate filter pipeline, as nothing to add
@@ -55,7 +55,6 @@ void GestureFilter::process()
     }
     else
     {
-        ss = gestSeqRecorder.handleRest(*controlStateHandle, response);
         if (response.responseType == ResponseType::NONE)
         {
             // No state stuff to do, so handle other special cases!
@@ -92,7 +91,7 @@ void GestureFilter::registerMouseSequences(void)
 {
     // Register sequence to left click in mouse mode and gesture mode
     sequence clickSeq;
-    clickSeq.push_back(seqElement(MYO_GESTURE_LEFT_MOUSE);
+    clickSeq.push_back(seqElement(MYO_GESTURE_LEFT_MOUSE));
     sequenceResponse clickResp;
     clickResp.responseName = "Left Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
@@ -102,7 +101,7 @@ void GestureFilter::registerMouseSequences(void)
 
     // Register sequence to right click in mouse mode and gesture mode
     clickSeq.clear();
-    clickSeq.push_back(seqElement(MYO_GESTURE_RIGHT_MOUSE);
+    clickSeq.push_back(seqElement(MYO_GESTURE_RIGHT_MOUSE));
     clickResp.responseName = "Right Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
     clickResp.responseAction.mouse = mouseCmds::RIGHT_CLICK;
@@ -124,9 +123,9 @@ void GestureFilter::registerStateSequences(void)
 {
     // Register sequence from lock to Mouse Mode
     sequence lockToMouseSeq;
-    lockToMouseSeq.push_back(seqElement(Pose::Type::thumbToPinky);
-    lockToMouseSeq.push_back(seqElement(Pose::Type::waveIn);
-    lockToMouseSeq.push_back(seqElement(Pose::Type::waveOut);
+    lockToMouseSeq.push_back(seqElement(Pose::Type::thumbToPinky));
+    lockToMouseSeq.push_back(seqElement(Pose::Type::waveIn));
+    lockToMouseSeq.push_back(seqElement(Pose::Type::waveOut));
     sequenceResponse lockToMouseResponse;
     lockToMouseResponse.responseName = "Unlock";
     lockToMouseResponse.responseType = ResponseType::STATE_CHANGE;
@@ -136,7 +135,7 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from Mouse Mode to Gesture Mode
     sequence mouseToGestSeq;
-    mouseToGestSeq.push_back(seqElement(Pose::Type::thumbToPinky);
+    mouseToGestSeq.push_back(seqElement(Pose::Type::thumbToPinky));
     sequenceResponse mouseToGestResponse;
     mouseToGestResponse.responseName = "Mouse To Gesture";
     mouseToGestResponse.responseType = ResponseType::STATE_CHANGE;
@@ -146,8 +145,8 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from Mouse Mode to Keyboard Mode
     sequence mouseToKybrdSeq;
-    mouseToKybrdSeq.push_back(seqElement(Pose::Type::waveOut);
-    mouseToKybrdSeq.push_back(seqElement(Pose::Type::waveIn);
+    mouseToKybrdSeq.push_back(seqElement(Pose::Type::waveOut));
+    mouseToKybrdSeq.push_back(seqElement(Pose::Type::waveIn));
     sequenceResponse mouseToKybrdResponse;
     mouseToKybrdResponse.responseName = "Mouse To Keyboard";
     mouseToKybrdResponse.responseType = ResponseType::STATE_CHANGE;
@@ -157,7 +156,7 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from Gesture Mode to Mouse Mode
     sequence gestureToMouseSeq;
-    gestureToMouseSeq.push_back(seqElement(Pose::Type::thumbToPinky);
+    gestureToMouseSeq.push_back(seqElement(Pose::Type::thumbToPinky));
     sequenceResponse gestureToMouseResponse;
     gestureToMouseResponse.responseName = "Gesture To Mouse";
     gestureToMouseResponse.responseType = ResponseType::STATE_CHANGE;
@@ -167,8 +166,8 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from Keyboard Mode to Mouse Mode
     sequence kybrdToMouseSeq;
-    kybrdToMouseSeq.push_back(seqElement(Pose::Type::waveOut);
-    kybrdToMouseSeq.push_back(seqElement(Pose::Type::waveIn);
+    kybrdToMouseSeq.push_back(seqElement(Pose::Type::waveOut));
+    kybrdToMouseSeq.push_back(seqElement(Pose::Type::waveIn));
     sequenceResponse kybrdToMouseResponse;
     kybrdToMouseResponse.responseName = "Keyboard To Mouse";
     kybrdToMouseResponse.responseType = ResponseType::STATE_CHANGE;
@@ -178,8 +177,8 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from ALL Modes to Lock Mode.
     sequence toLockSeq;
-    toLockSeq.push_back(seqElement(Pose::Type::waveIn);
-    toLockSeq.push_back(seqElement(Pose::Type::thumbToPinky);
+    toLockSeq.push_back(seqElement(Pose::Type::waveIn));
+    toLockSeq.push_back(seqElement(Pose::Type::thumbToPinky));
     sequenceResponse toLockResponse;
     toLockResponse.responseType = ResponseType::STATE_CHANGE;
     toLockResponse.responseAction.mode = midasMode::LOCK_MODE;
@@ -230,7 +229,7 @@ void GestureFilter::registerStateSequences(void)
     // Register sequences back to Gesture Mode from Gesture Hold Modes
 
     sequence fromHoldGestSeq;
-    fromHoldGestSeq.push_back(seqElement(Pose::Type::rest);
+    fromHoldGestSeq.push_back(seqElement(Pose::Type::rest));
     sequenceResponse fromHoldGestResponse;
     fromHoldGestResponse.responseName = "Gesture from Hold Gesture X";
     fromHoldGestResponse.responseType = ResponseType::STATE_CHANGE;

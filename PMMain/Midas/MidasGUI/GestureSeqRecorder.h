@@ -163,9 +163,7 @@ public:
     * was registered against the completed sequence.
     * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
     */
-    SequenceStatus progressSequenceTime(int delta, sequenceResponse& response);
-
-    SequenceStatus handleRest(ControlState state, sequenceResponse& response);
+    void progressSequenceTime(int delta, sequenceResponse& response);
 
     SequenceStatus progressActiveHoldSequences(ControlState state, sequenceResponse& response);
 
@@ -249,8 +247,6 @@ private:
     * @return x Same as progressSequence.
     */
     SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
-
-    SequenceStatus findRestSeq(ControlState state, sequenceResponse& response);
 
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;

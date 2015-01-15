@@ -119,7 +119,7 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 }
 
 
-SequenceStatus GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
+void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
 {
     // Provide response if hold is reached and cut off 'taps' if hold is reached
 
