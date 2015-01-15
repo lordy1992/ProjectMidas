@@ -2,14 +2,22 @@
 #include <QImage.h>
 #include <qevent.h>
 
+#define LABEL_NUM_COLS      3
+#define LABEL_NUM_ROWS      1
+#define SEQ_NUMBER_NUM_COLS 1
+#define SEQ_NUMBER_NUM_ROWS 1
+#define NUM_SEQUENCE_STEPS  3
+#define GRID_ELEMENT_SIZE   48
+
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
 {
     gridLayout = new QGridLayout;
+    gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     setLayout(gridLayout);
-
+  
     setAttribute(Qt::WA_TranslucentBackground);
-    //setWindowOpacity(0.9);
+    setWindowOpacity(0.8);
     // Test code
     QImage image1(tr("tester1.bmp"));
     QImage image2(tr("tester2.bmp"));
@@ -64,9 +72,9 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     sequence3.push_back(sequence3Step2);
     sequence3.push_back(sequence3Step3);
 
-    addSequence("Sequence 1", sequence1);
-    addSequence("Sequence 2", sequence2);
-    addSequence("Sequence 3", sequence3);
+    addSequence("Sequence Blah blah 1", sequence1);
+    addSequence("Seq. 2", sequence2);
+    addSequence("Seq. 3", sequence3);
 
     addSequenceWidgets();
 }
@@ -77,9 +85,15 @@ void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequen
     newSequence.sequenceImages = sequenceImages;
     newSequence.currentPos = 0;
     newSequence.numSteps = newSequence.sequenceImages.size();
+    QFont timesFont("Times", 9, QFont::Bold);
     newSequence.seqLabel = new QLabel(tr("%1").arg(QString(sequenceName.c_str())));
+    newSequence.seqLabel->setFont(timesFont);
+    newSequence.seqLabel->setWordWrap(true);
     formBoxLabel(newSequence.seqLabel);
+    newSequence.seqLabel->setMinimumSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
+    newSequence.seqLabel->setMaximumSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
     newSequence.seqPosLabel = new QLabel(tr("0 / %1").arg(newSequence.numSteps));
+    newSequence.seqPosLabel->setFont(timesFont);
     formBoxLabel(newSequence.seqPosLabel);
 
     std::vector<sequenceImageSet>::iterator it;
@@ -196,7 +210,9 @@ void SequenceDisplayer::formBoxLabel(QLabel *label)
     label->setBackgroundRole(QPalette::Base);
     label->setAlignment(Qt::AlignCenter);
     label->setAutoFillBackground(true);
-    label->setMinimumSize(96, 96);
+    label->setMinimumSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    label->setMaximumSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    label->setScaledContents(true);
 }
 
 void SequenceDisplayer::addSequenceWidgets()
@@ -210,14 +226,16 @@ void SequenceDisplayer::addSequenceWidgets()
         int currCol = 0;
         seq.seqLabel->setHidden(false);
         seq.seqPosLabel->setHidden(false);
-        gridLayout->addWidget(seq.seqLabel, currRow, currCol++);
-        gridLayout->addWidget(seq.seqPosLabel, currRow, currCol++);
+        gridLayout->addWidget(seq.seqLabel, currRow, currCol, LABEL_NUM_ROWS, LABEL_NUM_COLS);
+        currCol += LABEL_NUM_COLS;
+        gridLayout->addWidget(seq.seqPosLabel, currRow, currCol, SEQ_NUMBER_NUM_ROWS, SEQ_NUMBER_NUM_COLS);
+        currCol += SEQ_NUMBER_NUM_COLS;
         std::vector<sequenceImageSet>::iterator sequenceIt;
         for (sequenceIt = seq.sequenceImages.begin() + seq.currentPos; 
-             sequenceIt != seq.sequenceImages.end() && currCol < 5; sequenceIt++)
+            sequenceIt != seq.sequenceImages.end() && currCol < (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS); sequenceIt++)
         {
             QPixmap pixmap = sequenceIt->laterImage;
-            if (currCol == 2) pixmap = sequenceIt->nextImage;
+            if (currCol == LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS) pixmap = sequenceIt->nextImage;
 
             sequenceIt->currentImgLabel->setPixmap(pixmap);
             sequenceIt->currentImgLabel->setEnabled(!pixmap.isNull());
