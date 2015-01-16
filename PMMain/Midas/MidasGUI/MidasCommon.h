@@ -113,4 +113,6 @@ struct point {
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
 };
 
+
+
 #endif /* _MIDAS_COMMON_H */

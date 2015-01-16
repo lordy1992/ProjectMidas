@@ -133,7 +133,7 @@ void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& respo
             if (seqProg < (*it)->seq.size())
             {
                 // We just hit the "hold" state, handle accordingly
-                if (true == (*it)->seq.at(seqProg).holdRequired)
+                if (SeqElement::PoseLength::HOLD == (*it)->seq.at(seqProg).poseLen)
                 {
                     (*it)->progress++;
                     if ((*it)->progress == (*it)->seq.size())
@@ -238,8 +238,8 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
         {
             for (sequence::iterator baseSeqIt = baseSeq.begin(); baseSeqIt != baseSeq.end(); baseSeqIt++)
             {
-                seqElement gestInQuestion = seqInQuestion.at(gestureIdx);
-                seqElement baseGest = *baseSeqIt;
+                SeqElement gestInQuestion = seqInQuestion.at(gestureIdx);
+                SeqElement baseGest = *baseSeqIt;
                 if (gestInQuestion != baseGest)
                 {
                     bool conflict = false;
@@ -258,8 +258,8 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
         {
             for (sequence::iterator seqInQIt = seqInQuestion.begin(); seqInQIt != seqInQuestion.end(); seqInQIt++)
             {
-                seqElement gestInQuestion = *seqInQIt;
-                seqElement baseGest = baseSeq.at(gestureIdx);
+                SeqElement gestInQuestion = *seqInQIt;
+                SeqElement baseGest = baseSeq.at(gestureIdx);
                 if (gestInQuestion != baseGest)
                 {
                     bool conflict = false;
@@ -326,11 +326,11 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
 
         if (gesture == Pose::rest)
         {
-            // if this is NOT a 'hold' gesture, and the timer is still in the 'tapping range'
+            // if this is TAP gesture, and the timer is still in the 'tapping range'
             if (holdGestTimer > 0)
             {
                 if ((seqProg < (*it)->seq.size()) &&
-                    (false == (*it)->seq.at(seqProg).holdRequired))
+                    (SeqElement::PoseLength::TAP == (*it)->seq.at(seqProg).poseLen))
                 {
                     // match! Progress forward :)
                     (*it)->progress++;
