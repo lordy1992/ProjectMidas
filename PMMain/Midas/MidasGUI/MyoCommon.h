@@ -69,7 +69,7 @@ struct SeqElement {
         }
         return false;
     }
-
+    
     bool operator!=(SeqElement& e)
     {
         return !(e == *this);

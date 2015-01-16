@@ -91,21 +91,23 @@ void GestureFilter::registerMouseSequences(void)
 {
     // Register sequence to left click in mouse mode and gesture mode
     sequence clickSeq;
-    clickSeq.push_back(SeqElement(MYO_GESTURE_LEFT_MOUSE));
+    clickSeq.push_back(SeqElement(MYO_GESTURE_LEFT_MOUSE, SeqElement::PoseLength::IMMEDIATE));
     sequenceResponse clickResp;
     clickResp.responseName = "Left Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
     clickResp.responseAction.mouse = mouseCmds::LEFT_CLICK;
     SequenceStatus ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     // Register sequence to right click in mouse mode and gesture mode
     clickSeq.clear();
-    clickSeq.push_back(SeqElement(MYO_GESTURE_RIGHT_MOUSE));
+    clickSeq.push_back(SeqElement(MYO_GESTURE_RIGHT_MOUSE, SeqElement::PoseLength::IMMEDIATE));
     clickResp.responseName = "Right Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
     clickResp.responseAction.mouse = mouseCmds::RIGHT_CLICK;
     ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     if (ss != SequenceStatus::SUCCESS)
@@ -229,7 +231,7 @@ void GestureFilter::registerStateSequences(void)
     // Register sequences back to Gesture Mode from Gesture Hold Modes
 
     sequence fromHoldGestSeq;
-    fromHoldGestSeq.push_back(SeqElement(Pose::Type::rest));
+    fromHoldGestSeq.push_back(SeqElement(Pose::Type::rest, SeqElement::PoseLength::IMMEDIATE));
     sequenceResponse fromHoldGestResponse;
     fromHoldGestResponse.responseName = "Gesture from Hold Gesture X";
     fromHoldGestResponse.responseType = ResponseType::STATE_CHANGE;

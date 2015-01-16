@@ -98,6 +98,9 @@ public:
     * midasMode. When in that mode, any progression of gestures from the Myo will be compared
     * to all associated and registered sequences, and if any are succesfully completed, the 
     * registered sequenceResponse will be returned to the caller.
+    * NOTE: Can only register sequences with SeqElements of PoseLength IMMEDIATE if the sequence
+    * is of length one. This could be changed in the future if deemed necessary, but this allows
+    * progressSequence to be unnafected by this special case.
     *
     * @param mode The midasMode that the caller is registering the sequence against.
     * @param seq The sequence (std::vector<Pose::Type>) of gestures to register
