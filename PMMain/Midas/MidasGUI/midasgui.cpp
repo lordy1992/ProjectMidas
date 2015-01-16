@@ -8,14 +8,8 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
     ui.setupUi(this);
 
     // set window as "always on top"
-    Qt::WindowFlags flags = this->windowFlags();
-    this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
-
-    // set window as transparent to keyboard/mouse events - not working right now. TODO
-    HWND hwnd = (HWND)winId();
-    LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
-    SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_TRANSPARENT);
-    styles = GetWindowLong(hwnd, GWL_EXSTYLE);
+//    Qt::WindowFlags flags = this->windowFlags();
+//    this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
 
     this->mainThread = mainThread;
 

@@ -207,19 +207,19 @@ void GestureFilter::registerStateSequences(void)
 
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
-    toHoldGestSeq[0] = Pose::Type::fingersSpread;
+    toHoldGestSeq[0].type = Pose::Type::fingersSpread;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_TWO;
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
-    toHoldGestSeq[0] = Pose::Type::fist;
+    toHoldGestSeq[0].type = Pose::Type::fist;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_THREE;
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
-    toHoldGestSeq[0] = Pose::Type::waveIn;
+    toHoldGestSeq[0].type = Pose::Type::waveIn;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FOUR;
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
-    toHoldGestSeq[0] = Pose::Type::waveOut;
+    toHoldGestSeq[0].type = Pose::Type::waveOut;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FIVE;
     ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
@@ -317,16 +317,6 @@ void setupCallbackThread(GestureFilter *gf)
     callbackThread.detach();
 }
 
-// JHH TODO - problem at hand (Jan 10, 6:42 pm) - if two 1 pose transitions are registered
-// with the gestureSeqRecorder, then neither will be marked as conflicted <-- this part is good.
-// However, when seeing if any sequences are completed, there's no way of telling a 'tap' sequence
-// that it should wait to see if the user is holding, so it is immediately executed. 
-// 
-// To fix this, i will need to somehow record the second seqInfo somewhere and if there is this special case,
-// then IF the user lets go of the pose before the hold_time value, then it will execute the 'conflicting' response.
-
-// also, if theres a true conflict with prefixes (ex: waveIn (hold) vs waveIn, pinkyToThumb), then unpredictable
-// behaviour ensues, due to findActivation, so findActivation MUST BE FIXED.... TODO
 void callbackThreadWrapper(GestureFilter *gf)
 {
     std::chrono::milliseconds period(SLEEP_LEN);
@@ -349,7 +339,7 @@ void callbackThreadWrapper(GestureFilter *gf)
         //    handleKybrdCommand(response);
         //}
         // TODO - figure out if this is necessary here... cant make work easily as functions
-        // cant simply be converted to static.
+        // cant simply be converted to static. But... probably should make it work... Need to figure out.
 
     } while (true);
 }

@@ -3,16 +3,13 @@
 /*
 Checklist until this class is revamped properly:
 
-check 1) SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
+1) SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
 
-check - actually read note 2) SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+2) SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
-note: recheck this, ensuring that case where it's supposed to be held, and it is still held doesnt cancel the sequence, and then if it's not held and it's supposed to be held, it wont progress. this seems obvious but yeah...  
 3) SequenceStatus progressSequenceTime(int delta);
 
-4) SequenceStatus handleRest(ControlState state, sequenceResponse& response);
-
-good enough i think 5) void checkProgressBaseTime();
+5) void checkProgressBaseTime();
 
 6) void emptyActiveSequences();
 
@@ -20,16 +17,17 @@ good enough i think 5) void checkProgressBaseTime();
 
 8) clock_t getProgressMaxDeltaTime(void);
 
-check 9) SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
+9) SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
 10) SequenceStatus ensureSameState(ControlState state);
 
-check 11) SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+11) SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
 12) SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
 
-13) SequenceStatus findRestSeq(ControlState state, sequenceResponse& response);
 
+13) SequenceStatus findRestSeq(ControlState state, sequenceResponse& response);
+4) SequenceStatus handleRest(ControlState state, sequenceResponse& response);
 */
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
@@ -122,11 +120,11 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
 {
     // Provide response if hold is reached and cut off 'taps' if hold is reached
-
-    if (holdGestTimer - delta <= 0)
+    if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
     {
         // This call to progressSequenceTime indicates a 'hold'.
         // Update activeSequences now.
+        activeSequencesMutex.lock();
         std::list<sequenceInfo*>::iterator it = activeSequences.begin();
         while (it != activeSequences.end())
         {
@@ -144,14 +142,29 @@ void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& respo
                         response = (*it)->sequenceResponse;
                         break;
                     }
+                    it++;
                 }
                 else
                 {
                     (*it)->progress = 0;
                     std::list<sequenceInfo*>::iterator itCopy = it;
+                    it++;
                     activeSequences.erase(itCopy);
                 }
-                it++;
+            }
+        }
+        activeSequencesMutex.unlock();
+
+        if (response.responseType != ResponseType::NONE)
+        {
+            // if the response is not NONE, a sequence has completed. Therefore all
+            // active sequences must be cleared so that all valid sequences can potentially
+            // be started.
+            emptyActiveSequences();
+
+            if (response.responseType != ResponseType::NONE)
+            {
+                std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
             }
         }
     }
@@ -177,12 +190,14 @@ void GestureSeqRecorder::emptyActiveSequences()
     // Reset all sequence info sequence stat info, and clear all references
     // to them.
     std::list<sequenceInfo*>::iterator it;
+    activeSequencesMutex.lock();
     for (it = activeSequences.begin(); it != activeSequences.end(); it++)
     {
         (*it)->progress = 0;
     }
 
     activeSequences.clear();
+    activeSequencesMutex.unlock();
     std::cout << "Cleared Active Sequences." << std::endl;
 }
 
@@ -303,6 +318,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
         progressBaseTime = now; 
     }
 
+    activeSequencesMutex.lock();
     std::list<sequenceInfo*>::iterator it = activeSequences.begin();
     while (it != activeSequences.end())
     {
@@ -324,17 +340,20 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
                         response = (*it)->sequenceResponse;
                         break;
                     }
+                    it++;
                 }
                 else
                 {
                     (*it)->progress = 0;
                     std::list<sequenceInfo*>::iterator itCopy = it;
+                    it++;
                     activeSequences.erase(itCopy);
                 }
             }
             else
             {
-                // do nothing. This is handled in progressSequenceTime.
+                it++;
+                // do nothing important. This is handled in progressSequenceTime.
             }
         }
         else
@@ -345,16 +364,18 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
                 (gesture == (*it)->seq.at(seqProg).type))
             {
                 holdGestTimer = REQ_HOLD_TIME; // reset count on any progression
+                it++;
             }
             else
             {
                 (*it)->progress = 0;
                 std::list<sequenceInfo*>::iterator itCopy = it;
+                it++;
                 activeSequences.erase(itCopy);
             }
         }
-        it++;
     }
+    activeSequencesMutex.unlock();
     printStatus(true);
 
     return status;
@@ -391,7 +412,9 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
             }
 
             // found sequence to activate!
+            activeSequencesMutex.lock();
             activeSequences.push_back(&(*it));
+            activeSequencesMutex.unlock();
             printStatus(true);
 
             holdGestTimer = REQ_HOLD_TIME; // set count on any progression
@@ -406,6 +429,7 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
 
 void GestureSeqRecorder::printStatus(bool verbose)
 {
+    activeSequencesMutex.lock();
     if (verbose)
     {
         std::cout << "Active Sequences: " << std::endl;
@@ -451,6 +475,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
             it++;
         }
     }
+    activeSequencesMutex.unlock();
 }
 
 

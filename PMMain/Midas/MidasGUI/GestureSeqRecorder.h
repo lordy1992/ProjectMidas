@@ -27,7 +27,7 @@ using namespace myo;
 
 #define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
-#define REQ_HOLD_TIME 500 // ms
+#define REQ_HOLD_TIME 1000 // ms
 
 enum class SequenceStatus {
     SUCCESS,
@@ -50,11 +50,7 @@ enum class ResponseType {
 * GestureSeqRecorder to determine what action to take.
 */
 struct sequenceResponse {
-    sequenceResponse() {
-        responseName = "";
-    }
-
-    ResponseType responseType;
+    ResponseType responseType = ResponseType::NONE;
 
     union responseAction
     {
@@ -64,21 +60,30 @@ struct sequenceResponse {
     };
     responseAction responseAction;
 
-    std::string responseName;
+    std::string responseName = "";
 };
 
 struct seqElement {
     seqElement(Pose::Type type) {
-        type = type;
+        this->type = type;
         holdRequired = false;
     }
     seqElement(Pose::Type type, bool HR) {
-        type = type;
+        this->type = type;
         holdRequired = HR;
     }
 
     Pose::Type type;
-    bool holdRequired = false;
+    bool holdRequired = false; // JORDEN TODO - ex problem: clicking/click and drag wont work as it did before with new scheme.
+    // possible soln: may want to change this from a bool to an enum, with "immediate" being an option, which if chosen is the 
+    // dominant state when determining if registration is allowed. This seems logical.
+
+    /*
+        Jorden TODO - Jan 15 at 2:52. 
+        1) Debug current code. Ie, get tap/hold code working as it is
+        2) Change holdRequired to be more than a bool as described with Jeremy so that I can handle 'immediate' as to make click/drag 
+            far more usable.
+    */
 
     bool operator==(seqElement& e)
     {
@@ -155,7 +160,9 @@ public:
     * To handle tap/hold differentiation, this should be called to notify the SeqRecorder that a 
     * certain amount of time has passed. If a certain amount of time passes while a user is holding
     * a specific pose, then they are deemed to be holding it, otherwise they have tapped it.
-    * This function will either do nothing, decrement a timer if a sequence is active
+    * This function will continually decrement the hold timer, and if it reaches 0, it will clear
+    * any active sequences that were supposed to have a 'tap' action, and will progress any sequences
+    * that have a 'hold' action.
     *
     * @param delta The amount of time in ms indicated to have passed.
     * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
@@ -164,8 +171,6 @@ public:
     * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
     */
     void progressSequenceTime(int delta, sequenceResponse& response);
-
-    SequenceStatus progressActiveHoldSequences(ControlState state, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -204,18 +209,6 @@ public:
     */
     void printStatus(bool verbose = false);
 
-
-    //void decHoldGestDataTime(int delta);
-    //
-    ///**
-    //*
-    //* TODO - populate this better, but:
-    //* This function is used to see if the holdGestData is valid, and if so, update the remaining time
-    //* and return an appropriate response if the timer expires
-    //*
-    //*/
-    ////SequenceStatus holdSequenceStatus(sequenceResponse& response);
-
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
@@ -237,7 +230,7 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     /**
     * Perform the duties of progressSequence, but optimized for the situation where no sequence has yet
@@ -246,7 +239,7 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response);
 
     // Holds all registered sequenceResponses in a layered organization.
     sequenceMapPerMode *seqMapPerMode;
@@ -255,6 +248,8 @@ private:
     // Once ANY sequences are active, ONLY those sequences can potentially progress, until they 
     // are timed out.
     std::list<sequenceInfo*> activeSequences;
+
+    std::mutex activeSequencesMutex;
 
     // State info from when a sequence that has size >1 is started.
     midasMode prevState;
