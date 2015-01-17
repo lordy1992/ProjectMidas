@@ -1,34 +1,5 @@
 #include "GestureSeqRecorder.h"
 #include "MidasMain.h"
-/*
-Checklist until this class is revamped properly:
-
-1) SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
-
-2) SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
-
-3) SequenceStatus progressSequenceTime(int delta);
-
-5) void checkProgressBaseTime();
-
-6) void emptyActiveSequences();
-
-7) void setProgressMaxDeltaTime(clock_t newTime);
-
-8) clock_t getProgressMaxDeltaTime(void);
-
-9) SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
-
-10) SequenceStatus ensureSameState(ControlState state);
-
-11) SequenceStatus progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
-
-12) SequenceStatus findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
-
-
-13) SequenceStatus findRestSeq(ControlState state, sequenceResponse& response);
-4) SequenceStatus handleRest(ControlState state, sequenceResponse& response);
-*/
 
 GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
 {
