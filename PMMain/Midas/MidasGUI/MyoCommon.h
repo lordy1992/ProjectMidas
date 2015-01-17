@@ -49,17 +49,7 @@ struct SeqElement {
 
     Pose::Type type;
 
-    PoseLength poseLen = PoseLength::TAP; // JORDEN TODO - ex problem: clicking/click and drag wont work as it did before with new scheme.
-    // possible soln: may want to change this from a bool to an enum, with "immediate" being an option, which if chosen is the 
-    // dominant state when determining if registration is allowed. This seems logical.
-
-    /*
-    Jorden TODO - Jan 15 at 2:52.
-    check! (at 4:23, done) 1) Debug current code. Ie, get tap/hold code working as it is
-    2) Change holdRequired to be more than a bool as described with Jeremy so that I can handle 'immediate' as to make click/drag
-    far more usable.
-        ** Underway Need to implement "immediate" functionality
-    */
+    PoseLength poseLen = PoseLength::TAP; 
 
     bool operator==(SeqElement& e)
     {

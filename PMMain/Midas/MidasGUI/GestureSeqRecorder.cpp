@@ -434,20 +434,6 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
         if ((it->seq.size() >= 0) && 
             (it->seq.at(0).type == gesture))
         {
-           //if (it->seq.at(0).type == Pose::rest) // JORDEN TODO - once "IMMEDIATE" is implemented, set any calls to register 'rest' as immediate. then this code isnt duplicated
-           //{
-           //    // Special case. Rest can't be 'held'
-           //    if (it->seq.size() == 1)
-           //    {
-           //        response = it->sequenceResponse;
-           //    }
-           //    else
-           //    {
-           //        // recall rest sequences can ONLY be size 1.
-           //        status = SequenceStatus::INVALID_SEQUENCE;
-           //    }
-           //    break;
-           //}
             if (it->seq.at(0).poseLen == SeqElement::PoseLength::IMMEDIATE)
             {
                 // Special case. Immediate isn't 'held'
@@ -500,7 +486,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
             if (gThreadHandle)
             {
                 // TODO - figure out WHY this isnt working! This value is always null here....  so was gMidasThread when tried that...
-                gThreadHandle->threadEmitString(emitString);
+                gThreadHandle->threadEmitString(emitString); // Note: Handling in a different way than this for now, but this structure seemed promissing..
             }
 
             it++;

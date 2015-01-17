@@ -13,8 +13,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel) : time
     registerStateSequences();
 
     controlStateHandle = controlState;
-    // TODO - Setup constant callback function that sends signals to the gestSeqRecorder to indicate time, so that things like
-    // Hold sequences can be recognized, and sequence timeouts will be up to date.
+
     setupCallbackThread(this);
 }
 
