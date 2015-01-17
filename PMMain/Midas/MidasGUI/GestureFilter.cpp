@@ -95,9 +95,9 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.responseName = "Left Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
     clickResp.responseAction.mouse = mouseCmds::LEFT_CLICK;
-    SequenceStatus ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
     clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     // Register sequence to right click in mouse mode and gesture mode
     clickSeq.clear();
@@ -105,11 +105,11 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.responseName = "Right Click";
     clickResp.responseType = ResponseType::MOUSE_CMD;
     clickResp.responseAction.mouse = mouseCmds::RIGHT_CLICK;
-    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
     clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
-    if (ss != SequenceStatus::SUCCESS)
+    if (ss != (int)SequenceStatus::SUCCESS)
     {
         throw new std::exception("registerSequenceException");
     }
@@ -132,7 +132,7 @@ void GestureFilter::registerStateSequences(void)
     lockToMouseResponse.responseType = ResponseType::STATE_CHANGE;
     lockToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
 
-    SequenceStatus ss = gestSeqRecorder.registerSequence(midasMode::LOCK_MODE, lockToMouseSeq, lockToMouseResponse);
+    int ss = (int)gestSeqRecorder.registerSequence(midasMode::LOCK_MODE, lockToMouseSeq, lockToMouseResponse);
 
     // Register sequence from Mouse Mode to Gesture Mode
     sequence mouseToGestSeq;
@@ -142,7 +142,7 @@ void GestureFilter::registerStateSequences(void)
     mouseToGestResponse.responseType = ResponseType::STATE_CHANGE;
     mouseToGestResponse.responseAction.mode = midasMode::GESTURE_MODE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToGestSeq, mouseToGestResponse);
+    ss |= (int)(int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToGestSeq, mouseToGestResponse);
 
     // Register sequence from Mouse Mode to Keyboard Mode
     sequence mouseToKybrdSeq;
@@ -153,7 +153,7 @@ void GestureFilter::registerStateSequences(void)
     mouseToKybrdResponse.responseType = ResponseType::STATE_CHANGE;
     mouseToKybrdResponse.responseAction.mode = midasMode::KEYBOARD_MODE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToKybrdSeq, mouseToKybrdResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToKybrdSeq, mouseToKybrdResponse);
 
     // Register sequence from Gesture Mode to Mouse Mode
     sequence gestureToMouseSeq;
@@ -163,7 +163,7 @@ void GestureFilter::registerStateSequences(void)
     gestureToMouseResponse.responseType = ResponseType::STATE_CHANGE;
     gestureToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, gestureToMouseSeq, gestureToMouseResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, gestureToMouseSeq, gestureToMouseResponse);
 
     // Register sequence from Keyboard Mode to Mouse Mode
     sequence kybrdToMouseSeq;
@@ -174,7 +174,7 @@ void GestureFilter::registerStateSequences(void)
     kybrdToMouseResponse.responseType = ResponseType::STATE_CHANGE;
     kybrdToMouseResponse.responseAction.mode = midasMode::MOUSE_MODE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdToMouseSeq, kybrdToMouseResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdToMouseSeq, kybrdToMouseResponse);
 
     // Register sequence from ALL Modes to Lock Mode.
     sequence toLockSeq;
@@ -185,18 +185,13 @@ void GestureFilter::registerStateSequences(void)
     toLockResponse.responseAction.mode = midasMode::LOCK_MODE;
     // From Mouse:
     toLockResponse.responseName = "Mouse To Lock";
-    ss = gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, toLockSeq, toLockResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, toLockSeq, toLockResponse);
     // From Gesture:
     toLockResponse.responseName = "Gesture To Lock";
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toLockSeq, toLockResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toLockSeq, toLockResponse);
     // From Keyboard:
     toLockResponse.responseName = "Keyboard To Lock";
-    ss = gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse);
-
-    if (ss != SequenceStatus::SUCCESS)
-    {
-        throw new std::exception("registerSequenceException");
-    }
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse);
 
     // Register sequence from Gesture Mode to Gesture Hold Modes
     sequence toHoldGestSeq;
@@ -206,26 +201,23 @@ void GestureFilter::registerStateSequences(void)
     toHoldGestResponse.responseType = ResponseType::STATE_CHANGE;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_ONE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
     toHoldGestSeq[0].type = Pose::Type::fingersSpread;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_TWO;
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
     toHoldGestSeq[0].type = Pose::Type::fist;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_THREE;
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
     toHoldGestSeq[0].type = Pose::Type::waveIn;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FOUR;
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
     toHoldGestSeq[0].type = Pose::Type::waveOut;
     toHoldGestResponse.responseAction.mode = midasMode::GESTURE_HOLD_FIVE;
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
-
-    // Don't check ss status, as its quite possible that one of these will be in conflict. THis section is 
-    // just intended to register up to five gesture hold sequences.
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toHoldGestSeq, toHoldGestResponse);
 
     // Register sequences back to Gesture Mode from Gesture Hold Modes
 
@@ -236,11 +228,16 @@ void GestureFilter::registerStateSequences(void)
     fromHoldGestResponse.responseType = ResponseType::STATE_CHANGE;
     fromHoldGestResponse.responseAction.mode = midasMode::GESTURE_MODE;
 
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_ONE, fromHoldGestSeq, fromHoldGestResponse);
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_TWO, fromHoldGestSeq, fromHoldGestResponse);
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_THREE, fromHoldGestSeq, fromHoldGestResponse);
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FOUR, fromHoldGestSeq, fromHoldGestResponse);
-    ss = gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FIVE, fromHoldGestSeq, fromHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_ONE, fromHoldGestSeq, fromHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_TWO, fromHoldGestSeq, fromHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_THREE, fromHoldGestSeq, fromHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FOUR, fromHoldGestSeq, fromHoldGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_HOLD_FIVE, fromHoldGestSeq, fromHoldGestResponse);
+
+    if (ss != (int)SequenceStatus::SUCCESS)
+    {
+        throw new std::exception("registerSequenceException");
+    }
 }
 
 void GestureFilter::handleStateChange(sequenceResponse response)
