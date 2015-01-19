@@ -8,14 +8,8 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
     ui.setupUi(this);
 
     // set window as "always on top"
-    Qt::WindowFlags flags = this->windowFlags();
-    this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
-
-    // set window as transparent to keyboard/mouse events - not working right now. TODO
-    HWND hwnd = (HWND)winId();
-    LONG styles = GetWindowLong(hwnd, GWL_EXSTYLE);
-    SetWindowLong(hwnd, GWL_EXSTYLE, styles | WS_EX_TRANSPARENT);
-    styles = GetWindowLong(hwnd, GWL_EXSTYLE);
+//    Qt::WindowFlags flags = this->windowFlags();
+//    this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
 
     this->mainThread = mainThread;
 
@@ -23,6 +17,8 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
 
     qRegisterMetaType<std::string>("std::String");
     connect(mainThread, SIGNAL(emitString(std::string)), this, SLOT(displayMessage(std::string)));
+
+    connect(mainThread, SIGNAL(emitStateString(std::string)), this, SLOT(displayStateMessage(std::string)));
 
 
     // now for a mockup of the real business!
@@ -43,6 +39,11 @@ void MidasGUI::handleCount(int count)
 void MidasGUI::displayMessage(std::string str)
 {
     ui.label->setText(QString::fromStdString(str));
+}
+
+void MidasGUI::displayStateMessage(std::string str)
+{
+    ui.label_2->setText(QString::fromStdString(str));
 }
 
 void MidasGUI::handleXVeloc(int veloc)

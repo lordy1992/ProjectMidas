@@ -21,6 +21,11 @@ using namespace myo;
 #define MYO_GESTURE_LEFT_MOUSE Pose::fist
 #define SEQ_TIMEOUT_LENGTH 3000 // ms
 
+// GestureFilter spawns a thread to execute callback functions at this
+// period.
+#define SLEEP_LEN 20 // ms
+
+
 
 /**
  * Consult Filter.h for concepts regarding Filters.
@@ -53,6 +58,13 @@ public:
      */
     void process();
 
+    /**
+    * return actual handle to gestSeqRecorder
+    */
+    GestureSeqRecorder *getGestureSeqRecorder() { return &gestSeqRecorder; }
+
+    static void handleStateChange(sequenceResponse response);
+
 private:
 
     /**
@@ -66,19 +78,21 @@ private:
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleStateChange(sequenceResponse response);
     void handleMouseCommand(sequenceResponse response);
     void handleKybrdCommand(sequenceResponse response);
     void handleMouseRelease();
 
     Pose::Type lastPoseType;
     
-    ControlState* controlStateHandle;
+    static ControlState* controlStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
     ResponseType lastResponseType;
 };
+
+void setupCallbackThread(GestureFilter *gf);
+void callbackThreadWrapper(GestureFilter *gf);
 
 #endif /* _GESTURE_FILTER_H */

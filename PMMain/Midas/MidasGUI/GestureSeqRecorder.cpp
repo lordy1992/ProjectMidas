@@ -1,23 +1,22 @@
 #include "GestureSeqRecorder.h"
 #include "MidasMain.h"
 
-
-GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock())
+GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
     }
 }
 
-GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime) : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()) 
+GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime) : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
@@ -26,7 +25,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 
 GestureSeqRecorder::~GestureSeqRecorder()
 {
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_MODE; midasModeInt++)
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
     {
         midasMode mm = static_cast<midasMode>(midasModeInt);
         delete (*seqMapPerMode)[mm];
@@ -52,7 +51,7 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.responseType = ResponseType::NONE;
@@ -89,6 +88,62 @@ SequenceStatus GestureSeqRecorder::progressSequence(myo::Pose::Type gesture, Con
 }
 
 
+void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
+{
+    // Provide response if hold is reached and cut off 'taps' if hold is reached
+    if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
+    {
+        // This call to progressSequenceTime indicates a 'hold'.
+        // Update activeSequences now.
+        activeSequencesMutex.lock();
+        std::list<sequenceInfo*>::iterator it = activeSequences.begin();
+        while (it != activeSequences.end())
+        {
+            unsigned int seqProg = (*it)->progress;
+
+            if (seqProg < (*it)->seq.size())
+            {
+                // We just hit the "hold" state, handle accordingly
+                if (SeqElement::PoseLength::HOLD == (*it)->seq.at(seqProg).poseLen)
+                {
+                    (*it)->progress++;
+                    if ((*it)->progress == (*it)->seq.size())
+                    {
+                        // found a complete sequence!
+                        response = (*it)->sequenceResponse;
+                        break;
+                    }
+                    it++;
+                }
+                else
+                {
+                    (*it)->progress = 0;
+                    std::list<sequenceInfo*>::iterator itCopy = it;
+                    it++;
+                    activeSequences.erase(itCopy);
+                }
+            }
+        }
+        activeSequencesMutex.unlock();
+
+        if (response.responseType != ResponseType::NONE)
+        {
+            // if the response is not NONE, a sequence has completed. Therefore all
+            // active sequences must be cleared so that all valid sequences can potentially
+            // be started.
+            emptyActiveSequences();
+
+            if (response.responseType != ResponseType::NONE)
+            {
+                std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
+            }
+        }
+    }
+
+    holdGestTimer -= delta;
+}
+
+
 void GestureSeqRecorder::checkProgressBaseTime()
 {
     clock_t now = clock();
@@ -106,12 +161,14 @@ void GestureSeqRecorder::emptyActiveSequences()
     // Reset all sequence info sequence stat info, and clear all references
     // to them.
     std::list<sequenceInfo*>::iterator it;
+    activeSequencesMutex.lock();
     for (it = activeSequences.begin(); it != activeSequences.end(); it++)
     {
         (*it)->progress = 0;
     }
 
     activeSequences.clear();
+    activeSequencesMutex.unlock();
     std::cout << "Cleared Active Sequences." << std::endl;
 }
 
@@ -127,32 +184,58 @@ clock_t GestureSeqRecorder::getProgressMaxDeltaTime(void)
 
 SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const
 {
+    // This is a special concession to allow rest to be used to revert modes from a mode entered by holding 
+    // a gesture.
+    if (seqInfo.seq.size() > 1 && seqInfo.seq.at(0).type == Pose::Type::rest)
+    {
+        // if rest is being registered, it cannot be part of a sequence greater than size one. 
+        // Arbitrary rule, but will help with logistics.
+        return SequenceStatus::INVALID_SEQUENCE;
+    }
+
     sequence seqInQuestion = seqInfo.seq;
     sequenceList *seqList = (*seqMapPerMode)[mode];
 
     unsigned int compSeqIdx = 0;
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-        sequence compareSeq = it->seq;
+        sequence baseSeq = it->seq;
+
         bool conflict = false;
         unsigned int gestureIdx = 0;
 
         // loop through smaller of the two sequences, as that will determine if there is a conflict
         // most efficiently
-        if (compareSeq.size() < seqInQuestion.size())
+        if (baseSeq.size() < seqInQuestion.size())
         {
-            for (sequence::iterator compareSeqIt = compareSeq.begin(); compareSeqIt != compareSeq.end(); compareSeqIt++)
+            for (sequence::iterator baseSeqIt = baseSeq.begin(); baseSeqIt != baseSeq.end(); baseSeqIt++)
             {
-                Pose::Type gestInQuestion = seqInQuestion.at(gestureIdx);
-                Pose::Type compareGest = *compareSeqIt;
-                if (gestInQuestion != compareGest)
+                SeqElement gestInQuestion = seqInQuestion.at(gestureIdx);
+                SeqElement baseGest = *baseSeqIt;
+                
+                if (gestInQuestion.poseLen == SeqElement::PoseLength::IMMEDIATE || baseGest.poseLen == SeqElement::PoseLength::IMMEDIATE)
+                {
+                    if (gestureIdx > 1)
+                    {
+                        // can ONLY have length one IMMEDIATE types. This allows for very quick actions, such as clicking of a cursor,
+                        // but is not fully supported.
+                        return SequenceStatus::INVALID_SEQUENCE;
+                    }
+                    if (gestInQuestion.type == baseGest.type)
+                    {
+                        conflict = true;
+                        break;
+                    }
+                }
+                
+                if (gestInQuestion != baseGest)
                 {
                     bool conflict = false;
                     break;
                 }
 
                 gestureIdx++;
-                if (gestureIdx == compareSeq.size())
+                if (gestureIdx == baseSeq.size())
                 {
                     // made it to the end of the comparison and didn't find any differences!
                     conflict = true;
@@ -163,9 +246,25 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
         {
             for (sequence::iterator seqInQIt = seqInQuestion.begin(); seqInQIt != seqInQuestion.end(); seqInQIt++)
             {
-                Pose::Type gestInQuestion = *seqInQIt;
-                Pose::Type compareGest = compareSeq.at(gestureIdx);
-                if (gestInQuestion != compareGest)
+                SeqElement gestInQuestion = *seqInQIt;
+                SeqElement baseGest = baseSeq.at(gestureIdx);
+
+                if (gestInQuestion.poseLen == SeqElement::PoseLength::IMMEDIATE || baseGest.poseLen == SeqElement::PoseLength::IMMEDIATE)
+                {
+                    if (gestureIdx > 1)
+                    {
+                        // can ONLY have length one IMMEDIATE types. This allows for very quick actions, such as clicking of a cursor,
+                        // but is not fully supported.
+                        return SequenceStatus::INVALID_SEQUENCE;
+                    }
+                    if (gestInQuestion.type == baseGest.type)
+                    {
+                        conflict = true;
+                        break;
+                    }
+                }
+
+                if (gestInQuestion != baseGest)
                 {
                     bool conflict = false;
                     break;
@@ -204,7 +303,7 @@ SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
 
@@ -216,40 +315,82 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(myo::Pose::Type gestu
         emptyActiveSequences();
         return status;
     }
-    progressBaseTime = now;
+    if (gesture != Pose::rest)
+    {
+        // only update time if a new pose is input, as this flags intention 
+        // is to ensure that users progress through a sequence in relative haste.
+        progressBaseTime = now; 
+    }
 
+    activeSequencesMutex.lock();
     std::list<sequenceInfo*>::iterator it = activeSequences.begin();
     while (it != activeSequences.end())
     {
         unsigned int seqProg = (*it)->progress;
-        if ((seqProg < (*it)->seq.size()) &&  (gesture == (*it)->seq.at(seqProg)))
+        if ((seqProg < (*it)->seq.size()) &&
+            (SeqElement::PoseLength::IMMEDIATE == (*it)->seq.at(seqProg).poseLen))
         {
-            (*it)->progress++;
-            if ((*it)->progress == (*it)->seq.size())
-            {
-                // found a complete sequence!
-                // NOTE: This is guaranteed to be the ONLY sequence that will match the input
-                // gesture, due to how sequences are registered. (it is a pre-condition for this function).
+            // Handle IMMEDIATE uniquely, by not dealing with holdGestureTimer at all.
+        }
 
-                response = (*it)->sequenceResponse;
-                break;
+        if (gesture == Pose::rest)
+        {
+            // if this is TAP gesture, and the timer is still in the 'tapping range'
+            if (holdGestTimer > 0)
+            {
+                if ((seqProg < (*it)->seq.size()) &&
+                    (SeqElement::PoseLength::TAP == (*it)->seq.at(seqProg).poseLen))
+                {
+                    // match! Progress forward :)
+                    (*it)->progress++;
+                    if ((*it)->progress == (*it)->seq.size())
+                    {
+                        // found a complete sequence!
+                        response = (*it)->sequenceResponse;
+                        break;
+                    }
+                    it++;
+                }
+                else
+                {
+                    (*it)->progress = 0;
+                    std::list<sequenceInfo*>::iterator itCopy = it;
+                    it++;
+                    activeSequences.erase(itCopy);
+                }
             }
-            it++;
+            else
+            {
+                it++;
+                // do nothing important. This is handled in progressSequenceTime.
+            }
         }
         else
         {
-            (*it)->progress = 0;
-            std::list<sequenceInfo*>::iterator itCopy = it;
-            it++;
-            activeSequences.erase(itCopy);
+            // Use non-rest Poses to determine if the correct pose is being
+            // performed to follow a sequence. If its not, remove it.
+            if ((seqProg < (*it)->seq.size()) &&
+                (gesture == (*it)->seq.at(seqProg).type))
+            {
+                holdGestTimer = REQ_HOLD_TIME; // reset count on any progression
+                it++;
+            }
+            else
+            {
+                (*it)->progress = 0;
+                std::list<sequenceInfo*>::iterator itCopy = it;
+                it++;
+                activeSequences.erase(itCopy);
+            }
         }
     }
+    activeSequencesMutex.unlock();
     printStatus(true);
 
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
@@ -261,38 +402,35 @@ SequenceStatus GestureSeqRecorder::findActivation(myo::Pose::Type gesture, Contr
     // have a matching first gesture.
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
     {
-        if (it->seq.size() >= 0)
+        if ((it->seq.size() >= 0) && 
+            (it->seq.at(0).type == gesture))
         {
-            if (it->seq.at(0) == gesture) 
+            if (it->seq.at(0).poseLen == SeqElement::PoseLength::IMMEDIATE)
             {
-                // found sequence to activate!
-
-                // 2 cases - If the sequence is only size one, then the response can be set, as the 
-                // sequence is complete. 
-                // NOTE: This is guaranteed to be the ONLY size one sequence that will match the input
-                // gesture, due to how sequences are registered. (it is a pre-condition for this function).
-                if (it->seq.size() == 1)
-                {
-                    response = it->sequenceResponse;
-                    status = SequenceStatus::SUCCESS;
-                    break;
-                } 
-                else
-                {
-                    it->progress++;
-                    activeSequences.push_back(&(*it));
-                    printStatus(true);
-                }
+                // Special case. Immediate isn't 'held'
+                response = it->sequenceResponse;
+                break;
             }
+
+            // found sequence to activate!
+            activeSequencesMutex.lock();
+            activeSequences.push_back(&(*it));
+            activeSequencesMutex.unlock();
+            printStatus(true);
+
+            holdGestTimer = REQ_HOLD_TIME; // set count on any progression
         }
+        
     }
 
     seqList = NULL;
     return status;
 }
 
+
 void GestureSeqRecorder::printStatus(bool verbose)
 {
+    activeSequencesMutex.lock();
     if (verbose)
     {
         std::cout << "Active Sequences: " << std::endl;
@@ -310,8 +448,8 @@ void GestureSeqRecorder::printStatus(bool verbose)
             {
                 // more gestures to perform before completion - called RIGHT after progress is incremented, so print it's
                 // current value as the index... maybe change. TODO.
-                std::cout << ", Next Gesture: " << PoseTypeToString((*it)->seq.at(progress));
-                emitString += ", Next Gesture: " + PoseTypeToString((*it)->seq.at(progress));
+                std::cout << ", Next Gesture: " << PoseTypeToString((*it)->seq.at(progress).type);
+                emitString += ", Next Gesture: " + PoseTypeToString((*it)->seq.at(progress).type);
             }
             std::cout << std::endl;
             emitString += "\n";
@@ -319,7 +457,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
             if (gThreadHandle)
             {
                 // TODO - figure out WHY this isnt working! This value is always null here....  so was gMidasThread when tried that...
-                gThreadHandle->threadEmitString(emitString);
+                gThreadHandle->threadEmitString(emitString); // Note: Handling in a different way than this for now, but this structure seemed promissing..
             }
 
             it++;
@@ -338,4 +476,6 @@ void GestureSeqRecorder::printStatus(bool verbose)
             it++;
         }
     }
+    activeSequencesMutex.unlock();
 }
+
