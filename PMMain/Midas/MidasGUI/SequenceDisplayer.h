@@ -44,6 +44,7 @@ public:
     void addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
     void advanceSequences(int action);
     void keyPressEvent(QKeyEvent *e);
+    QSize sizeHint() const;
 
 private:
     void addSequenceWidgets();
@@ -52,6 +53,8 @@ private:
     void formBoxLabel(QLabel *label);
     std::map<std::string, sequenceData> sequenceNameToDataMap;
     QGridLayout *gridLayout;
+    int maxWidth, maxHeight;
+    int maxNumSequences;
 };
 
 #endif SEQUENCE_DISPLAYER_H

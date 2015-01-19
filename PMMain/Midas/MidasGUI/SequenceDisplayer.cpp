@@ -1,6 +1,8 @@
 #include "SequenceDisplayer.h"
 #include <QImage.h>
 #include <qevent.h>
+#include <qapplication.h>
+#include <qdesktopwidget.h>
 
 #define LABEL_NUM_COLS      3
 #define LABEL_NUM_ROWS      1
@@ -10,14 +12,28 @@
 #define GRID_ELEMENT_SIZE   48
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
-    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint)
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
     gridLayout = new QGridLayout;
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     setLayout(gridLayout);
-  
+
+    // Populate the grid layout initially.
+    QLabel *dummyLabel = new QLabel;
+    formBoxLabel(dummyLabel);
+    dummyLabel->hide();
+
+    maxNumSequences = 10;
+
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
+
+    maxHeight = 48 * maxNumSequences;
+    maxWidth = 48 * 8;
+    // Position the widget on the bottom-right initially.
+    QRect screen = QApplication::desktop()->availableGeometry(this);
+    move(screen.right() - maxWidth, screen.bottom() - maxHeight);
+
     // Test code
     QImage image1(tr("tester1.bmp"));
     QImage image2(tr("tester2.bmp"));
@@ -77,6 +93,11 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     addSequence("Seq. 3", sequence3);
 
     addSequenceWidgets();
+}
+
+QSize SequenceDisplayer::sizeHint() const
+{
+    return QSize(maxWidth, maxHeight);
 }
 
 void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages)
