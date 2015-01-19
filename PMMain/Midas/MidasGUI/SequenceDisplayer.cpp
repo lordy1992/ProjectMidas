@@ -10,6 +10,7 @@
 #define SEQ_NUMBER_NUM_ROWS 1
 #define NUM_SEQUENCE_STEPS  3
 #define GRID_ELEMENT_SIZE   48
+#define NUM_COLS (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS)
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
@@ -18,18 +19,13 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     setLayout(gridLayout);
 
-    // Populate the grid layout initially.
-    QLabel *dummyLabel = new QLabel;
-    formBoxLabel(dummyLabel);
-    dummyLabel->hide();
-
     maxNumSequences = 10;
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
 
-    maxHeight = 48 * maxNumSequences;
-    maxWidth = 48 * 8;
+    maxHeight = GRID_ELEMENT_SIZE * maxNumSequences;
+    maxWidth = GRID_ELEMENT_SIZE * NUM_COLS;
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
     move(screen.right() - maxWidth, screen.bottom() - maxHeight);
@@ -253,7 +249,7 @@ void SequenceDisplayer::addSequenceWidgets()
         currCol += SEQ_NUMBER_NUM_COLS;
         std::vector<sequenceImageSet>::iterator sequenceIt;
         for (sequenceIt = seq.sequenceImages.begin() + seq.currentPos; 
-            sequenceIt != seq.sequenceImages.end() && currCol < (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS); sequenceIt++)
+            sequenceIt != seq.sequenceImages.end() && currCol < NUM_COLS; sequenceIt++)
         {
             QPixmap pixmap = sequenceIt->laterImage;
             if (currCol == LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS) pixmap = sequenceIt->nextImage;
