@@ -41,13 +41,15 @@ public:
     SequenceDisplayer(QWidget *parent = 0);
 
     // QPixmap uses implicit data sharing, so it is okay to pass around by value.
-    void addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
-    void advanceSequences(int action);
     void keyPressEvent(QKeyEvent *e);
     QSize sizeHint() const;
 
+public slots:
+    void addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
+    void advanceSequences(int action);
+    void updateSequences();
+
 private:
-    void addSequenceWidgets();
     void clearWidgets();
     void clearRow(sequenceData seq);
     void formBoxLabel(QLabel *label);

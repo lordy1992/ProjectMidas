@@ -89,7 +89,7 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     addSequence("Seq. 2", sequence2);
     addSequence("Seq. 3", sequence3);
 
-    addSequenceWidgets();
+    updateSequences();
 }
 
 QSize SequenceDisplayer::sizeHint() const
@@ -162,7 +162,7 @@ void SequenceDisplayer::advanceSequences(int action)
         sequenceNameToDataMap.clear();
     }
 
-    addSequenceWidgets();
+    updateSequences();
 }
 
 void SequenceDisplayer::keyPressEvent(QKeyEvent *e)
@@ -233,7 +233,7 @@ void SequenceDisplayer::formBoxLabel(QLabel *label)
     label->setScaledContents(true);
 }
 
-void SequenceDisplayer::addSequenceWidgets()
+void SequenceDisplayer::updateSequences()
 {
     std::map<std::string, sequenceData>::iterator it;
 
