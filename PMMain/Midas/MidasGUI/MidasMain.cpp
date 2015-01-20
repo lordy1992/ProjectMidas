@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <Windows.h>
+#include "SCDDigester.h"
 #include "kybrdCtrl.h"
 #include "MouseCtrl.h"
 #include "WearableDevice.h"
@@ -86,76 +87,18 @@ int midasMain(MidasThread *threadHandle) {
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
     MouseCtrl* mouseCtrl = new MouseCtrl();
+	KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
-    time_t beginTime = clock();
-    commandData prevCmd;
-    int count = 0;
+	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
+    
     while (true)
     {
         if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
 
-        commandData nextCmd;
-        if (sharedData.consumeCommand(nextCmd))
-        {
-            if (nextCmd.mouse == LEFT_CLICK)
-            {
-                cout << "Received a left click." << endl;
-                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, false);
-            }
-            else if (nextCmd.mouse == RIGHT_CLICK)
-            {
-                cout << "Received a right click." << endl;
-                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, false);
-            }
-            else if (nextCmd.mouse == LEFT_RELEASE)
-            {
-                cout << "Received a left release." << endl;
-                mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
-            }
-            else if (nextCmd.mouse == RIGHT_RELEASE)
-            {
-                cout << "Received a right release." << endl;
-                mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
-            }
-        }
-
-        point unitVelocity = sharedData.getVelocity();
-        if (unitVelocity.x != 0)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
-            if (count % 1000 == 0)
-            {
-                // proof of concept - slowed down as to reduce buildup in signal buffer...
-                threadHandle->emitXVeloc(unitVelocity.x);
-            }
-        }
-        if (unitVelocity.y != 0)
-        {
-            mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
-            if (count % 1000 == 0)
-            {
-                // proof of concept - slowed down as to reduce buildup in signal buffer...
-                threadHandle->emitYVeloc(unitVelocity.y);
-            }
-        }
-
-        if (clock() - beginTime >= 1000)
-        {
-            cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << endl;
-            beginTime = clock();
-        }
-        prevCmd = nextCmd;
-
-        if (count % 100000 == 0)
-        {
-            threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
-            gMidasThread = threadHandle; // this isnt working, but i htink that's due to thread boundaries. so this needs to be properly coded. TODO
-            threadHandle->threadEmitStateString(std::to_string(controlState.getMode()));
-        }
-        count++;
+		scdDigester.digest();
     }
 
 #endif
