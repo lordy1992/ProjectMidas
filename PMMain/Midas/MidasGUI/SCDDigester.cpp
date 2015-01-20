@@ -68,17 +68,15 @@ void SCDDigester::digest()
     {
         if (deltaVolume > 0)
         {
-            //kybrdCtrl->setKeyChar(VK_VOLUME_UP); // TODO - make this work....
             threadHandle->threadEmitString("volume up" + std::to_string(count));
-            //kybrdCtrl->sendData();
-            kybrdCtrl->volumeUp();
+            kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_UP);
+            kybrdCtrl->sendData();
         }
         else if (deltaVolume < 0)
         {
-            //kybrdCtrl->setKeyChar(VK_VOLUME_DOWN);
             threadHandle->threadEmitString("volume down" + std::to_string(count));
-            //kybrdCtrl->sendData();
-            kybrdCtrl->volumeDown();
+            kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_DOWN);
+            kybrdCtrl->sendData();
         }
     }
 

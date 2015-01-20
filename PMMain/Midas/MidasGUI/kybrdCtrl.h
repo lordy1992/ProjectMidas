@@ -49,9 +49,6 @@ public:
      */
     int sendData();
 
-    void volumeDown();
-    void volumeUp();
-
 private:
     /**
     * Returns the vector of keyboard inputs. Should be used with caution.

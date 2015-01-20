@@ -12,41 +12,6 @@ KybrdCtrl::~KybrdCtrl()
 {
 }
 
-void KybrdCtrl::volumeDown()
-{
-    //keybd_event(VK_VOLUME_DOWN, 0, 0, 0);
-    //Sleep(20);
-    //keybd_event(VK_VOLUME_DOWN, 0, KEYEVENTF_KEYUP, 0);
-
-    this->kiVec.clear();
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_VOLUME_DOWN;
-    this->ki.wScan = MapVirtualKey(VK_VOLUME_DOWN, MAPVK_VK_TO_VSC);
-    this->kiVec.push_back(ki);
-    this->kiWillReleaseKeys = true;
-
-    setMirroredUpKeys();
-
-    sendData();
-}
-void KybrdCtrl::volumeUp()
-{
-    //keybd_event(VK_VOLUME_UP, 0, 0, 0);
-    //Sleep(20);
-    //keybd_event(VK_VOLUME_UP, 0, KEYEVENTF_KEYUP, 0);
-
-    this->kiVec.clear();
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_VOLUME_UP;
-    this->ki.wScan = MapVirtualKey(VK_VOLUME_UP, MAPVK_VK_TO_VSC);
-    this->kiVec.push_back(ki);
-    this->kiWillReleaseKeys = true;
-
-    setMirroredUpKeys();
-
-    sendData();
-}
-
 void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
     this->kiWillReleaseKeys = releaseKeys;
