@@ -14,15 +14,37 @@ KybrdCtrl::~KybrdCtrl()
 
 void KybrdCtrl::volumeDown()
 {
-    keybd_event(VK_VOLUME_DOWN, 0, 0, 0);
-    Sleep(20);
-    keybd_event(VK_VOLUME_DOWN, 0, KEYEVENTF_KEYUP, 0);
+    //keybd_event(VK_VOLUME_DOWN, 0, 0, 0);
+    //Sleep(20);
+    //keybd_event(VK_VOLUME_DOWN, 0, KEYEVENTF_KEYUP, 0);
+
+    this->kiVec.clear();
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_VOLUME_DOWN;
+    this->ki.wScan = MapVirtualKey(VK_VOLUME_DOWN, MAPVK_VK_TO_VSC);
+    this->kiVec.push_back(ki);
+    this->kiWillReleaseKeys = true;
+
+    setMirroredUpKeys();
+
+    sendData();
 }
 void KybrdCtrl::volumeUp()
 {
-    keybd_event(VK_VOLUME_UP, 0, 0, 0);
-    Sleep(20);
-    keybd_event(VK_VOLUME_UP, 0, KEYEVENTF_KEYUP, 0);
+    //keybd_event(VK_VOLUME_UP, 0, 0, 0);
+    //Sleep(20);
+    //keybd_event(VK_VOLUME_UP, 0, KEYEVENTF_KEYUP, 0);
+
+    this->kiVec.clear();
+    ZeroMemory(&ki, sizeof(KEYBDINPUT));
+    this->ki.wVk = VK_VOLUME_UP;
+    this->ki.wScan = MapVirtualKey(VK_VOLUME_UP, MAPVK_VK_TO_VSC);
+    this->kiVec.push_back(ki);
+    this->kiWillReleaseKeys = true;
+
+    setMirroredUpKeys();
+
+    sendData();
 }
 
 void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
@@ -34,23 +56,23 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
     switch (kybdCmd) 
     {
     case UNDO:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x5A); // 'Z' key
         break;
     case REDO:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x59); // 'Y' key
         break;
     case ZOOM_IN:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(VK_OEM_PLUS);
         break;
     case ZOOM_OUT:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(VK_OEM_MINUS);
         break;
     case ZOOM_100:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x30); // '0' key
         break;
     case ESCAPE:
@@ -64,62 +86,67 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
         break;
     case SWITCH_WIN_FORWARD:
         // This only works if uiAccess is set to True.
-        inputAlt();
+        inputVK(VK_MENU);
         inputVK(VK_TAB);
         break;
     case SWITCH_WIN_REVERSE:
         // This only works if uiAccess is set to True.
-        inputAlt();
-        inputLShift();
+        inputVK(VK_MENU);
+        inputVK(VK_LSHIFT);
         inputVK(VK_TAB);
         break;
     case COPY:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x43); // 'C' key
         break;
     case PASTE:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x56); // 'V' key
         break;
     case CUT:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x58); // 'X' key
         break;
     case FILE_MENU:
-        inputAlt();
+        inputVK(VK_MENU);
         inputVK(0x46); // 'F' key
         break;
     case NEW_BROWSER:
-        inputCtrl();
+        inputVK(VK_CONTROL);
         inputVK(0x4E); // 'N' key
         break;
     case GOTO_ADDR_BAR:
-        inputAlt();
+        inputVK(VK_MENU);
         inputVK(0x44); // 'D' key
         break;
     case LOCK_DESKTOP:
         // THIS ONE IS NOT WORKING TODO
-        inputWindows();
-        ZeroMemory(&ki, sizeof(KEYBDINPUT));
+        inputVK(VK_LWIN);
         inputVK(0x4C); // 'L' key
         break;
     case EDIT_MENU:
-        inputAlt();
+        inputVK(VK_MENU);
         inputVK(0x45); // 'E' key
         break;
     case VIEW_MENU:
-        inputAlt();
+        inputVK(VK_MENU);
         inputVK(0x56); // 'V' key
         break;
     case WIN_HOME:
-        inputWindows();
+        inputVK(VK_LWIN);
         break;
     case HIDE_APPS:
-        inputWindows();
+        inputVK(VK_LWIN);
         inputVK(0x44); // 'D' key
         break;
     case CONTROL:
-        inputCtrl();
+        inputVK(VK_CONTROL);
+        break;
+    case VOLUME_UP:
+        inputVK(VK_VOLUME_UP);
+        break;
+    case VOLUME_DOWN:
+        inputVK(VK_VOLUME_DOWN);
         break;
     default:
         break;
@@ -196,43 +223,7 @@ void KybrdCtrl::setMirroredUpKeys()
     }
 }
 
-void KybrdCtrl::inputCtrl()
-{
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_CONTROL;
-    this->ki.wScan = MapVirtualKey(VK_CONTROL, MAPVK_VK_TO_VSC);
-
-    this->kiVec.push_back(ki);
-}
-
-void KybrdCtrl::inputLShift()
-{
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_LSHIFT;
-    this->ki.wScan = MapVirtualKey(VK_LSHIFT, MAPVK_VK_TO_VSC);
-
-    this->kiVec.push_back(ki);
-}
-
-void KybrdCtrl::inputAlt()
-{
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_MENU;
-    this->ki.wScan = MapVirtualKey(VK_MENU, MAPVK_VK_TO_VSC);
-
-    this->kiVec.push_back(ki);
-}
-
-void KybrdCtrl::inputWindows()
-{
-    ZeroMemory(&ki, sizeof(KEYBDINPUT));
-    this->ki.wVk = VK_LWIN;
-    this->ki.wScan = MapVirtualKey(VK_LWIN, MAPVK_VK_TO_VSC);
-
-    this->kiVec.push_back(ki);
-}
-
-void KybrdCtrl::inputVK(int vk)
+void KybrdCtrl::inputVK(unsigned int vk)
 {
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
     this->ki.wVk = vk;

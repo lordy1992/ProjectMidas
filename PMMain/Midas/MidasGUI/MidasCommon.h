@@ -36,7 +36,9 @@ enum kybdCmds {
     VIEW_MENU,
     WIN_HOME,
     HIDE_APPS,
-    CONTROL
+    CONTROL,
+    VOLUME_UP,
+    VOLUME_DOWN
 };
 
 /**
