@@ -13,9 +13,10 @@ int main(int argc, char *argv[])
     midasThread.start();
 
    // MidasGUI w(&midasThread);
-   // MouseIndicator w;
+    MouseIndicator w1;
     SequenceDisplayer w;
 
+    w1.show();
     w.show();
     return a.exec();
 }

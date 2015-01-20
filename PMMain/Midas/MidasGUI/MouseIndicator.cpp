@@ -36,7 +36,8 @@ MouseIndicator::MouseIndicator(int widgetWidth, int widgetHeight, QWidget *paren
 
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
-    move(screen.right() - indWidth - 40, screen.bottom() - indHeight - 40);
+    setGeometry(screen.right() - indWidth, screen.bottom() - indHeight,
+        indWidth, indHeight);
 }
 
 void MouseIndicator::paintEvent(QPaintEvent *event)

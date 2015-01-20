@@ -50,8 +50,8 @@ public slots:
     void updateSequences();
 
 private:
-    void clearWidgets();
-    void clearRow(sequenceData seq);
+    void clearWidgets(bool deleteLabels = false);
+    void clearRow(sequenceData seq, bool deleteLabels = false);
     void formBoxLabel(QLabel *label);
     std::map<std::string, sequenceData> sequenceNameToDataMap;
     QGridLayout *gridLayout;

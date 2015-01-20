@@ -12,14 +12,15 @@
 #define GRID_ELEMENT_SIZE   48
 #define NUM_COLS (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS)
 #define GUI_WIDTH_BUFFER 1
+#define GUI_HEIGHT_OFFSET_FROM_BOTTOM 96
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
     gridLayout = new QGridLayout;
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+    gridLayout->setSpacing(5);
     setLayout(gridLayout);
-
     maxNumSequences = 10;
 
     setAttribute(Qt::WA_TranslucentBackground);
@@ -27,9 +28,11 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
 
     maxHeight = GRID_ELEMENT_SIZE * maxNumSequences;
     maxWidth = GRID_ELEMENT_SIZE * (NUM_COLS + GUI_WIDTH_BUFFER);
+
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
-    move(screen.right() - maxWidth, screen.bottom() - maxHeight);
+    setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
+        maxWidth, maxHeight);
 
     // Test code
     QImage image1(tr("tester1.bmp"));
@@ -108,8 +111,7 @@ void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequen
     newSequence.seqLabel->setFont(timesFont);
     newSequence.seqLabel->setWordWrap(true);
     formBoxLabel(newSequence.seqLabel);
-    newSequence.seqLabel->setMinimumSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
-    newSequence.seqLabel->setMaximumSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
+    newSequence.seqLabel->setFixedSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
     newSequence.seqPosLabel = new QLabel(tr("0 / %1").arg(newSequence.numSteps));
     newSequence.seqPosLabel->setFont(timesFont);
     formBoxLabel(newSequence.seqPosLabel);
@@ -152,14 +154,16 @@ void SequenceDisplayer::advanceSequences(int action)
         }
         else
         {
-            clearRow(it->second);
+            clearRow(it->second, true);
             it = sequenceNameToDataMap.erase(it);
         }
     }
     
-    clearWidgets();
     if (done) {
+        clearWidgets(true);
         sequenceNameToDataMap.clear();
+    } else {
+        clearWidgets();
     }
 
     updateSequences();
@@ -193,12 +197,19 @@ void SequenceDisplayer::keyPressEvent(QKeyEvent *e)
     }
 }
 
-void SequenceDisplayer::clearRow(sequenceData seq)
+void SequenceDisplayer::clearRow(sequenceData seq, bool deleteLabels)
 {
     seq.seqLabel->setHidden(true);
     gridLayout->removeWidget(seq.seqLabel);
     seq.seqPosLabel->setHidden(true);
     gridLayout->removeWidget(seq.seqPosLabel);
+
+    if (deleteLabels)
+    {
+        delete seq.seqLabel;
+        delete seq.seqPosLabel;
+        seq.seqLabel = seq.seqPosLabel = NULL;
+    }
 
     std::vector<sequenceImageSet> sequenceImages = seq.sequenceImages;
     std::vector<sequenceImageSet>::iterator sequenceIt;
@@ -207,16 +218,21 @@ void SequenceDisplayer::clearRow(sequenceData seq)
     {
         sequenceIt->currentImgLabel->setHidden(true);
         gridLayout->removeWidget(sequenceIt->currentImgLabel);
+        if (deleteLabels)
+        {
+            delete sequenceIt->currentImgLabel;
+            sequenceIt->currentImgLabel = NULL;
+        }
     }
 }
 
-void SequenceDisplayer::clearWidgets()
+void SequenceDisplayer::clearWidgets(bool deleteLabels)
 {
     std::map<std::string, sequenceData>::iterator it;
     for (it = sequenceNameToDataMap.begin(); it != sequenceNameToDataMap.end(); it++)
     {
         sequenceData seq = it->second;
-        clearRow(seq);
+        clearRow(seq, deleteLabels);
     }
 }
 
@@ -228,8 +244,7 @@ void SequenceDisplayer::formBoxLabel(QLabel *label)
     label->setBackgroundRole(QPalette::Base);
     label->setAlignment(Qt::AlignCenter);
     label->setAutoFillBackground(true);
-    label->setMinimumSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
-    label->setMaximumSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    label->setFixedSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
     label->setScaledContents(true);
 }
 

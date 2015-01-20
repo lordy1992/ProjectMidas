@@ -137,6 +137,9 @@
     <ClCompile Include="DraggableWidget.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="SequenceImageManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -209,6 +212,9 @@
     </ClInclude>
     <ClInclude Include="MidasMain.h">
       <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SequenceImageManager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
