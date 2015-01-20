@@ -142,7 +142,7 @@ void GestureFilter::registerStateSequences(void)
     mouseToGestResponse.responseType = ResponseType::STATE_CHANGE;
     mouseToGestResponse.responseAction.mode = midasMode::GESTURE_MODE;
 
-    ss |= (int)(int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToGestSeq, mouseToGestResponse);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, mouseToGestSeq, mouseToGestResponse);
 
     // Register sequence from Mouse Mode to Keyboard Mode
     sequence mouseToKybrdSeq;
