@@ -12,9 +12,11 @@ int main(int argc, char *argv[])
     MidasThread midasThread;
     midasThread.start();
 
+    qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
+
     //MidasGUI w(&midasThread);
     MouseIndicator w1(&midasThread);
-    SequenceDisplayer w;
+    SequenceDisplayer w(&midasThread);
 
     w1.show();
     w.show();

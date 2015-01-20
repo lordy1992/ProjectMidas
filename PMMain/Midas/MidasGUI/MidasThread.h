@@ -3,6 +3,7 @@
 
 #include <QThread>
 #include <string>
+#include "MyoCommon.h"
 
 class MidasThread : public QThread
 {
@@ -23,11 +24,12 @@ private:
 
 signals:
     void outputCount(int);
-
     void emitString(std::string);
     void emitStateString(std::string);
-
     void emitVeloc(int, int);
+    void emitAddSequence(std::string, std::vector<sequenceImageSet>);
+    void emitAdvanceSequence(int);
+    void emitUpdateSequences();
     
 };
 

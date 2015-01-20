@@ -17,9 +17,11 @@
 #define GUI_WIDTH_BUFFER 1
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM 96
 
-SequenceDisplayer::SequenceDisplayer(QWidget *parent)
+SequenceDisplayer::SequenceDisplayer(MidasThread* midasThread, QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
+    this->midasThread = midasThread;
+
     gridLayout = new QGridLayout;
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     gridLayout->setSpacing(5);
@@ -36,6 +38,10 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
         maxWidth, maxHeight);
+
+    connect(midasThread, SIGNAL(emitAddSequence(std::string, std::vector<sequenceImageSet>)), this, SLOT(addSequence(std::string, std::vector<sequenceImageSet>)));
+    connect(midasThread, SIGNAL(emitAdvanceSequence(int)), this, SLOT(advanceSequences(int)));
+    connect(midasThread, SIGNAL(emitUpdateSequences()), this, SLOT(updateSequences()));
 
     // Test code
     SequenceImageManager imgManager;

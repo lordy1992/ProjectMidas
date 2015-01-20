@@ -9,7 +9,6 @@ MidasThread::MidasThread()
 
 MidasThread::~MidasThread()
 {
-
 }
 
 void MidasThread::run()

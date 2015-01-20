@@ -4,6 +4,7 @@
 #include "myo\myo.hpp"
 #include <string>
 #include <iostream>
+#include <QLabel.h>
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -15,6 +16,26 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
+/*
+* Each step in a sequence may have three different images, depending on
+* the progress of the sequence. The 'doneImage' is displayed on sequence
+* steps that have already been performed; the 'nextImage' is displayed for
+* the next step that must be performed, and the 'laterImage' applies to all
+* other steps.
+*/
+struct sequenceImageSet
+{
+    QPixmap nextImage, laterImage;
+    QLabel* currentImgLabel;
+    int actionTag;
+};
+
+struct sequenceData
+{
+    QLabel *seqLabel, *seqPosLabel;
+    int numSteps, currentPos;
+    std::vector<sequenceImageSet> sequenceImages;
+};
 
 /**
 * Simple string conversion for Pose::Types to string.
