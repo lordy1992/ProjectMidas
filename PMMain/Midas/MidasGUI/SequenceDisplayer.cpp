@@ -11,6 +11,7 @@
 #define NUM_SEQUENCE_STEPS  3
 #define GRID_ELEMENT_SIZE   48
 #define NUM_COLS (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS)
+#define GUI_WIDTH_BUFFER 1
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
@@ -25,7 +26,7 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     setWindowOpacity(0.8);
 
     maxHeight = GRID_ELEMENT_SIZE * maxNumSequences;
-    maxWidth = GRID_ELEMENT_SIZE * NUM_COLS;
+    maxWidth = GRID_ELEMENT_SIZE * (NUM_COLS + GUI_WIDTH_BUFFER);
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
     move(screen.right() - maxWidth, screen.bottom() - maxHeight);
