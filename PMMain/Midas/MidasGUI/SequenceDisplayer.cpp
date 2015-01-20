@@ -4,6 +4,9 @@
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 
+// Temporary 
+#include "SequenceImageManager.h"
+
 #define LABEL_NUM_COLS      3
 #define LABEL_NUM_ROWS      1
 #define SEQ_NUMBER_NUM_COLS 1
@@ -35,62 +38,23 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
         maxWidth, maxHeight);
 
     // Test code
-    QImage image1(tr("tester1.bmp"));
-    QImage image2(tr("tester2.bmp"));
-    QPixmap pixmap1 = QPixmap::fromImage(image1);
-    QPixmap pixmap2 = QPixmap::fromImage(image2);
+    SequenceImageManager imgManager;
+    imgManager.loadImages();
 
-    std::vector<sequenceImageSet> sequence1, sequence2, sequence3;
+    std::vector<sequenceImageSet> sequence1, sequence2, sequence3, sequence4;
+    std::vector<int> ids1 = { 1, 2, 3, 2 };
+    std::vector<int> ids2 = { 1, 2, 4, 6 };
+    std::vector<int> ids3 = { 1, 3, 2 };
+    std::vector<int> ids4 = { 2, 6 };
+    sequence1 = imgManager.formSequenceSetFromIds(ids1);
+    sequence2 = imgManager.formSequenceSetFromIds(ids2);
+    sequence3 = imgManager.formSequenceSetFromIds(ids3);
+    sequence4 = imgManager.formSequenceSetFromIds(ids4);
 
-    sequenceImageSet sequence1Step1;
-    sequence1Step1.nextImage = pixmap1;
-    sequence1Step1.laterImage = pixmap2;
-    sequence1Step1.actionTag = 1;
-    sequenceImageSet sequence1Step2;
-    sequence1Step2.nextImage = pixmap1;
-    sequence1Step2.laterImage = pixmap2;
-    sequence1Step2.actionTag = 2;
-    sequenceImageSet sequence1Step3;
-    sequence1Step3.nextImage = pixmap1;
-    sequence1Step3.laterImage = pixmap2;
-    sequence1Step3.actionTag = 3;
-    sequenceImageSet sequence1Step4;
-    sequence1Step4.nextImage = pixmap1;
-    sequence1Step4.laterImage = pixmap2;
-    sequence1Step4.actionTag = 4;
-
-    sequence1.push_back(sequence1Step1);
-    sequence1.push_back(sequence1Step2);
-    sequence1.push_back(sequence1Step3);
-    sequence1.push_back(sequence1Step4);
-
-    sequenceImageSet sequence2Step1;
-    sequence2Step1.nextImage = pixmap1;
-    sequence2Step1.laterImage = pixmap2;
-    sequence2Step1.actionTag = 3;
-
-    sequence2.push_back(sequence2Step1);
-
-    sequenceImageSet sequence3Step1;
-    sequence3Step1.nextImage = pixmap1;
-    sequence3Step1.laterImage = pixmap2;
-    sequence3Step1.actionTag = 1;
-    sequenceImageSet sequence3Step2;
-    sequence3Step2.nextImage = pixmap1;
-    sequence3Step2.laterImage = pixmap2;
-    sequence3Step2.actionTag = 2;
-    sequenceImageSet sequence3Step3;
-    sequence3Step3.nextImage = pixmap1;
-    sequence3Step3.laterImage = pixmap2;
-    sequence3Step3.actionTag = 4;
-
-    sequence3.push_back(sequence3Step1);
-    sequence3.push_back(sequence3Step2);
-    sequence3.push_back(sequence3Step3);
-
-    addSequence("Sequence Blah blah 1", sequence1);
-    addSequence("Seq. 2", sequence2);
-    addSequence("Seq. 3", sequence3);
+    addSequence("Zoom In", sequence1);
+    addSequence("Rotate Screen", sequence2);
+    addSequence("Wiggle", sequence3);
+    addSequence("Double View", sequence4);
 
     updateSequences();
 }

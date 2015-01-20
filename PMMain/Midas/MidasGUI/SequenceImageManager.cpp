@@ -1,5 +1,4 @@
 #include "SequenceImageManager.h"
-#include "SequenceDisplayer.h"
 #include <QImage.h>
 #include <qstring.h>
 
@@ -22,6 +21,26 @@ SequenceImageManager::SequenceImageManager()
 
 SequenceImageManager::~SequenceImageManager()
 {
+}
+
+std::vector<sequenceImageSet> SequenceImageManager::formSequenceSetFromIds(std::vector<int> ids)
+{
+    std::vector<int>::iterator it;
+    std::vector<sequenceImageSet> sequenceImages;
+
+    for (it = ids.begin(); it != ids.end(); ++it)
+    {
+        if (idToImageMap.find(*it) != idToImageMap.end())
+        {
+            sequenceImages.push_back(idToImageMap[*it]);
+        }
+        else
+        {
+            return std::vector<sequenceImageSet>();
+        }
+    }
+
+    return sequenceImages;
 }
 
 void SequenceImageManager::loadImages()
