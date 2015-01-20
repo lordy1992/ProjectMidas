@@ -27,8 +27,7 @@ signals:
     void emitString(std::string);
     void emitStateString(std::string);
 
-    void emitXVeloc(int);
-    void emitYVeloc(int);
+    void emitVeloc(int, int);
     
 };
 

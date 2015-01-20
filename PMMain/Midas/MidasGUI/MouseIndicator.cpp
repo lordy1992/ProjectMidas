@@ -8,10 +8,12 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-MouseIndicator::MouseIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
+MouseIndicator::MouseIndicator(MidasThread *mainThread, int widgetWidth, int widgetHeight, QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint), indWidth(widgetWidth), indHeight(widgetHeight),
     cursorPos(0, 0)
 {
+    this->mainThread = mainThread;
+
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     timer->start(1000);
@@ -38,6 +40,8 @@ MouseIndicator::MouseIndicator(int widgetWidth, int widgetHeight, QWidget *paren
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - indWidth, screen.bottom() - indHeight,
         indWidth, indHeight);
+
+    connect(mainThread, SIGNAL(emitVeloc(int, int)), this, SLOT(handleUpdateCursorPos(int, int)));
 }
 
 void MouseIndicator::paintEvent(QPaintEvent *event)

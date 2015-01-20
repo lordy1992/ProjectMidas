@@ -129,7 +129,7 @@ int midasMain(MidasThread *threadHandle) {
             if (count % 1000 == 0)
             {
                 // proof of concept - slowed down as to reduce buildup in signal buffer...
-                threadHandle->emitXVeloc(unitVelocity.x);
+                threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
             }
         }
         if (unitVelocity.y != 0)
@@ -138,7 +138,7 @@ int midasMain(MidasThread *threadHandle) {
             if (count % 1000 == 0)
             {
                 // proof of concept - slowed down as to reduce buildup in signal buffer...
-                threadHandle->emitYVeloc(unitVelocity.y);
+                threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
             }
         }
 

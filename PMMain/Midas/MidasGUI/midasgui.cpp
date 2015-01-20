@@ -22,8 +22,8 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
 
 
     // now for a mockup of the real business!
-    connect(mainThread, SIGNAL(emitXVeloc(int)), this, SLOT(handleXVeloc(int)));
-    connect(mainThread, SIGNAL(emitYVeloc(int)), this, SLOT(handleYVeloc(int)));
+   // connect(mainThread, SIGNAL(emitXVeloc(int)), this, SLOT(handleXVeloc(int)));
+    //connect(mainThread, SIGNAL(emitYVeloc(int)), this, SLOT(handleYVeloc(int)));
 }
 
 MidasGUI::~MidasGUI()
