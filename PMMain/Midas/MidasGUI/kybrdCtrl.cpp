@@ -12,6 +12,19 @@ KybrdCtrl::~KybrdCtrl()
 {
 }
 
+void KybrdCtrl::volumeDown()
+{
+    keybd_event(VK_VOLUME_DOWN, 0, 0, 0);
+    Sleep(20);
+    keybd_event(VK_VOLUME_DOWN, 0, KEYEVENTF_KEYUP, 0);
+}
+void KybrdCtrl::volumeUp()
+{
+    keybd_event(VK_VOLUME_UP, 0, 0, 0);
+    Sleep(20);
+    keybd_event(VK_VOLUME_UP, 0, KEYEVENTF_KEYUP, 0);
+}
+
 void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
 {
     this->kiWillReleaseKeys = releaseKeys;
@@ -119,7 +132,7 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
     }
 }
 
-void KybrdCtrl::setKeyChar(char c, bool releaseKeys)
+void KybrdCtrl::setKeyChar(unsigned char c, bool releaseKeys)
 {
     this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();

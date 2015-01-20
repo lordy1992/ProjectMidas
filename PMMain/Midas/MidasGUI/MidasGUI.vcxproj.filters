@@ -114,7 +114,7 @@
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
     <ClCompile Include="SCDDigester.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Midas</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +181,7 @@
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
     <ClInclude Include="SCDDigester.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

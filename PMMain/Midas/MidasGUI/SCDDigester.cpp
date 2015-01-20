@@ -63,9 +63,28 @@ void SCDDigester::digest()
 		}
 	}
 
+	float deltaVolume = scdHandle->getDeltaVolume();
+    if (count % 10000 == 0)
+    {
+        if (deltaVolume > 0)
+        {
+            //kybrdCtrl->setKeyChar(VK_VOLUME_UP); // TODO - make this work....
+            threadHandle->threadEmitString("volume up" + std::to_string(count));
+            //kybrdCtrl->sendData();
+            kybrdCtrl->volumeUp();
+        }
+        else if (deltaVolume < 0)
+        {
+            //kybrdCtrl->setKeyChar(VK_VOLUME_DOWN);
+            threadHandle->threadEmitString("volume down" + std::to_string(count));
+            //kybrdCtrl->sendData();
+            kybrdCtrl->volumeDown();
+        }
+    }
+
 	if (count % 100000 == 0)
 	{
-		threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
+		//threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
 		threadHandle->threadEmitStateString(std::to_string(cntrlStateHandle->getMode()));
 		
 		std::cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << std::endl;

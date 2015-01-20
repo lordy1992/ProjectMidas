@@ -39,7 +39,7 @@ public:
      * @param releaseKeys If this is true, the key press will be followed by a release. Otherwise,
      * it will just cause a key press.
      */
-    void setKeyChar(char c, bool releaseKeys = true);
+	void setKeyChar(unsigned char c, bool releaseKeys = true);
 
     /**
      * This executes the keyboard commands set for the keyboard controller by sending the
@@ -48,6 +48,9 @@ public:
      * @return An integer representing the status of the action, as per kybdStatus.
      */
     int sendData();
+
+    static void volumeDown();
+    static void volumeUp();
 
 private:
     /**
