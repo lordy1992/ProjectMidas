@@ -318,7 +318,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
 
             if (gThreadHandle)
             {
-                // TODO - figure out WHY this isnt working! This value is always null here....
+                // TODO - figure out WHY this isnt working! This value is always null here....  so was gMidasThread when tried that...
                 gThreadHandle->threadEmitString(emitString);
             }
 
