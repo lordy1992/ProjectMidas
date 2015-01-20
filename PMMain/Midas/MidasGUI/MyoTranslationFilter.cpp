@@ -44,10 +44,6 @@ void MyoTranslationFilter::process()
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
             Filter::setOutput(outputToSharedCommandData);
         }
-        else
-        {
-            Filter::setFilterStatus(filterStatus::END_CHAIN);
-        }
     }
     else
     {

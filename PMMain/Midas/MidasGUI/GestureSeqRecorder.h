@@ -27,6 +27,8 @@ using namespace myo;
 
 #define DEFAULT_PROG_MAX_DELTA 1000 // ms
 
+#define REQ_HOLD_TIME 1000 // ms
+
 enum class SequenceStatus {
     SUCCESS,
     CONFLICTING_SEQUENCE,
@@ -48,11 +50,7 @@ enum class ResponseType {
 * GestureSeqRecorder to determine what action to take.
 */
 struct sequenceResponse {
-    sequenceResponse() {
-        responseName = "";
-    }
-
-    ResponseType responseType;
+    ResponseType responseType = ResponseType::NONE;
 
     union responseAction
     {
@@ -62,10 +60,12 @@ struct sequenceResponse {
     };
     responseAction responseAction;
 
-    std::string responseName;
+    std::string responseName = "";
 };
 
-typedef std::vector<Pose::Type> sequence;
+
+
+typedef std::vector<SeqElement> sequence;
 
 /**
 * Wrapper to tie state information to a sequence response.
@@ -98,6 +98,9 @@ public:
     * midasMode. When in that mode, any progression of gestures from the Myo will be compared
     * to all associated and registered sequences, and if any are succesfully completed, the 
     * registered sequenceResponse will be returned to the caller.
+    * NOTE: Can only register sequences with SeqElements of PoseLength IMMEDIATE if the sequence
+    * is of length one. This could be changed in the future if deemed necessary, but this allows
+    * progressSequence to be unnafected by this special case.
     *
     * @param mode The midasMode that the caller is registering the sequence against.
     * @param seq The sequence (std::vector<Pose::Type>) of gestures to register
@@ -120,6 +123,22 @@ public:
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */ 
     SequenceStatus progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response);
+
+    /**
+    * To handle tap/hold differentiation, this should be called to notify the SeqRecorder that a 
+    * certain amount of time has passed. If a certain amount of time passes while a user is holding
+    * a specific pose, then they are deemed to be holding it, otherwise they have tapped it.
+    * This function will continually decrement the hold timer, and if it reaches 0, it will clear
+    * any active sequences that were supposed to have a 'tap' action, and will progress any sequences
+    * that have a 'hold' action.
+    *
+    * @param delta The amount of time in ms indicated to have passed.
+    * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
+    * means that no sequence was completed. However, if it's not NONE, it holds the response that
+    * was registered against the completed sequence.
+    * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
+    */
+    void progressSequenceTime(int delta, sequenceResponse& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -198,6 +217,8 @@ private:
     // are timed out.
     std::list<sequenceInfo*> activeSequences;
 
+    std::mutex activeSequencesMutex;
+
     // State info from when a sequence that has size >1 is started.
     midasMode prevState;
 
@@ -209,6 +230,10 @@ private:
     // then when a wave in is recorded, the user has up to "TransMaxDeltaTime"
     // milliseconds to perform a wave out, or else the whole process needs to be repeated.
     clock_t progressMaxDeltaTime;
+
+    // Timer to hold the amount of time on each progression of a sequence, which 
+    // will determine if a user tapped a pose, or held it.
+    clock_t holdGestTimer;
 };
 
 #endif /* _GESTURE_SEQ_RECORDER_H */
