@@ -153,6 +153,7 @@ int midasMain(MidasThread *threadHandle) {
         {
             threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
             gMidasThread = threadHandle; // this isnt working, but i htink that's due to thread boundaries. so this needs to be properly coded. TODO
+            threadHandle->threadEmitStateString(std::to_string(controlState.getMode()));
         }
         count++;
     }

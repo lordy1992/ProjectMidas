@@ -23,6 +23,7 @@ private:
 public slots:
     void handleCount(int count);
     void displayMessage(std::string str);
+    void displayStateMessage(std::string str);
     void handleXVeloc(int veloc);
     void handleYVeloc(int veloc);
 };
