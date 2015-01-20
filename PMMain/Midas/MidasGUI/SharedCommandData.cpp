@@ -83,40 +83,40 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
 
 void SharedCommandData::setDeltaVolume(float volume)
 {
-	volumeMutex.lock();
-	deltaVolume = volume;
-	volumeMutex.unlock();
+    volumeMutex.lock();
+    deltaVolume = volume;
+    volumeMutex.unlock();
 }
 
 bool SharedCommandData::trySetDeltaVolume(float volume)
 {
-	bool locked = volumeMutex.try_lock();
-	if (locked) {
-		deltaVolume = volume;
-		volumeMutex.unlock();
-	}
+    bool locked = volumeMutex.try_lock();
+    if (locked) {
+        deltaVolume = volume;
+        volumeMutex.unlock();
+    }
 
-	return locked;
+    return locked;
 }
 
 float SharedCommandData::getDeltaVolume()
 {
-	volumeMutex.lock();
-	float volume = deltaVolume;
-	volumeMutex.unlock();
+    volumeMutex.lock();
+    float volume = deltaVolume;
+    volumeMutex.unlock();
 
-	return volume;
+    return volume;
 }
 
 bool SharedCommandData::tryGetVolume(float& outVolume)
 {
-	bool locked = volumeMutex.try_lock();
-	if (locked) {
-		outVolume = deltaVolume;
-		volumeMutex.unlock();
-	}
+    bool locked = volumeMutex.try_lock();
+    if (locked) {
+        outVolume = deltaVolume;
+        volumeMutex.unlock();
+    }
 
-	return locked;
+    return locked;
 }
 
 
@@ -143,11 +143,11 @@ void SharedCommandData::process()
         extractPoint(value);
     }
 
-	if (input.find(DELTA_VOL) != input.end())
-	{
-		boost::any value = input[DELTA_VOL];
-		extractVolume(value);
-	}
+    if (input.find(DELTA_VOL) != input.end())
+    {
+        boost::any value = input[DELTA_VOL];
+        extractVolume(value);
+    }
 }
 
 void SharedCommandData::empty()
@@ -200,14 +200,14 @@ void SharedCommandData::extractPoint(boost::any value)
 
 void SharedCommandData::extractVolume(boost::any value)
 {
-	if (value.type() != typeid(float))
-	{
-		Filter::setFilterError(filterError::INVALID_INPUT);
-		Filter::setFilterStatus(filterStatus::FILTER_ERROR);
-	}
-	else
-	{
-		float deltaVolume = boost::any_cast<float>(value);
-		setDeltaVolume(deltaVolume);
-	}
+    if (value.type() != typeid(float))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        float deltaVolume = boost::any_cast<float>(value);
+        setDeltaVolume(deltaVolume);
+    }
 }

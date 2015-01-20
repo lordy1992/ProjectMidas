@@ -86,17 +86,17 @@ private:
     */
     float getYawFromQuaternion(float x, float y, float z, float w);
 
-	/**
-	* Calculate the 'roll' angle from the supplied quaternion, consisting of x, y, z and w.
-	* Unlike pitch, roll is indifferent to arm/xDirection of Myo.
-	*
-	* @param x The x coordinate of the quaternion.
-	* @param y The y coordinate of the quaternion.
-	* @param z The z coordinate of the quaternion.
-	* @param w The w coordinate of the quaternion.
-	* @return Returns the 'roll' angle, in radians.
-	*/
-	float getRollFromQuaternion(float x, float y, float z, float w);
+    /**
+    * Calculate the 'roll' angle from the supplied quaternion, consisting of x, y, z and w.
+    * Unlike pitch, roll is indifferent to arm/xDirection of Myo.
+    *
+    * @param x The x coordinate of the quaternion.
+    * @param y The y coordinate of the quaternion.
+    * @param z The z coordinate of the quaternion.
+    * @param w The w coordinate of the quaternion.
+    * @return Returns the 'roll' angle, in radians.
+    */
+    float getRollFromQuaternion(float x, float y, float z, float w);
 
     /**
     * Calculates the percent of the mouse cursor's total velocity along the x

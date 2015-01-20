@@ -20,18 +20,18 @@ using namespace myo;
 class SCDDigester
 {
 public:
-	SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl);
-	~SCDDigester();
+    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl);
+    ~SCDDigester();
 
-	void digest();
+    void digest();
 
 private:
-	SharedCommandData *scdHandle;
-	MidasThread *threadHandle;
-	ControlState *cntrlStateHandle;
-	MouseCtrl *mouseCtrl;
-	KybrdCtrl *kybrdCtrl;
-	int count;
+    SharedCommandData *scdHandle;
+    MidasThread *threadHandle;
+    ControlState *cntrlStateHandle;
+    MouseCtrl *mouseCtrl;
+    KybrdCtrl *kybrdCtrl;
+    int count;
 };
 
 #endif /* _SCD_DIGESTER_H */

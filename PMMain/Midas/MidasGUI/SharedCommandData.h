@@ -18,7 +18,7 @@
 class SharedCommandData : public Filter
 {
 public:
-	SharedCommandData() : Filter(), mouseVelocity(), deltaVolume(0) {}
+    SharedCommandData() : Filter(), mouseVelocity(), deltaVolume(0) {}
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -95,10 +95,10 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
-	void setDeltaVolume(float volume);
-	bool trySetDeltaVolume(float volume);
-	float getDeltaVolume();
-	bool tryGetVolume(float& outVolume);
+    void setDeltaVolume(float volume);
+    bool trySetDeltaVolume(float volume);
+    float getDeltaVolume();
+    bool tryGetVolume(float& outVolume);
 
     /**
      * Returns true if the command queue is empty, otherwise false.
@@ -130,15 +130,15 @@ public:
 
 private:
     point mouseVelocity;
-	float deltaVolume;
+    float deltaVolume;
     std::queue<commandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
-	std::mutex volumeMutex;
+    std::mutex volumeMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-	void extractVolume(boost::any value);
+    void extractVolume(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

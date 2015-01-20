@@ -4,7 +4,7 @@
 #include <iostream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
-	: controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0), prevRoll(0), deltaRoll(0)
+    : controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0), prevRoll(0), deltaRoll(0)
 {
 }
 
@@ -19,7 +19,7 @@ void MyoTranslationFilter::process()
     float quatY = boost::any_cast<float>(input[INPUT_QUATERNION_Y]);
     float quatZ = boost::any_cast<float>(input[INPUT_QUATERNION_Z]);
     float quatW = boost::any_cast<float>(input[INPUT_QUATERNION_W]);
-	filterDataMap outputToSharedCommandData;
+    filterDataMap outputToSharedCommandData;
 
     Arm arm = boost::any_cast<Arm>(input[INPUT_ARM]);
     XDirection xDirection = boost::any_cast<XDirection>(input[INPUT_X_DIRECTION]);
@@ -37,25 +37,25 @@ void MyoTranslationFilter::process()
         baseYaw = yaw;
     }
 
-	outputToSharedCommandData[DELTA_VOL] = 0;
+    outputToSharedCommandData[DELTA_VOL] = 0;
     if (controlStateHandle->getMode() != MOUSE_MODE)
     {
         if (previousMode == MOUSE_MODE)
         {
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
-        }	
+        }    
 
-		// Jorden TODO -- put other "if (controlStateHandle->getMode() == XXX)" statements here, and generate output
-		// to populate the sharedcommanddata with. Such as rotational data for volume
-		// temp
-		if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
-		{
-			// as per GestureFilter, this is executed with a fist, and currently will be tested by changing the volume.
+        // Jorden TODO -- put other "if (controlStateHandle->getMode() == XXX)" statements here, and generate output
+        // to populate the sharedcommanddata with. Such as rotational data for volume
+        // temp
+        if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
+        {
+            // as per GestureFilter, this is executed with a fist, and currently will be tested by changing the volume.
             deltaRoll = rollDeg - prevRoll;
             prevRoll = rollDeg;
-			outputToSharedCommandData[DELTA_VOL] = deltaRoll;	
-		}
+            outputToSharedCommandData[DELTA_VOL] = deltaRoll;    
+        }
     }
     else
     {
@@ -112,7 +112,7 @@ float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, floa
 
 float MyoTranslationFilter::getRollFromQuaternion(float x, float y, float z, float w)
 {
-	return atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
+    return atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
 }
 
 float MyoTranslationFilter::calcRingDelta(float current, float base)

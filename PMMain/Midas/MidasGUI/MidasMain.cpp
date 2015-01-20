@@ -87,18 +87,18 @@ int midasMain(MidasThread *threadHandle) {
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
     MouseCtrl* mouseCtrl = new MouseCtrl();
-	KybrdCtrl* kybrdCtrl = new KybrdCtrl();
+    KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
-	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
+    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
     
     while (true)
     {
         if (myoDevice->getDeviceStatus() != deviceStatus::RUNNING) break;
 
-		scdDigester.digest();
+        scdDigester.digest();
     }
 
 #endif
