@@ -117,7 +117,7 @@ enum kybdStatus {
  * either all Midas command types.
  */
 struct commandData {
-    commandType type;
+    commandType type = commandType::NONE;
     union action{
         kybdCmds kybd;
         kybdGUICmds kybdGUI;
