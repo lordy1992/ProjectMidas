@@ -36,39 +36,6 @@ enum class SequenceStatus {
     UNEXPECT_STATE_CHANGE
 };
 
-
-// JORDEN TODO - Remove ResponseType and sequenceResponse and replace with commandType and commandData
-
-//enum class ResponseType {
-//    NONE,
-//    STATE_CHANGE,
-//    MOUSE_CMD,
-//    KYBRD_CMD,
-//    KYBRD_GUI_CMD
-//};
-//
-///**
-//* sequenceResponse defines all posible outcomes from a seequence
-//* successfully being completed. This will allow the user of a 
-//* GestureSeqRecorder to determine what action to take.
-//*/
-//struct sequenceResponse {
-//    ResponseType responseType = ResponseType::NONE;
-//
-//    union responseAction
-//    {
-//        mouseCmds mouse;
-//        kybdCmds kybd;
-//        kybdGUICmds kybdGUI;
-//        midasMode mode;
-//    };
-//    responseAction responseAction;
-//
-//    std::string responseName = "";
-//};
-
-
-
 typedef std::vector<SeqElement> sequence;
 
 /**
