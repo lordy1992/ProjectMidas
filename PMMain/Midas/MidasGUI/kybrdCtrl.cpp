@@ -113,6 +113,9 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
     case VOLUME_DOWN:
         inputVK(VK_VOLUME_DOWN);
         break;
+    case BACKSPACE:
+        inputVK(VK_BACK);
+        break;
     default:
         break;
     }

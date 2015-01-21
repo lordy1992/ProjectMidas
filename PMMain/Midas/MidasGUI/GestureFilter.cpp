@@ -50,7 +50,10 @@ void GestureFilter::process()
             // terminate filter pipeline, as nothing to add
             Filter::setFilterStatus(filterStatus::END_CHAIN);
         }
-        lastResponseType = response.responseType; // only care about non-rest responses.
+        lastResponseType = response.responseType; // only care about non-rest responses. // JORDEN TODO - see if theres a better way to do this so that the "tapped" mouse buttons will behave better (currently only "immediate" works nicely with this code)
+        // maybe just need to move this out of the if statment since responses are always returned now..? TODO test this theory after the meeting Jan 20.
+        // Nah... Really need to do what i was already planning, which is to extend the mouseCtrl class to include a "press and release" command
+        // like the kybrdCtrl class which includes a short delay, but completes the desired action entirely.
     }
     else
     {
@@ -77,7 +80,7 @@ void GestureFilter::process()
     {
         handleMouseCommand(response);
     }
-    else if (response.responseType == ResponseType::KYBRD_CMD)
+    else if (response.responseType == ResponseType::KYBRD_CMD || response.responseType == ResponseType::KYBRD_GUI_CMD)
     {
         handleKybrdCommand(response);
     }
@@ -111,13 +114,64 @@ void GestureFilter::registerMouseSequences(void)
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {
-        throw new std::exception("registerSequenceException");
+        throw new std::exception("registerSequenceException: mouse");
     }
 }
 
 void GestureFilter::registerKeyboardSequences(void)
 {
-    // Nothing to register right now. Always could though :)
+    sequence kybrdGUISequence;
+    sequenceResponse kybrdGUIResponse;
+
+    // register arm specific commands first
+    kybrdGUIResponse.responseName = "Swap Ring Focus";
+    kybrdGUIResponse.responseType = ResponseType::KYBRD_GUI_CMD;
+    kybrdGUIResponse.responseAction.kybdGUI = kybdGUICmds::SWAP_RING_FOCUS;
+    //if (left arm) // Todo, figure out an elegent way to access arm data here.
+    //{
+    //    kybrdGUISequence.push_back(SeqElement(Pose::Type::waveIn));
+    //}
+    //else
+    {
+        kybrdGUISequence.push_back(SeqElement(Pose::Type::waveOut));
+    }
+    int ss = (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdGUISequence, kybrdGUIResponse);
+    kybrdGUIResponse.responseName = "Backspace";
+    kybrdGUIResponse.responseType = ResponseType::KYBRD_CMD;
+    kybrdGUIResponse.responseAction.kybd = kybdCmds::BACKSPACE;
+    //if (left arm) // Todo, figure out an elegent way to access arm data here.
+    //{
+    //    kybrdGUISequence[0] = (SeqElement(Pose::Type::waveOut));
+    //}
+    //else
+    {
+        kybrdGUISequence[0] = (SeqElement(Pose::Type::waveIn));
+    }
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdGUISequence, kybrdGUIResponse);
+
+    // register the rest of the keyboard commands
+    kybrdGUIResponse.responseName = "Select";
+    kybrdGUIResponse.responseType = ResponseType::KYBRD_GUI_CMD;
+    kybrdGUIResponse.responseAction.kybdGUI = kybdGUICmds::SELECT;
+    kybrdGUISequence[0] = (SeqElement(Pose::Type::fist));
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdGUISequence, kybrdGUIResponse);
+
+    kybrdGUIResponse.responseName = "Hold Select";
+    kybrdGUIResponse.responseType = ResponseType::KYBRD_GUI_CMD;
+    kybrdGUIResponse.responseAction.kybdGUI = kybdGUICmds::HOLD_SELECT;
+    kybrdGUISequence[0] = (SeqElement(Pose::Type::fist, SeqElement::PoseLength::HOLD));
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdGUISequence, kybrdGUIResponse);
+
+    kybrdGUIResponse.responseName = "Change Wheels";
+    kybrdGUIResponse.responseType = ResponseType::KYBRD_GUI_CMD;
+    kybrdGUIResponse.responseAction.kybdGUI = kybdGUICmds::CHANGE_WHEELS;
+    kybrdGUISequence[0] = (SeqElement(Pose::Type::fingersSpread));
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdGUISequence, kybrdGUIResponse);
+
+    if (ss != (int)SequenceStatus::SUCCESS)
+    {
+        throw new std::exception("registerSequenceException: keyboard");
+    }
 }
 
 void GestureFilter::registerStateSequences(void)
@@ -167,7 +221,7 @@ void GestureFilter::registerStateSequences(void)
 
     // Register sequence from Keyboard Mode to Mouse Mode
     sequence kybrdToMouseSeq;
-    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveOut));
+    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
     kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));
     sequenceResponse kybrdToMouseResponse;
     kybrdToMouseResponse.responseName = "Keyboard To Mouse";
@@ -176,7 +230,7 @@ void GestureFilter::registerStateSequences(void)
 
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, kybrdToMouseSeq, kybrdToMouseResponse);
 
-    // Register sequence from ALL Modes to Lock Mode.
+    // Register sequence from most Modes to Lock Mode.
     sequence toLockSeq;
     toLockSeq.push_back(SeqElement(Pose::Type::waveIn));
     toLockSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
@@ -190,7 +244,9 @@ void GestureFilter::registerStateSequences(void)
     toLockResponse.responseName = "Gesture To Lock";
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, toLockSeq, toLockResponse);
     // From Keyboard:
-    toLockResponse.responseName = "Keyboard To Lock";
+    toLockResponse.responseName = "Keyboard To Lock"; // OVERRIDE for Keyboard.
+    toLockSeq[0] = (SeqElement(Pose::Type::thumbToPinky));
+    toLockSeq[1] = (SeqElement(Pose::Type::waveOut));
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse);
 
     // Register sequence from Gesture Mode to Gesture Hold Modes
@@ -275,7 +331,7 @@ void GestureFilter::handleKybrdCommand(sequenceResponse response)
     {
         filterDataMap outputToSharedCommandData;
         commandData command;
-        command.type = KEYBOARD_COMMAND;
+        command.type = KEYBOARD_COMMAND;//response.responseType; // Jorden TODO. This is same as GestureSeqRecorder TODO.
         command.kbd = response.responseAction.kybd;
 
         outputToSharedCommandData[COMMAND_INPUT] = command;

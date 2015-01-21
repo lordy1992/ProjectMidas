@@ -37,11 +37,14 @@ enum class SequenceStatus {
 };
 
 
+// JORDEN TODO - Remove ResponseType and sequenceResponse and replace with commandType and commandData
+
 enum class ResponseType {
     NONE,
     STATE_CHANGE,
     MOUSE_CMD,
-    KYBRD_CMD
+    KYBRD_CMD,
+    KYBRD_GUI_CMD
 };
 
 /**
@@ -56,6 +59,7 @@ struct sequenceResponse {
     {
         mouseCmds mouse;
         kybdCmds kybd;
+        kybdGUICmds kybdGUI;
         midasMode mode;
     };
     responseAction responseAction;

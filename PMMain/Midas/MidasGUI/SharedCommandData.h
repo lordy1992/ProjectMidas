@@ -18,7 +18,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData() : Filter(), mouseVelocity(), deltaVolume(0) {}
+    SharedCommandData(unsigned int maxKybdGuiSel = 0) : Filter(), mouseVelocity(), deltaVolume(0) { this->maxKybdGuiSel = maxKybdGuiSel; }
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -100,6 +100,11 @@ public:
     float getDeltaVolume();
     bool tryGetVolume(float& outVolume);
 
+    void setKybdGuiSel(unsigned int kybdGuiSel);
+    bool trySetKybdGuiSel(unsigned int kybdGuiSel);
+    float getKybdGuiSel();
+    bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
+
     /**
      * Returns true if the command queue is empty, otherwise false.
      *
@@ -131,10 +136,14 @@ public:
 private:
     point mouseVelocity;
     float deltaVolume;
+    // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
+    unsigned int maxKybdGuiSel;
+    unsigned int kybdGuiSel;
     std::queue<commandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
     std::mutex volumeMutex;
+    std::mutex kybdGuiSelMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);

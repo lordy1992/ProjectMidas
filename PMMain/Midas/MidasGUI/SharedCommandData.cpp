@@ -119,6 +119,53 @@ bool SharedCommandData::tryGetVolume(float& outVolume)
     return locked;
 }
 
+void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
+{
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        kybdGuiSelMutex.lock();
+        kybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+}
+
+bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
+{
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        bool locked = kybdGuiSelMutex.try_lock();
+        if (locked) {
+            kybdGuiSel = kybdGuiSel;
+            kybdGuiSelMutex.unlock();
+        }
+        return locked;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+float SharedCommandData::getKybdGuiSel()
+{
+    kybdGuiSelMutex.lock();
+    float volume = kybdGuiSel;
+    kybdGuiSelMutex.unlock();
+
+    return volume;
+}
+
+bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
+{
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        outKybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+
+    return locked;
+}
+
 
 bool SharedCommandData::isCommandQueueEmpty()
 {
@@ -208,6 +255,6 @@ void SharedCommandData::extractVolume(boost::any value)
     else
     {
         float deltaVolume = boost::any_cast<float>(value);
-        setDeltaVolume(deltaVolume);
+        setDeltaVolume(deltaVolume); // Jorden TODO -- Change this to addCommand asap. This should not be like this. Do stuff with owen first, then come back and fix this.
     }
 }
