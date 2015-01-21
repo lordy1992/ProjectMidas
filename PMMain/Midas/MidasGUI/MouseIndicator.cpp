@@ -13,10 +13,10 @@ MouseIndicator::MouseIndicator(MidasThread *mainThread, int widgetWidth, int wid
     cursorPos(0, 0)
 {
     this->mainThread = mainThread;
-
+    
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(1000);
+    timer->start(50);
 
     // Temporarily allow a Quit
     QAction *quitAction = new QAction(tr("E&xit"), this);
@@ -57,8 +57,8 @@ void MouseIndicator::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
     painter.setBrush(Qt::NoBrush);
 
-    int deadZoneWidth = width() / 3;
-    int deadZoneHeight = width() / 3;
+    int deadZoneWidth = width() / 10;
+    int deadZoneHeight = width() / 10;
     int originX = -deadZoneWidth / 2;
     int originY = -deadZoneHeight / 2;
     painter.drawEllipse(originX, originY, deadZoneWidth, deadZoneHeight);
@@ -71,7 +71,6 @@ void MouseIndicator::paintEvent(QPaintEvent *event)
 
     painter.drawPoint(cursorPos);
 }
-
 
 void MouseIndicator::resizeEvent(QResizeEvent *event)
 {
@@ -92,6 +91,8 @@ void MouseIndicator::handleUpdateCursorPos(int percentX, int percentY)
     if (percentY > 100) percentY = 100;
     if (percentY < -100) percentY = -100;
 
+    percentY *= -1;
+
     int rad = qMin(width(), height()) / 2;
     int newX = (percentX / 100.0) * rad;
     int newY = (percentY / 100.0) * rad;
@@ -99,7 +100,7 @@ void MouseIndicator::handleUpdateCursorPos(int percentX, int percentY)
     if (newX * newX + newY * newY > rad * rad)
     {
         // Constrain to the bounds of the circle.
-        double angleInRads = atan(((double) newY) / newX);
+        double angleInRads = atan2((double) newY, (double) newX);
         newX = rad * cos(angleInRads);
         newY = rad * sin(angleInRads);
     }

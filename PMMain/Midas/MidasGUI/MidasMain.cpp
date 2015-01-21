@@ -126,7 +126,7 @@ int midasMain(MidasThread *threadHandle) {
         if (unitVelocity.x != 0)
         {
             mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
-            if (count % 1000 == 0)
+            if (count % 100 == 0)
             {
                 // proof of concept - slowed down as to reduce buildup in signal buffer...
                 threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
@@ -135,7 +135,7 @@ int midasMain(MidasThread *threadHandle) {
         if (unitVelocity.y != 0)
         {
             mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
-            if (count % 1000 == 0)
+            if (count % 100 == 0)
             {
                 // proof of concept - slowed down as to reduce buildup in signal buffer...
                 threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
@@ -151,7 +151,7 @@ int midasMain(MidasThread *threadHandle) {
 
         if (count % 100000 == 0)
         {
-            threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
+            //threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
             gMidasThread = threadHandle; // this isnt working, but i htink that's due to thread boundaries. so this needs to be properly coded. TODO
             threadHandle->threadEmitStateString(std::to_string(controlState.getMode()));
         }
