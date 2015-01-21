@@ -269,8 +269,8 @@ void SharedCommandData::extractVolume(boost::any value)
 {
     if (value.type() != typeid(float))
     {
-        Filter::setFilterError(filterError::INVALID_INPUT);
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+        Filter::setFilterError(filterError::INVALID_INPUT); // Jorden TODO - this is where the "holding volume" bug is coming from.
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR); // 0 is failing here as its not seen as a float. change structure and see if bug dissapears. i assume it will.
     }
     else
     {
