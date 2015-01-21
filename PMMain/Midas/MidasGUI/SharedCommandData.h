@@ -102,8 +102,10 @@ public:
 
     void setKybdGuiSel(unsigned int kybdGuiSel);
     bool trySetKybdGuiSel(unsigned int kybdGuiSel);
-    float getKybdGuiSel();
+    unsigned int getKybdGuiSel();
     bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
+    unsigned int getKybdGuiSelMax();
+    bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
 
     /**
      * Returns true if the command queue is empty, otherwise false.

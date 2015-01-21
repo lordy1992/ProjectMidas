@@ -80,6 +80,11 @@ void SCDDigester::digest()
         }
     }
 
+    if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
+    {
+        digestKeyboardData(nextCmd);
+    }
+
     if (count % 100000 == 0)
     {
         //threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
@@ -88,4 +93,64 @@ void SCDDigester::digest()
         std::cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << std::endl;
     }
     count++;
+}
+
+void SCDDigester::digestKeyboardData(commandData nextCommand)
+{
+    if (nextCommand.type == KYBRD_CMD)
+    {
+        // handle as regular keyboard command input
+        kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
+        kybrdCtrl->sendData();
+    }
+    else if (nextCommand.type == KYBRD_GUI_CMD)
+    {
+        unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
+
+        // handle special commands for keyboard gui updating.
+        switch (nextCommand.action.kybdGUI)
+        {
+        case kybdGUICmds::SWAP_RING_FOCUS:
+            // Swap which ring is focussed on (out/in) 
+            // based on RingData structure: adding 1 will go from outer to inner ring and sub 1 will go from inner to outer
+            if (kybdGUISel % 4 == 0)
+            {
+                kybdGUISel += 1;
+            }
+            else
+            {
+                kybdGUISel -= 1;
+            }
+            //threadHandle->UpdateGUIToSwapRingFocus TODO
+            scdHandle->setKybdGuiSel(kybdGUISel);
+            break;
+        case kybdGUICmds::CHANGE_WHEELS:
+            // go to next wheel
+            kybdGUISel += 4;
+            kybdGUISel %= (scdHandle->getKybdGuiSelMax());
+            //threadHandle->UpdateGUIToChangeWheels TODO
+            scdHandle->setKybdGuiSel(kybdGUISel);
+            break;
+        case kybdGUICmds::SELECT:
+            /* Todo, pseudocode written 
+            scdHandle->getAngle()
+            use angle and current kybdGUISel to determine which character is being highlighted.
+            1) pass this character to the keyboard as such
+                kybrdCtrl->setKeyChar(charThatWasDetermined);
+                kybrdCtrl->sendData();    
+            2) tell the GUI that this was selected and that it should play some sort of animation *small flash or something, etc*
+            */
+            
+            break;
+        case kybdGUICmds::HOLD_SELECT:
+            /* Todo, pseudocode written
+            EXACT same thing as select except that the HOLD character is used, rather than the regular character.
+            // in the discusion of RingData, this would correspond to the "*Hold vectors"
+            */
+
+            break;
+        default:
+            break;
+        }
+    }
 }

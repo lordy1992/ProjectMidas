@@ -146,7 +146,7 @@ bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
     }
 }
 
-float SharedCommandData::getKybdGuiSel()
+unsigned int SharedCommandData::getKybdGuiSel()
 {
     kybdGuiSelMutex.lock();
     float volume = kybdGuiSel;
@@ -160,6 +160,26 @@ bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
     bool locked = kybdGuiSelMutex.try_lock();
     if (locked) {
         outKybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+
+    return locked;
+}
+
+unsigned int SharedCommandData::getKybdGuiSelMax()
+{
+    kybdGuiSelMutex.lock();
+    float volume = maxKybdGuiSel;
+    kybdGuiSelMutex.unlock();
+
+    return volume;
+}
+
+bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
+{
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        outMaxKybdGuiSel = maxKybdGuiSel;
         kybdGuiSelMutex.unlock();
     }
 

@@ -26,6 +26,8 @@ public:
     void digest();
 
 private:
+    void digestKeyboardData(commandData nextCommand);
+
     SharedCommandData *scdHandle;
     MidasThread *threadHandle;
     ControlState *cntrlStateHandle;
