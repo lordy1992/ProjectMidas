@@ -21,22 +21,22 @@ void SCDDigester::digest()
     commandData nextCmd;
     if (scdHandle->consumeCommand(nextCmd))
     {
-        if (nextCmd.mouse == LEFT_CLICK)
+        if (nextCmd.action.mouse == LEFT_CLICK)
         {
             std::cout << "Received a left click." << std::endl;
             mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, false);
         }
-        else if (nextCmd.mouse == RIGHT_CLICK)
+        else if (nextCmd.action.mouse == RIGHT_CLICK)
         {
             std::cout << "Received a right click." << std::endl;
             mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, false);
         }
-        else if (nextCmd.mouse == LEFT_RELEASE)
+        else if (nextCmd.action.mouse == LEFT_RELEASE)
         {
             std::cout << "Received a left release." << std::endl;
             mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
         }
-        else if (nextCmd.mouse == RIGHT_RELEASE)
+        else if (nextCmd.action.mouse == RIGHT_RELEASE)
         {
             std::cout << "Received a right release." << std::endl;
             mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
