@@ -8,9 +8,10 @@
  * peripherals on Windows.
  */
 enum commandType {
-    KEYBOARD_COMMAND,
-    KEYBOARD_GUI_COMMAND,
-    MOUSE_COMMAND,
+    KYBRD_CMD,
+    KYBRD_GUI_CMD,
+    MOUSE_CMD,
+    STATE_CHANGE,
     NONE,
     UNKNOWN_COMMAND
 };
@@ -116,13 +117,14 @@ enum kybdStatus {
  * either all Midas command types.
  */
 struct commandData {
-    commandType type;
-    union {
-        kybdCmds kbd;
-        kybdGUICmds kbdGUI;
+    commandType type = commandType::NONE;
+    union action{
+        kybdCmds kybd;
+        kybdGUICmds kybdGUI;
         mouseCmds mouse;
         midasMode mode;
     };
+    action action;
 
     std::string name = "";
 };

@@ -36,39 +36,6 @@ enum class SequenceStatus {
     UNEXPECT_STATE_CHANGE
 };
 
-
-// JORDEN TODO - Remove ResponseType and sequenceResponse and replace with commandType and commandData
-
-enum class ResponseType {
-    NONE,
-    STATE_CHANGE,
-    MOUSE_CMD,
-    KYBRD_CMD,
-    KYBRD_GUI_CMD
-};
-
-/**
-* sequenceResponse defines all posible outcomes from a seequence
-* successfully being completed. This will allow the user of a 
-* GestureSeqRecorder to determine what action to take.
-*/
-struct sequenceResponse {
-    ResponseType responseType = ResponseType::NONE;
-
-    union responseAction
-    {
-        mouseCmds mouse;
-        kybdCmds kybd;
-        kybdGUICmds kybdGUI;
-        midasMode mode;
-    };
-    responseAction responseAction;
-
-    std::string responseName = "";
-};
-
-
-
 typedef std::vector<SeqElement> sequence;
 
 /**
@@ -80,7 +47,7 @@ struct sequenceInfo {
     }
 
     sequence seq;
-    sequenceResponse sequenceResponse;
+    commandData sequenceResponse;
     unsigned int progress;
 };
 
@@ -101,7 +68,7 @@ public:
     * Register a sequence of gestures with this call. A registered sequence is associated with a 
     * midasMode. When in that mode, any progression of gestures from the Myo will be compared
     * to all associated and registered sequences, and if any are succesfully completed, the 
-    * registered sequenceResponse will be returned to the caller.
+    * registered commandData will be returned to the caller.
     * NOTE: Can only register sequences with SeqElements of PoseLength IMMEDIATE if the sequence
     * is of length one. This could be changed in the future if deemed necessary, but this allows
     * progressSequence to be unnafected by this special case.
@@ -112,7 +79,7 @@ public:
     * while in the registered mode.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */
-    SequenceStatus registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse);
+    SequenceStatus registerSequence(midasMode mode, sequence seq, commandData seqResponse);
 
     /**
     * Given a gesture, attempt to progress through any registered sequences, that match the mode
@@ -121,12 +88,12 @@ public:
     * @param gesture The recorded gesture that is being used to compare with the registered sequences.
     * @param state The ControlState handle to determine the current midasMode of the system, thereby 
     * knowing which registered sequence list to search through.
-    * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
+    * @param response The commandData that is populated by the function. Holding a type of NONE
     * means that no sequence was completed. However, if it's not NONE, it holds the response that
     * was registered against the completed sequence.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */ 
-    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, commandData& response);
 
     /**
     * To handle tap/hold differentiation, this should be called to notify the SeqRecorder that a 
@@ -137,12 +104,12 @@ public:
     * that have a 'hold' action.
     *
     * @param delta The amount of time in ms indicated to have passed.
-    * @param response The sequenceResponse that is populated by the function. Holding a type of NONE
+    * @param response The commandData that is populated by the function. Holding a type of NONE
     * means that no sequence was completed. However, if it's not NONE, it holds the response that
     * was registered against the completed sequence.
     * @return SequenceStatus The status of the progression. SUCCESS is typical and wanted.
     */
-    void progressSequenceTime(int delta, sequenceResponse& response);
+    void progressSequenceTime(int delta, commandData& response);
 
     /**
     * Called to check against progressBaseTime if any sequences are active, so that a 
@@ -202,7 +169,7 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus progressActiveSequences(Pose::Type gesture, ControlState state, commandData& response);
 
     /**
     * Perform the duties of progressSequence, but optimized for the situation where no sequence has yet
@@ -211,9 +178,9 @@ private:
     * @param x Same as progressSequence.
     * @return x Same as progressSequence.
     */
-    SequenceStatus findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response);
+    SequenceStatus findActivation(Pose::Type gesture, ControlState state, commandData& response);
 
-    // Holds all registered sequenceResponses in a layered organization.
+    // Holds all registered commandDatas in a layered organization.
     sequenceMapPerMode *seqMapPerMode;
 
     // Stores pointers to active sequenceInfos, so that progress can be tracked more efficiently.

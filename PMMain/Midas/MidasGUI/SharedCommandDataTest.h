@@ -19,18 +19,18 @@ public:
 
         if (cmd == 0)
         {
-            command.type = KEYBOARD_COMMAND;
-            command.kbd = UNDO;
+            command.type = KYBRD_CMD;
+            command.action.kybd = UNDO;
         }
         else if (cmd == 1)
         {
-            command.type = KEYBOARD_COMMAND;
-            command.kbd = COPY;
+            command.type = KYBRD_CMD;
+            command.action.kybd = COPY;
         }
         else
         {
-            command.type = MOUSE_COMMAND;
-            command.mouse = LEFT_CLICK;
+            command.type = MOUSE_CMD;
+            command.action.mouse = LEFT_CLICK;
         }
 
         filterDataMap output;
