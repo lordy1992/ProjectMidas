@@ -8,7 +8,6 @@
 
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
-#define DELTA_VOL "deltaVol"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
@@ -18,7 +17,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData(unsigned int maxKybdGuiSel = 0) : Filter(), mouseVelocity(), deltaVolume(0) { this->maxKybdGuiSel = maxKybdGuiSel; }
+    SharedCommandData(unsigned int maxKybdGuiSel = 0) : Filter(), mouseVelocity() { this->maxKybdGuiSel = maxKybdGuiSel; }
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -95,11 +94,6 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
-    void setDeltaVolume(float volume);
-    bool trySetDeltaVolume(float volume);
-    float getDeltaVolume();
-    bool tryGetVolume(float& outVolume);
-
     void setKybdGuiSel(unsigned int kybdGuiSel);
     bool trySetKybdGuiSel(unsigned int kybdGuiSel);
     unsigned int getKybdGuiSel();
@@ -137,19 +131,16 @@ public:
 
 private:
     point mouseVelocity;
-    float deltaVolume;
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;
     unsigned int kybdGuiSel;
     std::queue<commandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
-    std::mutex volumeMutex;
     std::mutex kybdGuiSelMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-    void extractVolume(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

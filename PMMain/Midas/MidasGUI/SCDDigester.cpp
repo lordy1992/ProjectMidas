@@ -19,6 +19,28 @@ SCDDigester::~SCDDigester()
 void SCDDigester::digest()
 {
     commandData nextCmd;
+    
+    scdHandle->consumeCommand(nextCmd);
+
+    switch (nextCmd.type)
+    {
+    case KYBRD_CMD:
+        digestKybdCmd(nextCmd);
+        break;
+    case KYBRD_GUI_CMD:
+        break;
+    case MOUSE_CMD:
+        break;
+    case STATE_CHANGE:
+        break;
+    case NONE:
+        break;
+    case UNKNOWN_COMMAND:
+        break;
+    default:
+        break;
+    }
+
     if (scdHandle->consumeCommand(nextCmd))
     {
         if (nextCmd.action.mouse == LEFT_CLICK)
@@ -63,22 +85,22 @@ void SCDDigester::digest()
         }
     }
 
-    float deltaVolume = scdHandle->getDeltaVolume();
-    if (count % 10000 == 0)
-    {
-        if (deltaVolume > 0)
-        {
-            threadHandle->threadEmitString("volume up" + std::to_string(count));
-            kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_UP);
-            kybrdCtrl->sendData();
-        }
-        else if (deltaVolume < 0)
-        {
-            threadHandle->threadEmitString("volume down" + std::to_string(count));
-            kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_DOWN);
-            kybrdCtrl->sendData();
-        }
-    }
+    //float deltaVolume = scdHandle->getDeltaVolume();
+    //if (count % 10000 == 0)
+    //{
+    //    if (deltaVolume > 0)
+    //    {
+    //        threadHandle->threadEmitString("volume up" + std::to_string(count));
+    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_UP);
+    //        kybrdCtrl->sendData();
+    //    }
+    //    else if (deltaVolume < 0)
+    //    {
+    //        threadHandle->threadEmitString("volume down" + std::to_string(count));
+    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_DOWN);
+    //        kybrdCtrl->sendData();
+    //    }
+    //}
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
@@ -153,4 +175,10 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
         }
     }
+}
+
+void SCDDigester::digestKybdCmd(commandData nextCommand)
+{
+    kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
+    kybrdCtrl->sendData();
 }

@@ -81,44 +81,6 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
-void SharedCommandData::setDeltaVolume(float volume)
-{
-    volumeMutex.lock();
-    deltaVolume = volume;
-    volumeMutex.unlock();
-}
-
-bool SharedCommandData::trySetDeltaVolume(float volume)
-{
-    bool locked = volumeMutex.try_lock();
-    if (locked) {
-        deltaVolume = volume;
-        volumeMutex.unlock();
-    }
-
-    return locked;
-}
-
-float SharedCommandData::getDeltaVolume()
-{
-    volumeMutex.lock();
-    float volume = deltaVolume;
-    volumeMutex.unlock();
-
-    return volume;
-}
-
-bool SharedCommandData::tryGetVolume(float& outVolume)
-{
-    bool locked = volumeMutex.try_lock();
-    if (locked) {
-        outVolume = deltaVolume;
-        volumeMutex.unlock();
-    }
-
-    return locked;
-}
-
 void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
 {
     if (kybdGuiSel <= maxKybdGuiSel)
@@ -149,10 +111,10 @@ bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
 unsigned int SharedCommandData::getKybdGuiSel()
 {
     kybdGuiSelMutex.lock();
-    float volume = kybdGuiSel;
+    float guiSel = kybdGuiSel;
     kybdGuiSelMutex.unlock();
 
-    return volume;
+    return guiSel;
 }
 
 bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
@@ -169,10 +131,10 @@ bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
 unsigned int SharedCommandData::getKybdGuiSelMax()
 {
     kybdGuiSelMutex.lock();
-    float volume = maxKybdGuiSel;
+    float max = maxKybdGuiSel;
     kybdGuiSelMutex.unlock();
 
-    return volume;
+    return max;
 }
 
 bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
@@ -208,12 +170,6 @@ void SharedCommandData::process()
     {
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
-    }
-
-    if (input.find(DELTA_VOL) != input.end())
-    {
-        boost::any value = input[DELTA_VOL];
-        extractVolume(value);
     }
 }
 
@@ -262,19 +218,5 @@ void SharedCommandData::extractPoint(boost::any value)
     {
         point velocity = boost::any_cast<point>(value);
         setVelocity(velocity);
-    }
-}
-
-void SharedCommandData::extractVolume(boost::any value)
-{
-    if (value.type() != typeid(float))
-    {
-        Filter::setFilterError(filterError::INVALID_INPUT); // Jorden TODO - this is where the "holding volume" bug is coming from.
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR); // 0 is failing here as its not seen as a float. change structure and see if bug dissapears. i assume it will.
-    }
-    else
-    {
-        float deltaVolume = boost::any_cast<float>(value);
-        setDeltaVolume(deltaVolume); // Jorden TODO -- Change this to addCommand asap. This should not be like this. Do stuff with owen first, then come back and fix this.
     }
 }
