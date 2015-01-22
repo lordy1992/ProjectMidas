@@ -1,18 +1,15 @@
 #ifndef _GESTURE_FILTER_H
 #define _GESTURE_FILTER_H
 
-#include "myo\myo.hpp"
 #include "ControlState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
-#endif
-
-#ifdef USE_SIMULATOR
 using namespace myoSim;
 #else
+#include "myo\myo.hpp"
 using namespace myo;
 #endif
 

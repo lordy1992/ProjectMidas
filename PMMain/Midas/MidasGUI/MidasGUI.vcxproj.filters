@@ -113,6 +113,9 @@
     <ClCompile Include="WearableDevice.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
+    <ClCompile Include="SCDDigester.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -175,6 +178,9 @@
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
     <ClInclude Include="MidasMain.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SCDDigester.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>

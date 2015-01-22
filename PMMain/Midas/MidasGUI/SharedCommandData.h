@@ -8,6 +8,7 @@
 
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
+#define DELTA_VOL "deltaVol"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
@@ -17,7 +18,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData() : Filter(), mouseVelocity() {}
+    SharedCommandData() : Filter(), mouseVelocity(), deltaVolume(0) {}
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -94,6 +95,11 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
+    void setDeltaVolume(float volume);
+    bool trySetDeltaVolume(float volume);
+    float getDeltaVolume();
+    bool tryGetVolume(float& outVolume);
+
     /**
      * Returns true if the command queue is empty, otherwise false.
      *
@@ -124,12 +130,15 @@ public:
 
 private:
     point mouseVelocity;
+    float deltaVolume;
     std::queue<commandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
+    std::mutex volumeMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
+    void extractVolume(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

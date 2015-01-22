@@ -81,6 +81,45 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
+void SharedCommandData::setDeltaVolume(float volume)
+{
+    volumeMutex.lock();
+    deltaVolume = volume;
+    volumeMutex.unlock();
+}
+
+bool SharedCommandData::trySetDeltaVolume(float volume)
+{
+    bool locked = volumeMutex.try_lock();
+    if (locked) {
+        deltaVolume = volume;
+        volumeMutex.unlock();
+    }
+
+    return locked;
+}
+
+float SharedCommandData::getDeltaVolume()
+{
+    volumeMutex.lock();
+    float volume = deltaVolume;
+    volumeMutex.unlock();
+
+    return volume;
+}
+
+bool SharedCommandData::tryGetVolume(float& outVolume)
+{
+    bool locked = volumeMutex.try_lock();
+    if (locked) {
+        outVolume = deltaVolume;
+        volumeMutex.unlock();
+    }
+
+    return locked;
+}
+
+
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
@@ -102,6 +141,12 @@ void SharedCommandData::process()
     {
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
+    }
+
+    if (input.find(DELTA_VOL) != input.end())
+    {
+        boost::any value = input[DELTA_VOL];
+        extractVolume(value);
     }
 }
 
@@ -150,5 +195,19 @@ void SharedCommandData::extractPoint(boost::any value)
     {
         point velocity = boost::any_cast<point>(value);
         setVelocity(velocity);
+    }
+}
+
+void SharedCommandData::extractVolume(boost::any value)
+{
+    if (value.type() != typeid(float))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        float deltaVolume = boost::any_cast<float>(value);
+        setDeltaVolume(deltaVolume);
     }
 }
