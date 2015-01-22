@@ -1,14 +1,30 @@
 #ifndef _MIDAS_COMMON_H
 #define _MIDAS_COMMON_H
 
+#include <string>
+
 /**
  * Enumerates the types of commands that can be sent to control
  * peripherals on Windows.
  */
 enum commandType {
-    KEYBOARD_COMMAND,
-    MOUSE_COMMAND,
+    KYBRD_CMD,
+    KYBRD_GUI_CMD,
+    MOUSE_CMD,
+    STATE_CHANGE,
+    NONE,
     UNKNOWN_COMMAND
+};
+
+/**
+*  Keyboard GUI commands, used to perform actions across the 
+*  Midas main/GUI threads.
+*/
+enum kybdGUICmds {
+    SWAP_RING_FOCUS,
+    CHANGE_WHEELS,
+    SELECT,
+    HOLD_SELECT
 };
 
 /**
@@ -38,7 +54,8 @@ enum kybdCmds {
     HIDE_APPS,
     CONTROL,
     VOLUME_UP,
-    VOLUME_DOWN
+    VOLUME_DOWN,
+    BACKSPACE
 };
 
 /**
@@ -49,6 +66,9 @@ enum mouseCmds {
     LEFT_CLICK,
     RIGHT_CLICK,
     MIDDLE_CLICK,
+    LEFT_HOLD,
+    RIGHT_HOLD,
+    MIDDLE_HOLD,
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
@@ -61,7 +81,8 @@ enum mouseCmds {
     SCROLL_DOWN,
     LEFT_RELEASE,
     RIGHT_RELEASE,
-    MIDDLE_RELEASE
+    MIDDLE_RELEASE,
+    RELEASE_LRM_BUTS
 };
 
 /**
@@ -96,15 +117,20 @@ enum kybdStatus {
 };
 
 /**
- * This struct bundles the command data that can be sent to Windows. It represents
- * either a mouse or keyboard command.
+ * This struct bundles the Midas command data. It represents
+ * either all Midas command types.
  */
 struct commandData {
-    commandType type;
-    union {
-        kybdCmds kbd;
+    commandType type = commandType::NONE;
+    union action{
+        kybdCmds kybd;
+        kybdGUICmds kybdGUI;
         mouseCmds mouse;
+        midasMode mode;
     };
+    action action;
+
+    std::string name = "";
 };
 
 /**

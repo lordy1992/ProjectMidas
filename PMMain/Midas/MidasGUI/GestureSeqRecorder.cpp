@@ -33,7 +33,7 @@ GestureSeqRecorder::~GestureSeqRecorder()
     delete seqMapPerMode;
 }
 
-SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, sequenceResponse seqResponse)
+SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, commandData seqResponse)
 {
     sequenceInfo seqInfo;
     seqInfo.seq = seq;
@@ -51,10 +51,10 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, commandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
-    response.responseType = ResponseType::NONE;
+    response.type = commandType::NONE;
 
     if (activeSequences.size() != 0)
     {
@@ -71,14 +71,14 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
         prevState = state.getMode();
     }
 
-    if (response.responseType != ResponseType::NONE || status != SequenceStatus::SUCCESS)
+    if (response.type != commandType::NONE || status != SequenceStatus::SUCCESS)
     { 
         // if the response is not NONE, a sequence has completed. Therefore all
         // active sequences must be cleared so that all valid sequences can potentially
         // be started.
         emptyActiveSequences();
 
-        if (response.responseType != ResponseType::NONE)
+        if (response.type != commandType::NONE)
         {
             std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
         }
@@ -88,7 +88,7 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 }
 
 
-void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& response)
+void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
 {
     // Provide response if hold is reached and cut off 'taps' if hold is reached
     if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
@@ -126,14 +126,14 @@ void GestureSeqRecorder::progressSequenceTime(int delta, sequenceResponse& respo
         }
         activeSequencesMutex.unlock();
 
-        if (response.responseType != ResponseType::NONE)
+        if (response.type != commandType::NONE)
         {
             // if the response is not NONE, a sequence has completed. Therefore all
             // active sequences must be cleared so that all valid sequences can potentially
             // be started.
             emptyActiveSequences();
 
-            if (response.responseType != ResponseType::NONE)
+            if (response.type != commandType::NONE)
             {
                 std::cout << "GestureSeqRecorder returning a registered response." << std::endl;
             }
@@ -303,7 +303,7 @@ SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, commandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
 
@@ -390,7 +390,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, sequenceResponse& response)
+SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, commandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
@@ -437,7 +437,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
         std::list<sequenceInfo*>::iterator it = activeSequences.begin();
         while (it != activeSequences.end())
         {
-            std::string activeSeqName = (*it)->sequenceResponse.responseName;
+            std::string activeSeqName = (*it)->sequenceResponse.name;
             unsigned int progress = (*it)->progress;
             unsigned int progressGoal = (*it)->seq.size();
 
@@ -454,12 +454,6 @@ void GestureSeqRecorder::printStatus(bool verbose)
             std::cout << std::endl;
             emitString += "\n";
 
-            if (gThreadHandle)
-            {
-                // TODO - figure out WHY this isnt working! This value is always null here....  so was gMidasThread when tried that...
-                gThreadHandle->threadEmitString(emitString); // Note: Handling in a different way than this for now, but this structure seemed promissing..
-            }
-
             it++;
         }
     }
@@ -469,7 +463,7 @@ void GestureSeqRecorder::printStatus(bool verbose)
         std::list<sequenceInfo*>::iterator it = activeSequences.begin();
         while (it != activeSequences.end())
         {
-            std::string activeSeqName = (*it)->sequenceResponse.responseName;
+            std::string activeSeqName = (*it)->sequenceResponse.name;
 
             std::cout << activeSeqName << ";";
 

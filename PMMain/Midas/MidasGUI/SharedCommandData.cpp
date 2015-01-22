@@ -81,39 +81,68 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
-void SharedCommandData::setDeltaVolume(float volume)
+void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
 {
-    volumeMutex.lock();
-    deltaVolume = volume;
-    volumeMutex.unlock();
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        kybdGuiSelMutex.lock();
+        kybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
 }
 
-bool SharedCommandData::trySetDeltaVolume(float volume)
+bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
 {
-    bool locked = volumeMutex.try_lock();
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        bool locked = kybdGuiSelMutex.try_lock();
+        if (locked) {
+            kybdGuiSel = kybdGuiSel;
+            kybdGuiSelMutex.unlock();
+        }
+        return locked;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+unsigned int SharedCommandData::getKybdGuiSel()
+{
+    kybdGuiSelMutex.lock();
+    float guiSel = kybdGuiSel;
+    kybdGuiSelMutex.unlock();
+
+    return guiSel;
+}
+
+bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
+{
+    bool locked = kybdGuiSelMutex.try_lock();
     if (locked) {
-        deltaVolume = volume;
-        volumeMutex.unlock();
+        outKybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
     }
 
     return locked;
 }
 
-float SharedCommandData::getDeltaVolume()
+unsigned int SharedCommandData::getKybdGuiSelMax()
 {
-    volumeMutex.lock();
-    float volume = deltaVolume;
-    volumeMutex.unlock();
+    kybdGuiSelMutex.lock();
+    float max = maxKybdGuiSel;
+    kybdGuiSelMutex.unlock();
 
-    return volume;
+    return max;
 }
 
-bool SharedCommandData::tryGetVolume(float& outVolume)
+bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
 {
-    bool locked = volumeMutex.try_lock();
+    bool locked = kybdGuiSelMutex.try_lock();
     if (locked) {
-        outVolume = deltaVolume;
-        volumeMutex.unlock();
+        outMaxKybdGuiSel = maxKybdGuiSel;
+        kybdGuiSelMutex.unlock();
     }
 
     return locked;
@@ -141,12 +170,6 @@ void SharedCommandData::process()
     {
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
-    }
-
-    if (input.find(DELTA_VOL) != input.end())
-    {
-        boost::any value = input[DELTA_VOL];
-        extractVolume(value);
     }
 }
 
@@ -195,19 +218,5 @@ void SharedCommandData::extractPoint(boost::any value)
     {
         point velocity = boost::any_cast<point>(value);
         setVelocity(velocity);
-    }
-}
-
-void SharedCommandData::extractVolume(boost::any value)
-{
-    if (value.type() != typeid(float))
-    {
-        Filter::setFilterError(filterError::INVALID_INPUT);
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
-    }
-    else
-    {
-        float deltaVolume = boost::any_cast<float>(value);
-        setDeltaVolume(deltaVolume);
     }
 }

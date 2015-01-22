@@ -60,7 +60,7 @@ public:
     */
     GestureSeqRecorder *getGestureSeqRecorder() { return &gestSeqRecorder; }
 
-    static void handleStateChange(sequenceResponse response);
+    static void handleStateChange(commandData response);
 
 private:
 
@@ -75,8 +75,8 @@ private:
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleMouseCommand(sequenceResponse response);
-    void handleKybrdCommand(sequenceResponse response);
+    void handleMouseCommand(commandData response);
+    void handleKybrdCommand(commandData response);
     void handleMouseRelease();
 
     Pose::Type lastPoseType;
@@ -86,7 +86,6 @@ private:
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
-    ResponseType lastResponseType;
 };
 
 void setupCallbackThread(GestureFilter *gf);

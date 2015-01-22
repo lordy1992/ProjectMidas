@@ -37,7 +37,6 @@ void MyoTranslationFilter::process()
         baseYaw = yaw;
     }
 
-    outputToSharedCommandData[DELTA_VOL] = 0;
     if (controlStateHandle->getMode() != MOUSE_MODE)
     {
         if (previousMode == MOUSE_MODE)
@@ -46,15 +45,25 @@ void MyoTranslationFilter::process()
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
         }    
 
-        // Jorden TODO -- put other "if (controlStateHandle->getMode() == XXX)" statements here, and generate output
-        // to populate the sharedcommanddata with. Such as rotational data for volume
-        // temp
         if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
         {
             // as per GestureFilter, this is executed with a fist, and currently will be tested by changing the volume.
             deltaRoll = rollDeg - prevRoll;
             prevRoll = rollDeg;
-            outputToSharedCommandData[DELTA_VOL] = deltaRoll;    
+            commandData command;
+            command.type = commandType::KYBRD_CMD;
+            command.name = "Volume Command";
+            if (deltaRoll > 0)
+            {
+                command.action.kybd = kybdCmds::VOLUME_UP;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+            }
+            else if (deltaRoll < 0)
+            {
+                
+                command.action.kybd = kybdCmds::VOLUME_DOWN;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+            }
         }
     }
     else
