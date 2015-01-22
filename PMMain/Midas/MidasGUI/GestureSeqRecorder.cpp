@@ -17,9 +17,10 @@ GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
 
     imageManager.loadImages();
 
-    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, std::string, std::vector<sequenceImageSet>)), 
-        sequenceDisplayerGui, SLOT(registerSequence(int, std::string, std::vector<sequenceImageSet>)));
-    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)), 
+    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
+        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
+
+    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
         sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
 
 }
@@ -38,8 +39,9 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
 
     imageManager.loadImages();
 
-    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, std::string, std::vector<sequenceImageSet>)),
-        sequenceDisplayerGui, SLOT(registerSequence(int, std::string, std::vector<sequenceImageSet>)));
+    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
+        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
+
     QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
         sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
 }
@@ -81,7 +83,7 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
 
     std::vector<sequenceImageSet> images = imageManager.formSequenceSetFromIds(ids);
 
-    signaller.emitRegisterSequence(seqInfo.id, seqInfo.sequenceName, images);
+    signaller.emitRegisterSequence(seqInfo.id, QString(seqInfo.sequenceName.c_str()), images);
 
     return SequenceStatus::SUCCESS;
 }

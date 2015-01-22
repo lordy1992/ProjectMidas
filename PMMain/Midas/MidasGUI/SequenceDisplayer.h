@@ -27,8 +27,8 @@ public:
     QSize sizeHint() const;
 
 public slots:
-    void registerSequence(int seqId, std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
-    void showSequences(std::vector<sequenceProgressData> progressPairs);
+    void registerSequenceImages(int, QString, std::vector<sequenceImageSet>);
+    void showSequences(std::vector<sequenceProgressData>);
  
 private:
     void clearWidgets(bool deleteLabels = false);

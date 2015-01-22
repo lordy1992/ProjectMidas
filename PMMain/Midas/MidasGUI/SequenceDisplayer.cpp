@@ -43,12 +43,12 @@ QSize SequenceDisplayer::sizeHint() const
     return QSize(maxWidth, maxHeight);
 }
 
-void SequenceDisplayer::registerSequence(int seqId, std::string sequenceName, std::vector<sequenceImageSet> sequenceImages)
+void SequenceDisplayer::registerSequenceImages(int seqId, QString sequenceName, std::vector<sequenceImageSet> sequenceImages)
 {
     sequenceData newSequence;
     newSequence.sequenceImages = sequenceImages;
     QFont timesFont("Times", 9, QFont::Bold);
-    newSequence.seqLabel = new QLabel(tr("%1").arg(QString(sequenceName.c_str())));
+    newSequence.seqLabel = new QLabel(tr("%1").arg(sequenceName));
     newSequence.seqLabel->setFont(timesFont);
     newSequence.seqLabel->setWordWrap(true);
     formBoxLabel(newSequence.seqLabel);

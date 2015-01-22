@@ -12,7 +12,7 @@ public:
     ~GestureSignaller(); 
 
 signals:
-    void emitRegisterSequence(int, std::string, std::vector<sequenceImageSet>);
+    void emitRegisterSequence(int, QString, std::vector<sequenceImageSet>);
     void emitShowSequences(std::vector<sequenceProgressData>);
 };
 

@@ -15,7 +15,7 @@ int main(int argc, char *argv[])
     midasThread.start();
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
-    qRegisterMetaType<std::vector<sequenceProgressData>>("std::vector<sequenceProgressData>");
+    qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");
 
     //MidasGUI w(&midasThread);
     MouseIndicator w1(&midasThread);
