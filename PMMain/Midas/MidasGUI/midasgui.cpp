@@ -7,10 +7,6 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
 {
     ui.setupUi(this);
 
-    // set window as "always on top"
-//    Qt::WindowFlags flags = this->windowFlags();
-//    this->setWindowFlags(flags | Qt::CustomizeWindowHint | Qt::WindowStaysOnTopHint);
-
     this->mainThread = mainThread;
 
     connect(mainThread, SIGNAL(outputCount(int)), this, SLOT(handleCount(int)));
@@ -19,11 +15,6 @@ MidasGUI::MidasGUI(MidasThread *mainThread, QWidget *parent)
     connect(mainThread, SIGNAL(emitString(std::string)), this, SLOT(displayMessage(std::string)));
 
     connect(mainThread, SIGNAL(emitStateString(std::string)), this, SLOT(displayStateMessage(std::string)));
-
-
-    // now for a mockup of the real business!
-   // connect(mainThread, SIGNAL(emitXVeloc(int)), this, SLOT(handleXVeloc(int)));
-    //connect(mainThread, SIGNAL(emitYVeloc(int)), this, SLOT(handleYVeloc(int)));
 }
 
 MidasGUI::~MidasGUI()
