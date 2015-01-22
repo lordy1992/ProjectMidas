@@ -39,7 +39,7 @@ public:
      * @param releaseKeys If this is true, the key press will be followed by a release. Otherwise,
      * it will just cause a key press.
      */
-    void setKeyChar(char c, bool releaseKeys = true);
+    void setKeyChar(unsigned char c, bool releaseKeys = true);
 
     /**
      * This executes the keyboard commands set for the keyboard controller by sending the
@@ -70,29 +70,9 @@ private:
     int getKeyInputArr(INPUT * kiArr, int lenArr);
 
     /**
-     * Inputs a CTRL key command into the vector of keyboard commands.
-     */
-    void inputCtrl();
-
-    /**
-    * Inputs a Left SHIFT key command into the vector of keyboard commands.
-    */
-    void inputLShift();
-
-    /**
-    * Inputs an ALT key command into the vector of keyboard commands.
-    */
-    void inputAlt();
-
-    /**
-    * Inputs a Windows key command into the vector of keyboard commands.
-    */
-    void inputWindows();
-
-    /**
     * Inputs a virtual key code into the vector of keyboard commands.
     */
-    void inputVK(int vk);
+    void inputVK(unsigned int vk);
 
     /**
     * Appends the 'mirror' of each key currently in the vector of keyboard commands.

@@ -1,18 +1,15 @@
 #ifndef _GESTURE_FILTER_H
 #define _GESTURE_FILTER_H
 
-#include "myo\myo.hpp"
 #include "ControlState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
-#endif
-
-#ifdef USE_SIMULATOR
 using namespace myoSim;
 #else
+#include "myo\myo.hpp"
 using namespace myo;
 #endif
 
@@ -63,7 +60,7 @@ public:
     */
     GestureSeqRecorder *getGestureSeqRecorder() { return &gestSeqRecorder; }
 
-    static void handleStateChange(sequenceResponse response);
+    static void handleStateChange(commandData response);
 
 private:
 
@@ -78,8 +75,8 @@ private:
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleMouseCommand(sequenceResponse response);
-    void handleKybrdCommand(sequenceResponse response);
+    void handleMouseCommand(commandData response);
+    void handleKybrdCommand(commandData response);
     void handleMouseRelease();
 
     Pose::Type lastPoseType;
@@ -89,7 +86,7 @@ private:
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
-    ResponseType lastResponseType;
+    commandType lastResponseType;
 };
 
 void setupCallbackThread(GestureFilter *gf);

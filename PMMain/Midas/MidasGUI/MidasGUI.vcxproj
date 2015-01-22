@@ -135,6 +135,7 @@
     <ClCompile Include="MyoTranslationFilter.cpp" />
     <ClCompile Include="SequenceDisplayer.cpp" />
     <ClCompile Include="SequenceImageManager.cpp" />
+    <ClCompile Include="SCDDigester.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
     <ClCompile Include="WearableDevice.cpp" />
   </ItemGroup>
@@ -204,6 +205,7 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
     <ClInclude Include="SequenceImageManager.h" />
+    <ClInclude Include="SCDDigester.h" />
     <ClInclude Include="SharedCommandData.h" />
     <ClInclude Include="WearableDevice.h" />
     <CustomBuild Include="MidasThread.h">

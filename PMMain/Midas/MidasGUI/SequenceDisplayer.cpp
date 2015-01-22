@@ -96,6 +96,7 @@ void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequen
     sequenceNameToDataMap[sequenceName] = newSequence;
 }
 
+// vector of pairs of numbers, representing IDs of the sequences and their corresponding progress.
 void SequenceDisplayer::advanceSequences(int action)
 {
     std::map<std::string, sequenceData>::iterator it = sequenceNameToDataMap.begin();

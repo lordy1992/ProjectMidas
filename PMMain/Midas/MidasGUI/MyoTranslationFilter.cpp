@@ -4,7 +4,7 @@
 #include <iostream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
-    : controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0)
+    : controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0), prevRoll(0), deltaRoll(0)
 {
 }
 
@@ -19,6 +19,7 @@ void MyoTranslationFilter::process()
     float quatY = boost::any_cast<float>(input[INPUT_QUATERNION_Y]);
     float quatZ = boost::any_cast<float>(input[INPUT_QUATERNION_Z]);
     float quatW = boost::any_cast<float>(input[INPUT_QUATERNION_W]);
+    filterDataMap outputToSharedCommandData;
 
     Arm arm = boost::any_cast<Arm>(input[INPUT_ARM]);
     XDirection xDirection = boost::any_cast<XDirection>(input[INPUT_X_DIRECTION]);
@@ -28,6 +29,7 @@ void MyoTranslationFilter::process()
 
     float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
+    int rollDeg = (int)(getRollFromQuaternion(quatX, quatY, quatZ, quatW) * (180 / M_PI));
 
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
@@ -39,20 +41,37 @@ void MyoTranslationFilter::process()
     {
         if (previousMode == MOUSE_MODE)
         {
-            filterDataMap outputToSharedCommandData;
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
-            Filter::setOutput(outputToSharedCommandData);
+        }    
+
+        if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
+        {
+            // as per GestureFilter, this is executed with a fist, and currently will be tested by changing the volume.
+            deltaRoll = rollDeg - prevRoll;
+            prevRoll = rollDeg;
+            commandData command;
+            command.type = commandType::KYBRD_CMD;
+            command.name = "Volume Command";
+            if (deltaRoll > 0)
+            {
+                command.action.kybd = kybdCmds::VOLUME_UP;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+            }
+            else if (deltaRoll < 0)
+            {
+                
+                command.action.kybd = kybdCmds::VOLUME_DOWN;
+                outputToSharedCommandData[COMMAND_INPUT] = command;
+            }
         }
     }
     else
     {
-        filterDataMap outputToSharedCommandData;
         point mouseUnitVelocity = getMouseUnitVelocity(pitch, yaw);
         outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
-
-        Filter::setOutput(outputToSharedCommandData);
     }
+    Filter::setOutput(outputToSharedCommandData);
 
     previousMode = controlStateHandle->getMode();
 }
@@ -98,6 +117,11 @@ float MyoTranslationFilter::getYawFromQuaternion(float x, float y, float z, floa
 {
     // Indifferent to arm/xDirection, unlike pitch.
     return -atan2(2.0f * (w * z + x * y), 1.0f - 2.0f * (y * y + z * z));
+}
+
+float MyoTranslationFilter::getRollFromQuaternion(float x, float y, float z, float w)
+{
+    return atan2(2.0f * (w * x + y * z), 1.0f - 2.0f * (x * x + y * y));
 }
 
 float MyoTranslationFilter::calcRingDelta(float current, float base)

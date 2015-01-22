@@ -81,6 +81,74 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
+void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
+{
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        kybdGuiSelMutex.lock();
+        kybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+}
+
+bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
+{
+    if (kybdGuiSel <= maxKybdGuiSel)
+    {
+        bool locked = kybdGuiSelMutex.try_lock();
+        if (locked) {
+            kybdGuiSel = kybdGuiSel;
+            kybdGuiSelMutex.unlock();
+        }
+        return locked;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+unsigned int SharedCommandData::getKybdGuiSel()
+{
+    kybdGuiSelMutex.lock();
+    float guiSel = kybdGuiSel;
+    kybdGuiSelMutex.unlock();
+
+    return guiSel;
+}
+
+bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
+{
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        outKybdGuiSel = kybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+
+    return locked;
+}
+
+unsigned int SharedCommandData::getKybdGuiSelMax()
+{
+    kybdGuiSelMutex.lock();
+    float max = maxKybdGuiSel;
+    kybdGuiSelMutex.unlock();
+
+    return max;
+}
+
+bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
+{
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        outMaxKybdGuiSel = maxKybdGuiSel;
+        kybdGuiSelMutex.unlock();
+    }
+
+    return locked;
+}
+
+
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();

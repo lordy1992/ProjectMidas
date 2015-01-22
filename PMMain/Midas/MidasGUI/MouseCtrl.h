@@ -3,6 +3,7 @@
 
 
 #include <Windows.h>
+#include <vector>
 #include "MidasCommon.h"
 
 #define DEFAULT_MIN_MOVE_TIME 10
@@ -57,6 +58,9 @@ public:
      * @param mouseRateIfMove The new rate of the mouse movement.
      */
     void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = 0);
+
+    // send an array of mouseCmds to be executed 20ms apart.
+    void sendCommands(std::vector<mouseCmds> mouseCmds, std::vector<bool> releaseIfClicks, std::vector<int> mouseRateIfMoves);
 
 private:
 

@@ -140,6 +140,9 @@
     <ClCompile Include="SequenceImageManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SCDDigester.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -215,6 +218,9 @@
     </ClInclude>
     <ClInclude Include="SequenceImageManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SCDDigester.h">
+      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
