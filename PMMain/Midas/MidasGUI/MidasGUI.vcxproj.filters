@@ -143,6 +143,15 @@
     <ClCompile Include="SCDDigester.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
+    <ClCompile Include="GestureSignaller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_GestureSignaller.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_GestureSignaller.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -165,6 +174,9 @@
     </CustomBuild>
     <CustomBuild Include="DraggableWidget.h">
       <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GestureSignaller.h">
+      <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

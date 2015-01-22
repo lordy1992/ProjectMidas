@@ -9,16 +9,18 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    MidasThread midasThread;
+    SequenceDisplayer sequenceDisplayer;
+
+    MidasThread midasThread(&sequenceDisplayer);
     midasThread.start();
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
+    qRegisterMetaType<std::vector<sequenceProgressData>>("std::vector<sequenceProgressData>");
 
     //MidasGUI w(&midasThread);
     MouseIndicator w1(&midasThread);
-    SequenceDisplayer w(&midasThread);
 
+    sequenceDisplayer.show();
     w1.show();
-    w.show();
     return a.exec();
 }

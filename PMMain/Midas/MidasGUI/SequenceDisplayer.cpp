@@ -17,11 +17,9 @@
 #define GUI_WIDTH_BUFFER 1
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM 96
 
-SequenceDisplayer::SequenceDisplayer(MidasThread* midasThread, QWidget *parent)
+SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
-    this->midasThread = midasThread;
-
     gridLayout = new QGridLayout;
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     gridLayout->setSpacing(5);
@@ -38,36 +36,6 @@ SequenceDisplayer::SequenceDisplayer(MidasThread* midasThread, QWidget *parent)
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
         maxWidth, maxHeight);
-
-    connect(midasThread, SIGNAL(emitAddSequence(std::string, std::vector<sequenceImageSet>)), this, SLOT(addSequence(std::string, std::vector<sequenceImageSet>)));
-    connect(midasThread, SIGNAL(emitAdvanceSequence(int)), this, SLOT(advanceSequences(int)));
-
-    // Test code
-    SequenceImageManager imgManager;
-    imgManager.loadImages();
-
-    std::vector<sequenceImageSet> sequence1, sequence2, sequence3, sequence4;
-    std::vector<int> ids1 = { 1, 2, 3, 2 };
-    std::vector<int> ids2 = { 1, 2, 4, 6 };
-    std::vector<int> ids3 = { 1, 3, 2 };
-    std::vector<int> ids4 = { 2, 6 };
-    sequence1 = imgManager.formSequenceSetFromIds(ids1);
-    sequence2 = imgManager.formSequenceSetFromIds(ids2);
-    sequence3 = imgManager.formSequenceSetFromIds(ids3);
-    sequence4 = imgManager.formSequenceSetFromIds(ids4);
-
-    registerSequence(1, "Zoom In", sequence1);
-    registerSequence(2, "Rotate Screen", sequence2);
-    registerSequence(3, "Wiggle", sequence3);
-    registerSequence(4, "Double View", sequence4);
-
-    std::vector<sequenceProgressData> seqProgressPairs;
-    seqProgressPairs.push_back(sequenceProgressData(1, 0));
-    seqProgressPairs.push_back(sequenceProgressData(2, 0));
-    seqProgressPairs.push_back(sequenceProgressData(3, 0));
-    seqProgressPairs.push_back(sequenceProgressData(4, 0));
-
-    showSequences(seqProgressPairs);
 }
 
 QSize SequenceDisplayer::sizeHint() const

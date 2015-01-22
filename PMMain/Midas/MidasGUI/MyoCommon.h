@@ -39,6 +39,11 @@ struct sequenceData
 
 struct sequenceProgressData
 {
+    sequenceProgressData()
+    {
+        seqId = progress = 0;
+    }
+
     sequenceProgressData(int id, int prog)
     {
         seqId = id;

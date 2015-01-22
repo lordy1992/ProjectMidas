@@ -3,7 +3,8 @@
 #include <qdebug.h>
 #include <Windows.h>
 
-MidasThread::MidasThread()
+MidasThread::MidasThread(SequenceDisplayer *sequenceDisplayerGui)
+    : sequenceDisplayer(sequenceDisplayerGui)
 {
 }
 
@@ -15,7 +16,7 @@ void MidasThread::run()
 {
     qDebug() << "running spawned thread.";
     threadEmitString("test within run func.");
-    midasMain(this);
+    midasMain(this, sequenceDisplayer);
 
     for (int i = 0; i < 100000; i++)
     {

@@ -3,7 +3,6 @@
 
 #include "DraggableWidget.h"
 #include "MyoCommon.h"
-#include "MidasThread.h"
 #include <QGridLayout.h>
 #include <string>
 #include <map>
@@ -13,6 +12,7 @@
 #define NUM_COLUMNS 5
 
 Q_DECLARE_METATYPE(std::vector<sequenceImageSet>)
+Q_DECLARE_METATYPE(std::vector<sequenceProgressData>)
 
 // A grid with 5 columns, and a certain number of rows.
 class SequenceDisplayer : public DraggableWidget
@@ -20,7 +20,7 @@ class SequenceDisplayer : public DraggableWidget
     Q_OBJECT
 
 public:
-    SequenceDisplayer(MidasThread* midasThread, QWidget *parent = 0);
+    SequenceDisplayer(QWidget *parent = 0);
 
     // QPixmap uses implicit data sharing, so it is okay to pass around by value.
     void keyPressEvent(QKeyEvent *e);
@@ -41,7 +41,6 @@ private:
     QGridLayout *gridLayout;
     int maxWidth, maxHeight;
     int maxNumSequences;
-    MidasThread* midasThread;
 };
 
 #endif SEQUENCE_DISPLAYER_H

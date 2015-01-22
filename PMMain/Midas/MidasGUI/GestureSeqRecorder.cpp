@@ -1,7 +1,11 @@
 #include "GestureSeqRecorder.h"
 #include "MidasMain.h"
 
-GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
+unsigned int sequenceInfo::counter = 0;
+
+GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
+    : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -10,9 +14,19 @@ GestureSeqRecorder::GestureSeqRecorder() : prevState(midasMode::LOCK_MODE), prog
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
     }
+
+    imageManager.loadImages();
+
+    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, std::string, std::vector<sequenceImageSet>)), 
+        sequenceDisplayerGui, SLOT(registerSequence(int, std::string, std::vector<sequenceImageSet>)));
+    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)), 
+        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
+
 }
 
-GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime) : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), holdGestTimer(REQ_HOLD_TIME)
+GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
+    : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -21,6 +35,13 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
         midasMode mm = static_cast<midasMode>(midasModeInt);
         (*seqMapPerMode)[mm] = new sequenceList();
     }
+
+    imageManager.loadImages();
+
+    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, std::string, std::vector<sequenceImageSet>)),
+        sequenceDisplayerGui, SLOT(registerSequence(int, std::string, std::vector<sequenceImageSet>)));
+    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
+        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
@@ -33,11 +54,12 @@ GestureSeqRecorder::~GestureSeqRecorder()
     delete seqMapPerMode;
 }
 
-SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, commandData seqResponse)
+SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, commandData seqResponse, std::string name)
 {
     sequenceInfo seqInfo;
     seqInfo.seq = seq;
     seqInfo.sequenceResponse = seqResponse;
+    seqInfo.sequenceName = name;
     SequenceStatus status = checkLegalRegister(mode, seqInfo);
     if (status != SequenceStatus::SUCCESS)
     {
@@ -48,6 +70,19 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     seqList->push_back(seqInfo);
 
     seqList = NULL;
+
+    std::vector<int> ids;
+    sequence::iterator it;
+
+    for (it = seq.begin(); it != seq.end(); ++it)
+    {
+        ids.push_back(it->type);
+    }
+
+    std::vector<sequenceImageSet> images = imageManager.formSequenceSetFromIds(ids);
+
+    signaller.emitRegisterSequence(seqInfo.id, seqInfo.sequenceName, images);
+
     return SequenceStatus::SUCCESS;
 }
 
@@ -122,6 +157,8 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
                     it++;
                     activeSequences.erase(itCopy);
                 }
+
+                updateGuiSequences();
             }
         }
         activeSequencesMutex.unlock();
@@ -168,7 +205,9 @@ void GestureSeqRecorder::emptyActiveSequences()
     }
 
     activeSequences.clear();
+    updateGuiSequences();
     activeSequencesMutex.unlock();
+
     std::cout << "Cleared Active Sequences." << std::endl;
 }
 
@@ -358,6 +397,8 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
                     it++;
                     activeSequences.erase(itCopy);
                 }
+
+                updateGuiSequences();
             }
             else
             {
@@ -381,6 +422,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
                 std::list<sequenceInfo*>::iterator itCopy = it;
                 it++;
                 activeSequences.erase(itCopy);
+                updateGuiSequences();
             }
         }
     }
@@ -427,6 +469,22 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
     return status;
 }
 
+void GestureSeqRecorder::updateGuiSequences()
+{
+    std::vector<sequenceProgressData> progressDataVec;
+    std::list<sequenceInfo*>::iterator it;
+
+    for (it = activeSequences.begin(); it != activeSequences.end(); ++it)
+    {
+        sequenceProgressData progressData;
+
+        progressData.seqId = (*it)->id;
+        progressData.progress = (*it)->progress;
+        progressDataVec.push_back(progressData);
+    }
+
+    signaller.emitShowSequences(progressDataVec);
+}
 
 void GestureSeqRecorder::printStatus(bool verbose)
 {

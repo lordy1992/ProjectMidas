@@ -4,13 +4,14 @@
 #include <QThread>
 #include <string>
 #include "MyoCommon.h"
+#include "SequenceDisplayer.h"
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
-    MidasThread();
+    MidasThread(SequenceDisplayer *sequenceDisplayerGui);
     ~MidasThread();
 
     void run();
@@ -21,15 +22,13 @@ public:
     void threadEmitStateString(std::string str);
 
 private:
+    SequenceDisplayer *sequenceDisplayer;
 
 signals:
     void outputCount(int);
     void emitString(std::string);
     void emitStateString(std::string);
     void emitVeloc(int, int);
-    void emitAddSequence(std::string, std::vector<sequenceImageSet>);
-    void emitAdvanceSequence(int);
-    void emitUpdateSequences();
     
 };
 
