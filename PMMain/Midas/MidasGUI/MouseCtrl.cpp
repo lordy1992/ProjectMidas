@@ -196,22 +196,6 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
     delete in; in = NULL;
 }
 
-//todo test, but first test send command with releaseIfClick.
-//void MouseCtrl::sendCommands(std::vector<mouseCmds> mouseCmds, std::vector<bool> releaseIfClicks, std::vector<int> mouseRateIfMoves)
-//{
-//    if (mouseCmds.size() != releaseIfClicks.size() || mouseCmds.size() != mouseRateIfMoves.size())
-//    {
-//        // exit if vectors not same size
-//        return;
-//    }
-//
-//    for (int i = 0; i < mouseCmds.size(); i++)
-//    {
-//        sendCommand(mouseCmds[i], releaseIfClicks[i], mouseRateIfMoves[i]);
-//        Sleep(20);
-//    }
-//}
-
 void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
 {
     if (mouseCmd == MOVE_HOR && mouseRateIfMove < 0)

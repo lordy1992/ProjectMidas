@@ -59,9 +59,6 @@ public:
      */
     void sendCommand(mouseCmds mouseCmd, int mouseRateIfMove = 0);
 
-//    // send an array of mouseCmds to be executed 20ms apart.
-//    void sendCommands(std::vector<mouseCmds> mouseCmds, std::vector<bool> releaseIfClicks, std::vector<int> mouseRateIfMoves);
-
 private:
 
     /**
