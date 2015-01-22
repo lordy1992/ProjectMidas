@@ -166,7 +166,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
     SendInput(1, in, sizeof(INPUT));
 
     // Build and send opposite command if releasing a click!
-    if (releaseIfClick)
+    if (releaseIfClick) // Jorden TODO - this could probably be removed since *_HOLD is being added.
     {
         ZeroMemory(&mi, sizeof(MOUSEINPUT));
         switch (mouseCmd)
@@ -184,6 +184,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
             goto done;
         }
 
+        Sleep(10);
         in->type = INPUT_MOUSE;
         in->mi = mi;
         SendInput(1, in, sizeof(INPUT));
@@ -233,12 +234,15 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
     switch (mouseCmd)
     {
     case mouseCmds::LEFT_CLICK:
+    case mouseCmds::LEFT_HOLD:
         mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
         break;
     case mouseCmds::RIGHT_CLICK:
+    case mouseCmds::RIGHT_HOLD:
         mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
         break;
     case mouseCmds::MIDDLE_CLICK:
+    case mouseCmds::MIDDLE_HOLD:
         mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
         break;
     case mouseCmds::MOVE_LEFT:

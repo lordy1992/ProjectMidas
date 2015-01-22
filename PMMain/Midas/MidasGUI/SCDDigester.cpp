@@ -20,7 +20,7 @@ void SCDDigester::digest()
 {
     commandData nextCmd;
     
-    scdHandle->consumeCommand(nextCmd);
+    bool consumed = scdHandle->consumeCommand(nextCmd);
 
     switch (nextCmd.type)
     {
@@ -41,28 +41,16 @@ void SCDDigester::digest()
         break;
     }
 
-    if (scdHandle->consumeCommand(nextCmd))
+    if (consumed && nextCmd.type == commandType::MOUSE_CMD)
     {
-        if (nextCmd.action.mouse == LEFT_CLICK)
+        bool releaseIfClick = true;
+        if (nextCmd.action.mouse == LEFT_HOLD ||
+            nextCmd.action.mouse == RIGHT_HOLD ||
+            nextCmd.action.mouse == MIDDLE_HOLD)
         {
-            std::cout << "Received a left click." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, false);
+            releaseIfClick = false;
         }
-        else if (nextCmd.action.mouse == RIGHT_CLICK)
-        {
-            std::cout << "Received a right click." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, false);
-        }
-        else if (nextCmd.action.mouse == LEFT_RELEASE)
-        {
-            std::cout << "Received a left release." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
-        }
-        else if (nextCmd.action.mouse == RIGHT_RELEASE)
-        {
-            std::cout << "Received a right release." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
-        }
+        mouseCtrl->sendCommand(nextCmd.action.mouse, releaseIfClick);
     }
 
     point unitVelocity = scdHandle->getVelocity();

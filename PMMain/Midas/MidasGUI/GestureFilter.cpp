@@ -97,20 +97,22 @@ void GestureFilter::registerMouseSequences(void)
     commandData clickResp;
     clickResp.name = "Left Click";
     clickResp.type = commandType::MOUSE_CMD;
+    clickResp.action.mouse = mouseCmds::LEFT_HOLD;
+    int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp); // TODO - maybe need to add "click_hold" cmd to enum to support 20 ms delay.
     clickResp.action.mouse = mouseCmds::LEFT_CLICK;
-    int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
-    //clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    //ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     // Register sequence to right click in mouse mode and gesture mode
     clickSeq.clear();
     clickSeq.push_back(SeqElement(MYO_GESTURE_RIGHT_MOUSE, SeqElement::PoseLength::IMMEDIATE));
     clickResp.name = "Right Click";
     clickResp.type = commandType::MOUSE_CMD;
-    clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
+    clickResp.action.mouse = mouseCmds::RIGHT_HOLD;
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
-    //clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    //ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {
