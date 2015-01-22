@@ -44,7 +44,7 @@ public:
      * @param controlState A handle to the ControlState object that manages application state.
      * @param timeDel The time that a user must hold a gesture before it is registered.
      */
-    GestureFilter(ControlState* controlState, clock_t timeDel);
+    GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer);
     ~GestureFilter();
 
     /**

@@ -33,14 +33,8 @@ using namespace myo;
 // TODO!!! TEMP only -- obtaining global handle on FIRST created MidasThread (ideally the only one) and using that to emitString.
 #include "GestureSeqRecorder.h"
 
-int midasMain(MidasThread *threadHandle) {
+int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer) {
     std::cout << "starting Midas Main" << std::endl;
-
-    threadHandle->emitInfo();
-    Sleep(1000);
-    threadHandle->threadEmitString("testString1");
-    Sleep(1000);
-    threadHandle->threadEmitString("testString2");
 
 #ifdef TEST_WEARABLE_DEVICE
     SharedCommandDataTest::testQueue();
@@ -83,7 +77,7 @@ int midasMain(MidasThread *threadHandle) {
 #ifdef MYO_POSE_FILTER_TEST
     SharedCommandData sharedData;
     ControlState controlState(&sharedData);
-    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test");
+    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", sequenceDisplayer);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 

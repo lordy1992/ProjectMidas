@@ -5,6 +5,9 @@
 #include "myo\myo.hpp"
 #include "MyoCommon.h"
 #include "ControlState.h"
+#include "SequenceDisplayer.h"
+#include "SequenceImageManager.h"
+#include "GestureSignaller.h"
 #include <map>
 #include <vector>
 #include <list>
@@ -21,9 +24,9 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-#define DEFAULT_PROG_MAX_DELTA 1000 // ms
+#define DEFAULT_PROG_MAX_DELTA 10000 // ms
 
-#define REQ_HOLD_TIME 1000 // ms
+#define REQ_HOLD_TIME 10000 // ms
 
 enum class SequenceStatus {
     SUCCESS,
@@ -40,11 +43,15 @@ typedef std::vector<SeqElement> sequence;
 struct sequenceInfo {
     sequenceInfo() {
         progress = 0;
+        id = counter++;
     }
 
     sequence seq;
     commandData sequenceResponse;
+    static unsigned int counter;
     unsigned int progress;
+    unsigned int id;
+    std::string sequenceName;
 };
 
 typedef std::list<sequenceInfo> sequenceList;
@@ -56,8 +63,8 @@ public:
     /**
     * Constructors/Destructor
     */
-    GestureSeqRecorder();
-    GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime);
+    GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui);
+    GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayer);
     ~GestureSeqRecorder();
 
     /**
@@ -75,7 +82,7 @@ public:
     * while in the registered mode.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */
-    SequenceStatus registerSequence(midasMode mode, sequence seq, commandData seqResponse);
+    SequenceStatus registerSequence(midasMode mode, sequence seq, commandData seqResponse, std::string name);
 
     /**
     * Given a gesture, attempt to progress through any registered sequences, that match the mode
@@ -89,7 +96,7 @@ public:
     * was registered against the completed sequence.
     * @return SequenceStatus associated status information to inform caller of success/lack there of
     */ 
-    SequenceStatus progressSequence(myo::Pose::Type gesture, ControlState state, commandData& response);
+    SequenceStatus progressSequence(Pose::Type gesture, ControlState state, commandData& response);
 
     /**
     * To handle tap/hold differentiation, this should be called to notify the SeqRecorder that a 
@@ -176,6 +183,8 @@ private:
     */
     SequenceStatus findActivation(Pose::Type gesture, ControlState state, commandData& response);
 
+    void updateGuiSequences();
+
     // Holds all registered commandDatas in a layered organization.
     sequenceMapPerMode *seqMapPerMode;
 
@@ -201,6 +210,10 @@ private:
     // Timer to hold the amount of time on each progression of a sequence, which 
     // will determine if a user tapped a pose, or held it.
     clock_t holdGestTimer;
+
+    SequenceImageManager imageManager;
+    SequenceDisplayer* sequenceDisplayer;
+    GestureSignaller signaller;
 };
 
 #endif /* _GESTURE_SEQ_RECORDER_H */
