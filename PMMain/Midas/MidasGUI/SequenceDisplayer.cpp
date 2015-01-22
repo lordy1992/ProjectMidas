@@ -4,9 +4,6 @@
 #include <qapplication.h>
 #include <qdesktopwidget.h>
 
-// Temporary 
-#include "SequenceImageManager.h"
-
 #define LABEL_NUM_COLS      3
 #define LABEL_NUM_ROWS      1
 #define SEQ_NUMBER_NUM_COLS 1
@@ -85,37 +82,6 @@ void SequenceDisplayer::showSequences(std::vector<sequenceProgressData> progress
     }
 
     updateSequences();
-}
-
-void SequenceDisplayer::keyPressEvent(QKeyEvent *e)
-{
-    std::vector<sequenceProgressData> seqProgressPairs;
-
-    if (e->key() == Qt::Key_1)
-    {
-        seqProgressPairs.push_back(sequenceProgressData(1, 1));
-        seqProgressPairs.push_back(sequenceProgressData(2, 1));
-        seqProgressPairs.push_back(sequenceProgressData(3, 1));
-
-        showSequences(seqProgressPairs);
-    }
-    else if (e->key() == Qt::Key_2)
-    {
-        seqProgressPairs.push_back(sequenceProgressData(1, 2));
-        seqProgressPairs.push_back(sequenceProgressData(2, 2));
-
-        showSequences(seqProgressPairs);
-    }
-    else if (e->key() == Qt::Key_3)
-    {
-        seqProgressPairs.push_back(sequenceProgressData(1, 3));
-
-        showSequences(seqProgressPairs);
-    }
-    else if (e->key() == Qt::Key_4)
-    {
-        showSequences(seqProgressPairs);
-    }
 }
 
 void SequenceDisplayer::clearRow(sequenceData seq, bool deleteLabels)

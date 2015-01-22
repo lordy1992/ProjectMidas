@@ -22,8 +22,6 @@ class SequenceDisplayer : public DraggableWidget
 public:
     SequenceDisplayer(QWidget *parent = 0);
 
-    // QPixmap uses implicit data sharing, so it is okay to pass around by value.
-    void keyPressEvent(QKeyEvent *e);
     QSize sizeHint() const;
 
 public slots:
