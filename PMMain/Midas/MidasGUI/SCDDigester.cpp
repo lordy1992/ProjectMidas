@@ -20,7 +20,7 @@ void SCDDigester::digest()
 {
     commandData nextCmd;
     
-    scdHandle->consumeCommand(nextCmd);
+    bool consumed = scdHandle->consumeCommand(nextCmd);
 
     switch (nextCmd.type)
     {
@@ -41,34 +41,15 @@ void SCDDigester::digest()
         break;
     }
 
-    if (scdHandle->consumeCommand(nextCmd))
+    if (consumed && nextCmd.type == commandType::MOUSE_CMD)
     {
-        if (nextCmd.action.mouse == LEFT_CLICK)
-        {
-            std::cout << "Received a left click." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, false);
-        }
-        else if (nextCmd.action.mouse == RIGHT_CLICK)
-        {
-            std::cout << "Received a right click." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, false);
-        }
-        else if (nextCmd.action.mouse == LEFT_RELEASE)
-        {
-            std::cout << "Received a left release." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::LEFT_CLICK, true);
-        }
-        else if (nextCmd.action.mouse == RIGHT_RELEASE)
-        {
-            std::cout << "Received a right release." << std::endl;
-            mouseCtrl->sendCommand(mouseCmds::RIGHT_CLICK, true);
-        }
+        mouseCtrl->sendCommand(nextCmd.action.mouse);
     }
 
     point unitVelocity = scdHandle->getVelocity();
     if (unitVelocity.x != 0)
     {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
+        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
         if (count % 100 == 0)
         {
             threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
@@ -76,29 +57,12 @@ void SCDDigester::digest()
     }
     if (unitVelocity.y != 0)
     {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
+        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
         if (count % 100 == 0)
         {
             threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
         }
     }
-
-    //float deltaVolume = scdHandle->getDeltaVolume();
-    //if (count % 10000 == 0)
-    //{
-    //    if (deltaVolume > 0)
-    //    {
-    //        threadHandle->threadEmitString("volume up" + std::to_string(count));
-    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_UP);
-    //        kybrdCtrl->sendData();
-    //    }
-    //    else if (deltaVolume < 0)
-    //    {
-    //        threadHandle->threadEmitString("volume down" + std::to_string(count));
-    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_DOWN);
-    //        kybrdCtrl->sendData();
-    //    }
-    //}
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {

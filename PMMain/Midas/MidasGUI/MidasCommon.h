@@ -66,6 +66,9 @@ enum mouseCmds {
     LEFT_CLICK,
     RIGHT_CLICK,
     MIDDLE_CLICK,
+    LEFT_HOLD,
+    RIGHT_HOLD,
+    MIDDLE_HOLD,
     MOVE_LEFT,
     MOVE_RIGHT,
     MOVE_UP,
@@ -78,7 +81,8 @@ enum mouseCmds {
     SCROLL_DOWN,
     LEFT_RELEASE,
     RIGHT_RELEASE,
-    MIDDLE_RELEASE
+    MIDDLE_RELEASE,
+    RELEASE_LRM_BUTS
 };
 
 /**

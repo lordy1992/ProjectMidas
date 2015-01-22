@@ -13,6 +13,10 @@
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
 #define MOVE_RATE_DEADZONE 10
 
+#define LEFT_HELD 0x1
+#define RIGHT_HELD 0x2
+#define MID_HELD 0x4
+
 /**
  * Handles sending mouse data to Windows.
  */
@@ -47,20 +51,13 @@ public:
     void setMinMoveYTimeDelta(unsigned int rate);
 
     /**
-     * Sends a mouse command to the OS. This includes movement commands. If releaseIfClick is true,
-     * any click event will be followed by a release of the same button. The mouseRateIfMove parameter
-     * sets the rate of the mouse movement if it is nonnegative. If the user would like to "Click and Hold",
-     * the releaseIfClick parameter should be set to false; then, sendCommand can be called again with 
-     * releaseIfClick set to true, to release the click.
+     * Sends a mouse command to the OS. This includes movement commands. The mouseRateIfMove parameter
+     * sets the rate of the mouse movement if it is nonnegative. 
      *
      * @param mouseCmd The mouse command to send.
-     * @param releaseIfClick If this is true, any button clicks are followed by a release.
      * @param mouseRateIfMove The new rate of the mouse movement.
      */
-    void sendCommand(mouseCmds mouseCmd, bool releaseIfClick = true, int mouseRateIfMove = 0);
-
-    // send an array of mouseCmds to be executed 20ms apart.
-    void sendCommands(std::vector<mouseCmds> mouseCmds, std::vector<bool> releaseIfClicks, std::vector<int> mouseRateIfMoves);
+    void sendCommand(mouseCmds mouseCmd, int mouseRateIfMove = 0);
 
 private:
 
@@ -89,6 +86,13 @@ private:
     // value from -WHEEL_DELTA to WHEEL_DELTA dictating portion of a scroll click
     // will happen when the "scrollwheel is moved"
     int scrollRate;
+
+    // range from 0 to 3:
+    // 0 = none held.
+    // 1 = left held.
+    // 2 = right held.
+    // 4 = middle held.
+    unsigned char currHeld;
 };
 
 #endif /* _MOUSE_CONTROLLER_H */

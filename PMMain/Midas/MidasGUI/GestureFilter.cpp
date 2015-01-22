@@ -43,34 +43,11 @@ void GestureFilter::process()
     commandData response;
     SequenceStatus ss;
     ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
-    if (gesture != Pose::Type::rest)
+    
+    if (response.type == commandType::NONE)
     {
-        // Handle state info first, as it is most important.
-        if (response.type == commandType::NONE)
-        {
-            // terminate filter pipeline, as nothing to add
-            Filter::setFilterStatus(filterStatus::END_CHAIN);
-        }
-        lastResponseType = response.type; // only care about non-rest responses. // JORDEN TODO - see if theres a better way to do this so that the "tapped" mouse buttons will behave better (currently only "immediate" works nicely with this code)
-        // maybe just need to move this out of the if statment since responses are always returned now..? TODO test this theory after the meeting Jan 20.
-        // Nah... Really need to do what i was already planning, which is to extend the mouseCtrl class to include a "press and release" command
-        // like the kybrdCtrl class which includes a short delay, but completes the desired action entirely.
-    }
-    else
-    {
-        if (response.type == commandType::NONE)
-        {
-            // No state stuff to do, so handle other special cases!
-            if (lastResponseType == commandType::MOUSE_CMD)
-            {
-                handleMouseRelease();
-            }
-            else
-            {
-                // terminate filter pipeline, as nothing to add
-                Filter::setFilterStatus(filterStatus::END_CHAIN);
-            }
-        }
+        // terminate filter pipeline, as nothing to add
+        Filter::setFilterStatus(filterStatus::END_CHAIN);
     }
 
     if (response.type == commandType::STATE_CHANGE)
@@ -98,20 +75,29 @@ void GestureFilter::registerMouseSequences(void)
     commandData clickResp;
     clickResp.name = "Left Click";
     clickResp.type = commandType::MOUSE_CMD;
-    clickResp.action.mouse = mouseCmds::LEFT_CLICK;
+    clickResp.action.mouse = mouseCmds::LEFT_HOLD;
     int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Left Click");
-    //clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    //ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    // setup clicking in gesture Mode
+    clickResp.action.mouse = mouseCmds::LEFT_CLICK;
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; 
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp, "Left Click");
 
     // Register sequence to right click in mouse mode and gesture mode
     clickSeq.clear();
     clickSeq.push_back(SeqElement(MYO_GESTURE_RIGHT_MOUSE, SeqElement::PoseLength::IMMEDIATE));
     clickResp.name = "Right Click";
     clickResp.type = commandType::MOUSE_CMD;
-    clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
+    clickResp.action.mouse = mouseCmds::RIGHT_HOLD;
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
-    //clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
-    //ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+    // setup clicking in gesture Mode
+    clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP;
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp, "Right Click");
+
+    // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
+    clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
+    clickSeq.at(0) = SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {

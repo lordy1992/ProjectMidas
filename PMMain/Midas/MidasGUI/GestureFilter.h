@@ -86,7 +86,6 @@ private:
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
-    commandType lastResponseType;
 };
 
 void setupCallbackThread(GestureFilter *gf);

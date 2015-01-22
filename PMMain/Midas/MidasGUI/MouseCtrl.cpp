@@ -11,6 +11,7 @@ MouseCtrl::MouseCtrl()
     minMoveXTimeDelta = DEFAULT_MIN_MOVE_TIME;
     minMoveYTimeDelta = DEFAULT_MIN_MOVE_TIME;
     scrollRate = DEFAULT_SCROLL_RATE;
+    currHeld = 0;
 }
 
 MouseCtrl::~MouseCtrl()
@@ -102,14 +103,13 @@ void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
     minMoveYTimeDelta = max(MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA), MIN_MOVE_TIME_DELTA);
 }
 
-void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRateIfMove)
+void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
     DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
     DWORD deltaTimeXMove = currentTime - lastMouseMoveX;
     DWORD deltaTimeYMove = currentTime - lastMouseMoveY;
     DWORD deltaTimeScroll = currentTime - lastMouseScroll;
-
 
     setMouseInputVars(mouseCmd, mouseRateIfMove);
 
@@ -165,8 +165,10 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
     in->mi = mi;
     SendInput(1, in, sizeof(INPUT));
 
-    // Build and send opposite command if releasing a click!
-    if (releaseIfClick)
+    // Build and send opposite command if clicking!
+    if (mouseCmd == mouseCmds::LEFT_CLICK ||
+        mouseCmd == mouseCmds::RIGHT_CLICK ||
+        mouseCmd == mouseCmds::MIDDLE_CLICK)
     {
         ZeroMemory(&mi, sizeof(MOUSEINPUT));
         switch (mouseCmd)
@@ -184,6 +186,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
             goto done;
         }
 
+        Sleep(10);
         in->type = INPUT_MOUSE;
         in->mi = mi;
         SendInput(1, in, sizeof(INPUT));
@@ -191,22 +194,6 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, bool releaseIfClick, int mouseRa
 
     done:
     delete in; in = NULL;
-}
-
-//todo test, but first test send command with releaseIfClick.
-void MouseCtrl::sendCommands(std::vector<mouseCmds> mouseCmds, std::vector<bool> releaseIfClicks, std::vector<int> mouseRateIfMoves)
-{
-    if (mouseCmds.size() != releaseIfClicks.size() || mouseCmds.size() != mouseRateIfMoves.size())
-    {
-        // exit if vectors not same size
-        return;
-    }
-
-    for (int i = 0; i < mouseCmds.size(); i++)
-    {
-        sendCommand(mouseCmds[i], releaseIfClicks[i], mouseRateIfMoves[i]);
-        Sleep(20);
-    }
 }
 
 void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
@@ -232,14 +219,50 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
 
     switch (mouseCmd)
     {
+    case mouseCmds::LEFT_HOLD:
+        currHeld |= LEFT_HELD;
     case mouseCmds::LEFT_CLICK:
         mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
         break;
+    case mouseCmds::RIGHT_HOLD:
+        currHeld |= RIGHT_HELD;
     case mouseCmds::RIGHT_CLICK:
         mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
         break;
+    case mouseCmds::MIDDLE_HOLD:
+        currHeld |= MID_HELD;
     case mouseCmds::MIDDLE_CLICK:
         mi.dwFlags = MOUSEEVENTF_MIDDLEDOWN;
+        break;
+    case mouseCmds::LEFT_RELEASE:
+        currHeld &= !LEFT_HELD;
+        mi.dwFlags = MOUSEEVENTF_LEFTUP;
+        break;
+    case mouseCmds::RIGHT_RELEASE:
+        currHeld &= !RIGHT_HELD;
+        mi.dwFlags = MOUSEEVENTF_RIGHTUP;
+        break;
+    case mouseCmds::MIDDLE_RELEASE:
+        currHeld &= !MID_HELD;
+        mi.dwFlags = MOUSEEVENTF_MIDDLEUP;
+        break;
+    case mouseCmds::RELEASE_LRM_BUTS:
+        mi.dwFlags = 0;
+        if ((currHeld & LEFT_HELD) != 0)
+        {
+            currHeld &= !LEFT_HELD;
+            mi.dwFlags |= MOUSEEVENTF_LEFTUP;
+        }
+        if ((currHeld & RIGHT_HELD) != 0)
+        {
+            currHeld &= !RIGHT_HELD;
+            mi.dwFlags |= MOUSEEVENTF_RIGHTUP;
+        }
+        if ((currHeld & MID_HELD) != 0)
+        {
+            currHeld &= !MID_HELD;
+            mi.dwFlags |= MOUSEEVENTF_MIDDLEUP;
+        }
         break;
     case mouseCmds::MOVE_LEFT:
         mi.dwFlags = MOUSEEVENTF_MOVE;

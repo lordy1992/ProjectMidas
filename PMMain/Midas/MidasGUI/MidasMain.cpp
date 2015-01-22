@@ -36,13 +36,6 @@ using namespace myo;
 int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer) {
     std::cout << "starting Midas Main" << std::endl;
 
-    threadHandle->emitInfo();
-    Sleep(1000);
-    threadHandle->threadEmitString("testString1");
-    gThreadHandle = threadHandle;
-    Sleep(1000);
-    threadHandle->threadEmitString("testString2");
-
 #ifdef TEST_WEARABLE_DEVICE
     SharedCommandDataTest::testQueue();
 #endif
