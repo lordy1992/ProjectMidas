@@ -59,16 +59,16 @@ void GestureFilter::process()
     {
         if (response.type == commandType::NONE)
         {
-            // No state stuff to do, so handle other special cases!
-            if (lastResponseType == commandType::MOUSE_CMD)
-            {
-                handleMouseRelease();
-            }
-            else
-            {
+//            // No state stuff to do, so handle other special cases! // Jorden, TODO this is the goal of this 'commit' is to remove this crap.
+//            if (lastResponseType == commandType::MOUSE_CMD)
+//            {
+//                handleMouseRelease();
+//            }
+//            else
+//            {
                 // terminate filter pipeline, as nothing to add
                 Filter::setFilterStatus(filterStatus::END_CHAIN);
-            }
+            //}
         }
     }
 
@@ -98,9 +98,10 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.name = "Left Click";
     clickResp.type = commandType::MOUSE_CMD;
     clickResp.action.mouse = mouseCmds::LEFT_HOLD;
-    int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp); // TODO - maybe need to add "click_hold" cmd to enum to support 20 ms delay.
+    int ss = (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    // setup clicking in gesture Mode
     clickResp.action.mouse = mouseCmds::LEFT_CLICK;
-    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; 
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
 
     // Register sequence to right click in mouse mode and gesture mode
@@ -110,9 +111,15 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.type = commandType::MOUSE_CMD;
     clickResp.action.mouse = mouseCmds::RIGHT_HOLD;
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
+    // setup clicking in gesture Mode
     clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
-    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP; // Jorden. TODO. Not quite this, or it can 'stick on click'
+    clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP;
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp);
+
+    // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
+    clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
+    clickSeq.at(0) = SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE);
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp);
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {

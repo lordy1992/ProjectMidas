@@ -81,7 +81,8 @@ enum mouseCmds {
     SCROLL_DOWN,
     LEFT_RELEASE,
     RIGHT_RELEASE,
-    MIDDLE_RELEASE
+    MIDDLE_RELEASE,
+    RELEASE_LRM_BUTS
 };
 
 /**

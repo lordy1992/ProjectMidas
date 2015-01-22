@@ -43,20 +43,13 @@ void SCDDigester::digest()
 
     if (consumed && nextCmd.type == commandType::MOUSE_CMD)
     {
-        bool releaseIfClick = true;
-        if (nextCmd.action.mouse == LEFT_HOLD ||
-            nextCmd.action.mouse == RIGHT_HOLD ||
-            nextCmd.action.mouse == MIDDLE_HOLD)
-        {
-            releaseIfClick = false;
-        }
-        mouseCtrl->sendCommand(nextCmd.action.mouse, releaseIfClick);
+        mouseCtrl->sendCommand(nextCmd.action.mouse);
     }
 
     point unitVelocity = scdHandle->getVelocity();
     if (unitVelocity.x != 0)
     {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, true, unitVelocity.x);
+        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
         if (count % 1000 == 0)
         {
             // proof of concept - slowed down as to reduce buildup in signal buffer...
@@ -65,30 +58,13 @@ void SCDDigester::digest()
     }
     if (unitVelocity.y != 0)
     {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, true, unitVelocity.y);
+        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
         if (count % 1000 == 0)
         {
             // proof of concept - slowed down as to reduce buildup in signal buffer...
             threadHandle->emitYVeloc(unitVelocity.y);
         }
     }
-
-    //float deltaVolume = scdHandle->getDeltaVolume();
-    //if (count % 10000 == 0)
-    //{
-    //    if (deltaVolume > 0)
-    //    {
-    //        threadHandle->threadEmitString("volume up" + std::to_string(count));
-    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_UP);
-    //        kybrdCtrl->sendData();
-    //    }
-    //    else if (deltaVolume < 0)
-    //    {
-    //        threadHandle->threadEmitString("volume down" + std::to_string(count));
-    //        kybrdCtrl->setKeyCmd(kybdCmds::VOLUME_DOWN);
-    //        kybrdCtrl->sendData();
-    //    }
-    //}
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
