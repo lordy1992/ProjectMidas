@@ -33,8 +33,20 @@ struct sequenceImageSet
 struct sequenceData
 {
     QLabel *seqLabel, *seqPosLabel;
-    int numSteps, currentPos;
+    int imageOffset;
     std::vector<sequenceImageSet> sequenceImages;
+};
+
+struct sequenceProgressData
+{
+    sequenceProgressData(int id, int prog)
+    {
+        seqId = id;
+        progress = prog;
+    }
+
+    int seqId;
+    int progress;
 };
 
 /**

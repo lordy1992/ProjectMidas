@@ -41,7 +41,6 @@ SequenceDisplayer::SequenceDisplayer(MidasThread* midasThread, QWidget *parent)
 
     connect(midasThread, SIGNAL(emitAddSequence(std::string, std::vector<sequenceImageSet>)), this, SLOT(addSequence(std::string, std::vector<sequenceImageSet>)));
     connect(midasThread, SIGNAL(emitAdvanceSequence(int)), this, SLOT(advanceSequences(int)));
-    connect(midasThread, SIGNAL(emitUpdateSequences()), this, SLOT(updateSequences()));
 
     // Test code
     SequenceImageManager imgManager;
@@ -57,12 +56,18 @@ SequenceDisplayer::SequenceDisplayer(MidasThread* midasThread, QWidget *parent)
     sequence3 = imgManager.formSequenceSetFromIds(ids3);
     sequence4 = imgManager.formSequenceSetFromIds(ids4);
 
-    addSequence("Zoom In", sequence1);
-    addSequence("Rotate Screen", sequence2);
-    addSequence("Wiggle", sequence3);
-    addSequence("Double View", sequence4);
+    registerSequence(1, "Zoom In", sequence1);
+    registerSequence(2, "Rotate Screen", sequence2);
+    registerSequence(3, "Wiggle", sequence3);
+    registerSequence(4, "Double View", sequence4);
 
-    updateSequences();
+    std::vector<sequenceProgressData> seqProgressPairs;
+    seqProgressPairs.push_back(sequenceProgressData(1, 0));
+    seqProgressPairs.push_back(sequenceProgressData(2, 0));
+    seqProgressPairs.push_back(sequenceProgressData(3, 0));
+    seqProgressPairs.push_back(sequenceProgressData(4, 0));
+
+    showSequences(seqProgressPairs);
 }
 
 QSize SequenceDisplayer::sizeHint() const
@@ -70,19 +75,17 @@ QSize SequenceDisplayer::sizeHint() const
     return QSize(maxWidth, maxHeight);
 }
 
-void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages)
+void SequenceDisplayer::registerSequence(int seqId, std::string sequenceName, std::vector<sequenceImageSet> sequenceImages)
 {
     sequenceData newSequence;
     newSequence.sequenceImages = sequenceImages;
-    newSequence.currentPos = 0;
-    newSequence.numSteps = newSequence.sequenceImages.size();
     QFont timesFont("Times", 9, QFont::Bold);
     newSequence.seqLabel = new QLabel(tr("%1").arg(QString(sequenceName.c_str())));
     newSequence.seqLabel->setFont(timesFont);
     newSequence.seqLabel->setWordWrap(true);
     formBoxLabel(newSequence.seqLabel);
     newSequence.seqLabel->setFixedSize(GRID_ELEMENT_SIZE * LABEL_NUM_COLS, GRID_ELEMENT_SIZE);
-    newSequence.seqPosLabel = new QLabel(tr("0 / %1").arg(newSequence.numSteps));
+    newSequence.seqPosLabel = new QLabel;
     newSequence.seqPosLabel->setFont(timesFont);
     formBoxLabel(newSequence.seqPosLabel);
 
@@ -93,48 +96,24 @@ void SequenceDisplayer::addSequence(std::string sequenceName, std::vector<sequen
         formBoxLabel(it->currentImgLabel);
     }
 
-    sequenceNameToDataMap[sequenceName] = newSequence;
+    sequenceIdToDataMap[seqId] = newSequence;
 }
 
-// vector of pairs of numbers, representing IDs of the sequences and their corresponding progress.
-void SequenceDisplayer::advanceSequences(int action)
+void SequenceDisplayer::showSequences(std::vector<sequenceProgressData> progressPairs)
 {
-    std::map<std::string, sequenceData>::iterator it = sequenceNameToDataMap.begin();
+    // Clear the current active widgets.
+    clearWidgets();
+    activeSequencesIdToDataMap.clear();
 
-    bool done = false;
-    int rownum = 0;
-    while (it != sequenceNameToDataMap.end())
+    std::vector<sequenceProgressData>::iterator it;
+
+    for (it = progressPairs.begin(); it != progressPairs.end(); ++it)
     {
-        sequenceImageSet images = it->second.sequenceImages.at(it->second.currentPos);
-        if (images.actionTag == action)
-        {
-            // This sequence has a match.
-            it->second.currentPos++;
-            if (it->second.currentPos >= it->second.sequenceImages.size())
-            {
-                // Done
-                done = true;
-            }
-            else
-            {
-                it->second.seqPosLabel->setText(tr("%1 / %2").arg(QString::number(it->second.currentPos), 
-                    QString::number(it->second.numSteps)));
-            }
-
-            it++;
-        }
-        else
-        {
-            clearRow(it->second, true);
-            it = sequenceNameToDataMap.erase(it);
-        }
-    }
-    
-    if (done) {
-        clearWidgets(true);
-        sequenceNameToDataMap.clear();
-    } else {
-        clearWidgets();
+        sequenceData seqData = sequenceIdToDataMap[it->seqId];
+        seqData.seqPosLabel->setText(tr("%1 / %2").arg(QString::number(it->progress),
+            QString::number(seqData.sequenceImages.size())));
+        seqData.imageOffset = it->progress;
+        activeSequencesIdToDataMap[it->seqId] = seqData;
     }
 
     updateSequences();
@@ -142,29 +121,32 @@ void SequenceDisplayer::advanceSequences(int action)
 
 void SequenceDisplayer::keyPressEvent(QKeyEvent *e)
 {
-    if (e->key() == Qt::Key_0)
+    std::vector<sequenceProgressData> seqProgressPairs;
+
+    if (e->key() == Qt::Key_1)
     {
-        advanceSequences(0);
-    }
-    else if (e->key() == Qt::Key_1)
-    {
-        advanceSequences(1);
+        seqProgressPairs.push_back(sequenceProgressData(1, 1));
+        seqProgressPairs.push_back(sequenceProgressData(2, 1));
+        seqProgressPairs.push_back(sequenceProgressData(3, 1));
+
+        showSequences(seqProgressPairs);
     }
     else if (e->key() == Qt::Key_2)
     {
-        advanceSequences(2);
+        seqProgressPairs.push_back(sequenceProgressData(1, 2));
+        seqProgressPairs.push_back(sequenceProgressData(2, 2));
+
+        showSequences(seqProgressPairs);
     }
     else if (e->key() == Qt::Key_3)
     {
-        advanceSequences(3);
+        seqProgressPairs.push_back(sequenceProgressData(1, 3));
+
+        showSequences(seqProgressPairs);
     }
     else if (e->key() == Qt::Key_4)
     {
-        advanceSequences(4);
-    }
-    else if (e->key() == Qt::Key_5)
-    {
-        advanceSequences(5);
+        showSequences(seqProgressPairs);
     }
 }
 
@@ -199,8 +181,8 @@ void SequenceDisplayer::clearRow(sequenceData seq, bool deleteLabels)
 
 void SequenceDisplayer::clearWidgets(bool deleteLabels)
 {
-    std::map<std::string, sequenceData>::iterator it;
-    for (it = sequenceNameToDataMap.begin(); it != sequenceNameToDataMap.end(); it++)
+    std::map<int, sequenceData>::iterator it;
+    for (it = activeSequencesIdToDataMap.begin(); it != activeSequencesIdToDataMap.end(); it++)
     {
         sequenceData seq = it->second;
         clearRow(seq, deleteLabels);
@@ -221,10 +203,10 @@ void SequenceDisplayer::formBoxLabel(QLabel *label)
 
 void SequenceDisplayer::updateSequences()
 {
-    std::map<std::string, sequenceData>::iterator it;
+    std::map<int, sequenceData>::iterator it;
 
     int currRow = 0;
-    for (it = sequenceNameToDataMap.begin(); it != sequenceNameToDataMap.end(); it++)
+    for (it = activeSequencesIdToDataMap.begin(); it != activeSequencesIdToDataMap.end(); it++)
     {
         sequenceData seq = it->second;
         int currCol = 0;
@@ -235,7 +217,7 @@ void SequenceDisplayer::updateSequences()
         gridLayout->addWidget(seq.seqPosLabel, currRow, currCol, SEQ_NUMBER_NUM_ROWS, SEQ_NUMBER_NUM_COLS);
         currCol += SEQ_NUMBER_NUM_COLS;
         std::vector<sequenceImageSet>::iterator sequenceIt;
-        for (sequenceIt = seq.sequenceImages.begin() + seq.currentPos; 
+        for (sequenceIt = seq.sequenceImages.begin() + seq.imageOffset;
             sequenceIt != seq.sequenceImages.end() && currCol < NUM_COLS; sequenceIt++)
         {
             QPixmap pixmap = sequenceIt->laterImage;

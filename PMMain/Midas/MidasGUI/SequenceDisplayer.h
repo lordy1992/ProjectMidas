@@ -27,16 +27,17 @@ public:
     QSize sizeHint() const;
 
 public slots:
-    void addSequence(std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
-    void advanceSequences(int action);
-    void updateSequences();
+    void registerSequence(int seqId, std::string sequenceName, std::vector<sequenceImageSet> sequenceImages);
+    void showSequences(std::vector<sequenceProgressData> progressPairs);
  
 private:
     void clearWidgets(bool deleteLabels = false);
     void clearRow(sequenceData seq, bool deleteLabels = false);
     void formBoxLabel(QLabel *label);
+    void updateSequences();
 
-    std::map<std::string, sequenceData> sequenceNameToDataMap;
+    std::map<int, sequenceData> sequenceIdToDataMap;
+    std::map<int, sequenceData> activeSequencesIdToDataMap;
     QGridLayout *gridLayout;
     int maxWidth, maxHeight;
     int maxNumSequences;
