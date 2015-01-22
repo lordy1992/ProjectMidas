@@ -10,10 +10,6 @@
 #include <list>
 #include <string>
 #include <iostream>
-// TODO!!! TEMP only -- obtaining global handle on FIRST created MidasThread (ideally the only one) and using that to emitString.
-#include "MidasThread.h"
-// TODO!!! TEMP only -- obtaining global handle on FIRST created MidasThread (ideally the only one) and using that to emitString.
-static MidasThread *gMidasThread;
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"

@@ -454,12 +454,6 @@ void GestureSeqRecorder::printStatus(bool verbose)
             std::cout << std::endl;
             emitString += "\n";
 
-            if (gThreadHandle)
-            {
-                // TODO - figure out WHY this isnt working! This value is always null here....  so was gMidasThread when tried that...
-                gThreadHandle->threadEmitString(emitString); // Note: Handling in a different way than this for now, but this structure seemed promissing..
-            }
-
             it++;
         }
     }
