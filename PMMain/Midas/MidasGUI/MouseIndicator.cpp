@@ -8,9 +8,9 @@
 #include <math.h>
 #include <qmessagebox.h>
 
-MouseIndicator::MouseIndicator(MidasThread *mainThread, int widgetWidth, int widgetHeight, QWidget *parent)
-    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint), indWidth(widgetWidth), indHeight(widgetHeight),
-    cursorPos(0, 0)
+MouseIndicator::MouseIndicator(MidasThread *mainThread, int deadZoneRad, int widgetWidth, int widgetHeight, QWidget *parent)
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint), deadZoneRadius(deadZoneRad),
+    indWidth(widgetWidth), indHeight(widgetHeight), cursorPos(0, 0)
 {
     this->mainThread = mainThread;
     
@@ -57,8 +57,8 @@ void MouseIndicator::paintEvent(QPaintEvent *event)
     painter.setPen(pen);
     painter.setBrush(Qt::NoBrush);
 
-    int deadZoneWidth = width() / 10;
-    int deadZoneHeight = width() / 10;
+    int deadZoneWidth = width() * (deadZoneRadius / 100.0);
+    int deadZoneHeight = width() * (deadZoneRadius / 100.0);
     int originX = -deadZoneWidth / 2;
     int originY = -deadZoneHeight / 2;
     painter.drawEllipse(originX, originY, deadZoneWidth, deadZoneHeight);

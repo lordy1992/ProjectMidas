@@ -9,7 +9,7 @@ class MouseIndicator : public DraggableWidget
     Q_OBJECT
 
 public:
-    MouseIndicator(MidasThread *mainThread, int widgetWidth = 100, int widgetHeight = 100, QWidget *parent = 0);
+    MouseIndicator(MidasThread *mainThread, int deadZoneRad, int widgetWidth = 100, int widgetHeight = 100, QWidget *parent = 0);
     QSize sizeHint() const;
 
     // For testing handleUpdateCursorPos, until we plug it into the Myo code.
@@ -22,6 +22,7 @@ protected:
 private:
     QPoint position, cursorPos;
     int indWidth, indHeight;
+    int deadZoneRadius;
     MidasThread *mainThread;
 
 public slots:

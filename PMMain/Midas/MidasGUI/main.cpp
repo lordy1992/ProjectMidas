@@ -1,5 +1,6 @@
 #include "midasgui.h"
 #include "MidasThread.h"
+#include "MouseCtrl.h"
 #include "MouseIndicator.h"
 #include "SequenceDisplayer.h"
 
@@ -18,7 +19,7 @@ int main(int argc, char *argv[])
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");
 
     //MidasGUI w(&midasThread);
-    MouseIndicator w1(&midasThread);
+    MouseIndicator w1(&midasThread, MOVE_RATE_DEADZONE);
 
     sequenceDisplayer.show();
     w1.show();
