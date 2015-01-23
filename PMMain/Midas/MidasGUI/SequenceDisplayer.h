@@ -31,6 +31,8 @@ public:
      */
     SequenceDisplayer(QWidget *parent = 0);
 
+    ~SequenceDisplayer();
+
     /**
      * Returns the recommended size of the widget.
      *
@@ -84,6 +86,11 @@ private:
      * Updates the GUI with the new active sequence information.
      */
     void updateSequences();
+
+    /**
+     * Cleans up the memory allocated by the sequence displayer.
+     */
+    void cleanup();
 
     std::map<int, sequenceData> sequenceIdToDataMap;
     std::map<int, sequenceData> activeSequencesIdToDataMap;

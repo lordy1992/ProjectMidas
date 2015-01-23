@@ -35,6 +35,32 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
         maxWidth, maxHeight);
 }
 
+SequenceDisplayer::~SequenceDisplayer()
+{
+    cleanup();
+}
+
+void SequenceDisplayer::cleanup()
+{
+    std::map<int, sequenceData>::iterator it;
+
+    for (it = sequenceIdToDataMap.begin(); it != sequenceIdToDataMap.end(); ++it)
+    {
+        delete it->second.seqLabel;
+        it->second.seqLabel = NULL;
+        delete it->second.seqPosLabel;
+        it->second.seqPosLabel = NULL;
+
+        std::vector<sequenceImageSet>::iterator image_it;
+        for (image_it = it->second.sequenceImages.begin(); image_it != it->second.sequenceImages.end(); image_it++)
+        {
+            delete image_it->currentImgLabel;
+        }
+    }
+
+    delete gridLayout;
+}
+
 QSize SequenceDisplayer::sizeHint() const
 {
     return QSize(maxWidth, maxHeight);
