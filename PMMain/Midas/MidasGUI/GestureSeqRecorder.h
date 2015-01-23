@@ -183,7 +183,17 @@ private:
     */
     SequenceStatus findActivation(Pose::Type gesture, ControlState state, commandData& response);
 
+    /**
+     * Updates the sequence displayer GUI with the latest sequence information. This should be
+     * called upon any update to the sequences.
+     */
     void updateGuiSequences();
+
+    /**
+     * Loads the images needed for the sequence GUI and connects the signals of the GestureSignaller to the
+     * slots of the GUI.
+     */
+    void connectGuiSignals();
 
     // Holds all registered commandDatas in a layered organization.
     sequenceMapPerMode *seqMapPerMode;

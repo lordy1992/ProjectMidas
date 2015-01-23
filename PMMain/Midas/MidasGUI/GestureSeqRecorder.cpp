@@ -15,13 +15,7 @@ GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
         (*seqMapPerMode)[mm] = new sequenceList();
     }
 
-    imageManager.loadImages();
-
-    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-
-    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
+    connectGuiSignals();
 
 }
 
@@ -37,13 +31,7 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
         (*seqMapPerMode)[mm] = new sequenceList();
     }
 
-    imageManager.loadImages();
-
-    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-
-    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
+    connectGuiSignals();
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
@@ -533,3 +521,13 @@ void GestureSeqRecorder::printStatus(bool verbose)
     activeSequencesMutex.unlock();
 }
 
+void GestureSeqRecorder::connectGuiSignals()
+{
+    imageManager.loadImages();
+
+    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
+        sequenceDisplayer, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
+
+    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
+        sequenceDisplayer, SLOT(showSequences(std::vector<sequenceProgressData>)));
+}
