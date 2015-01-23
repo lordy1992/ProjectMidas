@@ -24,9 +24,9 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-#define DEFAULT_PROG_MAX_DELTA 10000 // ms
+#define DEFAULT_PROG_MAX_DELTA 3000 // ms
 
-#define REQ_HOLD_TIME 10000 // ms
+#define REQ_HOLD_TIME 1000 // ms
 
 enum class SequenceStatus {
     SUCCESS,
@@ -64,7 +64,6 @@ public:
     * Constructors/Destructor
     */
     GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui);
-    GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayer);
     ~GestureSeqRecorder();
 
     /**
@@ -197,6 +196,8 @@ private:
 
     // State info from when a sequence that has size >1 is started.
     midasMode prevState;
+
+    Pose::Type prevPose;
 
     // Base timestamp used to calculate transitions
     clock_t progressBaseTime;

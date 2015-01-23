@@ -7,7 +7,7 @@ ControlState* GestureFilter::controlStateHandle;
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), gestSeqRecorder(midasMode::LOCK_MODE, SEQ_TIMEOUT_LENGTH, sequenceDisplayer)
+    lastTime(0), gestSeqRecorder(sequenceDisplayer)
 {
     registerMouseSequences();
     registerKeyboardSequences();

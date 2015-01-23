@@ -16,7 +16,6 @@ using namespace myo;
 #define GESTURE_INPUT "gesture"
 #define MYO_GESTURE_RIGHT_MOUSE Pose::fingersSpread
 #define MYO_GESTURE_LEFT_MOUSE Pose::fist
-#define SEQ_TIMEOUT_LENGTH 3000 // ms
 
 // GestureFilter spawns a thread to execute callback functions at this
 // period.
