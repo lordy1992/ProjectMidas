@@ -25,27 +25,6 @@ GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
 
 }
 
-//GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
-//    : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
-//    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
-//{
-//    seqMapPerMode = new sequenceMapPerMode();
-//
-//    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
-//    {
-//        midasMode mm = static_cast<midasMode>(midasModeInt);
-//        (*seqMapPerMode)[mm] = new sequenceList();
-//    }
-//
-//    imageManager.loadImages();
-//
-//    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-//        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-//
-//    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-//        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
-//}
-
 GestureSeqRecorder::~GestureSeqRecorder()
 {
     for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)

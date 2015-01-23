@@ -64,7 +64,6 @@ public:
     * Constructors/Destructor
     */
     GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui);
-    //GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayer);
     ~GestureSeqRecorder();
 
     /**
