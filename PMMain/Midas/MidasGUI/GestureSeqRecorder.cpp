@@ -3,9 +3,6 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-
-//Jorden TODO - figure out why 'my fixes' for timing stuff now makes the GUI stop getting updated properly!
-
 GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
     holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui), prevPose(Pose::rest)
@@ -159,7 +156,7 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
                 }
                 else
                 {
-                    if (prevPose != Pose::rest) // JORDEN TODO - not working.
+                    if (prevPose != Pose::rest)
                     {
                         // Erase if they're still holding a non-rest pose, since
                         // that means they 'actually' hit a hold-state.
@@ -167,6 +164,10 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
                         std::list<sequenceInfo*>::iterator itCopy = it;
                         it++;
                         activeSequences.erase(itCopy);
+                    }
+                    else
+                    {
+                        it++;
                     }
                 }
 
