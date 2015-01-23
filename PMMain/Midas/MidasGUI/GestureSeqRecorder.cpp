@@ -3,9 +3,12 @@
 
 unsigned int sequenceInfo::counter = 0;
 
+
+//Jorden TODO - figure out why 'my fixes' for timing stuff now makes the GUI stop getting updated properly!
+
 GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui), prevPose(Pose::rest)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -25,26 +28,26 @@ GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
 
 }
 
-GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
-    : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
-{
-    seqMapPerMode = new sequenceMapPerMode();
-
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
-    {
-        midasMode mm = static_cast<midasMode>(midasModeInt);
-        (*seqMapPerMode)[mm] = new sequenceList();
-    }
-
-    imageManager.loadImages();
-
-    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-
-    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
-}
+//GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
+//    : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
+//    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
+//{
+//    seqMapPerMode = new sequenceMapPerMode();
+//
+//    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
+//    {
+//        midasMode mm = static_cast<midasMode>(midasModeInt);
+//        (*seqMapPerMode)[mm] = new sequenceList();
+//    }
+//
+//    imageManager.loadImages();
+//
+//    QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
+//        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
+//
+//    QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
+//        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
+//}
 
 GestureSeqRecorder::~GestureSeqRecorder()
 {
@@ -92,6 +95,8 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.type = commandType::NONE;
+
+    prevPose = gesture;
 
     if (activeSequences.size() != 0)
     {
@@ -154,10 +159,15 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
                 }
                 else
                 {
-                    (*it)->progress = 0;
-                    std::list<sequenceInfo*>::iterator itCopy = it;
-                    it++;
-                    activeSequences.erase(itCopy);
+                    if (prevPose != Pose::rest) // JORDEN TODO - not working.
+                    {
+                        // Erase if they're still holding a non-rest pose, since
+                        // that means they 'actually' hit a hold-state.
+                        (*it)->progress = 0;
+                        std::list<sequenceInfo*>::iterator itCopy = it;
+                        it++;
+                        activeSequences.erase(itCopy);
+                    }
                 }
 
                 updateGuiSequences();
@@ -179,7 +189,15 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
         }
     }
 
-    holdGestTimer -= delta;
+    if (holdGestTimer - delta <= 0)
+    {
+        // ensure value doesn't loop and cause we're results if decremented too much.
+        holdGestTimer = 0;
+    }
+    else
+    {
+        holdGestTimer -= delta;
+    }
 }
 
 
@@ -439,9 +457,6 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
 
-    clock_t now = clock();
-    progressBaseTime = now;
-
     // Loop through all possible sequences in this mode, and activate any that
     // have a matching first gesture.
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
@@ -449,6 +464,8 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
         if ((it->seq.size() >= 0) && 
             (it->seq.at(0).type == gesture))
         {
+            clock_t now = clock();
+            progressBaseTime = now;
             if (it->seq.at(0).poseLen == SeqElement::PoseLength::IMMEDIATE)
             {
                 // Special case. Immediate isn't 'held'
