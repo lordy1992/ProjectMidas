@@ -3,6 +3,10 @@
 
 #include <string>
 
+#define MOUSE_INDICATOR_SIZE 100
+#define INFO_INDICATOR_HEIGHT 30
+#define WIDGET_BUFFER 5
+
 /**
  * Enumerates the types of commands that can be sent to control
  * peripherals on Windows.

@@ -31,7 +31,6 @@ public slots:
 private:
     void clearWidgets(bool deleteLabels = false);
     void clearRow(sequenceData seq, bool deleteLabels = false);
-    void formBoxLabel(QLabel *label);
     void updateSequences();
 
     std::map<int, sequenceData> sequenceIdToDataMap;

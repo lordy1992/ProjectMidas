@@ -5,9 +5,9 @@
 
 ControlState* GestureFilter::controlStateHandle;
 
-GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer) 
+GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), gestSeqRecorder(sequenceDisplayer)
+    lastTime(0), gestSeqRecorder(sequenceDisplayer), infoIndicator(infoIndicator)
 {
     registerMouseSequences();
     registerKeyboardSequences();
@@ -16,6 +16,11 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, Sequen
     controlStateHandle = controlState;
 
     setupCallbackThread(this);
+
+    bool status1 = QObject::connect(&signaller, SIGNAL(emitStateString(QString)),
+        infoIndicator, SLOT(handleUpdateState(QString)));
+    bool status2 = QObject::connect(infoIndicator, SIGNAL(emitShowAllToggle(bool)),
+        &signaller, SLOT(handleShowAllToggle(bool)));
 }
 
 GestureFilter::~GestureFilter()

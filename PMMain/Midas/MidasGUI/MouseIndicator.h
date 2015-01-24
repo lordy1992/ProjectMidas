@@ -3,13 +3,14 @@
 
 #include "DraggableWidget.h"
 #include "MidasThread.h"
+#include "MidasCommon.h"
 
 class MouseIndicator : public DraggableWidget
 {
     Q_OBJECT
 
 public:
-    MouseIndicator(MidasThread *mainThread, int deadZoneRad, int widgetWidth = 100, int widgetHeight = 100, QWidget *parent = 0);
+    MouseIndicator(MidasThread *mainThread, int deadZoneRad, int widgetWidth = MOUSE_INDICATOR_SIZE, int widgetHeight = MOUSE_INDICATOR_SIZE, QWidget *parent = 0);
     QSize sizeHint() const;
 
 protected:

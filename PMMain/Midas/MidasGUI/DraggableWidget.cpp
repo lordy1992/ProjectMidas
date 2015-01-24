@@ -27,3 +27,15 @@ void DraggableWidget::mouseMoveEvent(QMouseEvent *event)
         event->accept();
     }
 }
+
+void DraggableWidget::formBoxLabel(QLabel *label)
+{
+    label->setEnabled(false);
+    label->setFrameShape(QFrame::Box);
+    label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    label->setBackgroundRole(QPalette::Base);
+    label->setAlignment(Qt::AlignCenter);
+    label->setAutoFillBackground(true);
+    label->setFixedSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    label->setScaledContents(true);
+}
