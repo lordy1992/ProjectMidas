@@ -23,6 +23,6 @@ signals:
     void emitStateString(QString);
 
 private:
-    bool showAll;
+    static bool showAll;
 };
 

@@ -3,9 +3,9 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
+GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui), prevPose(Pose::rest)
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui), controlStateHandle(controlStateHandle), prevPose(Pose::rest)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -471,17 +471,36 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
 void GestureSeqRecorder::updateGuiSequences()
 {
     std::vector<sequenceProgressData> progressDataVec;
-    std::list<sequenceInfo*>::iterator it;
-
-    for (it = activeSequences.begin(); it != activeSequences.end(); ++it)
+    if (signaller.getShowAll())
     {
-        sequenceProgressData progressData;
+        // Add ALL sequences registered to the current mode
+        sequenceList* sl = (*seqMapPerMode)[controlStateHandle->getMode()];
 
-        progressData.seqId = (*it)->id;
-        progressData.progress = (*it)->progress;
-        progressDataVec.push_back(progressData);
+        std::list<sequenceInfo>::iterator it;
+
+        for (it = sl->begin(); it != sl->end(); ++it)
+        {
+            sequenceProgressData progressData;
+
+            progressData.seqId = it->id;
+            progressData.progress = it->progress;
+            progressDataVec.push_back(progressData);
+        }
     }
+    else
+    {
+        // Add only the active sequences
+        std::list<sequenceInfo*>::iterator it;
 
+        for (it = activeSequences.begin(); it != activeSequences.end(); ++it)
+        {
+            sequenceProgressData progressData;
+
+            progressData.seqId = (*it)->id;
+            progressData.progress = (*it)->progress;
+            progressDataVec.push_back(progressData);
+        }
+    }
     signaller.emitShowSequences(progressDataVec);
 }
 

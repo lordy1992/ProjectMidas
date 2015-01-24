@@ -1,5 +1,6 @@
 #include "GestureSignaller.h"
 
+bool GestureSignaller::showAll;
 
 GestureSignaller::GestureSignaller()
 {

@@ -10,7 +10,7 @@ GestureSignaller GestureFilter::signaller;
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), gestSeqRecorder(sequenceDisplayer), infoIndicator(infoIndicator)
+    lastTime(0), gestSeqRecorder(controlState, sequenceDisplayer), infoIndicator(infoIndicator)
 {
     registerMouseSequences();
     registerKeyboardSequences();
