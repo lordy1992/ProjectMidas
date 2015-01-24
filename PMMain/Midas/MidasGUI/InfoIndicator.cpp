@@ -11,7 +11,7 @@
 
 InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint),
-    indWidth(widgetWidth), indHeight(widgetHeight)
+    indWidth(widgetWidth), indHeight(widgetHeight), showAll(false)
 {
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -45,7 +45,9 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     stateLabel->setFont(timesFont);
     layout->addWidget(stateLabel, 0, 0);
 
-    button = new QPushButton(tr("more"), this);
+    button = new QPushButton(this);
+    button->setText(getShowAllString());
+    connect(button, SIGNAL(released()), this, SLOT(handleButton()));
     layout->addWidget(button, 0, 1);
 
     // Position the widget on the bottom-right initially.
@@ -88,6 +90,13 @@ void InfoIndicator::resizeEvent(QResizeEvent *event)
     setMask(maskedRegion);
 }
 
+void InfoIndicator::handleButton()
+{
+    showAll = !showAll;
+    button->setText(getShowAllString());
+    emitShowAllToggle(showAll);
+}
+
 QSize InfoIndicator::sizeHint() const
 {
     return QSize(indWidth, indHeight);
@@ -96,4 +105,17 @@ QSize InfoIndicator::sizeHint() const
 void InfoIndicator::handleUpdateState(QString stateString)
 {
     stateLabel->setText(stateString);
+}
+
+QString InfoIndicator::getShowAllString()
+{
+    if (showAll)
+    {
+        return tr("less");
+    }
+    else
+    {
+        return tr("more");
+    }
+
 }

@@ -24,6 +24,8 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, Sequen
         infoIndicator, SLOT(handleUpdateState(QString)));
     bool status2 = QObject::connect(infoIndicator, SIGNAL(emitShowAllToggle(bool)),
         &signaller, SLOT(handleShowAllToggle(bool)));
+
+    signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
 }
 
 GestureFilter::~GestureFilter()
