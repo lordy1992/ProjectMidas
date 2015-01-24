@@ -24,6 +24,7 @@ GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, Sequenc
         sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
 
     prevShowAll = signaller.getShowAll();
+    timeBasedPrevState = controlStateHandle->getMode();
     updateGuiSequences();
 }
 
@@ -119,6 +120,11 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
     {
         updateGuiSequences();
         prevShowAll = signaller.getShowAll();
+    }
+    if (controlStateHandle->getMode() != timeBasedPrevState)
+    {
+        updateGuiSequences();
+        timeBasedPrevState = controlStateHandle->getMode();
     }
 
     // Provide response if hold is reached and cut off 'taps' if hold is reached

@@ -200,6 +200,7 @@ private:
     Pose::Type prevPose;
 
     bool prevShowAll;
+    midasMode timeBasedPrevState; // previous state seen in time, used for GUI purposes.
 
     // Base timestamp used to calculate transitions
     clock_t progressBaseTime;
