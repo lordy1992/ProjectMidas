@@ -58,30 +58,6 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
 
 void InfoIndicator::paintEvent(QPaintEvent *event)
 {
-
-    //int side = qMin(width(), height());
-    //QPainter painter(this);
-    //painter.setRenderHint(QPainter::Antialiasing);
-    //painter.translate(width() / 2, height() / 2);
-    //
-    //QColor cursorIndicatorColor(200, 0, 0);
-    //QBrush cursorIndicatorBrush(cursorIndicatorColor);
-    //QPen cursorIndicatorPen(cursorIndicatorBrush, 5);
-    //painter.setPen(cursorIndicatorPen);
-    //painter.setBrush(Qt::NoBrush);
-    //
-    //painter.drawPoint(cursorPos);
-
-
-    //stateLabel->setEnabled(true);
-    //stateLabel->setFrameShape(QFrame::Box);
-    //stateLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    //stateLabel->setBackgroundRole(QPalette::Base);
-    //stateLabel->setAlignment(Qt::AlignLeft);
-    //stateLabel->setAutoFillBackground(true);
-    //stateLabel->setFixedSize(width(), height());
-    //stateLabel->setScaledContents(true);
-    //stateLabel->setHidden(false);
 }
 
 void InfoIndicator::resizeEvent(QResizeEvent *event)
