@@ -47,6 +47,8 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
 
     button = new QPushButton(this);
     button->setText(getShowAllString());
+    QFont timesSmall("Times", 8, QFont::DemiBold);
+    button->setFont(timesSmall);
     connect(button, SIGNAL(released()), this, SLOT(handleButton()));
     layout->addWidget(button, 0, 1);
 

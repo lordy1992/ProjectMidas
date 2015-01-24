@@ -106,6 +106,7 @@ void GestureFilter::registerMouseSequences(void)
 
     // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
     clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
+    clickResp.name = "Release Mouse";
     clickSeq.at(0) = SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE);
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
 
