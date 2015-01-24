@@ -199,6 +199,8 @@ private:
 
     Pose::Type prevPose;
 
+    bool prevShowAll;
+
     // Base timestamp used to calculate transitions
     clock_t progressBaseTime;
 

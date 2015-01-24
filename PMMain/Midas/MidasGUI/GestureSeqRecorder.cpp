@@ -23,6 +23,8 @@ GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, Sequenc
     bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
         sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
 
+    prevShowAll = signaller.getShowAll();
+    updateGuiSequences();
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
@@ -86,6 +88,11 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
     {
         status = findActivation(gesture, state, response);
         
+        if (state.getMode() != prevState)
+        {
+            updateGuiSequences();
+        }
+
         prevState = state.getMode();
     }
 
@@ -108,6 +115,12 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 
 void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
 {
+    if (signaller.getShowAll() != prevShowAll)
+    {
+        updateGuiSequences();
+        prevShowAll = signaller.getShowAll();
+    }
+
     // Provide response if hold is reached and cut off 'taps' if hold is reached
     if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
     {
@@ -477,14 +490,24 @@ void GestureSeqRecorder::updateGuiSequences()
         sequenceList* sl = (*seqMapPerMode)[controlStateHandle->getMode()];
 
         std::list<sequenceInfo>::iterator it;
-
+        // loop once to find the max progress
+        unsigned int maxProg = 0;
         for (it = sl->begin(); it != sl->end(); ++it)
         {
-            sequenceProgressData progressData;
+            if (it->progress > maxProg)
+                maxProg = it->progress;
+        }
+        // loop twice to 'load' all sequences == progress
+        for (it = sl->begin(); it != sl->end(); ++it)
+        {
+            if (it->progress >= maxProg)
+            {
+                sequenceProgressData progressData;
 
-            progressData.seqId = it->id;
-            progressData.progress = it->progress;
-            progressDataVec.push_back(progressData);
+                progressData.seqId = it->id;
+                progressData.progress = it->progress;
+                progressDataVec.push_back(progressData);
+            }
         }
     }
     else
