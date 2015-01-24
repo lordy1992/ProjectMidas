@@ -1,9 +1,12 @@
 #include "GestureFilter.h"
+#include "MyoCommon.h"
 #include <time.h>
 #include <thread>
-#include "MyoCommon.h"
+#include <qtranslator.h>
+
 
 ControlState* GestureFilter::controlStateHandle;
+GestureSignaller GestureFilter::signaller;
 
 GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
@@ -296,6 +299,8 @@ void GestureFilter::handleStateChange(commandData response)
         return;
     }
 
+    signaller.emitStateString(QTranslator::tr((modeToString(response.action.mode)).c_str()));
+
     std::cout << "Transitioning to state: " << response.action.mode << std::endl;
     controlStateHandle->setMode(response.action.mode);
     
@@ -326,32 +331,6 @@ void GestureFilter::handleKybrdCommand(commandData response)
 
         outputToSharedCommandData[COMMAND_INPUT] = command;
         Filter::setOutput(outputToSharedCommandData);
-    }
-}
-
-void GestureFilter::handleMouseRelease()
-{
-    if (controlStateHandle->getMode() == midasMode::MOUSE_MODE ||
-        controlStateHandle->getMode() == midasMode::GESTURE_MODE)
-    {
-        filterDataMap outputToSharedCommandData;
-        commandData command;
-        command.type = MOUSE_CMD;
-
-        if (lastPoseType == MYO_GESTURE_LEFT_MOUSE)
-        {
-            command.action.mouse = LEFT_RELEASE;
-            outputToSharedCommandData[COMMAND_INPUT] = command;
-            Filter::setOutput(outputToSharedCommandData);
-            return;
-        }
-        else if (lastPoseType == MYO_GESTURE_RIGHT_MOUSE)
-        {
-            command.action.mouse = RIGHT_RELEASE;
-            outputToSharedCommandData[COMMAND_INPUT] = command;
-            Filter::setOutput(outputToSharedCommandData);
-            return;
-        }
     }
 }
 

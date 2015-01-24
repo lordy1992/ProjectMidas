@@ -4,7 +4,8 @@
 #include <string>
 
 #define MOUSE_INDICATOR_SIZE 100
-#define INFO_INDICATOR_HEIGHT 30
+#define INFO_INDICATOR_HEIGHT 50
+#define INFO_INDICATOR_WIDTH 160
 #define WIDGET_BUFFER 5
 
 /**
@@ -109,6 +110,33 @@ enum midasMode {
     GESTURE_HOLD_FOUR,
     GESTURE_HOLD_FIVE
 };
+
+static std::string modeToString(midasMode mm)
+{
+    switch (mm)
+    {
+    case LOCK_MODE:   
+        return "Locked";
+    case MOUSE_MODE:  
+        return "Mouse Mode";
+    case KEYBOARD_MODE:  
+        return "Keyboard Mode";
+    case GESTURE_MODE:  
+        return "Gesture Mode";
+    case GESTURE_HOLD_ONE:
+        return "Hold1 Mode";
+    case GESTURE_HOLD_TWO:
+        return "Hold2 Mode";
+    case GESTURE_HOLD_THREE:
+        return "Hold3 Mode";
+    case GESTURE_HOLD_FOUR:
+        return "Hold4 Mode";
+    case GESTURE_HOLD_FIVE:
+        return "Hold5 Mode";
+    default:
+        return "default";
+    }
+}
 
 /**
  * A status used in the Keyboard Controller, with different

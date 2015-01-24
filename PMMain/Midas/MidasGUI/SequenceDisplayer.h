@@ -3,6 +3,7 @@
 
 #include "DraggableWidget.h"
 #include "MyoCommon.h"
+#include "MidasCommon.h"
 #include <QGridLayout.h>
 #include <string>
 #include <map>

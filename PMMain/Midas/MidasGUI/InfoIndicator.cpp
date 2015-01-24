@@ -4,6 +4,7 @@
 #include <QApplication.h>
 #include <QEvent.h>
 #include <QPainter.h>
+#include <qstyle.h>
 #include <qdesktopwidget.h>
 #include <math.h>
 #include <qmessagebox.h>
@@ -34,12 +35,18 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     setPalette(pal);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
+    layout = new QGridLayout;
+    //layout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
+    layout->setSpacing(5);
+    setLayout(layout);
+
     QFont timesFont("Times", 9, QFont::Bold);
-    QLabel *label = new QLabel(tr("%1").arg("jorden test"));
-    label->setFont(timesFont);
-    label->setWordWrap(true);
-    formBoxLabel(label);
-    stateLabel = label;
+    stateLabel = new QLabel(tr("%1").arg("jorden test"));
+    stateLabel->setFont(timesFont);
+    layout->addWidget(stateLabel, 0, 0);
+
+    button = new QPushButton(tr("more"), this);
+    layout->addWidget(button, 0, 1);
 
     // Position the widget on the bottom-right initially.
     QRect screen = QApplication::desktop()->availableGeometry(this);
@@ -64,15 +71,15 @@ void InfoIndicator::paintEvent(QPaintEvent *event)
     //painter.drawPoint(cursorPos);
 
 
-    stateLabel->setEnabled(true);
-    stateLabel->setFrameShape(QFrame::Box);
-    stateLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    stateLabel->setBackgroundRole(QPalette::Base);
-    stateLabel->setAlignment(Qt::AlignLeft);
-    stateLabel->setAutoFillBackground(true);
-    stateLabel->setFixedSize(width(), height());
-    stateLabel->setScaledContents(true);
-    stateLabel->setHidden(false);
+    //stateLabel->setEnabled(true);
+    //stateLabel->setFrameShape(QFrame::Box);
+    //stateLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    //stateLabel->setBackgroundRole(QPalette::Base);
+    //stateLabel->setAlignment(Qt::AlignLeft);
+    //stateLabel->setAutoFillBackground(true);
+    //stateLabel->setFixedSize(width(), height());
+    //stateLabel->setScaledContents(true);
+    //stateLabel->setHidden(false);
 }
 
 void InfoIndicator::resizeEvent(QResizeEvent *event)

@@ -77,7 +77,6 @@ private:
     void registerStateSequences(void);
     void handleMouseCommand(commandData response);
     void handleKybrdCommand(commandData response);
-    void handleMouseRelease();
 
     Pose::Type lastPoseType;
     
@@ -88,7 +87,7 @@ private:
     GestureSeqRecorder gestSeqRecorder;
 
     InfoIndicator *infoIndicator;
-    GestureSignaller signaller;
+    static GestureSignaller signaller;
 };
 
 void setupCallbackThread(GestureFilter *gf);
