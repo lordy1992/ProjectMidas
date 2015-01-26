@@ -3,11 +3,11 @@
 #include "MyoTranslationFilter.h"
 #include "AveragingFilter.h"
 
-MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, 
-    std::string applicationIdentifier, SequenceDisplayer* sequenceDisplayerGui)
+MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
+    std::string applicationIdentifier, SequenceDisplayer* sequenceDisplayerGui, InfoIndicator* infoIndicator)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
     durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), xDirection(DEFAULT_MYO_XDIR),
-    sequenceDisplayer(sequenceDisplayerGui)
+    sequenceDisplayer(sequenceDisplayerGui), infoIndicator(infoIndicator)
 {
 }
 
@@ -29,7 +29,7 @@ void MyoDevice::runDeviceLoop()
 {
     WearableDevice::setDeviceStatus(deviceStatus::RUNNING);
 
-    GestureFilter gestureFilter(state, 0, sequenceDisplayer);
+    GestureFilter gestureFilter(state, 0, sequenceDisplayer, infoIndicator);
     posePipeline.registerFilter(&gestureFilter);
     posePipeline.registerFilter(WearableDevice::sharedData);
 

@@ -9,10 +9,9 @@
 #define SEQ_NUMBER_NUM_COLS 1
 #define SEQ_NUMBER_NUM_ROWS 1
 #define NUM_SEQUENCE_STEPS  3
-#define GRID_ELEMENT_SIZE   48
 #define NUM_COLS (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS)
 #define GUI_WIDTH_BUFFER 1
-#define GUI_HEIGHT_OFFSET_FROM_BOTTOM 96
+#define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
@@ -121,18 +120,6 @@ void SequenceDisplayer::clearWidgets(bool deleteLabels)
         sequenceData seq = it->second;
         clearRow(seq, deleteLabels);
     }
-}
-
-void SequenceDisplayer::formBoxLabel(QLabel *label)
-{
-    label->setEnabled(false);
-    label->setFrameShape(QFrame::Box);
-    label->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
-    label->setBackgroundRole(QPalette::Base);
-    label->setAlignment(Qt::AlignCenter);
-    label->setAutoFillBackground(true);
-    label->setFixedSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
-    label->setScaledContents(true);
 }
 
 void SequenceDisplayer::updateSequences()

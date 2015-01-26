@@ -1,13 +1,16 @@
 #include "GestureFilter.h"
+#include "MyoCommon.h"
 #include <time.h>
 #include <thread>
-#include "MyoCommon.h"
+#include <qtranslator.h>
+
 
 ControlState* GestureFilter::controlStateHandle;
+GestureSignaller GestureFilter::signaller;
 
-GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer) 
+GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), gestSeqRecorder(sequenceDisplayer)
+    lastTime(0), gestSeqRecorder(controlState, sequenceDisplayer), infoIndicator(infoIndicator)
 {
     registerMouseSequences();
     registerKeyboardSequences();
@@ -16,6 +19,13 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, Sequen
     controlStateHandle = controlState;
 
     setupCallbackThread(this);
+
+    bool status1 = QObject::connect(&signaller, SIGNAL(emitStateString(QString)),
+        infoIndicator, SLOT(handleUpdateState(QString)));
+    bool status2 = QObject::connect(infoIndicator, SIGNAL(emitShowAllToggle(bool)),
+        &signaller, SLOT(handleShowAllToggle(bool)));
+
+    signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
 }
 
 GestureFilter::~GestureFilter()
@@ -96,6 +106,7 @@ void GestureFilter::registerMouseSequences(void)
 
     // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
     clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
+    clickResp.name = "Release Mouse";
     clickSeq.at(0) = SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE);
     ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
 
@@ -291,6 +302,8 @@ void GestureFilter::handleStateChange(commandData response)
         return;
     }
 
+    signaller.emitStateString(QTranslator::tr((modeToString(response.action.mode)).c_str()));
+
     std::cout << "Transitioning to state: " << response.action.mode << std::endl;
     controlStateHandle->setMode(response.action.mode);
     
@@ -321,32 +334,6 @@ void GestureFilter::handleKybrdCommand(commandData response)
 
         outputToSharedCommandData[COMMAND_INPUT] = command;
         Filter::setOutput(outputToSharedCommandData);
-    }
-}
-
-void GestureFilter::handleMouseRelease()
-{
-    if (controlStateHandle->getMode() == midasMode::MOUSE_MODE ||
-        controlStateHandle->getMode() == midasMode::GESTURE_MODE)
-    {
-        filterDataMap outputToSharedCommandData;
-        commandData command;
-        command.type = MOUSE_CMD;
-
-        if (lastPoseType == MYO_GESTURE_LEFT_MOUSE)
-        {
-            command.action.mouse = LEFT_RELEASE;
-            outputToSharedCommandData[COMMAND_INPUT] = command;
-            Filter::setOutput(outputToSharedCommandData);
-            return;
-        }
-        else if (lastPoseType == MYO_GESTURE_RIGHT_MOUSE)
-        {
-            command.action.mouse = RIGHT_RELEASE;
-            outputToSharedCommandData[COMMAND_INPUT] = command;
-            Filter::setOutput(outputToSharedCommandData);
-            return;
-        }
     }
 }
 

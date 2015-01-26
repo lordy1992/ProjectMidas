@@ -152,6 +152,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_GestureSignaller.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="InfoIndicator.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_InfoIndicator.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_InfoIndicator.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -177,6 +186,9 @@
     </CustomBuild>
     <CustomBuild Include="GestureSignaller.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="InfoIndicator.h">
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

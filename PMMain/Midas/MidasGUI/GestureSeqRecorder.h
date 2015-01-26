@@ -63,7 +63,7 @@ public:
     /**
     * Constructors/Destructor
     */
-    GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui);
+    GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui);
     ~GestureSeqRecorder();
 
     /**
@@ -199,6 +199,9 @@ private:
 
     Pose::Type prevPose;
 
+    bool prevShowAll;
+    midasMode timeBasedPrevState; // previous state seen in time, used for GUI purposes.
+
     // Base timestamp used to calculate transitions
     clock_t progressBaseTime;
 
@@ -211,6 +214,8 @@ private:
     // Timer to hold the amount of time on each progression of a sequence, which 
     // will determine if a user tapped a pose, or held it.
     clock_t holdGestTimer;
+
+    ControlState* controlStateHandle;
 
     SequenceImageManager imageManager;
     SequenceDisplayer* sequenceDisplayer;
