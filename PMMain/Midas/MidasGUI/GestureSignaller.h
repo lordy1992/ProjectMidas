@@ -17,7 +17,7 @@ public:
 
     bool getShowAll();
 
-    public slots:
+public slots:
     void handleShowAllToggle(bool showAll);
 
 signals:

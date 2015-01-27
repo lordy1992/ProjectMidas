@@ -3,7 +3,7 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
+GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui)
     : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
     holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
 {
