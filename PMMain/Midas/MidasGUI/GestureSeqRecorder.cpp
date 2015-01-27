@@ -4,8 +4,9 @@
 unsigned int sequenceInfo::counter = 0;
 
 GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui)
-    : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
+    : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()),
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui),
+    controlStateHandle(controlStateHandle), prevPose(Pose::rest)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
