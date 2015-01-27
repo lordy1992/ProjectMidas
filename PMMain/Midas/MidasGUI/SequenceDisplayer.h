@@ -3,6 +3,7 @@
 
 #include "DraggableWidget.h"
 #include "MyoCommon.h"
+#include "MidasCommon.h"
 #include <QGridLayout.h>
 #include <string>
 #include <map>
@@ -85,6 +86,7 @@ private:
     /**
      * Updates the GUI with the new active sequence information.
      */
+
     void updateSequences();
 
     /**

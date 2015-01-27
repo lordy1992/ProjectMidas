@@ -4,6 +4,7 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 #include "SequenceDisplayer.h"
+#include "InfoIndicator.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -36,7 +37,8 @@ public:
      * changed, and so that the device can read the current state.
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
-    MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, SequenceDisplayer *sequenceDisplayerGui);
+    MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, 
+        SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator);
     ~MyoDevice();
 
     /**
@@ -110,6 +112,7 @@ private:
     ControlState* state;
     FilterPipeline posePipeline, orientationPipeline;
     SequenceDisplayer *sequenceDisplayer;
+    InfoIndicator *infoIndicator;
 
     Arm arm;
     XDirection xDirection;

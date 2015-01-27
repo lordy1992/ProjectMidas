@@ -4,6 +4,7 @@
 #include "ControlState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
+#include "InfoIndicator.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -16,7 +17,6 @@ using namespace myo;
 #define GESTURE_INPUT "gesture"
 #define MYO_GESTURE_RIGHT_MOUSE Pose::fingersSpread
 #define MYO_GESTURE_LEFT_MOUSE Pose::fist
-#define SEQ_TIMEOUT_LENGTH 3000 // ms
 
 // GestureFilter spawns a thread to execute callback functions at this
 // period.
@@ -44,7 +44,7 @@ public:
      * @param controlState A handle to the ControlState object that manages application state.
      * @param timeDel The time that a user must hold a gesture before it is registered.
      */
-    GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer);
+    GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator);
     ~GestureFilter();
 
     /**
@@ -77,7 +77,6 @@ private:
     void registerStateSequences(void);
     void handleMouseCommand(commandData response);
     void handleKybrdCommand(commandData response);
-    void handleMouseRelease();
 
     Pose::Type lastPoseType;
     
@@ -86,6 +85,9 @@ private:
     clock_t lastTime;
 
     GestureSeqRecorder gestSeqRecorder;
+
+    InfoIndicator *infoIndicator;
+    static GestureSignaller signaller;
 };
 
 void setupCallbackThread(GestureFilter *gf);

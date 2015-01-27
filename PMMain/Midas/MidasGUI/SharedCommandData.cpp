@@ -111,7 +111,7 @@ bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
 unsigned int SharedCommandData::getKybdGuiSel()
 {
     kybdGuiSelMutex.lock();
-    float guiSel = kybdGuiSel;
+    unsigned int guiSel = kybdGuiSel;
     kybdGuiSelMutex.unlock();
 
     return guiSel;
@@ -131,7 +131,7 @@ bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
 unsigned int SharedCommandData::getKybdGuiSelMax()
 {
     kybdGuiSelMutex.lock();
-    float max = maxKybdGuiSel;
+    unsigned int max = maxKybdGuiSel;
     kybdGuiSelMutex.unlock();
 
     return max;

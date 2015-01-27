@@ -2,6 +2,9 @@
 #define DRAGGABLE_WIDGET_H
 
 #include <QtWidgets/QWidget.h>
+#include <qlabel.h>
+
+#define GRID_ELEMENT_SIZE   48
 
 /**
  * This class represents a Widget that can be dragged using the mouse, by left-clicking the widget
@@ -34,6 +37,8 @@ protected:
      * The event handler function that is called when the mouse moves over the widget.
      */
     virtual void mouseMoveEvent(QMouseEvent *event);
+
+    void formBoxLabel(QLabel *label);
     
 private:
     QPoint position;

@@ -3,22 +3,6 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(SequenceDisplayer* sequenceDisplayerGui)
-    : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
-{
-    seqMapPerMode = new sequenceMapPerMode();
-
-    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
-    {
-        midasMode mm = static_cast<midasMode>(midasModeInt);
-        (*seqMapPerMode)[mm] = new sequenceList();
-    }
-
-    connectGuiSignals();
-
-}
-
 GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxDeltaTime, SequenceDisplayer* sequenceDisplayerGui) 
     : prevState(prevState), progressMaxDeltaTime(progressMaxDeltaTime), progressBaseTime(clock()), 
     holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui)
@@ -32,6 +16,10 @@ GestureSeqRecorder::GestureSeqRecorder(midasMode prevState, clock_t progressMaxD
     }
 
     connectGuiSignals();
+
+    prevShowAll = signaller.getShowAll();
+    timeBasedPrevState = controlStateHandle->getMode();
+    updateGuiSequences();
 }
 
 GestureSeqRecorder::~GestureSeqRecorder()
@@ -81,6 +69,8 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.type = commandType::NONE;
 
+    prevPose = gesture;
+
     if (activeSequences.size() != 0)
     {
         status = ensureSameState(state);
@@ -93,6 +83,11 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
     {
         status = findActivation(gesture, state, response);
         
+        if (state.getMode() != prevState)
+        {
+            updateGuiSequences();
+        }
+
         prevState = state.getMode();
     }
 
@@ -115,6 +110,17 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 
 void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
 {
+    if (signaller.getShowAll() != prevShowAll)
+    {
+        updateGuiSequences();
+        prevShowAll = signaller.getShowAll();
+    }
+    if (controlStateHandle->getMode() != timeBasedPrevState)
+    {
+        updateGuiSequences();
+        timeBasedPrevState = controlStateHandle->getMode();
+    }
+
     // Provide response if hold is reached and cut off 'taps' if hold is reached
     if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
     {
@@ -142,10 +148,19 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
                 }
                 else
                 {
-                    (*it)->progress = 0;
-                    std::list<sequenceInfo*>::iterator itCopy = it;
-                    it++;
-                    activeSequences.erase(itCopy);
+                    if (prevPose != Pose::rest)
+                    {
+                        // Erase if they're still holding a non-rest pose, since
+                        // that means they 'actually' hit a hold-state.
+                        (*it)->progress = 0;
+                        std::list<sequenceInfo*>::iterator itCopy = it;
+                        it++;
+                        activeSequences.erase(itCopy);
+                    }
+                    else
+                    {
+                        it++;
+                    }
                 }
 
                 updateGuiSequences();
@@ -167,7 +182,15 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
         }
     }
 
-    holdGestTimer -= delta;
+    if (holdGestTimer - delta <= 0)
+    {
+        // ensure value doesn't loop and cause we're results if decremented too much.
+        holdGestTimer = 0;
+    }
+    else
+    {
+        holdGestTimer -= delta;
+    }
 }
 
 
@@ -427,9 +450,6 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];
 
-    clock_t now = clock();
-    progressBaseTime = now;
-
     // Loop through all possible sequences in this mode, and activate any that
     // have a matching first gesture.
     for (sequenceList::iterator it = seqList->begin(); it != seqList->end(); it++)
@@ -437,6 +457,8 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
         if ((it->seq.size() >= 0) && 
             (it->seq.at(0).type == gesture))
         {
+            clock_t now = clock();
+            progressBaseTime = now;
             if (it->seq.at(0).poseLen == SeqElement::PoseLength::IMMEDIATE)
             {
                 // Special case. Immediate isn't 'held'
@@ -462,17 +484,46 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
 void GestureSeqRecorder::updateGuiSequences()
 {
     std::vector<sequenceProgressData> progressDataVec;
-    std::list<sequenceInfo*>::iterator it;
-
-    for (it = activeSequences.begin(); it != activeSequences.end(); ++it)
+    if (signaller.getShowAll())
     {
-        sequenceProgressData progressData;
+        // Add ALL sequences registered to the current mode
+        sequenceList* sl = (*seqMapPerMode)[controlStateHandle->getMode()];
 
-        progressData.seqId = (*it)->id;
-        progressData.progress = (*it)->progress;
-        progressDataVec.push_back(progressData);
+        std::list<sequenceInfo>::iterator it;
+        // loop once to find the max progress
+        unsigned int maxProg = 0;
+        for (it = sl->begin(); it != sl->end(); ++it)
+        {
+            if (it->progress > maxProg)
+                maxProg = it->progress;
+        }
+        // loop twice to 'load' all sequences == progress
+        for (it = sl->begin(); it != sl->end(); ++it)
+        {
+            if (it->progress >= maxProg)
+            {
+                sequenceProgressData progressData;
+
+                progressData.seqId = it->id;
+                progressData.progress = it->progress;
+                progressDataVec.push_back(progressData);
+            }
+        }
     }
+    else
+    {
+        // Add only the active sequences
+        std::list<sequenceInfo*>::iterator it;
 
+        for (it = activeSequences.begin(); it != activeSequences.end(); ++it)
+        {
+            sequenceProgressData progressData;
+
+            progressData.seqId = (*it)->id;
+            progressData.progress = (*it)->progress;
+            progressDataVec.push_back(progressData);
+        }
+    }
     signaller.emitShowSequences(progressDataVec);
 }
 

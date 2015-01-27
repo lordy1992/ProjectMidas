@@ -5,13 +5,14 @@
 #include <string>
 #include "MyoCommon.h"
 #include "SequenceDisplayer.h"
+#include "InfoIndicator.h"
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
-    MidasThread(SequenceDisplayer *sequenceDisplayerGui);
+    MidasThread(SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator);
     ~MidasThread();
 
     void run();
@@ -23,6 +24,7 @@ public:
 
 private:
     SequenceDisplayer *sequenceDisplayer;
+    InfoIndicator *infoIndicator;
 
 signals:
     void outputCount(int);
