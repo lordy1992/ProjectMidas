@@ -114,6 +114,7 @@
     <ClCompile Include="MyoCommon.cpp" />
     <ClCompile Include="MyoDevice.cpp" />
     <ClCompile Include="MyoTranslationFilter.cpp" />
+    <ClCompile Include="RingData.cpp" />
     <ClCompile Include="SCDDigester.cpp" />
     <ClCompile Include="SharedCommandData.cpp" />
     <ClCompile Include="WearableDevice.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="MyoCommon.h" />
     <ClInclude Include="MyoDevice.h" />
     <ClInclude Include="MyoTranslationFilter.h" />
+    <ClInclude Include="RingData.h" />
     <ClInclude Include="SCDDigester.h" />
     <ClInclude Include="SharedCommandData.h" />
     <ClInclude Include="WearableDevice.h" />

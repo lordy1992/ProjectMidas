@@ -141,6 +141,11 @@ struct point {
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
 };
 
+struct ori_data {
+    float roll, pitch, yaw;
+    ori_data(float rollVal = 0, float pitchVal = 0, float yawVal = 0) : roll(rollVal), pitch(pitchVal), yaw(yawVal) { }
+};
+
 
 
 #endif /* _MIDAS_COMMON_H */

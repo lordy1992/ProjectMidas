@@ -3,6 +3,10 @@
 
 #include <QThread>
 #include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include "RingData.h"
 
 class MidasThread : public QThread
 {
@@ -18,7 +22,7 @@ public:
 
     void threadEmitString(std::string str);
     void threadEmitStateString(std::string str);
-
+    std::vector<ringData> readKeyboardSetupFile();
 private:
 
 signals:

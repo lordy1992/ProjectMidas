@@ -1,13 +1,14 @@
 #include "SCDDigester.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl)
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, ringData* kybrdRingData)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
     this->cntrlStateHandle = cntrlStateHandle;
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
+    this->kybrdRingData = kybrdRingData;
     count = 0;
 }
 
@@ -118,6 +119,10 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
         case kybdGUICmds::SELECT:
+            
+            //calculate angle and return a number from 0 - 12 and current kybdGUISel to determine which charater is highlighted
+//            kybrdCtrl->setKeyChar(kybrdRingData-> scdHandle->getAngle(scdHandle->getMyoOrientation())); WIP
+           // kybrdCtrl->sendData()
             /* Todo, pseudocode written 
             scdHandle->getAngle()
             use angle and current kybdGUISel to determine which character is being highlighted.

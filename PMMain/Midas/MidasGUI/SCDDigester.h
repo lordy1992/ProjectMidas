@@ -6,6 +6,7 @@
 #include "ControlState.h"
 #include "MouseCtrl.h"
 #include "kybrdCtrl.h"
+#include "RingData.h"
 #include "MyoCommon.h"
 #include <iostream>
 
@@ -20,7 +21,7 @@ using namespace myo;
 class SCDDigester
 {
 public:
-    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl);
+    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, ringData *kybrdRingData);
     ~SCDDigester();
 
     void digest();
@@ -35,6 +36,7 @@ private:
     ControlState *cntrlStateHandle;
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
+    ringData* kybrdRingData;
     int count;
 };
 

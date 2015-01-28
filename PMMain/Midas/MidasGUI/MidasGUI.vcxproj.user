@@ -2,10 +2,12 @@
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
-    <QTDIR>C:\Users\jorde_000\Documents\Qt\5.4.0\5.4\msvc2013_opengl</QTDIR>
+
+    <QTDIR>C:\Qt\5.4\msvc2013_opengl</QTDIR>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b"$(QTDIR)\bin%3b$(PATH)</LocalDebuggerEnvironment>
-    <QTDIR>C:\Users\jorde_000\Documents\Qt\5.4.0\5.4\msvc2013_opengl</QTDIR>
+    <QTDIR>C:\Qt\5.4\msvc2013_opengl</QTDIR>
+
   </PropertyGroup>
 </Project>

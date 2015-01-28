@@ -148,6 +148,45 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
     return locked;
 }
 
+void SharedCommandData::setMyoOrientation(ori_data orientation)
+{
+    myoOrientationMutex.lock();
+    myoOrientation = orientation;
+    myoOrientationMutex.unlock();
+}
+
+bool SharedCommandData::trySetMyoOrientation(ori_data orientation)
+{
+    bool locked = myoOrientationMutex.try_lock();
+    if (locked) {
+        myoOrientation = orientation;
+        myoOrientationMutex.unlock();
+    }
+
+    return locked;
+}
+
+ori_data SharedCommandData::getMyoOrientation()
+{
+    myoOrientationMutex.lock();
+    ori_data orientation = myoOrientation;
+    myoOrientationMutex.unlock();
+
+    return orientation;
+}
+
+
+bool SharedCommandData::tryGetMyoOrientation(ori_data& outMyoOrientation)
+{
+    bool locked = myoOrientationMutex.try_lock();
+    if (locked) {
+        outMyoOrientation = myoOrientation;
+        myoOrientationMutex.unlock();
+    }
+
+    return locked;
+}
+
 
 bool SharedCommandData::isCommandQueueEmpty()
 {
@@ -220,3 +259,35 @@ void SharedCommandData::extractPoint(boost::any value)
         setVelocity(velocity);
     }
 }
+
+
+void SharedCommandData::extractOrientation(boost::any value)
+{
+    if (value.type() != typeid(ori_data))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        ori_data orientation = boost::any_cast<ori_data> (value);
+        setMyoOrientation(orientation);
+    }
+}
+
+
+int SharedCommandData::getAngle(ori_data orientation,int ring_size)
+{
+    float angle, x, y;
+    x = cos(orientation.yaw)*cos(orientation.pitch);
+    y = sin(orientation.yaw)*cos(orientation.pitch);
+    angle = tan(x / y);
+
+    int inc = 360/ring_size;
+
+
+    //angle/inc gets you the current position
+    return angle / inc;
+}
+
+

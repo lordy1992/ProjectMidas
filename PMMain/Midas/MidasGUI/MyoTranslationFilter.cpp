@@ -27,6 +27,7 @@ void MyoTranslationFilter::process()
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
 
+    float roll = getRollFromQuaternion(quatX, quatY, quatZ, quatW);
     float pitch = getPitchFromQuaternion(quatX, quatY, quatZ, quatW, arm, xDirection);
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
     int rollDeg = (int)(getRollFromQuaternion(quatX, quatY, quatZ, quatW) * (180 / M_PI));
@@ -65,6 +66,14 @@ void MyoTranslationFilter::process()
                 outputToSharedCommandData[COMMAND_INPUT] = command;
             }
         }
+    }
+    else if (controlStateHandle->getMode() == KEYBOARD_MODE)
+    {
+        filterDataMap outputToSharedCommandData;
+        ori_data mouseOrientationForKeyboard = ori_data(roll, pitch, yaw);
+        outputToSharedCommandData[ORIENTATION_INPUT] = mouseOrientationForKeyboard;
+        Filter::setOutput(outputToSharedCommandData);
+
     }
     else
     {
