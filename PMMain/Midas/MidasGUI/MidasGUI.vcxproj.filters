@@ -193,4 +193,9 @@
   <ItemGroup>
     <ResourceCompile Include="MidasGUI.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="keyboardData.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

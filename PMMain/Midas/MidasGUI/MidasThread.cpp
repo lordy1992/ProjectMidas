@@ -47,70 +47,86 @@ void MidasThread::threadEmitStateString(std::string str)
 std::vector<ringData> MidasThread::readKeyboardSetupFile()
 {
     
-    std::ifstream readRingData;
+    std::ifstream readRingData("C:/Users/Owen/Documents/keyboardData.txt");
     std::string temp;
-    int ring_num = 0;
-    int count = 0;
-    int ringDataSet = 0;
+    int vect_num = 0;
+    int ringInOutSwitch = 0; //0 = ringIn , 1 = ringOut 
     bool holdkey_check = false;
 
     ringData::keyboard_value key_temp; //lvl1
-    std::vector<ringData::keyboard_value> tempRingData; //lvl2
+    std::vector<ringData::keyboard_value> tempRingInData[100]; //lvl2
+    std::vector<ringData::keyboard_value> tempRingOutData[100]; //lvl2
     ringData ringTemp; //lvl3
     std::vector<ringData> keyboardData; //lvl4
 
 
-    readRingData.open("keyboardData.txt");
+    //readRingData.open();
     if (readRingData.is_open())
     {
         while (!readRingData.eof())
         {
             getline(readRingData, temp);
+            char* temp_char = (char*)malloc(sizeof(char)*(temp.length() + 1));
+            strcpy(temp_char, temp.c_str());
 
-            char* temp_char = new char[temp.length() + 1];
-            std::strcpy(temp_char, temp.c_str());
-
-            for (int i = 0; i < temp.length();  i++)
+            for (int i = 0; i < temp.length(); i++)
             {
 
-                if (temp_char[i] = !' ' && holdkey_check == false)
+                if (temp_char[i] != char(32) && holdkey_check == false)
                 {
-                    key_temp.main = temp_char[i];
-                
 
-                    if (temp_char[i + 1] == ' ')
+                    key_temp.main = temp_char[i];
+
+
+                    if (temp_char[i + 1] == char(32))
                     {
                         holdkey_check = false;
-                        tempRingData.push_back(key_temp);
+
+                        if (ringInOutSwitch == 0)
+                            tempRingInData[vect_num].push_back(key_temp);
+                        else
+                            tempRingOutData[vect_num].push_back(key_temp);
                     }
                     else
+                    {
                         holdkey_check = true;
+                    }
                 }
-                else if (holdkey_check = true)
+                else if (holdkey_check == true)
                 {
+
                     key_temp.hold = temp_char[i];
-                    tempRingData.push_back(key_temp);
+
+                    if (ringInOutSwitch == 0)
+                        tempRingInData[vect_num].push_back(key_temp);
+                    else
+                        tempRingOutData[vect_num].push_back(key_temp);
+
                     holdkey_check = false;
+                    std::cout << "loading!!!!!\n";
                 }
 
             }
 
-            if (count == 0)
+            if (ringInOutSwitch == 0)
             {
-                ringTemp.setRingInVector(tempRingData); 
-                count++;
+                std::cout << "Ring In Vector!!!!!\n";
+                ringTemp.setRingInVector(tempRingInData[vect_num]);
+                ringInOutSwitch = 1;
             }
-            else if (count == 1)
+            else if (ringInOutSwitch == 1)
             {
-                ringTemp.setRingOutVector(tempRingData);
-                count--;
+                std::cout << "Ring Out Vector!!!!!\n";
+                ringTemp.setRingOutVector(tempRingOutData[vect_num]);
+
                 keyboardData.push_back(ringTemp);
+                ringInOutSwitch = 0;
             }
-           
-           
+
+            vect_num++;
         }
 
-       
+
     }
     else
     {

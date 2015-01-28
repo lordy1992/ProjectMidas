@@ -120,8 +120,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
         case kybdGUICmds::SELECT:
             
-            //calculate angle and return a number from 0 - 12 and current kybdGUISel to determine which charater is highlighted
-//            kybrdCtrl->setKeyChar(kybrdRingData-> scdHandle->getAngle(scdHandle->getMyoOrientation())); WIP
+            //kybrdCtrl->setKeyChar(kybrdRingData-> scdHandle->getAngle(scdHandle->getMyoOrientation())); WIP
            // kybrdCtrl->sendData()
             /* Todo, pseudocode written 
             scdHandle->getAngle()

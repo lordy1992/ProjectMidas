@@ -89,9 +89,8 @@ int midasMain(MidasThread *threadHandle) {
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
     ringData* kybrdRingData = new ringData();
-//    vector<ringData>* kybrdRingData = readKeyboardSetupFile(); //fix
-    //readKeyboardSetupFile(); //fix
-    
+    vector<ringData> kybrdRingData = threadHandle->readKeyboardSetupFile();
+
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
