@@ -3,6 +3,10 @@
 #include "QObject.h"
 #include "MyoCommon.h"
 
+/**
+ * The GestureSignaller class handles the communication between the Midas sequence logic
+ * and the SequenceDisplayer GUI.
+ */
 class GestureSignaller : public QObject
 {
     Q_OBJECT
@@ -13,7 +17,7 @@ public:
 
     bool getShowAll();
 
-    public slots:
+public slots:
     void handleShowAllToggle(bool showAll);
 
 signals:
