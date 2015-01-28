@@ -4,8 +4,9 @@
 unsigned int sequenceInfo::counter = 0;
 
 GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui)
-    : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()), 
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui), controlStateHandle(controlStateHandle), prevPose(Pose::rest)
+    : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()),
+    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui),
+    controlStateHandle(controlStateHandle), prevPose(Pose::rest)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -15,13 +16,7 @@ GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, Sequenc
         (*seqMapPerMode)[mm] = new sequenceList();
     }
 
-    imageManager.loadImages();
-
-    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-        sequenceDisplayerGui, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-
-    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-        sequenceDisplayerGui, SLOT(showSequences(std::vector<sequenceProgressData>)));
+    connectGuiSignals();
 
     prevShowAll = signaller.getShowAll();
     timeBasedPrevState = controlStateHandle->getMode();
@@ -578,3 +573,13 @@ void GestureSeqRecorder::printStatus(bool verbose)
     activeSequencesMutex.unlock();
 }
 
+void GestureSeqRecorder::connectGuiSignals()
+{
+    imageManager.loadImages();
+
+    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
+        sequenceDisplayer, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
+
+    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
+        sequenceDisplayer, SLOT(showSequences(std::vector<sequenceProgressData>)));
+}
