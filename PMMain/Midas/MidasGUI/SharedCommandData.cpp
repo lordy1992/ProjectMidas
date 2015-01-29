@@ -148,6 +148,7 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
     return locked;
 }
 
+
 void SharedCommandData::setMyoOrientation(ori_data orientation)
 {
     myoOrientationMutex.lock();
@@ -187,6 +188,45 @@ bool SharedCommandData::tryGetMyoOrientation(ori_data& outMyoOrientation)
     return locked;
 }
 
+void SharedCommandData::setKeySelectAngle(int angle)
+{
+    keySelectAngleMutex.lock();
+    keySelectAngle = angle;
+    keySelectAngleMutex.unlock();
+}
+
+bool SharedCommandData::trySetKeySelectAngle(int angle)
+{
+    bool locked = keySelectAngleMutex.try_lock();
+    if (locked) {
+        keySelectAngle = angle;
+        keySelectAngleMutex.unlock();
+    }
+
+    return locked;
+}
+
+int SharedCommandData::getKeySelectAngle()
+{
+    keySelectAngleMutex.lock();
+    int angle = keySelectAngle;
+    keySelectAngleMutex.unlock();
+
+    return angle;
+}
+
+
+bool SharedCommandData::tryGetKeySelectAngle(int& outKeySelectAngle)
+{
+    bool locked = keySelectAngleMutex.try_lock();
+    if (locked) {
+        outKeySelectAngle = keySelectAngle;
+        keySelectAngleMutex.unlock();
+    }
+
+    return locked;
+}
+
 
 bool SharedCommandData::isCommandQueueEmpty()
 {
@@ -209,6 +249,16 @@ void SharedCommandData::process()
     {
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
+    }
+
+    if (input.find(ORIENTATION_INPUT) != input.end())
+    {
+        boost::any value = input[ORIENTATION_INPUT];
+        extractPoint(value);
+    }
+    if (input.find(ANGLE_INPUT) != input.end())
+    {
+        extractPoint(input);
     }
 }
 
@@ -275,19 +325,13 @@ void SharedCommandData::extractOrientation(boost::any value)
     }
 }
 
-
-int SharedCommandData::getAngle(ori_data orientation,int ring_size)
+void SharedCommandData::extractKeySelectAngle(int angle)
 {
-    float angle, x, y;
-    x = cos(orientation.yaw)*cos(orientation.pitch);
-    y = sin(orientation.yaw)*cos(orientation.pitch);
-    angle = tan(x / y);
 
-    float inc = 360/ring_size;
-
-
-    //angle/inc gets you the current position
-    return int(angle / inc);
+    setKeySelectAngle(angle);
+    
 }
+
+
 
 

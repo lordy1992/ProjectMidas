@@ -9,6 +9,7 @@
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
 #define ORIENTATION_INPUT "orientation"
+#define ANGLE_INPUT "angle"
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
  * queue of mouse and keyboard commands for the main thread to send to Windows, and contains 
@@ -131,14 +132,18 @@ public:
     bool tryGetMyoOrientation(ori_data& outMyoOrientation);
 
 
-    int getAngle(ori_data orientation, int ring_size);
+    void setKeySelectAngle(int angle);
+    bool trySetKeySelectAngle(int angle);
+    int getKeySelectAngle();
+    bool tryGetKeySelectAngle(int& outKeySelectAngle);
 
-   
 
+    int keySelectAngle;
     void setKybdGuiSel(unsigned int kybdGuiSel);
     bool trySetKybdGuiSel(unsigned int kybdGuiSel);
     unsigned int getKybdGuiSel();
     bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
+
     unsigned int getKybdGuiSelMax();
     bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
 
@@ -182,10 +187,12 @@ private:
     std::mutex velocityMutex;
     std::mutex kybdGuiSelMutex;
     std::mutex myoOrientationMutex;
+    std::mutex keySelectAngleMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
     void extractOrientation(boost::any value);
+    void extractKeySelectAngle(int angle);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

@@ -82,7 +82,6 @@ int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer, I
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", sequenceDisplayer, infoIndicator);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
-    ringData* kybrdRingData = new ringData();
     vector<ringData> kybrdRingData = threadHandle->readKeyboardSetupFile();
 
     // Kick off device thread

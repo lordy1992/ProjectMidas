@@ -21,7 +21,7 @@ using namespace myo;
 class SCDDigester
 {
 public:
-    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData);
+    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> kybrdRingData);
     ~SCDDigester();
 
     void digest();
@@ -36,7 +36,7 @@ private:
     ControlState *cntrlStateHandle;
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
-    std::vector<ringData>* kybrdRingData;
+    std::vector<ringData> kybrdRingData;
     int count;
 };
 
