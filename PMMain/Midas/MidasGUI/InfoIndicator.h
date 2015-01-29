@@ -6,7 +6,7 @@
 #include <QGridLayout.h>
 #include <qpushbutton.h>
 
-class InfoIndicator : public DraggableWidget
+class InfoIndicator : public QWidget
 {
     Q_OBJECT
 

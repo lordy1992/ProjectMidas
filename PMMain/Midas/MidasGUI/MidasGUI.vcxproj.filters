@@ -161,6 +161,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_InfoIndicator.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainGUI.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainGUI.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasgui.ui">
@@ -189,6 +198,9 @@
     </CustomBuild>
     <CustomBuild Include="InfoIndicator.h">
       <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="MainGUI.h">
+      <Filter>Source Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

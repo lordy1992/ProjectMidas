@@ -69,13 +69,6 @@ void SCDDigester::digest()
         digestKeyboardData(nextCmd);
     }
 
-    if (count % 100000 == 0)
-    {
-        //threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
-        threadHandle->threadEmitStateString(std::to_string(cntrlStateHandle->getMode()));
-        
-        std::cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << std::endl;
-    }
     count++;
 }
 

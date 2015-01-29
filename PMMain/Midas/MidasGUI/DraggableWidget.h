@@ -37,8 +37,6 @@ protected:
      * The event handler function that is called when the mouse moves over the widget.
      */
     virtual void mouseMoveEvent(QMouseEvent *event);
-
-    void formBoxLabel(QLabel *label);
     
 private:
     QPoint position;

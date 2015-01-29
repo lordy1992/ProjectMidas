@@ -7,6 +7,7 @@
 #define INFO_INDICATOR_HEIGHT 50
 #define INFO_INDICATOR_WIDTH 175
 #define WIDGET_BUFFER 5
+#define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
 /**
  * Enumerates the types of commands that can be sent to control

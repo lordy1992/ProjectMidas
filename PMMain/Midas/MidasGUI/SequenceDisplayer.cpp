@@ -11,10 +11,9 @@
 #define NUM_SEQUENCE_STEPS  3
 #define NUM_COLS (LABEL_NUM_COLS + SEQ_NUMBER_NUM_COLS + NUM_SEQUENCE_STEPS)
 #define GUI_WIDTH_BUFFER 1
-#define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
 SequenceDisplayer::SequenceDisplayer(QWidget *parent)
-    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
+    : QWidget(parent)
 {
     gridLayout = new QGridLayout;
     gridLayout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
@@ -29,9 +28,10 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     maxWidth = GRID_ELEMENT_SIZE * (NUM_COLS + GUI_WIDTH_BUFFER);
 
     // Position the widget on the bottom-right initially.
-    QRect screen = QApplication::desktop()->availableGeometry(this);
-    setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
-        maxWidth, maxHeight);
+   // QRect screen = QApplication::desktop()->availableGeometry(this);
+   // setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
+   //     maxWidth, maxHeight);
+    setFixedSize(maxWidth, maxHeight);
 }
 
 SequenceDisplayer::~SequenceDisplayer()

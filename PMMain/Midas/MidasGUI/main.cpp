@@ -1,9 +1,7 @@
 #include "midasgui.h"
 #include "MidasThread.h"
 #include "MouseCtrl.h"
-#include "MouseIndicator.h"
-#include "SequenceDisplayer.h"
-#include "InfoIndicator.h"
+#include "MainGUI.h"
 
 #include <QtWidgets/QApplication>
 
@@ -11,20 +9,16 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    SequenceDisplayer sequenceDisplayer;
-    InfoIndicator infoIndicator;
-
-    MidasThread midasThread(&sequenceDisplayer, &infoIndicator);
-    midasThread.start();
+    MidasThread midasThread;
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");
 
-    //MidasGUI w(&midasThread);
-    MouseIndicator w1(&midasThread, MOVE_RATE_DEADZONE);
+    MainGUI mainDisplay(&midasThread, MOVE_RATE_DEADZONE);
 
-    sequenceDisplayer.show();
-    infoIndicator.show();
-    w1.show();
+    midasThread.setDisplayHandles(mainDisplay.getSequenceDisplayer(), mainDisplay.getInfoIndicator());
+    midasThread.start();
+
+    mainDisplay.show();
     return a.exec();
 }
