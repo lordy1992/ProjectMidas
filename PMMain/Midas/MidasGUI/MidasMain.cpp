@@ -6,12 +6,14 @@
 #include "SCDDigester.h"
 #include "kybrdCtrl.h"
 #include "MouseCtrl.h"
+#include "ringData.h"
 #include "WearableDevice.h"
 #include <vector>
 #include <thread>
 #include "SharedCommandData.h"
 #include "MyoDevice.h"
 
+#include "MidasThread.h"
 #include "SharedCommandDataTest.h"
 #include "KybrdCtrlTest.h"
 #include "MouseCtrlTest.h"
@@ -80,11 +82,12 @@ int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer, I
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", sequenceDisplayer, infoIndicator);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
+    vector<ringData> kybrdRingData = threadHandle->readKeyboardSetupFile();
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
 
-    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
+    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl, kybrdRingData);
     
     while (true)
     {

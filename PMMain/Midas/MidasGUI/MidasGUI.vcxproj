@@ -147,6 +147,7 @@
     <ClCompile Include="MyoCommon.cpp" />
     <ClCompile Include="MyoDevice.cpp" />
     <ClCompile Include="MyoTranslationFilter.cpp" />
+    <ClCompile Include="RingData.cpp" />
     <ClCompile Include="SequenceDisplayer.cpp" />
     <ClCompile Include="SequenceImageManager.cpp" />
     <ClCompile Include="SCDDigester.cpp" />
@@ -228,6 +229,7 @@
     <ClInclude Include="MyoCommon.h" />
     <ClInclude Include="MyoDevice.h" />
     <ClInclude Include="MyoTranslationFilter.h" />
+    <ClInclude Include="RingData.h" />
     <CustomBuild Include="SequenceDisplayer.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing SequenceDisplayer.h...</Message>
@@ -267,6 +269,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MidasGUI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="keyboardData.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,6 +1,7 @@
 #include "kybrdCtrl.h"
 #include <iostream>
-
+#include <string>
+#include <fstream>
 KybrdCtrl::KybrdCtrl()
 {
     this->kiVec.clear();
@@ -217,3 +218,6 @@ int KybrdCtrl::getKeyInputArr(INPUT * kiArr, int lenArr)
 
     return kybdStatus::SUCCESS;
 }
+
+
+

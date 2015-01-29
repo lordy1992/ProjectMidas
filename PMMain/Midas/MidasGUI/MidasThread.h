@@ -3,6 +3,10 @@
 
 #include <QThread>
 #include <string>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include "RingData.h"
 #include "MyoCommon.h"
 #include "SequenceDisplayer.h"
 #include "InfoIndicator.h"
@@ -21,7 +25,7 @@ public:
 
     void threadEmitString(std::string str);
     void threadEmitStateString(std::string str);
-
+    std::vector<ringData> readKeyboardSetupFile();
 private:
     SequenceDisplayer *sequenceDisplayer;
     InfoIndicator *infoIndicator;
