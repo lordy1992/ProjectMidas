@@ -1,7 +1,7 @@
 #include "SCDDigester.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, ringData* kybrdRingData)
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -120,7 +120,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
         case kybdGUICmds::SELECT:
             
-            //kybrdCtrl->setKeyChar(kybrdRingData-> scdHandle->getAngle(scdHandle->getMyoOrientation())); WIP
+            kybrdCtrl->setKeyChar(kybrdRingData[1]. scdHandle->getAngle(scdHandle->getMyoOrientation())); //WIP
            // kybrdCtrl->sendData()
             /* Todo, pseudocode written 
             scdHandle->getAngle()

@@ -283,11 +283,11 @@ int SharedCommandData::getAngle(ori_data orientation,int ring_size)
     y = sin(orientation.yaw)*cos(orientation.pitch);
     angle = tan(x / y);
 
-    int inc = 360/ring_size;
+    float inc = 360/ring_size;
 
 
     //angle/inc gets you the current position
-    return angle / inc;
+    return int(angle / inc);
 }
 
 
