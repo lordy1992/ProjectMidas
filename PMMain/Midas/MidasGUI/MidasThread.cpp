@@ -4,20 +4,20 @@
 #include <Windows.h>
 #include "RingData.h"
 
-MidasThread::MidasThread()
+MidasThread::MidasThread(SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator)
+    : sequenceDisplayer(sequenceDisplayerGui), infoIndicator(infoIndicator)
 {
 }
 
 MidasThread::~MidasThread()
 {
-
 }
 
 void MidasThread::run()
 {
     qDebug() << "running spawned thread.";
     threadEmitString("test within run func.");
-    midasMain(this);
+    midasMain(this, sequenceDisplayer, infoIndicator);
 
     for (int i = 0; i < 100000; i++)
     {

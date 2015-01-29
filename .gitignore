@@ -43,6 +43,8 @@
 *.idb
 *.pdb
 
+*.vcxproj.user
+
 
 PMMain/Midas/Debug/
 PMMain/Midas/Midas/Debug/
@@ -57,3 +59,9 @@ testDev/
 #QT stuff
 PMMain/Midas/MidasGUI/Debug/
 PMMain/Midas/MidasGUI/GeneratedFiles/
+
+
+
+PMMain/Midas/MidasGUI/MidasGUI.vcxproj.user
+PMMain/Midas/MidasGUI/MidasGUI.vcxproj.filters
+PMMain/Midas/MidasGUI/MidasGUI.vcxproj

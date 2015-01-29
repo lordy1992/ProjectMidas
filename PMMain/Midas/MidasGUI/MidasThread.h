@@ -7,13 +7,16 @@
 #include <fstream>
 #include <iostream>
 #include "RingData.h"
+#include "MyoCommon.h"
+#include "SequenceDisplayer.h"
+#include "InfoIndicator.h"
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
-    MidasThread();
+    MidasThread(SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator);
     ~MidasThread();
 
     void run();
@@ -24,15 +27,14 @@ public:
     void threadEmitStateString(std::string str);
     std::vector<ringData> readKeyboardSetupFile();
 private:
+    SequenceDisplayer *sequenceDisplayer;
+    InfoIndicator *infoIndicator;
 
 signals:
     void outputCount(int);
-
     void emitString(std::string);
     void emitStateString(std::string);
-
-    void emitXVeloc(int);
-    void emitYVeloc(int);
+    void emitVeloc(int, int);
     
 };
 
