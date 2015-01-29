@@ -109,6 +109,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             //threadHandle->UpdateGUIToSwapRingFocus TODO
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
+
         case kybdGUICmds::CHANGE_WHEELS:
             // go to next wheel
             kybdGUISel += 4;
@@ -116,16 +117,15 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             //threadHandle->UpdateGUIToChangeWheels TODO
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
+
         case kybdGUICmds::SELECT:
             if (kybdGUISel % 4 == 0)
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle()/ kybrdRingData[kybdGUISel].getRingInVector().size()].main);
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVector().size())].main);
             else
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / kybrdRingData[kybdGUISel].getRingInVector().size()].main); 
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingOutVector().size())].main);
             kybrdCtrl->sendData();
 
             /* Todo, pseudocode written 
-            scdHandle->getAngle()
-            use angle and current kybdGUISel to determine which character is being highlighted.
             1) pass this character to the keyboard as such
                 kybrdCtrl->setKeyChar(charThatWasDetermined);
                 kybrdCtrl->sendData();    
@@ -139,9 +139,9 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             // in the discusion of RingData, this would correspond to the "*Hold vectors"
             */
             if (kybdGUISel % 4 == 0)
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle() / kybrdRingData[kybdGUISel].getRingInVector().size()].hold);
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle() /  (360/kybrdRingData[kybdGUISel].getRingInVector().size())].hold);
             else
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / kybrdRingData[kybdGUISel].getRingInVector().size()].hold);
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / (360/kybrdRingData[kybdGUISel].getRingOutVector().size())].hold);
             kybrdCtrl->sendData();
             break;
         default:
