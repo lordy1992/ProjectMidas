@@ -3,8 +3,7 @@
 #include "FilterPipeline.h"
 #include "ControlState.h"
 #include "myo\myo.hpp"
-#include "SequenceDisplayer.h"
-#include "InfoIndicator.h"
+#include "MainGUI.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -38,7 +37,7 @@ public:
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
     MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, 
-        SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator);
+        MainGUI *mainGuiHandle);
     ~MyoDevice();
 
     /**
@@ -111,8 +110,7 @@ private:
     std::string appIdentifier;
     ControlState* state;
     FilterPipeline posePipeline, orientationPipeline;
-    SequenceDisplayer *sequenceDisplayer;
-    InfoIndicator *infoIndicator;
+    MainGUI *mainGui;
 
     Arm arm;
     XDirection xDirection;

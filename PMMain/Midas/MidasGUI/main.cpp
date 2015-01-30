@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     MainGUI mainDisplay(&midasThread, MOVE_RATE_DEADZONE);
 
-    midasThread.setDisplayHandles(mainDisplay.getSequenceDisplayer(), mainDisplay.getInfoIndicator());
+    midasThread.setMainGuiHandle(&mainDisplay);
     midasThread.start();
 
     mainDisplay.show();

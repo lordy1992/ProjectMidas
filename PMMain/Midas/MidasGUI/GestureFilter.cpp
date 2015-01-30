@@ -8,9 +8,9 @@
 ControlState* GestureFilter::controlStateHandle;
 GestureSignaller GestureFilter::signaller;
 
-GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator) 
+GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGUI *mainGuiHandle) 
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), gestSeqRecorder(controlState, sequenceDisplayer), infoIndicator(infoIndicator)
+    lastTime(0), gestSeqRecorder(controlState, mainGuiHandle), mainGui(mainGuiHandle)
 {
     registerMouseSequences();
     registerKeyboardSequences();
@@ -20,10 +20,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, Sequen
 
     setupCallbackThread(this);
 
-    bool status1 = QObject::connect(&signaller, SIGNAL(emitStateString(QString)),
-        infoIndicator, SLOT(handleUpdateState(QString)));
-    bool status2 = QObject::connect(infoIndicator, SIGNAL(emitShowAllToggle(bool)),
-        &signaller, SLOT(handleShowAllToggle(bool)));
+    mainGui->connectSignallerToInfoIndicator(&signaller);
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
 }

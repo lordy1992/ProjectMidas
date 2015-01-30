@@ -200,7 +200,7 @@
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="MainGUI.h">
-      <Filter>Source Files\GUI</Filter>
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

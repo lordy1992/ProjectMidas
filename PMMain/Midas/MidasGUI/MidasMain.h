@@ -3,6 +3,6 @@
 
 #include "MidasThread.h"
 
-int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator);
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui);
 
 #endif /* MIDAS_MAIN_H */
