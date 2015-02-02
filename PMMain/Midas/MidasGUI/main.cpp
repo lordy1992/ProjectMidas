@@ -1,4 +1,3 @@
-#include "midasgui.h"
 #include "MidasThread.h"
 #include "MouseCtrl.h"
 #include "MainGUI.h"
