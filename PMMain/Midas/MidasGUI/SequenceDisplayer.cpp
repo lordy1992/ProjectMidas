@@ -27,10 +27,6 @@ SequenceDisplayer::SequenceDisplayer(QWidget *parent)
     maxHeight = GRID_ELEMENT_SIZE * maxNumSequences;
     maxWidth = GRID_ELEMENT_SIZE * (NUM_COLS + GUI_WIDTH_BUFFER);
 
-    // Position the widget on the bottom-right initially.
-   // QRect screen = QApplication::desktop()->availableGeometry(this);
-   // setGeometry(screen.right() - maxWidth, screen.bottom() - maxHeight - GUI_HEIGHT_OFFSET_FROM_BOTTOM, 
-   //     maxWidth, maxHeight);
     setFixedSize(maxWidth, maxHeight);
 }
 

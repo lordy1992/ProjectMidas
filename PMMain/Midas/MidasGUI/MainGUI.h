@@ -30,11 +30,6 @@ public:
     void connectSignallerToInfoIndicator(GestureSignaller *signaller);
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
 
-    // Temporary
-    MouseIndicator *getMouseIndicator();
-    InfoIndicator *getInfoIndicator();
-    SequenceDisplayer *getSequenceDisplayer();
-
 private:
     QVBoxLayout *layout;
     MouseIndicator *mouseIndicator;

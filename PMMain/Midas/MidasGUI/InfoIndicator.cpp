@@ -35,7 +35,6 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     layout = new QGridLayout;
-   // layout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     layout->setSpacing(5);
     setLayout(layout);
 
@@ -54,11 +53,6 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
 
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     setMinimumSize(indWidth, indHeight);
-    //setFixedSize(indWidth, indHeight);
-    // Position the widget on the bottom-right initially.
-    //QRect screen = QApplication::desktop()->availableGeometry(this);
-    //setGeometry(screen.right() - indWidth - WIDGET_BUFFER, screen.bottom() - indHeight - MOUSE_INDICATOR_SIZE - 2*WIDGET_BUFFER,
-    //    indWidth, indHeight);
 }
 
 void InfoIndicator::paintEvent(QPaintEvent *event)

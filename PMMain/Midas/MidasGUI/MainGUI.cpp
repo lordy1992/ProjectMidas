@@ -67,18 +67,3 @@ void MainGUI::connectSignallerToSequenceDisplayer(GestureSignaller *signaller)
     QObject::connect(signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
         sequenceDisplayer, SLOT(showSequences(std::vector<sequenceProgressData>)));
 }
-
-MouseIndicator *MainGUI::getMouseIndicator()
-{
-    return mouseIndicator;
-}
-
-InfoIndicator *MainGUI::getInfoIndicator()
-{
-    return infoIndicator;
-}
-
-SequenceDisplayer *MainGUI::getSequenceDisplayer()
-{
-    return sequenceDisplayer;
-}

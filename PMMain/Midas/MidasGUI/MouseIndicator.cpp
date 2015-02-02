@@ -34,12 +34,7 @@ MouseIndicator::MouseIndicator(MidasThread *mainThread, int deadZoneRad, int wid
     pal.setColor(QPalette::Background, QColor(205, 205, 193));
     setAutoFillBackground(true);
     setPalette(pal);
-   // setWindowFlags(Qt::WindowStaysOnTopHint);
 
-    // Position the widget on the bottom-right initially.
-   // QRect screen = QApplication::desktop()->availableGeometry(this);
-   // setGeometry(screen.right() - indWidth - WIDGET_BUFFER, screen.bottom() - indHeight - WIDGET_BUFFER,
-   //     indWidth, indHeight);
     setFixedSize(indWidth, indHeight);
 
     connect(mainThread, SIGNAL(emitVeloc(int, int)), this, SLOT(handleUpdateCursorPos(int, int)));
