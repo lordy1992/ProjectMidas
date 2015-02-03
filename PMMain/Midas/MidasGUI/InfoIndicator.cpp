@@ -10,8 +10,7 @@
 #include <qmessagebox.h>
 
 InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
-    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint),
-    indWidth(widgetWidth), indHeight(widgetHeight), showAll(false)
+    : QWidget(parent), indWidth(widgetWidth), indHeight(widgetHeight), showAll(false)
 {
     QTimer *timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -36,7 +35,6 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     layout = new QGridLayout;
-    //layout->setAlignment(Qt::AlignRight | Qt::AlignBottom);
     layout->setSpacing(5);
     setLayout(layout);
 
@@ -44,6 +42,7 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     stateLabel = new QLabel(tr("%1").arg("jorden test"));
     stateLabel->setFont(timesFont);
     layout->addWidget(stateLabel, 0, 0);
+    layout->setAlignment(stateLabel, Qt::AlignLeft);
 
     button = new QPushButton(this);
     button->setText(getShowAllString());
@@ -52,10 +51,8 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     connect(button, SIGNAL(released()), this, SLOT(handleButton()));
     layout->addWidget(button, 0, 1);
 
-    // Position the widget on the bottom-right initially.
-    QRect screen = QApplication::desktop()->availableGeometry(this);
-    setGeometry(screen.right() - indWidth - WIDGET_BUFFER, screen.bottom() - indHeight - MOUSE_INDICATOR_SIZE - 2*WIDGET_BUFFER,
-        indWidth, indHeight);
+    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    setMinimumSize(indWidth, indHeight);
 }
 
 void InfoIndicator::paintEvent(QPaintEvent *event)
