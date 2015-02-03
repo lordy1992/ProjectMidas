@@ -5,7 +5,7 @@
 #include "myo\myo.hpp"
 #include "MyoCommon.h"
 #include "ControlState.h"
-#include "SequenceDisplayer.h"
+#include "MainGUI.h"
 #include "SequenceImageManager.h"
 #include "GestureSignaller.h"
 #include <map>
@@ -63,7 +63,7 @@ public:
     /**
     * Constructors/Destructor
     */
-    GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui);
+    GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle);
     ~GestureSeqRecorder();
 
     /**
@@ -228,7 +228,7 @@ private:
     ControlState* controlStateHandle;
 
     SequenceImageManager imageManager;
-    SequenceDisplayer* sequenceDisplayer;
+    MainGUI* mainGui;
     GestureSignaller signaller;
 };
 

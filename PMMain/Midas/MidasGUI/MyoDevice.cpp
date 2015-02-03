@@ -4,10 +4,10 @@
 #include "AveragingFilter.h"
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
-    std::string applicationIdentifier, SequenceDisplayer* sequenceDisplayerGui, InfoIndicator* infoIndicator)
+    std::string applicationIdentifier, MainGUI *mainGuiHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
-    durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), xDirection(DEFAULT_MYO_XDIR),
-    sequenceDisplayer(sequenceDisplayerGui), infoIndicator(infoIndicator)
+    durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), 
+    xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle)
 {
 }
 
@@ -29,7 +29,7 @@ void MyoDevice::runDeviceLoop()
 {
     WearableDevice::setDeviceStatus(deviceStatus::RUNNING);
 
-    GestureFilter gestureFilter(state, 0, sequenceDisplayer, infoIndicator);
+    GestureFilter gestureFilter(state, 0, mainGui);
     posePipeline.registerFilter(&gestureFilter);
     posePipeline.registerFilter(WearableDevice::sharedData);
 

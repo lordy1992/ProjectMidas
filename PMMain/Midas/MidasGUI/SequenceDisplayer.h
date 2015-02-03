@@ -20,7 +20,7 @@ Q_DECLARE_METATYPE(std::vector<sequenceProgressData>)
  * are made up of a series of images that should convey information to the user on what gesture they must perform
  * next in the sequence.
  */
-class SequenceDisplayer : public DraggableWidget
+class SequenceDisplayer : public QWidget
 {
     Q_OBJECT
 

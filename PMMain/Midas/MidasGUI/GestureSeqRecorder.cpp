@@ -3,9 +3,9 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, SequenceDisplayer* sequenceDisplayerGui)
+GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()),
-    holdGestTimer(REQ_HOLD_TIME), sequenceDisplayer(sequenceDisplayerGui),
+    holdGestTimer(REQ_HOLD_TIME), mainGui(mainGuiHandle),
     controlStateHandle(controlStateHandle), prevPose(Pose::rest)
 {
     seqMapPerMode = new sequenceMapPerMode();
@@ -577,9 +577,5 @@ void GestureSeqRecorder::connectGuiSignals()
 {
     imageManager.loadImages();
 
-    bool status1 = QObject::connect(&signaller, SIGNAL(emitRegisterSequence(int, QString, std::vector<sequenceImageSet>)),
-        sequenceDisplayer, SLOT(registerSequenceImages(int, QString, std::vector<sequenceImageSet>)));
-
-    bool status2 = QObject::connect(&signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
-        sequenceDisplayer, SLOT(showSequences(std::vector<sequenceProgressData>)));
+    mainGui->connectSignallerToSequenceDisplayer(&signaller);
 }

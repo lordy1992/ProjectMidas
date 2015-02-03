@@ -50,23 +50,11 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GeneratedFiles\Debug\moc_midasgui.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\Release\moc_midasgui.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="GeneratedFiles\qrc_midasgui.cpp">
-      <Filter>Generated Files</Filter>
-    </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_MidasThread.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Release\moc_MidasThread.cpp">
       <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="midasgui.cpp">
-      <Filter>Source Files\GUI</Filter>
     </ClCompile>
     <ClCompile Include="MidasThread.cpp">
       <Filter>Source Files\Midas</Filter>
@@ -161,17 +149,17 @@
     <ClCompile Include="GeneratedFiles\Release\moc_InfoIndicator.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_MainGUI.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_MainGUI.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="MainGUI.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="midasgui.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="midasgui.qrc">
-      <Filter>Resource Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="midasgui.h">
-      <Filter>Header Files\GUI</Filter>
-    </CustomBuild>
     <CustomBuild Include="MidasThread.h">
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
@@ -190,11 +178,11 @@
     <CustomBuild Include="InfoIndicator.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
+    <CustomBuild Include="MainGUI.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_midasgui.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="AveragingFilter.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>

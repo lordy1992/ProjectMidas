@@ -4,32 +4,24 @@
 #include <QThread>
 #include <string>
 #include "MyoCommon.h"
-#include "SequenceDisplayer.h"
-#include "InfoIndicator.h"
+
+class MainGUI;
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
-    MidasThread(SequenceDisplayer *sequenceDisplayerGui, InfoIndicator *infoIndicator);
+    MidasThread();
     ~MidasThread();
 
+    void setMainGuiHandle(MainGUI *mainGui);
     void run();
 
-    void emitInfo();
-
-    void threadEmitString(std::string str);
-    void threadEmitStateString(std::string str);
-
 private:
-    SequenceDisplayer *sequenceDisplayer;
-    InfoIndicator *infoIndicator;
+    MainGUI *mainGui;
 
 signals:
-    void outputCount(int);
-    void emitString(std::string);
-    void emitStateString(std::string);
     void emitVeloc(int, int);
     
 };
