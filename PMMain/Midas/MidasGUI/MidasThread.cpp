@@ -3,6 +3,7 @@
 #include "MainGUI.h"
 #include <qdebug.h>
 #include <Windows.h>
+#include "RingData.h"
 
 MidasThread::MidasThread()
 {
@@ -21,3 +22,4 @@ void MidasThread::run()
 {
     midasMain(this, mainGui);
 }
+
