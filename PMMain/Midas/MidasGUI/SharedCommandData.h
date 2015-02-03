@@ -101,7 +101,7 @@ public:
     *
     * @param mouseAngle The new angle of the cursor.
     */
-    void setMyoOrientation(ori_data orientation);
+    void setMyoOrientation(orientation_data orientation);
 
     /**
     * Sets the cursor angle in the shared data. If another thread is accessing/changing
@@ -111,7 +111,7 @@ public:
     * @param mouseAngle The new angle of the cursor.
     * @return True if the angle was successfully set, otherwise false.
     */
-    bool trySetMyoOrientation(ori_data orientation);
+    bool trySetMyoOrientation(orientation_data orientation);
 
     /**
     * Return the mouse angle in the shared data. If another thread is accessing/changing
@@ -119,7 +119,7 @@ public:
     *
     * @return The mouse angle in the SCD.
     */
-    ori_data getMyoOrientation();
+    orientation_data getMyoOrientation();
 
     /**
     * Return the mouse angle in the shared data. If another thread is accessing/changing
@@ -129,7 +129,7 @@ public:
     * @param outMouseAngle The retrieved mouse angle from the SCD will be placed here.
     * @return True if the pangle is successfully received, false otherwise.
     */
-    bool tryGetMyoOrientation(ori_data& outMyoOrientation);
+    bool tryGetMyoOrientation(orientation_data& outMyoOrientation);
 
 
     void setKeySelectAngle(int angle);
@@ -177,7 +177,7 @@ public:
 
 private:
     point mouseVelocity;
-    ori_data myoOrientation;
+    orientation_data myoOrientation;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;

@@ -6,28 +6,23 @@ public:
     ringData();
     ~ringData();
 
-    void Dispose_object()
-    {
-        delete this;
-    }
-
     struct keyboard_value
     {
         char main, hold;
-        keyboard_value(char mainVal = '\0', char holdVal = '\0') : main(mainVal), hold(holdVal) { }
+     //   keyboard_value(char mainVal = '\0', char holdVal = '\0') : main(mainVal), hold(holdVal) { }
     };
 
 
-    std::vector<keyboard_value> getRingInVector();
-    std::vector<keyboard_value> getRingOutVector();
+    std::vector<keyboard_value>* getRingInVectorHandle();
+    std::vector<keyboard_value>* getRingOutVectorHandle();
 
-    void setRingInVector(std::vector<keyboard_value> &ringInVal);
-    void setRingOutVector(std::vector<keyboard_value> &ringOutVal);
+    void setRingInVector(std::vector<keyboard_value> ringInVal);
+    void setRingOutVector(std::vector<keyboard_value> ringOutVal);
 
 private:
 
-    std::vector<keyboard_value>* ringInVector;
-    std::vector<keyboard_value>* ringOutVector;
+    std::vector<keyboard_value> *ringInVector;
+    std::vector<keyboard_value> *ringOutVector;
 
 };
 

@@ -119,10 +119,17 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
 
         case kybdGUICmds::SELECT:
+
+            int keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
+
             if (kybdGUISel % 4 == 0)
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVector().size())].main);
+            {
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).main);
+            }
             else
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingOutVector().size())].main);
+            {
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).main);
+            }
             kybrdCtrl->sendData();
 
             /* Todo, pseudocode written 
@@ -138,10 +145,16 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             EXACT same thing as select except that the HOLD character is used, rather than the regular character.
             // in the discusion of RingData, this would correspond to the "*Hold vectors"
             */
+            int keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
+
             if (kybdGUISel % 4 == 0)
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVector()[scdHandle->getKeySelectAngle() /  (360/kybrdRingData[kybdGUISel].getRingInVector().size())].hold);
+            {
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).hold);
+            }
             else
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVector()[scdHandle->getKeySelectAngle() / (360/kybrdRingData[kybdGUISel].getRingOutVector().size())].hold);
+            {
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).hold);
+            }
             kybrdCtrl->sendData();
             break;
         default:

@@ -149,14 +149,14 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
 }
 
 
-void SharedCommandData::setMyoOrientation(ori_data orientation)
+void SharedCommandData::setMyoOrientation(orientation_data orientation)
 {
     myoOrientationMutex.lock();
     myoOrientation = orientation;
     myoOrientationMutex.unlock();
 }
 
-bool SharedCommandData::trySetMyoOrientation(ori_data orientation)
+bool SharedCommandData::trySetMyoOrientation(orientation_data orientation)
 {
     bool locked = myoOrientationMutex.try_lock();
     if (locked) {
@@ -167,17 +167,17 @@ bool SharedCommandData::trySetMyoOrientation(ori_data orientation)
     return locked;
 }
 
-ori_data SharedCommandData::getMyoOrientation()
+orientation_data SharedCommandData::getMyoOrientation()
 {
     myoOrientationMutex.lock();
-    ori_data orientation = myoOrientation;
+    orientation_data orientation = myoOrientation;
     myoOrientationMutex.unlock();
 
     return orientation;
 }
 
 
-bool SharedCommandData::tryGetMyoOrientation(ori_data& outMyoOrientation)
+bool SharedCommandData::tryGetMyoOrientation(orientation_data& outMyoOrientation)
 {
     bool locked = myoOrientationMutex.try_lock();
     if (locked) {
@@ -313,14 +313,14 @@ void SharedCommandData::extractPoint(boost::any value)
 
 void SharedCommandData::extractOrientation(boost::any value)
 {
-    if (value.type() != typeid(ori_data))
+    if (value.type() != typeid(orientation_data))
     {
         Filter::setFilterError(filterError::INVALID_INPUT);
         Filter::setFilterStatus(filterStatus::FILTER_ERROR);
     }
     else
     {
-        ori_data orientation = boost::any_cast<ori_data> (value);
+        orientation_data orientation = boost::any_cast<orientation_data> (value);
         setMyoOrientation(orientation);
     }
 }

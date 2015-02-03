@@ -173,9 +173,9 @@ struct point {
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
 };
 
-struct ori_data {
+struct orientation_data {
     float roll, pitch, yaw;
-    ori_data(float rollVal = 0, float pitchVal = 0, float yawVal = 0) : roll(rollVal), pitch(pitchVal), yaw(yawVal) { }
+    orientation_data(float rollVal = 0, float pitchVal = 0, float yawVal = 0) : roll(rollVal), pitch(pitchVal), yaw(yawVal) { }
 };
 
 

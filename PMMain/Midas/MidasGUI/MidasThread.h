@@ -25,7 +25,7 @@ public:
 
     void threadEmitString(std::string str);
     void threadEmitStateString(std::string str);
-    std::vector<ringData> readKeyboardSetupFile();
+
 private:
     SequenceDisplayer *sequenceDisplayer;
     InfoIndicator *infoIndicator;

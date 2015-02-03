@@ -17,6 +17,7 @@
 #include "SharedCommandDataTest.h"
 #include "KybrdCtrlTest.h"
 #include "MouseCtrlTest.h"
+#include "KeyboardSettingsReader.h"
 
 using namespace std;
 
@@ -82,7 +83,7 @@ int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer, I
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", sequenceDisplayer, infoIndicator);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
-    vector<ringData> kybrdRingData = threadHandle->readKeyboardSetupFile();
+    vector<ringData> kybrdRingData;
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);
