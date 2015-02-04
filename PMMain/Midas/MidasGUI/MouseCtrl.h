@@ -12,6 +12,7 @@
 #define MAX_MOVE_TIME_DELTA 40 //large enough ms delay between moving a pixel is pretty slow.
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
 #define MOVE_RATE_DEADZONE 20
+#define NUM_PIXEL_MOVE 1
 
 #define LEFT_HELD 0x1
 #define RIGHT_HELD 0x2

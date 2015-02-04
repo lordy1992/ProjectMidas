@@ -18,7 +18,7 @@
 
 using namespace std;
 
-#define MYO_POSE_FILTER_TEST
+#define MAIN_MODE
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -29,9 +29,6 @@ using namespace myoSim;
 #else
 using namespace myo;
 #endif
-
-// TODO!!! TEMP only -- obtaining global handle on FIRST created MidasThread (ideally the only one) and using that to emitString.
-#include "GestureSeqRecorder.h"
 
 int midasMain(MidasThread *threadHandle, MainGUI *mainGui) {
     std::cout << "starting Midas Main" << std::endl;
@@ -75,6 +72,9 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui) {
 #endif
 
 #ifdef MYO_POSE_FILTER_TEST
+#endif
+
+#ifdef MAIN_MODE
     SharedCommandData sharedData;
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui);
@@ -82,7 +82,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui) {
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 
     // Kick off device thread
-    startWearableDeviceListener(myoDevice);
+    startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.
 
     SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
     
