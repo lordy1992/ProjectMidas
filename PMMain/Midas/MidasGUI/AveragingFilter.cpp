@@ -3,9 +3,6 @@
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
-#endif
-
-#ifdef USE_SIMULATOR
 using namespace myoSim;
 #else
 using namespace myo;
