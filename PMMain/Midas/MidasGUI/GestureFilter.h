@@ -4,7 +4,7 @@
 #include "ControlState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
-#include "InfoIndicator.h"
+#include "MainGUI.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -44,7 +44,7 @@ public:
      * @param controlState A handle to the ControlState object that manages application state.
      * @param timeDel The time that a user must hold a gesture before it is registered.
      */
-    GestureFilter(ControlState* controlState, clock_t timeDel, SequenceDisplayer* sequenceDisplayer, InfoIndicator* infoIndicator);
+    GestureFilter(ControlState* controlState, clock_t timeDel, MainGUI *mainGuiHandle);
     ~GestureFilter();
 
     /**
@@ -86,7 +86,7 @@ private:
 
     GestureSeqRecorder gestSeqRecorder;
 
-    InfoIndicator *infoIndicator;
+    MainGUI *mainGui;
     static GestureSignaller signaller;
 };
 

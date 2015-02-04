@@ -10,7 +10,7 @@
  * 'dead zone' for the mouse, which looks like a smaller circle within the display. It shows a small cursor
  * that moves about that represents the current mouse velocity.
  */
-class MouseIndicator : public DraggableWidget
+class MouseIndicator : public QWidget
 {
     Q_OBJECT
 

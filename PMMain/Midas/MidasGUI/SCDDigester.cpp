@@ -51,18 +51,16 @@ void SCDDigester::digest()
     if (unitVelocity.x != 0)
     {
         mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
-        if (count % 100 == 0)
-        {
-            threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
-        }
+
     }
     if (unitVelocity.y != 0)
     {
         mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
-        if (count % 100 == 0)
-        {
-            threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
-        }
+    }
+
+    if (count % 100 == 0)
+    {
+        threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
     }
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
@@ -70,13 +68,6 @@ void SCDDigester::digest()
         digestKeyboardData(nextCmd);
     }
 
-    if (count % 100000 == 0)
-    {
-        //threadHandle->threadEmitString(std::to_string(count)); // this proves we can modify gui from here! woot.
-        threadHandle->threadEmitStateString(std::to_string(cntrlStateHandle->getMode()));
-        
-        std::cout << "Percent of X: " << unitVelocity.x << ", Percent of Y: " << unitVelocity.y << std::endl;
-    }
     count++;
 }
 
