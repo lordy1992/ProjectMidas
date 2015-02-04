@@ -1,81 +1,86 @@
 #include "KeyboardSettingsReader.h"
+#include <boost/algorithm/string.hpp>
+using namespace std;
+using namespace boost;
 
-
-keyboardSettingsReader::keyboardSettingsReader()
+KeyboardSettingsReader::KeyboardSettingsReader()
 {
 }
 
 
-keyboardSettingsReader::~keyboardSettingsReader()
+KeyboardSettingsReader::~KeyboardSettingsReader()
 {
 }
-void keyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData> ringDataHandle)
+
+
+void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDataHandle)
 {
 
-    std::ifstream readRingData("C:/Users/Owen/Documents/keyboardData.txt");
+    std::ifstream ringDataFile("./keyboardData.txt");
     std::vector<std::string> temp;
     std::string line;
 
     currentRing currentRing = ringIn;
-    bool holdkey_check = false;
+    bool holdkeyCheck = false;
 
-    ringData::keyboard_value key_temp;
-
-    ringDataHandle.push_back(ringData());
-
-    int ringCount = 0;
+    ringData::keyboardValue keyTemp('\0');
+    ringData *ringTemp = new ringData();
 
 
-    if (readRingData.is_open())
+    if (ringDataFile.is_open())
     {
-        while (!readRingData.eof())
+        while (!ringDataFile.eof())
         {
-            getline(readRingData, line);
+            getline(ringDataFile, line);
             boost::split(temp, line, std::bind2nd(std::equal_to<char>(), ' '));
 
             for (int i = 0; i < temp.size(); i++)
             {
+
                 for (char & key : temp[i])
                 {
-                    if (temp[i].size() == 1)
+
+                    if (temp[i].size() == 1) //size can only be 1(main) or 2(main & hold)
                     {
-                        key_temp.main = key;
+                        keyTemp.main = key;
 
                         if (currentRing == ringIn)
                         {
-                            ringDataHandle[ringCount].getRingInVectorHandle()->push_back(key_temp);
+                            ringTemp->getRingInVectorHandle()->push_back(keyTemp);
+
                         }
                         else
                         {
-                            ringDataHandle[ringCount].getRingOutVectorHandle()->push_back(key_temp);
+                            ringTemp->getRingOutVectorHandle()->push_back(keyTemp);
+
                         }
                     }
                     else
                     {
-                        if (holdkey_check == true)
+                        if (holdkeyCheck == true)
                         {
-                            key_temp.hold = key;
+                            keyTemp.hold = key;
 
                             if (currentRing == ringIn)
                             {
-                                ringDataHandle[ringCount].getRingInVectorHandle()->push_back(key_temp);
+                                ringTemp->getRingInVectorHandle()->push_back(keyTemp);
                             }
                             else
                             {
-                                ringDataHandle[ringCount].getRingOutVectorHandle()->push_back(key_temp);
+                                ringTemp->getRingOutVectorHandle()->push_back(keyTemp);
                             }
 
-                            holdkey_check = false;
+                            holdkeyCheck = false;
                         }
                         else
                         {
-                            key_temp.main = key;
-                            holdkey_check = true;
+                            keyTemp.main = key;
+                            holdkeyCheck = true;
                         }
 
                     }
                 }
-              
+
             }
 
             if (currentRing == ringIn)
@@ -85,16 +90,19 @@ void keyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData> ringDat
             else if (currentRing == ringOut)
             {
                 currentRing = ringIn;
-                ringCount++;
-                ringDataHandle.push_back(ringData());
+                ringDataHandle.push_back(*ringTemp);
+                ringTemp = new ringData();
             }
+
         }
+
     }
     else
     {
         std::cout << "Error in opening file!";
     }
+    ringDataFile.close();
+    ringTemp->~ringData();
 
-    readRingData.close();
 
 }

@@ -84,6 +84,8 @@ int midasMain(MidasThread *threadHandle, SequenceDisplayer* sequenceDisplayer, I
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
     vector<ringData> kybrdRingData;
+    KeyboardSettingsReader readFile;
+    readFile.readKeyboardSetupFile(kybrdRingData);
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice);

@@ -37,6 +37,7 @@ private:
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     std::vector<ringData> kybrdRingData;
+    int keySelect;
     int count;
 };
 

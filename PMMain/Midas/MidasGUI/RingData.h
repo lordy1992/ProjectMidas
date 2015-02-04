@@ -1,4 +1,5 @@
 #include <vector>
+
 #pragma once
 class ringData
 {
@@ -6,24 +7,28 @@ public:
     ringData();
     ~ringData();
 
-    struct keyboard_value
+    ringData(const ringData& rd);
+
+    struct keyboardValue
     {
         char main, hold;
-     //   keyboard_value(char mainVal = '\0', char holdVal = '\0') : main(mainVal), hold(holdVal) { }
+        keyboardValue(char mainVal, char holdVal = '\0') : main(mainVal), hold(holdVal) { }
     };
 
 
-    std::vector<keyboard_value>* getRingInVectorHandle();
-    std::vector<keyboard_value>* getRingOutVectorHandle();
+    std::vector<keyboardValue>* getRingInVectorHandle();
+    std::vector<keyboardValue>* getRingOutVectorHandle();
 
-    void setRingInVector(std::vector<keyboard_value> ringInVal);
-    void setRingOutVector(std::vector<keyboard_value> ringOutVal);
+    void setRingInVector(std::vector<keyboardValue> ringInVal);
+    void setRingOutVector(std::vector<keyboardValue> ringOutVal);
+
+
 
 private:
 
-    std::vector<keyboard_value> *ringInVector;
-    std::vector<keyboard_value> *ringOutVector;
+    std::vector<keyboardValue> *ringInVector;
+    std::vector<keyboardValue> *ringOutVector;
+
 
 };
-
 

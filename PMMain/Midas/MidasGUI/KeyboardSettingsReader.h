@@ -6,7 +6,7 @@
 #include <iostream>
 #include <boost/algorithm/string.hpp>
 
-class keyboardSettingsReader
+class KeyboardSettingsReader
 {
     enum currentRing
     {
@@ -15,8 +15,8 @@ class keyboardSettingsReader
     };
 
 public:
-    keyboardSettingsReader();
-    ~keyboardSettingsReader();
-    void readKeyboardSetupFile(std::vector<ringData> ringDataHandle);
+    KeyboardSettingsReader();
+    ~KeyboardSettingsReader();
+    void readKeyboardSetupFile(std::vector<ringData> &ringDataHandle);
 };
 

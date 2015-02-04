@@ -327,9 +327,7 @@ void SharedCommandData::extractOrientation(boost::any value)
 
 void SharedCommandData::extractKeySelectAngle(int angle)
 {
-
     setKeySelectAngle(angle);
-    
 }
 
 

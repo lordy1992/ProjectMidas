@@ -3,8 +3,8 @@
 
 ringData::ringData()
 {
-    this->ringInVector = new std::vector<keyboard_value>();
-    this->ringOutVector = new std::vector<keyboard_value>();
+    this->ringInVector = new std::vector<keyboardValue>();
+    this->ringOutVector = new std::vector<keyboardValue>();
 }
 
 
@@ -14,24 +14,28 @@ ringData::~ringData()
     delete this->ringInVector;
 }
 
+ringData::ringData(const ringData& rd)
+{
+    this->ringInVector = new std::vector<keyboardValue>(*rd.ringInVector);
+    this->ringOutVector = new std::vector<keyboardValue>(*rd.ringOutVector);
+}
 
-
-std::vector<ringData::keyboard_value> *ringData::getRingInVectorHandle()
+std::vector<ringData::keyboardValue> *ringData::getRingInVectorHandle()
 {
     return ringInVector;
 }
 
-std::vector<ringData::keyboard_value> *ringData::getRingOutVectorHandle()
+std::vector<ringData::keyboardValue> *ringData::getRingOutVectorHandle()
 {
     return ringOutVector;
 }
 
-void ringData::setRingInVector(std::vector<keyboard_value> ringInVal)
+void ringData::setRingInVector(std::vector<keyboardValue> ringInVal)
 {
     *ringInVector = ringInVal;
 }
 
-void ringData::setRingOutVector(std::vector<keyboard_value> ringOutVal)
+void ringData::setRingOutVector(std::vector<keyboardValue> ringOutVal)
 {
     *ringOutVector = ringOutVal;
 }
