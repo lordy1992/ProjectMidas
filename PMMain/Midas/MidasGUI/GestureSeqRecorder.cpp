@@ -475,7 +475,6 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
 
             holdGestTimer = REQ_HOLD_TIME; // set count on any progression
         }
-        
     }
 
     seqList = NULL;

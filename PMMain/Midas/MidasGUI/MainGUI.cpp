@@ -14,6 +14,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     infoIndicator = new InfoIndicator(INFO_INDICATOR_WIDTH, 
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
+    poseDisplayer = new PoseDisplayer(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE, this);
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
@@ -23,8 +24,10 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
     layout->addWidget(mouseIndicator);
+    layout->addWidget(poseDisplayer);
 
     layout->setAlignment(mouseIndicator, Qt::AlignRight);
+    layout->setAlignment(poseDisplayer, Qt::AlignLeft);
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
     
@@ -47,6 +50,8 @@ MainGUI::~MainGUI()
     infoIndicator = NULL;
     delete sequenceDisplayer;
     sequenceDisplayer = NULL;
+    delete poseDisplayer;
+    poseDisplayer = NULL;
     delete layout;
     layout = NULL;
 }
@@ -66,4 +71,10 @@ void MainGUI::connectSignallerToSequenceDisplayer(GestureSignaller *signaller)
 
     QObject::connect(signaller, SIGNAL(emitShowSequences(std::vector<sequenceProgressData>)),
         sequenceDisplayer, SLOT(showSequences(std::vector<sequenceProgressData>)));
+}
+
+void MainGUI::connectSignallerToPoseDisplayer(GestureSignaller *signaller)
+{
+    QObject::connect(signaller, SIGNAL(emitPoseEnum(Pose)),
+        poseDisplayer, SLOT(handlePoseEnum(Pose)));
 }

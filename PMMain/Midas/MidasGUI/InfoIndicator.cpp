@@ -55,10 +55,6 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     setMinimumSize(indWidth, indHeight);
 }
 
-void InfoIndicator::paintEvent(QPaintEvent *event)
-{
-}
-
 void InfoIndicator::resizeEvent(QResizeEvent *event)
 {
     QRegion maskedRegion(0, 0 , width(), height(), QRegion::Rectangle);

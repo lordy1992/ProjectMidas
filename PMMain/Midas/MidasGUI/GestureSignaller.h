@@ -3,6 +3,12 @@
 #include "QObject.h"
 #include "MyoCommon.h"
 
+#ifdef USE_SIMULATOR
+#include "MyoSimIncludes.hpp"
+#else
+#include "myo\myo.hpp"
+#endif
+
 /**
  * The GestureSignaller class handles the communication between the Midas sequence logic
  * and the SequenceDisplayer GUI.
@@ -25,6 +31,8 @@ signals:
     void emitShowSequences(std::vector<sequenceProgressData>);
 
     void emitStateString(QString);
+
+    void emitPoseEnum(Pose);
 
 private:
     static bool showAll;
