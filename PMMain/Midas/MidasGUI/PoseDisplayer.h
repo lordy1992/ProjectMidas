@@ -31,7 +31,7 @@ private:
     QLabel *tempLabel;
 
 public slots:
-    void handlePoseEnum(Pose poseEnum);
+    void handlePoseEnum(QString poseEnum);
 };
 
 #endif POSE_DISPLAYER_H
