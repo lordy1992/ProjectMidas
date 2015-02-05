@@ -32,33 +32,27 @@ void MouseCtrl::setScrollRate(int rate)
 
 void MouseCtrl::setMinMoveXTimeDelta(unsigned int rate)
 {
-    float ratePercent = min(1.0, max(((rate - MOVE_RATE_DEADZONE) / (100.0 - MOVE_RATE_DEADZONE)), 0));
-
-    // calc min/max velocity in pixels/ms
-    float maxVeloc = NUM_PIXEL_MOVE / (float)MIN_MOVE_TIME_DELTA;
-    float minVeloc = NUM_PIXEL_MOVE / (float)MAX_MOVE_TIME_DELTA;
-    float deltaVeloc = maxVeloc - minVeloc;
-
-    float currVeloc = (deltaVeloc * ratePercent) + minVeloc;
-    if (currVeloc <= 0.0)
-    {
-        // should not happen
-        return;
-    }
-
-    if (currVeloc / deltaVeloc <= .2)
-    {
-        // set bottom 20% to just have slowest velocity setting (for fine tuned movements)
-        minMoveXTimeDelta = MAX_MOVE_TIME_DELTA;
-    }
-    else {
-        minMoveXTimeDelta = min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
-    }
+    minMoveXTimeDelta = convertRateToDelta(rate);
 }
 
 void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
 {
-    float ratePercent = min(1.0, max(((rate - MOVE_RATE_DEADZONE) / (100.0 - MOVE_RATE_DEADZONE)), 0));
+    
+    minMoveYTimeDelta = convertRateToDelta(rate);
+}
+
+unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
+{
+    if (rate < MOVE_RATE_DEADZONE)
+    {
+        return MAXUINT;
+    }
+    else if (rate < MOVE_RATE_DEADZONE + MOVE_RATE_SLOWZONE)
+    {
+        return MAX_MOVE_TIME_DELTA;
+    }
+
+    float ratePercent = min(1.0, max(((rate - MOVE_RATE_DEADZONE - MOVE_RATE_SLOWZONE) / (100.0 - MOVE_RATE_DEADZONE - MOVE_RATE_SLOWZONE)), 0));
 
     // calc min/max velocity in pixels/ms
     float maxVeloc = NUM_PIXEL_MOVE / (float)MIN_MOVE_TIME_DELTA;
@@ -69,17 +63,10 @@ void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
     if (currVeloc <= 0.0)
     {
         // should not happen
-        return;
+        return MAXUINT;
     }
 
-    if (currVeloc / deltaVeloc <= .2)
-    {
-        // set bottom 20% to just have slowest velocity setting (for fine tuned movements)
-        minMoveYTimeDelta = MAX_MOVE_TIME_DELTA;
-    }
-    else {
-        minMoveYTimeDelta = min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
-    }
+    return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
 void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
