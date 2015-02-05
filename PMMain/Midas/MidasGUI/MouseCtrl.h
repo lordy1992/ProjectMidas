@@ -12,6 +12,8 @@
 #define MAX_MOVE_TIME_DELTA 40 //large enough ms delay between moving a pixel is pretty slow.
 #define MIN_MOVE_TIME_DELTA 1 //small enough ms delay between moving a pixel is fast, but not uncontrolled..
 #define MOVE_RATE_DEADZONE 20
+#define MOVE_RATE_SLOWZONE 20
+#define NUM_PIXEL_MOVE 1
 
 #define LEFT_HELD 0x1
 #define RIGHT_HELD 0x2
@@ -39,16 +41,23 @@ public:
      * Sets the rate at which the cursor should move in the X axis.
      *
      * @param rate The rate of cursor movement in the X axis, between
-     * -100 and 100.
+     * 0 and 100.
      */
     void setMinMoveXTimeDelta(unsigned int rate);
 
     /**
      * Sets the rate at which the cursor should move in the Y axis.
      *
-     * @param rate The rate of cursor movement in the Y axis, between -100 and 100.
+     * @param rate The rate of cursor movement in the Y axis, between 0 and 100.
      */
     void setMinMoveYTimeDelta(unsigned int rate);
+
+    /**
+    *  Abstracts function for linearizing rate into velocity
+    *
+    * @param rate The rate to convert into a velocity (from 0 to 100)
+    */
+    unsigned int convertRateToDelta(unsigned int rate);
 
     /**
      * Sends a mouse command to the OS. This includes movement commands. The mouseRateIfMove parameter

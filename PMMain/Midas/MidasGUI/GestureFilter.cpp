@@ -105,7 +105,7 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
     clickResp.name = "Release Mouse";
     clickSeq.at(0) = SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE);
-    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
+    ss |= (int)gestSeqRecorder.registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Release Mouse");
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {
