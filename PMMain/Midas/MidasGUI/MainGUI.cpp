@@ -20,14 +20,19 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     setWindowOpacity(0.8);
 
     layout = new QVBoxLayout;
+    QGridLayout *gridLayout = new QGridLayout;
 
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
-    layout->addWidget(mouseIndicator);
-    layout->addWidget(poseDisplayer);
 
-    layout->setAlignment(mouseIndicator, Qt::AlignRight);
-    layout->setAlignment(poseDisplayer, Qt::AlignLeft);
+    gridLayout->addWidget(poseDisplayer, 0, 0, Qt::AlignRight);
+    gridLayout->addWidget(mouseIndicator, 0, 1, Qt::AlignRight);
+    layout->addLayout(gridLayout);
+    //layout->addWidget(mouseIndicator);
+    //layout->addWidget(poseDisplayer);
+
+    //layout->setAlignment(mouseIndicator, Qt::AlignRight);
+    //layout->setAlignment(poseDisplayer, Qt::AlignLeft);
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
     
@@ -75,6 +80,6 @@ void MainGUI::connectSignallerToSequenceDisplayer(GestureSignaller *signaller)
 
 void MainGUI::connectSignallerToPoseDisplayer(GestureSignaller *signaller)
 {
-    QObject::connect(signaller, SIGNAL(emitPoseEnum(Pose)),
-        poseDisplayer, SLOT(handlePoseEnum(Pose)));
+    QObject::connect(signaller, SIGNAL(emitPoseEnum(QString)),
+        poseDisplayer, SLOT(handlePoseEnum(QString)));
 }

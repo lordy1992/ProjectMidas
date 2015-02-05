@@ -32,7 +32,7 @@ signals:
 
     void emitStateString(QString);
 
-    void emitPoseEnum(Pose);
+    void emitPoseEnum(QString);
 
 private:
     static bool showAll;

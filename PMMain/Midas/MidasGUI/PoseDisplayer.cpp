@@ -60,9 +60,7 @@ QSize PoseDisplayer::sizeHint() const
     return QSize(indWidth, indHeight);
 }
 
-void PoseDisplayer::handlePoseEnum(Pose poseEnum)
+void PoseDisplayer::handlePoseEnum(QString poseEnum)
 {
-    int i = 0;
-    tempLabel->setText(tr(poseEnum.toString().c_str()));
-    i++;
+    tempLabel->setText(poseEnum);
 }

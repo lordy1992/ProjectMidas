@@ -24,7 +24,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGU
     mainGui->connectSignallerToPoseDisplayer(&signaller);
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
-    signaller.emitPoseEnum(Pose::rest);
+    signaller.emitPoseEnum(QTranslator::tr("hi"));
 }
 
 GestureFilter::~GestureFilter()
@@ -52,7 +52,7 @@ void GestureFilter::process()
     commandData response;
     SequenceStatus ss;
     ss = gestSeqRecorder.progressSequence(gesture, *controlStateHandle, response);
-    signaller.emitPoseEnum(gesture);
+    signaller.emitPoseEnum(QTranslator::tr("world")); // gesture
     
     if (response.type == commandType::NONE)
     {
