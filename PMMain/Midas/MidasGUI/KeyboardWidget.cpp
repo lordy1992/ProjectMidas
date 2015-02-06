@@ -5,22 +5,27 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+#define POPOUT_DISTANCE 10
+#define EXTRA_WINDOW_DIST 10
+
 KeyboardWidget::KeyboardWidget(int radius, int ringWidth, QWidget *parent)
-    : DraggableWidget(parent), keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint), 
+        keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
     selectedKey(-1)
 {
    // setWindowOpacity(0.75);
+    setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
-    QPalette pal;
-    pal.setColor(QPalette::Background, QColor(205, 205, 193));
-    setAutoFillBackground(true);
-    setPalette(pal);
+    //QPalette pal;
+    //pal.setColor(QPalette::Background, QColor(205, 205, 193));
+   // setAutoFillBackground(true);
+   // setPalette(pal);
 
-    setFixedSize(radius * 2, radius * 2);
+    setFixedSize(radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST, radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST);
 
     // Temporary Test:
     selectedWheel = 0;
-    selectedKey = 0;
+    selectedKey = 5;
     outerSelected = true;
     wheelData wheel1;
     wheel1.outerRing.push_back(keyData('a', 'A'));
@@ -66,7 +71,6 @@ void KeyboardWidget::clearWheels()
 
 void KeyboardWidget::paintEvent(QPaintEvent *event)
 {
-    int side = qMin(width(), height());
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
     painter.translate(width() / 2, height() / 2);
@@ -88,7 +92,9 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
     int innerRingBorderDiam = innerRingBorderRadius * 2;
     //painter.drawEllipse(-keyboardBorderRad, -keyboardBorderRad, keyboardDiam, keyboardDiam);
     //painter.drawEllipse(-outerRingBorderRadius, -outerRingBorderRadius, outerRingBorderDiam, outerRingBorderDiam);
-    //painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+    QBrush fillCenterBrush(QColor(205, 205, 193));
+    painter.setBrush(fillCenterBrush);
+    painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
 
     // Draw the key squares.
     if (selectedWheel >= 0)
@@ -136,7 +142,7 @@ void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int 
         else
         {
             drawKey(painter, ringInnerRad, startAngle, deltaAngle, outerRect, 
-                innerRect, *it, lineColour);
+                innerRect, *it, lineColour, ringWidth);
         }
 
         startAngle -= deltaAngle;
@@ -146,12 +152,15 @@ void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int 
     if (foundSelected)
     {
         // Draw the selected.
-        drawKey(painter, ringInnerRad, selectedAngle, deltaAngle, outerRect, innerRect, ring[selectedKey], lineColourSelected);
+        int selectRad = ringOuterRad + POPOUT_DISTANCE;
+        QRectF selectRect(-selectRad, -selectRad, selectRad * 2, selectRad * 2);
+        drawKey(painter, ringInnerRad, selectedAngle, deltaAngle, selectRect, innerRect, ring[selectedKey],
+            lineColourSelected, ringWidth + POPOUT_DISTANCE);
     }
 }
 
 void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle, 
-    QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour)
+    QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour, int distBetween)
 {
     QColor fillColour(160, 182, 215);
     QBrush borderBrush(lineColour);
@@ -161,13 +170,13 @@ void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngl
     QPen textPen(textCol);
 
     QPainterPath path;
-    qreal startX = (ringInnerRad + ringWidth) * cos(currAngle * (M_PI / 180.0));
-    qreal startY = -1 * (ringInnerRad + ringWidth) * sin(currAngle * (M_PI / 180.0));
+    qreal startX = (ringInnerRad + distBetween) * cos(currAngle * (M_PI / 180.0));
+    qreal startY = -1 * (ringInnerRad + distBetween) * sin(currAngle * (M_PI / 180.0));
     qreal acrossX = ringInnerRad * cos((currAngle - deltaAngle) * (M_PI / 180.0));
     qreal acrossY = -1 * ringInnerRad * sin((currAngle - deltaAngle) * (M_PI / 180.0));
 
-    qreal textPointX = (ringInnerRad + ringWidth / 2) * cos((currAngle - deltaAngle / 2) * (M_PI / 180.0));
-    qreal textPointY = -1 * (ringInnerRad + ringWidth / 2) * sin((currAngle - deltaAngle / 2) * (M_PI / 180.0));
+    qreal textPointX = (ringInnerRad + distBetween / 2) * cos((currAngle - deltaAngle / 2) * (M_PI / 180.0));
+    qreal textPointY = -1 * (ringInnerRad + distBetween / 2) * sin((currAngle - deltaAngle / 2) * (M_PI / 180.0));
 
     path.moveTo(startX, startY);
     path.arcTo(outerRect, currAngle, -deltaAngle);
@@ -215,12 +224,12 @@ void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngl
 
 void KeyboardWidget::resizeEvent(QResizeEvent *event)
 {
-    int side = qMin(width(), height());
-    QRegion maskedRegion(width() / 2 - side / 2, height() / 2 - side / 2, side, side, QRegion::Ellipse);
-    setMask(maskedRegion);
+    //int side = qMin(width(), height());
+    //QRegion maskedRegion(width() / 2 - side / 2, height() / 2 - side / 2, side, side, QRegion::Ellipse);
+    //setMask(maskedRegion);
 }
 
 QSize KeyboardWidget::sizeHint() const
 {
-    return QSize(keyboardRadius, keyboardRadius);
+    return QSize(keyboardRadius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST, keyboardRadius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST);
 }

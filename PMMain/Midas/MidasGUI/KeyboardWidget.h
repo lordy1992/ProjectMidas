@@ -54,7 +54,7 @@ protected:
 private:
     void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad, bool isSelected);
     void drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle,
-        QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour);
+        QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour, int distBetween);
 
     QPoint position, cursorPos;
     std::vector<wheelData> wheels;
