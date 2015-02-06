@@ -7,8 +7,6 @@
 #include <QGridLayout.h>
 #include <qpushbutton.h>
 
-// Q_DECLARE_METATYPE(sequenceImageSet) // TODO - this would be better than std::vector<sequenceImageSet>, but is not working immediately
-
 class PoseDisplayer : public QWidget
 {
     Q_OBJECT

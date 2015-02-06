@@ -52,8 +52,7 @@ PoseDisplayer::~PoseDisplayer()
 
 void PoseDisplayer::resizeEvent(QResizeEvent *event)
 {
-    //QRegion maskedRegion(0, 0, width(), height(), QRegion::Rectangle);
-    //setMask(maskedRegion);
+    // todo - could handle resize.
 }
 
 QSize PoseDisplayer::sizeHint() const

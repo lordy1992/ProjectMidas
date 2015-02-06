@@ -83,7 +83,6 @@ void GestureFilter::process()
 
 void GestureFilter::emitPoseData(int poseInt)
 {
-    // TODO ALL.
     std::vector<int> ids;
     ids.push_back(poseInt);
 
@@ -93,9 +92,6 @@ void GestureFilter::emitPoseData(int poseInt)
     {
         signaller.emitPoseImages(images);
     }
-    // else error
-
-    //signaller.emitPoseEnum(QTranslator::tr("world")); // TODO gesture
 }
 
 void GestureFilter::registerMouseSequences(void)
