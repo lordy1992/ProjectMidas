@@ -52,15 +52,16 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad);
+    void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad, bool isSelected);
     void drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle,
-        QRectF& outerRect, QRectF& innerRect, keyData keyDat);
+        QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour);
 
     QPoint position, cursorPos;
     std::vector<wheelData> wheels;
     int keyboardRadius, ringWidth;
     int selectedWheel;
     int selectedKey;
+    bool outerSelected;
 };
 
 #endif

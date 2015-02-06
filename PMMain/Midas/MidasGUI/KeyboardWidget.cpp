@@ -21,6 +21,7 @@ KeyboardWidget::KeyboardWidget(int radius, int ringWidth, QWidget *parent)
     // Temporary Test:
     selectedWheel = 0;
     selectedKey = 0;
+    outerSelected = true;
     wheelData wheel1;
     wheel1.outerRing.push_back(keyData('a', 'A'));
     wheel1.outerRing.push_back(keyData('b', 'B'));
@@ -98,12 +99,20 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
         int deltaAngleInner = 360 / innerRing.size();
         int deltaAngleOuter = 360 / outerRing.size();
 
-        drawRing(painter, outerRing, outerRingBorderRadius - 2);
-        drawRing(painter, innerRing, innerRingBorderRadius - 2);
+        if (outerSelected)
+        {
+            drawRing(painter, innerRing, innerRingBorderRadius - 2, !outerSelected);
+            drawRing(painter, outerRing, outerRingBorderRadius - 2, outerSelected);
+        }
+        else
+        {
+            drawRing(painter, outerRing, outerRingBorderRadius - 2, outerSelected);
+            drawRing(painter, innerRing, innerRingBorderRadius - 2, !outerSelected);
+        }
     }
 }
 
-void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad)
+void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad, bool isSelected)
 {
     qreal deltaAngle = 360.0 / ring.size();
     qreal startAngle = 90.0 + deltaAngle / 2;
@@ -113,19 +122,37 @@ void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int 
     QRectF outerRect(-ringOuterRad, -ringOuterRad, ringOuterRad * 2, ringOuterRad * 2);
     QRectF innerRect(-ringInnerRad, -ringInnerRad, ringInnerRad * 2, ringInnerRad * 2);
     int currentKey = 0;
+    qreal selectedAngle = 0.0;
+    bool foundSelected = false;
+    QColor lineColour(0, 0, 100);
+    QColor lineColourSelected(200, 0, 0);
     for (it = ring.begin(); it != ring.end(); it++)
     {
-        drawKey(painter, ringInnerRad, startAngle, deltaAngle, outerRect, innerRect, *it);
+        if (isSelected && selectedKey == currentKey)
+        {
+            foundSelected = true;
+            selectedAngle = startAngle;
+        }
+        else
+        {
+            drawKey(painter, ringInnerRad, startAngle, deltaAngle, outerRect, 
+                innerRect, *it, lineColour);
+        }
+
         startAngle -= deltaAngle;
         currentKey++;
+    }
+
+    if (foundSelected)
+    {
+        // Draw the selected.
+        drawKey(painter, ringInnerRad, selectedAngle, deltaAngle, outerRect, innerRect, ring[selectedKey], lineColourSelected);
     }
 }
 
 void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle, 
-    QRectF& outerRect, QRectF& innerRect, keyData keyDat)
+    QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour)
 {
-    QColor lineColour(0, 0, 100);
-    QColor lineColourSelected(200, 0, 0);
     QColor fillColour(160, 182, 215);
     QBrush borderBrush(lineColour);
     QPen pen(borderBrush, 5);
