@@ -24,45 +24,36 @@ PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
     setWindowTitle(tr("Pose Displayer"));
 
     setWindowOpacity(0.75);
-    QPalette pal;
-    pal.setColor(QPalette::Background, QColor(205, 205, 193));
-    setAutoFillBackground(true);
-    setPalette(pal);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     layout = new QGridLayout;
-    layout->setSpacing(5);
+    layout->setSpacing(0);
     setLayout(layout);
 
-    QFont timesFont("Times", 9, QFont::Bold);
-    poseImgLabel = new QLabel(tr("%1").arg("temp")); // todo TEMP!
-    poseImgLabel->setFont(timesFont);
-
+    poseImgLabel = new QLabel();
     poseImgLabel->setFrameShape(QFrame::Box);
     poseImgLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     poseImgLabel->setBackgroundRole(QPalette::Base);
-    poseImgLabel->setAlignment(Qt::AlignCenter);
     poseImgLabel->setAutoFillBackground(true);
-    poseImgLabel->setFixedSize(indWidth, indWidth);
+    poseImgLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     poseImgLabel->setScaledContents(true);
 
-
-    layout->addWidget(poseImgLabel, 0, 0);
-    layout->setAlignment(poseImgLabel, Qt::AlignCenter);
+    layout->addWidget(poseImgLabel, 0, 0, Qt::AlignLeft | Qt::AlignTop);
     
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setFixedSize(indWidth, indHeight);
 }
 
 PoseDisplayer::~PoseDisplayer()
 {
-    delete this->poseImgLabel;
+    delete poseImgLabel; poseImgLabel = NULL;
+    delete layout; layout = NULL;
 }
 
 void PoseDisplayer::resizeEvent(QResizeEvent *event)
 {
-    QRegion maskedRegion(0, 0, width(), height(), QRegion::Rectangle);
-    setMask(maskedRegion);
+    //QRegion maskedRegion(0, 0, width(), height(), QRegion::Rectangle);
+    //setMask(maskedRegion);
 }
 
 QSize PoseDisplayer::sizeHint() const
@@ -72,14 +63,10 @@ QSize PoseDisplayer::sizeHint() const
 
 void PoseDisplayer::handlePoseImages(std::vector<sequenceImageSet> poseImages)
 {
-    //poseImgLabel->setText(poseEnum); // todo remove
     if (poseImages.size() == 1)
     {
-        poseImgLabel->setPixmap(poseImages[0].nextImage);
+        QPixmap scaledPic = poseImages[0].nextImage;
+        scaledPic.scaled(indWidth, indHeight);
+        poseImgLabel->setPixmap(scaledPic);
     }
-}
-
-void PoseDisplayer::initPoseImgMap()
-{
-    //poseImgMap[Pose::rest] = // likely un-needed!
 }

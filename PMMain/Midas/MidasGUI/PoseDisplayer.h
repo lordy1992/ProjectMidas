@@ -14,10 +14,9 @@ class PoseDisplayer : public QWidget
     Q_OBJECT
 
 public:
-    PoseDisplayer(int widgetWidth = GRID_ELEMENT_SIZE, int widgetHeight = GRID_ELEMENT_SIZE, QWidget *parent = 0);
+    PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent = 0);
     ~PoseDisplayer();
     QSize sizeHint() const;
-
 
 protected:
     void resizeEvent(QResizeEvent *event);
@@ -29,7 +28,6 @@ private:
     int indWidth, indHeight;
     QGridLayout *layout;
 
-    QPixmap posePix;
     QLabel *poseImgLabel;
 
 public slots:
