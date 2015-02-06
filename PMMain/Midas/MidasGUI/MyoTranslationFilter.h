@@ -106,6 +106,8 @@ private:
     */
     point getMouseUnitVelocity(float pitch, float yaw);
 
+    int keySelectAngle(orientation_data data);
+
     ControlState* controlStateHandle;
     midasMode previousMode;
     float basePitch, baseYaw, prevRoll, deltaRoll;

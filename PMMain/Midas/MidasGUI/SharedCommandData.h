@@ -8,7 +8,8 @@
 
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
-
+#define ORIENTATION_INPUT "orientation"
+#define ANGLE_INPUT "angle"
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
  * queue of mouse and keyboard commands for the main thread to send to Windows, and contains 
@@ -94,10 +95,55 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
+    /**
+    * Sets the cursor angle in the shared data. If another thread is accessing/changing
+    * the angle, this will block until the other thread is done.
+    *
+    * @param mouseAngle The new angle of the cursor.
+    */
+    void setMyoOrientation(orientation_data orientation);
+
+    /**
+    * Sets the cursor angle in the shared data. If another thread is accessing/changing
+    * the angle, this will return false and not update the angle. Otherwise, it will
+    * return true and set the cursor angle.
+    *
+    * @param mouseAngle The new angle of the cursor.
+    * @return True if the angle was successfully set, otherwise false.
+    */
+    bool trySetMyoOrientation(orientation_data orientation);
+
+    /**
+    * Return the mouse angle in the shared data. If another thread is accessing/changing
+    * the angle, this will block until the other thread is done.
+    *
+    * @return The mouse angle in the SCD.
+    */
+    orientation_data getMyoOrientation();
+
+    /**
+    * Return the mouse angle in the shared data. If another thread is accessing/changing
+    * the velocity, this will return false and not retrieve the angle. Otherwise, it will
+    * return true and set the cursor pitch and yaw.
+    *
+    * @param outMouseAngle The retrieved mouse angle from the SCD will be placed here.
+    * @return True if the pangle is successfully received, false otherwise.
+    */
+    bool tryGetMyoOrientation(orientation_data& outMyoOrientation);
+
+
+    void setKeySelectAngle(int angle);
+    bool trySetKeySelectAngle(int angle);
+    int getKeySelectAngle();
+    bool tryGetKeySelectAngle(int& outKeySelectAngle);
+
+
+    int keySelectAngle;
     void setKybdGuiSel(unsigned int kybdGuiSel);
     bool trySetKybdGuiSel(unsigned int kybdGuiSel);
     unsigned int getKybdGuiSel();
     bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
+
     unsigned int getKybdGuiSelMax();
     bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
 
@@ -131,6 +177,8 @@ public:
 
 private:
     point mouseVelocity;
+    orientation_data myoOrientation;
+   
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;
     unsigned int kybdGuiSel;
@@ -138,9 +186,13 @@ private:
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
     std::mutex kybdGuiSelMutex;
+    std::mutex myoOrientationMutex;
+    std::mutex keySelectAngleMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
+    void extractOrientation(boost::any value);
+    void extractKeySelectAngle(int angle);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

@@ -80,7 +80,7 @@ private:
     * instead of pressed. This method enforces that every key is released after it is 
     * pressed, in the correct order.
     */
-    void setMirroredUpKeys();
+    void setMirroredUpKeys();  
 
     KEYBDINPUT ki;
     std::vector<KEYBDINPUT> kiVec;

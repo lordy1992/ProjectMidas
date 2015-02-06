@@ -4,6 +4,7 @@
 #include <qdebug.h>
 #include <Windows.h>
 
+
 MidasThread::MidasThread()
 {
 }
@@ -21,3 +22,4 @@ void MidasThread::run()
 {
     midasMain(this, mainGui);
 }
+

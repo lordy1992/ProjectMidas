@@ -149,6 +149,85 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
 }
 
 
+void SharedCommandData::setMyoOrientation(orientation_data orientation)
+{
+    myoOrientationMutex.lock();
+    myoOrientation = orientation;
+    myoOrientationMutex.unlock();
+}
+
+bool SharedCommandData::trySetMyoOrientation(orientation_data orientation)
+{
+    bool locked = myoOrientationMutex.try_lock();
+    if (locked) {
+        myoOrientation = orientation;
+        myoOrientationMutex.unlock();
+    }
+
+    return locked;
+}
+
+orientation_data SharedCommandData::getMyoOrientation()
+{
+    myoOrientationMutex.lock();
+    orientation_data orientation = myoOrientation;
+    myoOrientationMutex.unlock();
+
+    return orientation;
+}
+
+
+bool SharedCommandData::tryGetMyoOrientation(orientation_data& outMyoOrientation)
+{
+    bool locked = myoOrientationMutex.try_lock();
+    if (locked) {
+        outMyoOrientation = myoOrientation;
+        myoOrientationMutex.unlock();
+    }
+
+    return locked;
+}
+
+void SharedCommandData::setKeySelectAngle(int angle)
+{
+    keySelectAngleMutex.lock();
+    keySelectAngle = angle;
+    keySelectAngleMutex.unlock();
+}
+
+bool SharedCommandData::trySetKeySelectAngle(int angle)
+{
+    bool locked = keySelectAngleMutex.try_lock();
+    if (locked) {
+        keySelectAngle = angle;
+        keySelectAngleMutex.unlock();
+    }
+
+    return locked;
+}
+
+int SharedCommandData::getKeySelectAngle()
+{
+    keySelectAngleMutex.lock();
+    int angle = keySelectAngle;
+    keySelectAngleMutex.unlock();
+
+    return angle;
+}
+
+
+bool SharedCommandData::tryGetKeySelectAngle(int& outKeySelectAngle)
+{
+    bool locked = keySelectAngleMutex.try_lock();
+    if (locked) {
+        outKeySelectAngle = keySelectAngle;
+        keySelectAngleMutex.unlock();
+    }
+
+    return locked;
+}
+
+
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
@@ -170,6 +249,16 @@ void SharedCommandData::process()
     {
         boost::any value = input[VELOCITY_INPUT];
         extractPoint(value);
+    }
+
+    if (input.find(ORIENTATION_INPUT) != input.end())
+    {
+        boost::any value = input[ORIENTATION_INPUT];
+        extractPoint(value);
+    }
+    if (input.find(ANGLE_INPUT) != input.end())
+    {
+        extractPoint(input);
     }
 }
 
@@ -220,3 +309,27 @@ void SharedCommandData::extractPoint(boost::any value)
         setVelocity(velocity);
     }
 }
+
+
+void SharedCommandData::extractOrientation(boost::any value)
+{
+    if (value.type() != typeid(orientation_data))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        orientation_data orientation = boost::any_cast<orientation_data> (value);
+        setMyoOrientation(orientation);
+    }
+}
+
+void SharedCommandData::extractKeySelectAngle(int angle)
+{
+    setKeySelectAngle(angle);
+}
+
+
+
+

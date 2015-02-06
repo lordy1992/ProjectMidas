@@ -167,6 +167,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_PoseDisplayer.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="RingData.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardSettingsReader.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -246,8 +252,17 @@
     <ClInclude Include="SequenceImageManager.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
+    <ClInclude Include="KeyboardSettingsReader.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="RingData.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MidasGUI.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="keyboardData.txt" />
   </ItemGroup>
 </Project>
