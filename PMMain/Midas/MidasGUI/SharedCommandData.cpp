@@ -83,29 +83,25 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
 
 void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
 {
+    kybdGuiSelMutex.lock();
     if (kybdGuiSel <= maxKybdGuiSel)
     {
-        kybdGuiSelMutex.lock();
         kybdGuiSel = kybdGuiSel;
-        kybdGuiSelMutex.unlock();
     }
+    kybdGuiSelMutex.unlock();
 }
 
 bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
 {
-    if (kybdGuiSel <= maxKybdGuiSel)
-    {
-        bool locked = kybdGuiSelMutex.try_lock();
-        if (locked) {
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        if (kybdGuiSel <= maxKybdGuiSel)
+        {
             kybdGuiSel = kybdGuiSel;
             kybdGuiSelMutex.unlock();
         }
-        return locked;
     }
-    else
-    {
-        return false;
-    }
+    return locked;
 }
 
 unsigned int SharedCommandData::getKybdGuiSel()

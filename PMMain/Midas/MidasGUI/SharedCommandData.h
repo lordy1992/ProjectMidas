@@ -18,7 +18,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData(unsigned int maxKybdGuiSel = 1) : Filter(), mouseVelocity() { this->maxKybdGuiSel = maxKybdGuiSel; }
+    SharedCommandData(unsigned int maxKybdGuiSel) : Filter(), mouseVelocity(), kybdGuiSel(0) { this->maxKybdGuiSel = maxKybdGuiSel; }
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 

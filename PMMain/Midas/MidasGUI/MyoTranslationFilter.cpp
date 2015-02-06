@@ -38,6 +38,12 @@ void MyoTranslationFilter::process()
         baseYaw = yaw;
     }
 
+    if (previousMode != KEYBOARD_MODE && controlStateHandle->getMode() == KEYBOARD_MODE)
+    {
+        basePitch = pitch;
+        baseYaw = yaw;
+    }
+
     if (controlStateHandle->getMode() != MOUSE_MODE)
     {
         if (previousMode == MOUSE_MODE)
@@ -65,14 +71,26 @@ void MyoTranslationFilter::process()
                 command.action.kybd = kybdCmds::VOLUME_DOWN;
                 outputToSharedCommandData[COMMAND_INPUT] = command;
             }
+        } 
+        else if (controlStateHandle->getMode() == KEYBOARD_MODE)
+        {
+            //keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
+
+            point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
+            unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
+            if (magnitude > 20)
+            {
+                // TODO this needs to be changed!
+                // myoAngle.ringThreshReached = asdfasdf; // TODO
+            }
+            int myoAngleDegree = 180 - atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2
+            
+            keyboardAngle myoAngle;
+            myoAngle.angle = myoAngleDegree;
+            myoAngle.ringThreshReached = true; // TODO
+
+            outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
         }
-    }
-    else if (controlStateHandle->getMode() == KEYBOARD_MODE)
-    {
-        filterDataMap outputToSharedCommandData;
-        keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
-        outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
-        Filter::setOutput(outputToSharedCommandData);
     }
     else
     {
