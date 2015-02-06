@@ -125,14 +125,8 @@
     <ClCompile Include="DraggableWidget.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="SequenceImageManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SCDDigester.cpp">
       <Filter>Source Files\Midas</Filter>
-    </ClCompile>
-    <ClCompile Include="GestureSignaller.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GeneratedFiles\Debug\moc_GestureSignaller.cpp">
       <Filter>Generated Files\Debug</Filter>
@@ -158,6 +152,21 @@
     <ClCompile Include="MainGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GestureSignaller.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="SequenceImageManager.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="PoseDisplayer.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PoseDisplayer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PoseDisplayer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -172,13 +181,16 @@
     <CustomBuild Include="DraggableWidget.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
-    <CustomBuild Include="GestureSignaller.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="InfoIndicator.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="MainGUI.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GestureSignaller.h">
+      <Filter>Header Files\Midas</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PoseDisplayer.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -228,10 +240,10 @@
     <ClInclude Include="MidasMain.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
-    <ClInclude Include="SequenceImageManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SCDDigester.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SequenceImageManager.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>

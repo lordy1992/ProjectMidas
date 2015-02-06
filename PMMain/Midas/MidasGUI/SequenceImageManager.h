@@ -16,6 +16,8 @@
 #define WAVE_IN_NEXT_PATH         "Resources\\Post200PxImgs\\waveIn.jpg"
 #define WAVE_OUT_LATER_PATH       "Resources\\BW200PxImgs\\waveOut.jpg"
 #define WAVE_OUT_NEXT_PATH        "Resources\\Post200PxImgs\\waveOut.jpg"
+#define NO_HAND_LATER_PATH           "Resources\\Post200PxImgs\\noHand.jpg"
+#define NO_HAND_NEXT_PATH            "Resources\\Post200PxImgs\\noHand.jpg"
 
 class SequenceImageManager
 {

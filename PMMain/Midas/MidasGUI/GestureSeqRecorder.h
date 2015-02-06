@@ -60,7 +60,7 @@ public:
     /**
     * Constructors/Destructor
     */
-    GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle);
+    GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager);
     ~GestureSeqRecorder();
 
     /**
