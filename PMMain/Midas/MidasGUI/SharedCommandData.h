@@ -132,13 +132,13 @@ public:
     bool tryGetMyoOrientation(orientation_data& outMyoOrientation);
 
 
-    void setKeySelectAngle(int angle);
-    bool trySetKeySelectAngle(int angle);
-    int getKeySelectAngle();
-    bool tryGetKeySelectAngle(int& outKeySelectAngle);
+    void setKeySelectAngle(keyboardAngle angle);
+    bool trySetKeySelectAngle(keyboardAngle angle);
+    keyboardAngle getKeySelectAngle();
+    bool tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle);
 
 
-    int keySelectAngle;
+    keyboardAngle keySelectAngle;
     void setKybdGuiSel(unsigned int kybdGuiSel);
     bool trySetKybdGuiSel(unsigned int kybdGuiSel);
     unsigned int getKybdGuiSel();
@@ -192,7 +192,7 @@ private:
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
     void extractOrientation(boost::any value);
-    void extractKeySelectAngle(int angle);
+    void extractKeySelectAngle(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

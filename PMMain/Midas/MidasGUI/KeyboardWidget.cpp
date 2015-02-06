@@ -29,6 +29,7 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
     //outerSelected = true;
  
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
+    connect(mainThread, SIGNAL(emitKeyboardData(int, double)), this, SLOT(handleKeyboardData(int, double)));
 }
 
 void KeyboardWidget::addWheel(ringData wheel)
@@ -50,6 +51,15 @@ void KeyboardWidget::clearWheels()
 }
 
 void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool center, bool held)
+{
+    selectedWheel = wheelNumber / 2;
+    outerSelected = (wheelNumber % 2 == 0);
+    selectedKey = getSelectedKeyFromAngle(currAngle);
+
+    update();
+}
+
+void KeyboardWidget::handleKeyboardData(int wheelNumber, double currAngle)
 {
     selectedWheel = wheelNumber / 2;
     outerSelected = (wheelNumber % 2 == 0);

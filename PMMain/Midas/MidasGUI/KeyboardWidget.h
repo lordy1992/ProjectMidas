@@ -22,6 +22,7 @@ public:
 
 public slots:
     void updateKeyboard(int, double, bool, bool);
+    void handleKeyboardData(int, double);
 
 protected:
     /**

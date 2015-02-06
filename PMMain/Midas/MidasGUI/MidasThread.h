@@ -28,6 +28,8 @@ signals:
     void emitVeloc(int, int);
 
     void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
+
+    void emitKeyboardData(int, double);
     
 };
 

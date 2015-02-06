@@ -21,7 +21,7 @@ SCDDigester::~SCDDigester()
 
 void SCDDigester::digest()
 {
-    threadHandle->emitUpdateKeyboard(1, 210, false, false);
+    threadHandle->emitUpdateKeyboard(1, 210, false, false); // TODO TEMP
 
     commandData nextCmd;
     
@@ -69,6 +69,10 @@ void SCDDigester::digest()
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
+        unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
+        keyboardAngle currAngle = scdHandle->getKeySelectAngle();
+        threadHandle->emitKeyboardData(kybdGUISel, currAngle.angle);
+
         digestKeyboardData(nextCmd);
     }
 
@@ -77,7 +81,8 @@ void SCDDigester::digest()
 
 void SCDDigester::digestKeyboardData(commandData nextCommand)
 {
-    int currAngle, ringSegmentAngle, ringKeySelIdx;
+    keyboardAngle currAngle;
+    int ringSegmentAngle, ringKeySelIdx;
     char key;
     if (nextCommand.type == KYBRD_CMD)
     {
@@ -119,7 +124,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
         case kybdGUICmds::SELECT:
             currAngle = scdHandle->getKeySelectAngle();
             ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
-            ringKeySelIdx = floor(currAngle / ringSegmentAngle);
+            ringKeySelIdx = floor(currAngle.angle / ringSegmentAngle);
 
             key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).main;
 
@@ -143,7 +148,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             */
             currAngle = scdHandle->getKeySelectAngle();
             ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
-            ringKeySelIdx = floor(currAngle / ringSegmentAngle);
+            ringKeySelIdx = floor(currAngle.angle / ringSegmentAngle);
 
             key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).hold;
 

@@ -70,10 +70,9 @@ void MyoTranslationFilter::process()
     else if (controlStateHandle->getMode() == KEYBOARD_MODE)
     {
         filterDataMap outputToSharedCommandData;
-        int mouseOrientationForKeyboard = keySelectAngle(orientation_data(roll, pitch, yaw));
-        outputToSharedCommandData[ORIENTATION_INPUT] = mouseOrientationForKeyboard;
+        keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
+        outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
         Filter::setOutput(outputToSharedCommandData);
-
     }
     else
     {
@@ -168,12 +167,15 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
     return delta;
 }
 
-int MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
+keyboardAngle MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
 {
+    keyboardAngle retVal;
     float angle, x, y;
     x = cos(orientation.yaw)*cos(orientation.pitch);
     y = sin(orientation.yaw)*cos(orientation.pitch);
-    angle = tan(x / y);
+    retVal.angle = tan(x / y);
 
-    return int(angle);
+    retVal.ringThreshReached = true; // TODO - force this to actually care about absolute value of pitch/yaw
+
+    return retVal;
 }
