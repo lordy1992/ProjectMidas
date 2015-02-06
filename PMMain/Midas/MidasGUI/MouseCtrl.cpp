@@ -32,75 +32,41 @@ void MouseCtrl::setScrollRate(int rate)
 
 void MouseCtrl::setMinMoveXTimeDelta(unsigned int rate)
 {
-//    int range = 100 - MOVE_RATE_DEADZONE; // available rate delta to deduce velocity from
-//
-//    int numPossibleDeltas = MAX_MOVE_TIME_DELTA - MIN_MOVE_TIME_DELTA + 1;
-//    double speedUpFactor[MAX_MOVE_TIME_DELTA - MIN_MOVE_TIME_DELTA + 1];
-//
-//    for (int i = 0; i < numPossibleDeltas; i++)
-//    {
-//        // For example this array is being populated with the series 2/1, 3/2, 4/3, 5/4, ... Which indicates the TRUE factor 
-//        // of speedup that each increment incurs. Thus using this data, velocity can be linearized.
-//        speedUpFactor[i] = ((double)(i + MIN_MOVE_TIME_DELTA + 1) / (i + MIN_MOVE_TIME_DELTA)) - 1;
-//    }
-//
-//    minMoveXTimeDelta = MAX_MOVE_TIME_DELTA; // default
-//    double angleThresh = 1.0;// (double)MOVE_RATE_DEADZONE;
-//    for (int i = 0; i < numPossibleDeltas; i++)
-//    {
-//        //if (rate <= angleThresh)
-//        //{
-//        //    minMoveXTimeDelta = max(MAX_MOVE_TIME_DELTA - i, MIN_MOVE_TIME_DELTA); // just incase, ensure that the Min Move Time Delta isn't passed.
-//        //    break;
-//        //}
-//        //
-//        //angleThresh *= speedUpFactor[numPossibleDeltas - 1 - i];
-//
-//        if (rate <= MOVE_RATE_DEADZONE + (range * speedUpFactor[numPossibleDeltas - 1 - i] - 1))
-//        {
-//            minMoveYTimeDelta = max(MAX_MOVE_TIME_DELTA - i, MIN_MOVE_TIME_DELTA); // just incase, ensure that the Min Move Time Delta isn't passed.
-//            break;
-//        }
-//    }
-
-    minMoveXTimeDelta = max(MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA), MIN_MOVE_TIME_DELTA);
+    minMoveXTimeDelta = convertRateToDelta(rate);
 }
 
 void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
 {
-//    int range = 100 - MOVE_RATE_DEADZONE; // available rate delta to deduce velocity from
-//
-//    int numPossibleDeltas = MAX_MOVE_TIME_DELTA - MIN_MOVE_TIME_DELTA + 1;
-//    double speedUpFactor[MAX_MOVE_TIME_DELTA - MIN_MOVE_TIME_DELTA + 1];
-//
-//    for (int i = 0; i < numPossibleDeltas; i++)
-//    {
-//        // For example this array is being populated with the series 2/1, 3/2, 4/3, 5/4, ... Which indicates the TRUE factor 
-//        // of speedup that each increment incurs. Thus using this data, velocity can be linearized.
-//        speedUpFactor[i] = ((double)(i + MIN_MOVE_TIME_DELTA + 1) / (i + MIN_MOVE_TIME_DELTA)) - 1;
-//    }
-//
-//    minMoveYTimeDelta = MAX_MOVE_TIME_DELTA; // default
-//    double angleThresh = 1.0;// (double)MOVE_RATE_DEADZONE;
-//    for (int i = 0; i < numPossibleDeltas; i++)
-//    {
-//        //if (rate <= angleThresh)
-//        //{
-//        //    minMoveYTimeDelta = max(MAX_MOVE_TIME_DELTA - i, MIN_MOVE_TIME_DELTA); // just incase, ensure that the Min Move Time Delta isn't passed.
-//        //    break;
-//        //}
-//        //
-//        //angleThresh *= speedUpFactor[numPossibleDeltas - 1 - i];
-//
-//        if (rate <= MOVE_RATE_DEADZONE + (range * speedUpFactor[numPossibleDeltas - 1 - i] - 1))
-//        {
-//            minMoveYTimeDelta = max(MAX_MOVE_TIME_DELTA - i, MIN_MOVE_TIME_DELTA); // just incase, ensure that the Min Move Time Delta isn't passed.
-//            break;
-//        }
-//    }
+    
+    minMoveYTimeDelta = convertRateToDelta(rate);
+}
 
+unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
+{
+    if (rate < MOVE_RATE_DEADZONE)
+    {
+        return MAXUINT;
+    }
+    else if (rate < MOVE_RATE_DEADZONE + MOVE_RATE_SLOWZONE)
+    {
+        return MAX_MOVE_TIME_DELTA;
+    }
 
-    minMoveYTimeDelta = max(MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA), MIN_MOVE_TIME_DELTA);
+    float ratePercent = min(1.0, max(((rate - MOVE_RATE_DEADZONE - MOVE_RATE_SLOWZONE) / (100.0 - MOVE_RATE_DEADZONE - MOVE_RATE_SLOWZONE)), 0));
+
+    // calc min/max velocity in pixels/ms
+    float maxVeloc = NUM_PIXEL_MOVE / (float)MIN_MOVE_TIME_DELTA;
+    float minVeloc = NUM_PIXEL_MOVE / (float)MAX_MOVE_TIME_DELTA;
+    float deltaVeloc = maxVeloc - minVeloc;
+
+    float currVeloc = (deltaVeloc * ratePercent) + minVeloc;
+    if (currVeloc <= 0.0)
+    {
+        // should not happen
+        return MAXUINT;
+    }
+
+    return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
 void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)

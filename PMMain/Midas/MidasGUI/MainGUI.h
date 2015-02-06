@@ -6,6 +6,7 @@
 #include "SequenceDisplayer.h"
 #include "InfoIndicator.h"
 #include "GestureSignaller.h"
+#include "PoseDisplayer.h"
 
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
@@ -29,12 +30,14 @@ public:
 
     void connectSignallerToInfoIndicator(GestureSignaller *signaller);
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
+    void connectSignallerToPoseDisplayer(GestureSignaller *signaller);
 
 private:
     QVBoxLayout *layout;
     MouseIndicator *mouseIndicator;
     InfoIndicator *infoIndicator;
     SequenceDisplayer *sequenceDisplayer;
+    PoseDisplayer *poseDisplayer;
 };
 
 #endif

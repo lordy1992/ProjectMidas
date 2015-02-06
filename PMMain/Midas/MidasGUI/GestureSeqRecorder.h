@@ -16,9 +16,6 @@
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
-#endif
-
-#ifdef USE_SIMULATOR
 using namespace myoSim;
 #else
 using namespace myo;
@@ -63,7 +60,7 @@ public:
     /**
     * Constructors/Destructor
     */
-    GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle);
+    GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager);
     ~GestureSeqRecorder();
 
     /**

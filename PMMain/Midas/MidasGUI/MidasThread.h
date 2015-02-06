@@ -3,10 +3,6 @@
 
 #include <QThread>
 #include <string>
-#include <vector>
-#include <fstream>
-#include <iostream>
-#include "RingData.h"
 #include "MyoCommon.h"
 
 class MainGUI;

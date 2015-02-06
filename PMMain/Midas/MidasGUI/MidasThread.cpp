@@ -3,7 +3,7 @@
 #include "MainGUI.h"
 #include <qdebug.h>
 #include <Windows.h>
-#include "RingData.h"
+
 
 MidasThread::MidasThread()
 {

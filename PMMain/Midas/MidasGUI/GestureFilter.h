@@ -58,7 +58,7 @@ public:
     /**
     * return actual handle to gestSeqRecorder
     */
-    GestureSeqRecorder *getGestureSeqRecorder() { return &gestSeqRecorder; }
+    GestureSeqRecorder *getGestureSeqRecorder() { return gestSeqRecorder; }
 
     static void handleStateChange(commandData response);
 
@@ -78,16 +78,20 @@ private:
     void handleMouseCommand(commandData response);
     void handleKybrdCommand(commandData response);
 
+    void emitPoseData(int poseInt);
+
     Pose::Type lastPoseType;
     
     static ControlState* controlStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
 
-    GestureSeqRecorder gestSeqRecorder;
+    GestureSeqRecorder* gestSeqRecorder;
 
     MainGUI *mainGui;
     static GestureSignaller signaller;
+
+    SequenceImageManager imageManager;
 };
 
 void setupCallbackThread(GestureFilter *gf);

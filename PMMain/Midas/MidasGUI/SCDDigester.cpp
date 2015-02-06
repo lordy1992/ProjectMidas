@@ -110,19 +110,19 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
 
         case kybdGUICmds::SELECT:
-
+            /*
             keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
 
-            if (kybdGUISel % 4 == 0)
+            if (need to add correct select logic)
             {
                 kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).main);
             }
             else
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).hold);
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).main);
             }
             kybrdCtrl->sendData();
-
+            */
             /* Todo, pseudocode written 
             1) pass this character to the keyboard as such
                 kybrdCtrl->setKeyChar(charThatWasDetermined);
@@ -136,17 +136,19 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             EXACT same thing as select except that the HOLD character is used, rather than the regular character.
             // in the discusion of RingData, this would correspond to the "*Hold vectors"
             */
+            /*
             keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
-
-            if (kybdGUISel % 4 == 0)
+            
+            if ( need to add correct select logic)
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).main);
+                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).hold);
             }
             else
             {
                 kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).hold);
             }
             kybrdCtrl->sendData();
+            */
             break;
         default:
             break;

@@ -1,45 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="AveragingFilter.cpp" />
-    <ClCompile Include="ControlState.cpp" />
-    <ClCompile Include="DraggableWidget.cpp" />
-    <ClCompile Include="Filter.cpp" />
-    <ClCompile Include="FilterPipeline.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_DraggableWidget.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_GestureSignaller.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_InfoIndicator.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_midasgui.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_MidasThread.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_MouseIndicator.cpp" />
-    <ClCompile Include="GeneratedFiles\Debug\moc_SequenceDisplayer.cpp" />
-    <ClCompile Include="GeneratedFiles\qrc_midasgui.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_DraggableWidget.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_GestureSignaller.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_InfoIndicator.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_midasgui.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_MidasThread.cpp" />
-    <ClCompile Include="GeneratedFiles\Release\moc_SequenceDisplayer.cpp" />
-    <ClCompile Include="GestureFilter.cpp" />
-    <ClCompile Include="GestureSeqRecorder.cpp" />
-    <ClCompile Include="GestureSignaller.cpp" />
-    <ClCompile Include="InfoIndicator.cpp" />
-    <ClCompile Include="kybrdCtrl.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="midasgui.cpp" />
-    <ClCompile Include="MidasMain.cpp" />
-    <ClCompile Include="MidasThread.cpp" />
-    <ClCompile Include="MouseCtrl.cpp" />
-    <ClCompile Include="MouseIndicator.cpp" />
-    <ClCompile Include="MyoCommon.cpp" />
-    <ClCompile Include="MyoDevice.cpp" />
-    <ClCompile Include="MyoTranslationFilter.cpp" />
-    <ClCompile Include="SequenceDisplayer.cpp" />
-    <ClCompile Include="SequenceImageManager.cpp" />
-    <ClCompile Include="SCDDigester.cpp" />
-    <ClCompile Include="SharedCommandData.cpp" />
-    <ClCompile Include="WearableDevice.cpp" />
-    <ClCompile Include="KeyboardSettingsReader.cpp">
     <Filter Include="Source Files">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;cxx;c;def</Extensions>
@@ -164,34 +125,9 @@
     <ClCompile Include="DraggableWidget.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
-    <ClCompile Include="SequenceImageManager.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="SCDDigester.cpp">
+      <Filter>Source Files\Midas</Filter>
     </ClCompile>
-    <ClCompile Include="RingData.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="AveragingFilter.h" />
-    <ClInclude Include="ControlState.h" />
-    <ClInclude Include="Filter.h" />
-    <ClInclude Include="FilterPipeline.h" />
-    <ClInclude Include="GeneratedFiles\ui_midasgui.h" />
-    <ClInclude Include="GestureFilter.h" />
-    <ClInclude Include="GestureSeqRecorder.h" />
-    <ClInclude Include="kybrdCtrl.h" />
-    <ClInclude Include="MidasCommon.h" />
-    <ClInclude Include="MidasMain.h" />
-    <ClInclude Include="MouseCtrl.h" />
-    <ClInclude Include="MyoCommon.h" />
-    <ClInclude Include="MyoDevice.h" />
-    <ClInclude Include="MyoTranslationFilter.h" />
-    <ClInclude Include="SequenceImageManager.h" />
-    <ClInclude Include="SCDDigester.h" />
-    <ClInclude Include="SharedCommandData.h" />
-    <ClInclude Include="WearableDevice.h" />
-    <ClInclude Include="KeyboardSettingsReader.h">
-      <Filter>Header Files</Filter>
     <ClCompile Include="GeneratedFiles\Debug\moc_GestureSignaller.cpp">
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
@@ -216,6 +152,27 @@
     <ClCompile Include="MainGUI.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GestureSignaller.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="SequenceImageManager.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="PoseDisplayer.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_PoseDisplayer.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_PoseDisplayer.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="RingData.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardSettingsReader.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -230,13 +187,16 @@
     <CustomBuild Include="DraggableWidget.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
-    <CustomBuild Include="GestureSignaller.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="InfoIndicator.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="MainGUI.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="GestureSignaller.h">
+      <Filter>Header Files\Midas</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PoseDisplayer.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -265,37 +225,44 @@
     <ClInclude Include="MidasCommon.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
-    <ClInclude Include="RingData.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="MouseCtrl.h">
+      <Filter>Header Files\Midas</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <CustomBuild Include="midasgui.h" />
-    <CustomBuild Include="midasgui.ui" />
-    <CustomBuild Include="DraggableWidget.h" />
-    <CustomBuild Include="GestureSignaller.h" />
-    <CustomBuild Include="InfoIndicator.h" />
-    <CustomBuild Include="MouseIndicator.h" />
-    <CustomBuild Include="SequenceDisplayer.h" />
-    <CustomBuild Include="MidasThread.h" />
-    <CustomBuild Include="midasgui.qrc" />
+    <ClInclude Include="MyoCommon.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoDevice.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoTranslationFilter.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SharedCommandData.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="WearableDevice.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="MidasMain.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SCDDigester.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="SequenceImageManager.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyboardSettingsReader.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="RingData.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MidasGUI.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="keyboardData.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;cxx;c;def</Extensions>
-      <ParseFiles>true</ParseFiles>
-    </Filter>
   </ItemGroup>
 </Project>

@@ -6,9 +6,6 @@
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
-#endif
-
-#ifdef USE_SIMULATOR
 using namespace myoSim;
 #else
 using namespace myo;
@@ -55,6 +52,8 @@ void SequenceImageManager::loadImages()
     QImage waveInNext(QString(WAVE_IN_NEXT_PATH));
     QImage waveOutLater(QString(WAVE_OUT_LATER_PATH));
     QImage waveOutNext(QString(WAVE_OUT_NEXT_PATH));
+    QImage noHandLater(QString(NO_HAND_LATER_PATH));
+    QImage noHandNext(QString(NO_HAND_NEXT_PATH));
     
     sequenceImageSet fingerSpread;
     fingerSpread.actionTag = Pose::fingersSpread;
@@ -85,5 +84,11 @@ void SequenceImageManager::loadImages()
     waveOut.nextImage = QPixmap::fromImage(waveOutNext);
     waveOut.laterImage = QPixmap::fromImage(waveOutLater);
     idToImageMap[waveOut.actionTag] = waveOut;
+
+    sequenceImageSet rest;
+    rest.actionTag = Pose::rest;
+    rest.nextImage = QPixmap::fromImage(noHandNext);
+    rest.laterImage = QPixmap::fromImage(noHandLater);
+    idToImageMap[rest.actionTag] = rest;
 
 }

@@ -3,10 +3,10 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle)
+GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()),
     holdGestTimer(REQ_HOLD_TIME), mainGui(mainGuiHandle),
-    controlStateHandle(controlStateHandle), prevPose(Pose::rest)
+    controlStateHandle(controlStateHandle), prevPose(Pose::rest), imageManager(imageManager)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -123,7 +123,7 @@ void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
     }
 
     // Provide response if hold is reached and cut off 'taps' if hold is reached
-    if (holdGestTimer > 0 && holdGestTimer - delta <= 0)
+    if (holdGestTimer > 0 && holdGestTimer - delta <= 0 && activeSequences.size() > 0)
     {
         // This call to progressSequenceTime indicates a 'hold'.
         // Update activeSequences now.
@@ -475,7 +475,6 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
 
             holdGestTimer = REQ_HOLD_TIME; // set count on any progression
         }
-        
     }
 
     seqList = NULL;
@@ -511,7 +510,7 @@ void GestureSeqRecorder::updateGuiSequences()
             }
         }
     }
-    else
+    else if (activeSequences.size() > 0)
     {
         // Add only the active sequences
         std::list<sequenceInfo*>::iterator it;
@@ -575,7 +574,5 @@ void GestureSeqRecorder::printStatus(bool verbose)
 
 void GestureSeqRecorder::connectGuiSignals()
 {
-    imageManager.loadImages();
-
     mainGui->connectSignallerToSequenceDisplayer(&signaller);
 }

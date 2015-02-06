@@ -82,7 +82,6 @@ private:
     */
     void setMirroredUpKeys();  
 
-   
     KEYBDINPUT ki;
     std::vector<KEYBDINPUT> kiVec;
     bool kiWillReleaseKeys;
