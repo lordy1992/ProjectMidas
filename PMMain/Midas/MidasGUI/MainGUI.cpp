@@ -14,25 +14,22 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     infoIndicator = new InfoIndicator(INFO_INDICATOR_WIDTH, 
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
-    poseDisplayer = new PoseDisplayer(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE, this);
+    poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
 
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
 
     layout = new QVBoxLayout;
-    QGridLayout *gridLayout = new QGridLayout;
+    QHBoxLayout *boxLayout = new QHBoxLayout;
+    boxLayout->setSpacing(INFO_INDICATOR_WIDTH - MOUSE_INDICATOR_SIZE*2);
 
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
 
-    gridLayout->addWidget(poseDisplayer, 0, 0, Qt::AlignRight);
-    gridLayout->addWidget(mouseIndicator, 0, 1, Qt::AlignRight);
-    layout->addLayout(gridLayout);
-    //layout->addWidget(mouseIndicator);
-    //layout->addWidget(poseDisplayer);
+    boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
+    boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
+    layout->addLayout(boxLayout);
 
-    //layout->setAlignment(mouseIndicator, Qt::AlignRight);
-    //layout->setAlignment(poseDisplayer, Qt::AlignLeft);
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
     
@@ -80,6 +77,6 @@ void MainGUI::connectSignallerToSequenceDisplayer(GestureSignaller *signaller)
 
 void MainGUI::connectSignallerToPoseDisplayer(GestureSignaller *signaller)
 {
-    QObject::connect(signaller, SIGNAL(emitPoseEnum(QString)),
-        poseDisplayer, SLOT(handlePoseEnum(QString)));
+    QObject::connect(signaller, SIGNAL(emitPoseImages(std::vector<sequenceImageSet>)),
+        poseDisplayer, SLOT(handlePoseImages(std::vector<sequenceImageSet>)));
 }

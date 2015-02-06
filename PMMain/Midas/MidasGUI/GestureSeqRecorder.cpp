@@ -3,10 +3,10 @@
 
 unsigned int sequenceInfo::counter = 0;
 
-GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle)
+GestureSeqRecorder::GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager)
     : prevState(midasMode::LOCK_MODE), progressMaxDeltaTime(DEFAULT_PROG_MAX_DELTA), progressBaseTime(clock()),
     holdGestTimer(REQ_HOLD_TIME), mainGui(mainGuiHandle),
-    controlStateHandle(controlStateHandle), prevPose(Pose::rest)
+    controlStateHandle(controlStateHandle), prevPose(Pose::rest), imageManager(imageManager)
 {
     seqMapPerMode = new sequenceMapPerMode();
 
@@ -574,7 +574,5 @@ void GestureSeqRecorder::printStatus(bool verbose)
 
 void GestureSeqRecorder::connectGuiSignals()
 {
-    imageManager.loadImages();
-
     mainGui->connectSignallerToSequenceDisplayer(&signaller);
 }

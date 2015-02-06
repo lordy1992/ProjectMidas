@@ -32,7 +32,7 @@ signals:
 
     void emitStateString(QString);
 
-    void emitPoseEnum(QString);
+    void emitPoseImages(std::vector<sequenceImageSet>);
 
 private:
     static bool showAll;

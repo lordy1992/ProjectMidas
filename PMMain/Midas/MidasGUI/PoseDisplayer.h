@@ -7,7 +7,7 @@
 #include <QGridLayout.h>
 #include <qpushbutton.h>
 
-Q_DECLARE_METATYPE(Pose)
+// Q_DECLARE_METATYPE(sequenceImageSet) // TODO - this would be better than std::vector<sequenceImageSet>, but is not working immediately
 
 class PoseDisplayer : public QWidget
 {
@@ -23,15 +23,17 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
+    void initPoseImgMap();
+
     QPoint position;
     int indWidth, indHeight;
     QGridLayout *layout;
 
     QPixmap posePix;
-    QLabel *tempLabel;
+    QLabel *poseImgLabel;
 
 public slots:
-    void handlePoseEnum(QString poseEnum);
+void handlePoseImages(std::vector<sequenceImageSet> poseImages);
 };
 
 #endif POSE_DISPLAYER_H

@@ -35,10 +35,20 @@ PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
     setLayout(layout);
 
     QFont timesFont("Times", 9, QFont::Bold);
-    tempLabel = new QLabel(tr("%1").arg("temp")); // todo TEMP!
-    tempLabel->setFont(timesFont);
-    layout->addWidget(tempLabel, 0, 0);
-    layout->setAlignment(tempLabel, Qt::AlignCenter);
+    poseImgLabel = new QLabel(tr("%1").arg("temp")); // todo TEMP!
+    poseImgLabel->setFont(timesFont);
+
+    poseImgLabel->setFrameShape(QFrame::Box);
+    poseImgLabel->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    poseImgLabel->setBackgroundRole(QPalette::Base);
+    poseImgLabel->setAlignment(Qt::AlignCenter);
+    poseImgLabel->setAutoFillBackground(true);
+    //label->setFixedSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    poseImgLabel->setScaledContents(true);
+
+
+    layout->addWidget(poseImgLabel, 0, 0);
+    layout->setAlignment(poseImgLabel, Qt::AlignCenter);
     
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
     setMinimumSize(indWidth, indHeight);
@@ -46,7 +56,7 @@ PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
 
 PoseDisplayer::~PoseDisplayer()
 {
-    delete this->tempLabel;
+    delete this->poseImgLabel;
 }
 
 void PoseDisplayer::resizeEvent(QResizeEvent *event)
@@ -60,7 +70,16 @@ QSize PoseDisplayer::sizeHint() const
     return QSize(indWidth, indHeight);
 }
 
-void PoseDisplayer::handlePoseEnum(QString poseEnum)
+void PoseDisplayer::handlePoseImages(std::vector<sequenceImageSet> poseImages)
 {
-    tempLabel->setText(poseEnum);
+    //poseImgLabel->setText(poseEnum); // todo remove
+    if (poseImages.size() == 1)
+    {
+        poseImgLabel->setPixmap(poseImages[0].nextImage);
+    }
+}
+
+void PoseDisplayer::initPoseImgMap()
+{
+    //poseImgMap[Pose::rest] = // likely un-needed!
 }
