@@ -71,7 +71,10 @@ void SCDDigester::digest()
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
         keyboardAngle currAngle = scdHandle->getKeySelectAngle();
-        threadHandle->emitKeyboardData(kybdGUISel, currAngle.angle);
+        if (count % 1000 == 0)
+        {
+            threadHandle->emitKeyboardData(kybdGUISel, currAngle.angle);
+        }
 
         digestKeyboardData(nextCmd);
     }
