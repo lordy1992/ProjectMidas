@@ -6,24 +6,6 @@
 #define KEYBOARD_RADIUS 200
 #define RING_WIDTH 50
 
-// TODO: Replace these with actual back-end data type.
-struct keyData
-{
-    keyData(char main_, char hold_)
-    {
-        main = main_;
-        hold = hold_;
-    }
-
-    char main, hold;
-};
-
-struct wheelData
-{
-    std::vector<keyData> innerRing;
-    std::vector<keyData> outerRing;
-};
-
 class KeyboardWidget : public DraggableWidget
 {
     Q_OBJECT
@@ -32,9 +14,12 @@ public:
     KeyboardWidget(int radius = KEYBOARD_RADIUS, int ringWidth = RING_WIDTH, QWidget *parent = 0);
     QSize sizeHint() const;
 
-    // TODO: Add slots for the operations.
-    void addWheel(wheelData wheel);
+    // TODO: Add slots for thes operations.
+    void addWheel(ringData wheel);
     void clearWheels();
+
+public slots:
+    void updateKeyboard(int, double, bool, bool);
 
 protected:
     /**
@@ -52,12 +37,13 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad, bool isSelected);
+    int getSelectedKeyFromAngle(double angle);
+    void drawRing(QPainter &painter, std::vector<keyboardValue> *ring, int ringInnerRad, bool isSelected);
     void drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle,
-        QRectF& outerRect, QRectF& innerRect, keyData keyDat, QColor& lineColour, int distBetween);
+        QRectF& outerRect, QRectF& innerRect, keyboardValue keyDat, QColor& lineColour, int distBetween);
 
     QPoint position, cursorPos;
-    std::vector<wheelData> wheels;
+    std::vector<ringData> wheels;
     int keyboardRadius, ringWidth;
     int selectedWheel;
     int selectedKey;
