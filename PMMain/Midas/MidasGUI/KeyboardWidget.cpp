@@ -9,7 +9,8 @@ KeyboardWidget::KeyboardWidget(int radius, int ringWidth, QWidget *parent)
     : DraggableWidget(parent), keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
     selectedKey(-1)
 {
-    setWindowOpacity(0.75);
+   // setWindowOpacity(0.75);
+    setWindowOpacity(0.8);
     QPalette pal;
     pal.setColor(QPalette::Background, QColor(205, 205, 193));
     setAutoFillBackground(true);
@@ -71,7 +72,7 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
 
     int penWidth = 5;
 
-    QColor keyboardBorderColour(139, 139, 131);
+    QColor keyboardBorderColour(0, 0, 100);
     QBrush brush(keyboardBorderColour);
     QPen pen(brush, penWidth);
     painter.setPen(pen);
@@ -84,9 +85,9 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
     int outerRingBorderDiam = outerRingBorderRadius * 2;
     int innerRingBorderRadius = outerRingBorderRadius - ringWidth;
     int innerRingBorderDiam = innerRingBorderRadius * 2;
-   // painter.drawEllipse(-keyboardBorderRad, -keyboardBorderRad, keyboardDiam, keyboardDiam);
-   // painter.drawEllipse(-outerRingBorderRadius, -outerRingBorderRadius, outerRingBorderDiam, outerRingBorderDiam);
-   // painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+    //painter.drawEllipse(-keyboardBorderRad, -keyboardBorderRad, keyboardDiam, keyboardDiam);
+    //painter.drawEllipse(-outerRingBorderRadius, -outerRingBorderRadius, outerRingBorderDiam, outerRingBorderDiam);
+    //painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
 
     // Draw the key squares.
     if (selectedWheel >= 0)
@@ -97,8 +98,8 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
         int deltaAngleInner = 360 / innerRing.size();
         int deltaAngleOuter = 360 / outerRing.size();
 
-        drawRing(painter, outerRing, outerRingBorderRadius);
-        drawRing(painter, innerRing, innerRingBorderRadius);
+        drawRing(painter, outerRing, outerRingBorderRadius - 2);
+        drawRing(painter, innerRing, innerRingBorderRadius - 2);
     }
 }
 
@@ -108,79 +109,81 @@ void KeyboardWidget::drawRing(QPainter &painter, std::vector<keyData> ring, int 
     qreal startAngle = 90.0 + deltaAngle / 2;
     std::vector<keyData>::iterator it;
 
-    QColor lineColour(0, 0, 0);
-    QColor fillColour(139, 139, 131);
+    int ringOuterRad = ringInnerRad + ringWidth;
+    QRectF outerRect(-ringOuterRad, -ringOuterRad, ringOuterRad * 2, ringOuterRad * 2);
+    QRectF innerRect(-ringInnerRad, -ringInnerRad, ringInnerRad * 2, ringInnerRad * 2);
+    int currentKey = 0;
+    for (it = ring.begin(); it != ring.end(); it++)
+    {
+        drawKey(painter, ringInnerRad, startAngle, deltaAngle, outerRect, innerRect, *it);
+        startAngle -= deltaAngle;
+        currentKey++;
+    }
+}
+
+void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle, 
+    QRectF& outerRect, QRectF& innerRect, keyData keyDat)
+{
+    QColor lineColour(0, 0, 100);
+    QColor lineColourSelected(200, 0, 0);
+    QColor fillColour(160, 182, 215);
     QBrush borderBrush(lineColour);
     QPen pen(borderBrush, 5);
     QBrush fillBrush(fillColour);
     QColor textCol(0, 0, 0);
     QPen textPen(textCol);
 
-    // Testing
-    int ringOuterRad = ringInnerRad + ringWidth;
-    QRectF outerRect(-ringOuterRad, -ringOuterRad, ringOuterRad * 2, ringOuterRad * 2);
-    QRectF innerRect(-ringInnerRad, -ringInnerRad, ringInnerRad * 2, ringInnerRad * 2);
-    for (it = ring.begin(); it != ring.end(); it++)
-    {
-        QPainterPath path;
-        qreal startX = (ringInnerRad + ringWidth) * cos(startAngle * (M_PI / 180.0));
-        qreal startY = -1 * (ringInnerRad + ringWidth) * sin(startAngle * (M_PI / 180.0));
-        qreal acrossX = ringInnerRad * cos((startAngle - deltaAngle) * (M_PI / 180.0));
-        qreal acrossY = -1 * ringInnerRad * sin((startAngle - deltaAngle) * (M_PI / 180.0));
+    QPainterPath path;
+    qreal startX = (ringInnerRad + ringWidth) * cos(currAngle * (M_PI / 180.0));
+    qreal startY = -1 * (ringInnerRad + ringWidth) * sin(currAngle * (M_PI / 180.0));
+    qreal acrossX = ringInnerRad * cos((currAngle - deltaAngle) * (M_PI / 180.0));
+    qreal acrossY = -1 * ringInnerRad * sin((currAngle - deltaAngle) * (M_PI / 180.0));
 
-        qreal textPointX = (ringInnerRad + ringWidth / 2) * cos((startAngle - deltaAngle / 2) * (M_PI / 180.0));
-        qreal textPointY = -1 * (ringInnerRad + ringWidth / 2) * sin((startAngle - deltaAngle / 2) * (M_PI / 180.0));
+    qreal textPointX = (ringInnerRad + ringWidth / 2) * cos((currAngle - deltaAngle / 2) * (M_PI / 180.0));
+    qreal textPointY = -1 * (ringInnerRad + ringWidth / 2) * sin((currAngle - deltaAngle / 2) * (M_PI / 180.0));
 
-        path.moveTo(startX, startY);
-        path.arcTo(outerRect, startAngle, -deltaAngle);
-        path.lineTo(acrossX, acrossY);
-        path.arcTo(innerRect, startAngle - deltaAngle, deltaAngle);
-        path.lineTo(startX, startY);
+    path.moveTo(startX, startY);
+    path.arcTo(outerRect, currAngle, -deltaAngle);
+    path.lineTo(acrossX, acrossY);
+    path.arcTo(innerRect, currAngle - deltaAngle, deltaAngle);
+    path.lineTo(startX, startY);
 
-        painter.setPen(pen);
-        painter.setBrush(fillBrush);
-        painter.drawPath(path);
+    painter.setPen(pen);
+    painter.setBrush(fillBrush);
+    painter.drawPath(path);
 
-        QFont holdFont("Times", 9, QFont::Normal);
-        QFont timesFont("Times", 16, QFont::DemiBold);
-        painter.setFont(timesFont);
-        painter.setPen(textPen);
+    QFont holdFont("Times", 9, QFont::Normal);
+    QFont timesFont("Times", 16, QFont::DemiBold);
+    painter.setFont(timesFont);
+    painter.setPen(textPen);
 
-        QFontMetrics fontMetrics = painter.fontMetrics();
-        QString mainText = QString(it->main);
-        QString holdText = QString(it->hold);
+    QFontMetrics fontMetrics = painter.fontMetrics();
+    QString mainText = QString(keyDat.main);
+    QString holdText = QString(keyDat.hold);
 
-        int mainTextWidth = fontMetrics.width(mainText);
+    int mainTextWidth = fontMetrics.width(mainText);
 
-        painter.setFont(holdFont);
-        int holdTextWidth = fontMetrics.width(holdText);
+    painter.setFont(holdFont);
+    int holdTextWidth = fontMetrics.width(holdText);
 
-        painter.setFont(timesFont);
-        textPointX = textPointX - mainTextWidth / 2 - holdTextWidth / 2;
-        textPointY += fontMetrics.height() / 4;
+    painter.setFont(timesFont);
+    textPointX = textPointX - mainTextWidth / 2 - holdTextWidth / 2;
+    textPointY += fontMetrics.height() / 4;
 
-        int holdPointX = textPointX + mainTextWidth + 2;
+    int holdPointX = textPointX + mainTextWidth + 2;
 
-        QPoint textPoint;
-        textPoint.setX(textPointX);
-        textPoint.setY(textPointY);
+    QPoint textPoint;
+    textPoint.setX(textPointX);
+    textPoint.setY(textPointY);
 
-        QPoint holdTextPoint;
-        holdTextPoint.setX(holdPointX);
-        holdTextPoint.setY(textPointY);
+    QPoint holdTextPoint;
+    holdTextPoint.setX(holdPointX);
+    holdTextPoint.setY(textPointY);
 
-        QColor tmpCol(255, 0, 0);
-        QPen tmpPen(tmpCol, 5);
-        painter.setPen(tmpPen);
-        painter.drawPoint(textPointX, textPointY);
-        painter.setPen(textPen);
+    painter.drawText(textPoint, mainText);
 
-        painter.drawText(textPoint, mainText);
-
-        painter.setFont(holdFont);
-        painter.drawText(holdTextPoint, holdText);
-        startAngle -= deltaAngle;
-    }
+    painter.setFont(holdFont);
+    painter.drawText(holdTextPoint, holdText);
 }
 
 void KeyboardWidget::resizeEvent(QResizeEvent *event)

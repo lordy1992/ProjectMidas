@@ -53,6 +53,8 @@ protected:
 
 private:
     void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad);
+    void drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle,
+        QRectF& outerRect, QRectF& innerRect, keyData keyDat);
 
     QPoint position, cursorPos;
     std::vector<wheelData> wheels;
