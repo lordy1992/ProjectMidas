@@ -83,7 +83,7 @@ void MyoTranslationFilter::process()
                 // TODO this needs to be changed!
                 // myoAngle.ringThreshReached = asdfasdf; // TODO
             }
-            int myoAngleDegree = 180 - atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2
+            int myoAngleDegree = 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2
             
             keyboardAngle myoAngle;
             myoAngle.angle = myoAngleDegree;
