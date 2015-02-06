@@ -43,7 +43,7 @@ PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
     poseImgLabel->setBackgroundRole(QPalette::Base);
     poseImgLabel->setAlignment(Qt::AlignCenter);
     poseImgLabel->setAutoFillBackground(true);
-    //label->setFixedSize(GRID_ELEMENT_SIZE, GRID_ELEMENT_SIZE);
+    poseImgLabel->setFixedSize(indWidth, indWidth);
     poseImgLabel->setScaledContents(true);
 
 
@@ -51,7 +51,7 @@ PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
     layout->setAlignment(poseImgLabel, Qt::AlignCenter);
     
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
-    setMinimumSize(indWidth, indHeight);
+    setFixedSize(indWidth, indHeight);
 }
 
 PoseDisplayer::~PoseDisplayer()
