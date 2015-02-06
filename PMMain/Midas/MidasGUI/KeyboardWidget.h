@@ -4,11 +4,17 @@
 #include "DraggableWidget.h"
 
 #define KEYBOARD_RADIUS 200
-#define RING_WIDTH 40
+#define RING_WIDTH 50
 
 // TODO: Replace these with actual back-end data type.
 struct keyData
 {
+    keyData(char main_, char hold_)
+    {
+        main = main_;
+        hold = hold_;
+    }
+
     char main, hold;
 };
 
@@ -46,7 +52,7 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    void drawRing(QPainter &painter, std::vector<keyData> ring);
+    void drawRing(QPainter &painter, std::vector<keyData> ring, int ringInnerRad);
 
     QPoint position, cursorPos;
     std::vector<wheelData> wheels;
