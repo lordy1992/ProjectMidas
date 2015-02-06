@@ -51,6 +51,11 @@ private:
     int selectedWheel;
     int selectedKey;
     bool outerSelected;
+
+    QString tempDebugText1;
+    QString tempDebugText2;
+    QString tempDebugText3;
+    QString tempDebugText4;
 };
 
 #endif

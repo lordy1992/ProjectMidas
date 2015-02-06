@@ -193,7 +193,7 @@ void GestureFilter::registerStateSequences(void)
 {
     // Register sequence from lock to Mouse Mode
     sequence lockToMouseSeq;
-    lockToMouseSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
+    lockToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));// thumbToPinky)); // TODO TEMPPPP -- move back to t2p. 
     lockToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));
     lockToMouseSeq.push_back(SeqElement(Pose::Type::waveOut));
     commandData lockToMouseResponse;

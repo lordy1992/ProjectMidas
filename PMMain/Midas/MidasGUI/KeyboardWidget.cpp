@@ -30,6 +30,11 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
  
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
     connect(mainThread, SIGNAL(emitKeyboardData(int, double)), this, SLOT(handleKeyboardData(int, double)));
+
+    tempDebugText1 = "text1";
+    tempDebugText2 = "text2";
+    tempDebugText3 = "text3";
+    tempDebugText4 = "text4";
 }
 
 void KeyboardWidget::addWheel(ringData wheel)
@@ -64,6 +69,8 @@ void KeyboardWidget::handleKeyboardData(int wheelNumber, double currAngle)
     selectedWheel = wheelNumber / 2;
     outerSelected = (wheelNumber % 2 == 0);
     selectedKey = getSelectedKeyFromAngle(currAngle);
+
+    tempDebugText1 = std::to_string(currAngle).c_str();
 
     update();
 }
@@ -114,6 +121,12 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
     QBrush fillCenterBrush(QColor(205, 205, 193));
     painter.setBrush(fillCenterBrush);
     painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+
+    QString temp;
+    painter.drawText(QPoint(0, 30), tempDebugText1);
+    painter.drawText(QPoint(0, 10), tempDebugText2);
+    painter.drawText(QPoint(0, -10), tempDebugText3);
+    painter.drawText(QPoint(0, -30), tempDebugText4);
 
     // Draw the key squares.
     if (selectedWheel >= 0)
