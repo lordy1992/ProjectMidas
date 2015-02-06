@@ -4,15 +4,17 @@
 #include <QThread>
 #include <string>
 #include "MyoCommon.h"
+#include "RingData.h"
 
 class MainGUI;
+class KeyboardWidget;
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
-    MidasThread();
+    MidasThread(std::vector<ringData> *kybrdRingData);
     ~MidasThread();
 
     void setMainGuiHandle(MainGUI *mainGui);
@@ -20,9 +22,12 @@ public:
 
 private:
     MainGUI *mainGui;
+    std::vector<ringData> *kybrdRingData;
 
 signals:
     void emitVeloc(int, int);
+
+    void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
     
 };
 

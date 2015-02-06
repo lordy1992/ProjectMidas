@@ -1,7 +1,8 @@
 #include "SCDDigester.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> kybrdRingData)
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
+    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -9,6 +10,7 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
     this->kybrdRingData = kybrdRingData;
+    this->keyboardWidget = keyboardWidget;
     count = 0;
 }
 
@@ -19,6 +21,8 @@ SCDDigester::~SCDDigester()
 
 void SCDDigester::digest()
 {
+    threadHandle->emitUpdateKeyboard(1, 210, false, false);
+
     commandData nextCmd;
     
     bool consumed = scdHandle->consumeCommand(nextCmd);
@@ -73,6 +77,8 @@ void SCDDigester::digest()
 
 void SCDDigester::digestKeyboardData(commandData nextCommand)
 {
+    int currAngle, ringSegmentAngle, ringKeySelIdx;
+    char key;
     if (nextCommand.type == KYBRD_CMD)
     {
         // handle as regular keyboard command input
@@ -89,7 +95,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
         case kybdGUICmds::SWAP_RING_FOCUS:
             // Swap which ring is focussed on (out/in) 
             // based on RingData structure: adding 1 will go from outer to inner ring and sub 1 will go from inner to outer
-            if (kybdGUISel % 4 == 0)
+            if (kybdGUISel % 2 == 0)
             {
                 kybdGUISel += 1;
             }
@@ -103,26 +109,25 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
 
         case kybdGUICmds::CHANGE_WHEELS:
             // go to next wheel
-            kybdGUISel += 4;
+            kybdGUISel += 2;
             kybdGUISel %= (scdHandle->getKybdGuiSelMax());
             //threadHandle->UpdateGUIToChangeWheels TODO
+            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, false);
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
 
         case kybdGUICmds::SELECT:
-            /*
-            keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
+            currAngle = scdHandle->getKeySelectAngle();
+            ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
+            ringKeySelIdx = floor(currAngle / ringSegmentAngle);
 
-            if (need to add correct select logic)
-            {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).main);
-            }
-            else
-            {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).main);
-            }
+            key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).main;
+
+            kybrdCtrl->setKeyChar(key);
             kybrdCtrl->sendData();
-            */
+
+            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, false);
+
             /* Todo, pseudocode written 
             1) pass this character to the keyboard as such
                 kybrdCtrl->setKeyChar(charThatWasDetermined);
@@ -136,19 +141,17 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             EXACT same thing as select except that the HOLD character is used, rather than the regular character.
             // in the discusion of RingData, this would correspond to the "*Hold vectors"
             */
-            /*
-            keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
-            
-            if ( need to add correct select logic)
-            {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).hold);
-            }
-            else
-            {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).hold);
-            }
+            currAngle = scdHandle->getKeySelectAngle();
+            ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
+            ringKeySelIdx = floor(currAngle / ringSegmentAngle);
+
+            key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).hold;
+
+            kybrdCtrl->setKeyChar(key);
             kybrdCtrl->sendData();
-            */
+
+            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, true);
+
             break;
         default:
             break;

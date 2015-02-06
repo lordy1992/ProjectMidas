@@ -12,6 +12,7 @@
 #include <thread>
 #include "SharedCommandData.h"
 #include "MyoDevice.h"
+#include "KeyboardWidget.h"
 
 #include "MidasThread.h"
 #include "SharedCommandDataTest.h"
@@ -33,7 +34,7 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-int midasMain(MidasThread *threadHandle, MainGUI *mainGui) {
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData> *kybrdRingData) {
     std::cout << "starting Midas Main" << std::endl;
 
 #ifdef TEST_WEARABLE_DEVICE
@@ -83,9 +84,6 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui) {
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
-    vector<ringData> kybrdRingData;
-    KeyboardSettingsReader readFile;
-    readFile.readKeyboardSetupFile(kybrdRingData);
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.

@@ -20,7 +20,7 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
     std::vector<std::string> temp;
     std::string line;
 
-    currentRing currentRing = ringIn;
+    currentRing currentRing = ringOut;
     bool holdkeyCheck = false;
 
     ringData::keyboardValue keyTemp('\0');
@@ -83,13 +83,13 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
 
             }
 
-            if (currentRing == ringIn)
-            {
-                currentRing = ringOut;
-            }
-            else if (currentRing == ringOut)
+            if (currentRing == ringOut)
             {
                 currentRing = ringIn;
+            }
+            else if (currentRing == ringIn)
+            {
+                currentRing = ringOut;
                 ringDataHandle.push_back(*ringTemp);
                 ringTemp = new ringData();
             }
@@ -103,6 +103,4 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
     }
     ringDataFile.close();
     ringTemp->~ringData();
-
-
 }

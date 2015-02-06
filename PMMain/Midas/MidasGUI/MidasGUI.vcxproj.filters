@@ -173,6 +173,15 @@
     <ClCompile Include="KeyboardSettingsReader.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_KeyboardWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyboardWidget.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_KeyboardWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -197,6 +206,9 @@
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
     <CustomBuild Include="PoseDisplayer.h">
+      <Filter>Header Files\Midas</Filter>
+    </CustomBuild>
+    <CustomBuild Include="KeyboardWidget.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>

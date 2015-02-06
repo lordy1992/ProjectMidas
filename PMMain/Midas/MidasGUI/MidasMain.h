@@ -3,6 +3,6 @@
 
 #include "MidasThread.h"
 
-int midasMain(MidasThread *threadHandle, MainGUI *mainGui);
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData> *kybrdRingData);
 
 #endif /* MIDAS_MAIN_H */
