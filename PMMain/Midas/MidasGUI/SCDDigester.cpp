@@ -21,7 +21,7 @@ SCDDigester::~SCDDigester()
 
 void SCDDigester::digest()
 {
-    threadHandle->emitUpdateKeyboard(1, 210, false, false); // TODO TEMP
+ //   threadHandle->emitUpdateKeyboard(1, 210, false, false); // TODO TEMP
 
     commandData nextCmd;
     
@@ -62,7 +62,7 @@ void SCDDigester::digest()
         mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
     }
 
-    if (count % 100 == 0)
+    if (count % 1000 == 0)
     {
         threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
     }
@@ -71,9 +71,18 @@ void SCDDigester::digest()
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
         keyboardAngle currAngle = scdHandle->getKeySelectAngle();
-        threadHandle->emitKeyboardData(kybdGUISel, currAngle.angle);
 
-        digestKeyboardData(nextCmd);
+        if (count % 1000 == 0)
+        {
+            if (kybdGUISel > 100)
+            {
+                int a = 5;
+            }
+            double angleAsDouble = (double) currAngle.angle;
+            threadHandle->emitKeyboardData(kybdGUISel, angleAsDouble);
+        }
+
+       // digestKeyboardData(nextCmd);
     }
 
     count++;

@@ -79,7 +79,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData>
 #endif
 
 #ifdef MAIN_MODE
-    SharedCommandData sharedData;
+    SharedCommandData sharedData(kybrdRingData->size());
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui);
     MouseCtrl* mouseCtrl = new MouseCtrl();

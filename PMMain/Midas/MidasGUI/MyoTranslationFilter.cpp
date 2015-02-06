@@ -65,14 +65,12 @@ void MyoTranslationFilter::process()
                 command.action.kybd = kybdCmds::VOLUME_DOWN;
                 outputToSharedCommandData[COMMAND_INPUT] = command;
             }
+        } 
+        else if (controlStateHandle->getMode() == KEYBOARD_MODE)
+        {
+            keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
+            outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
         }
-    }
-    else if (controlStateHandle->getMode() == KEYBOARD_MODE)
-    {
-        filterDataMap outputToSharedCommandData;
-        keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
-        outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
-        Filter::setOutput(outputToSharedCommandData);
     }
     else
     {
