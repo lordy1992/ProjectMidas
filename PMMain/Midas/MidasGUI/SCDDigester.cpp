@@ -113,7 +113,6 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             {
                 kybdGUISel -= 1;
             }
-            //threadHandle->UpdateGUIToSwapRingFocus TODO
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
 
@@ -121,8 +120,6 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             // go to next wheel
             kybdGUISel += 2;
             kybdGUISel %= (scdHandle->getKybdGuiSelMax());
-            //threadHandle->UpdateGUIToChangeWheels TODO
-            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, false);
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
 
