@@ -364,7 +364,9 @@ void GestureFilter::handleKybrdCommand(commandData response, bool addToExtra)
 
 filterDataMap GestureFilter::getExtraDataForSCD()
 {
-    return extraDataForSCD;
+    filterDataMap retVal = extraDataForSCD;
+    extraDataForSCD.clear();
+    return retVal;
 }
 
 void setupCallbackThread(GestureFilter *gf)
@@ -391,6 +393,10 @@ void callbackThreadWrapper(GestureFilter *gf)
         //    handleMouseCommand(response);
         //}
         else if (response.type == commandType::KYBRD_CMD) // TODO THIS NEEDS TO BE FIXED NOW! Feb 6 TODO.
+        {
+            gf->handleKybrdCommand(response, true);
+        }
+        else if (response.type == commandType::KYBRD_GUI_CMD)
         {
             gf->handleKybrdCommand(response, true);
         }
