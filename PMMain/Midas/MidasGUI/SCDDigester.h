@@ -32,6 +32,8 @@ private:
 
     void digestKeyboardData(commandData nextCommand);
 
+    int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);
+
     SharedCommandData *scdHandle;
     MidasThread *threadHandle;
     ControlState *cntrlStateHandle;

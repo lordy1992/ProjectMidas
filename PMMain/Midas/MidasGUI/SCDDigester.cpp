@@ -92,7 +92,7 @@ void SCDDigester::digest()
 void SCDDigester::digestKeyboardData(commandData nextCommand)
 {
     keyboardAngle currAngle;
-    int ringSegmentAngle, ringKeySelIdx;
+    int ringKeySelIdx;
     char key;
     if (nextCommand.type == KYBRD_CMD)
     {
@@ -129,16 +129,23 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
 
         case kybdGUICmds::SELECT:
-//            currAngle = scdHandle->getKeySelectAngle();
-//            ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
-//            ringKeySelIdx = floor(currAngle.angle / ringSegmentAngle);
-//
-//            key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).main;
-//
-//            kybrdCtrl->setKeyChar(key);
-//            kybrdCtrl->sendData();
-//
-//            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, false);
+            currAngle = scdHandle->getKeySelectAngle();
+
+            if (kybdGUISel % 2 == 0)
+            {
+                ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle());
+                key = (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle()->at(ringKeySelIdx).main;
+            }
+            else
+            {
+                ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle());
+                key = (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle()->at(ringKeySelIdx).main;
+            }
+
+            kybrdCtrl->setKeyChar(key);
+            kybrdCtrl->sendData();
+
+            //threadHandle->animateSelection();
 
             /* Todo, pseudocode written 
             1) pass this character to the keyboard as such
@@ -175,4 +182,14 @@ void SCDDigester::digestKybdCmd(commandData nextCommand)
 {
     kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
     kybrdCtrl->sendData();
+}
+
+// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
+int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
+{
+    qreal deltaAngle = 360.0 / ring->size();
+    //qreal startAngle = 90.0 + deltaAngle / 2; // TODO - normalize on backend side.
+
+    // TODO: May have to change later, based on received angle
+    return (int)((angle) / deltaAngle);
 }

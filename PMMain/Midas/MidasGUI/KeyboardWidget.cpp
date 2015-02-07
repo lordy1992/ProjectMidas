@@ -92,6 +92,7 @@ void KeyboardWidget::handleDebugInfo(int x, int y)
     tempDebugText3 = std::to_string(y).c_str();
 }
 
+// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
 int KeyboardWidget::getSelectedKeyFromAngle(double angle)
 {
     std::vector<ringData::keyboardValue> *ring;
