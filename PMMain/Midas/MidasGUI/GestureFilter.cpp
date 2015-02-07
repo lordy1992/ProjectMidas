@@ -341,7 +341,7 @@ void GestureFilter::handleMouseCommand(commandData response)
     }
 }
 
-void GestureFilter::handleKybrdCommand(commandData response)
+void GestureFilter::handleKybrdCommand(commandData response, bool addToExtra)
 {
     if (controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
@@ -350,8 +350,21 @@ void GestureFilter::handleKybrdCommand(commandData response)
         command = response;
 
         outputToSharedCommandData[COMMAND_INPUT] = command;
-        Filter::setOutput(outputToSharedCommandData);
+
+        if (addToExtra) 
+        {
+            extraDataForSCD = outputToSharedCommandData;
+        }
+        else
+        {
+            Filter::setOutput(outputToSharedCommandData);
+        }
     }
+}
+
+filterDataMap GestureFilter::getExtraDataForSCD()
+{
+    return extraDataForSCD;
 }
 
 void setupCallbackThread(GestureFilter *gf)
@@ -377,10 +390,10 @@ void callbackThreadWrapper(GestureFilter *gf)
         //{
         //    handleMouseCommand(response);
         //}
-        //else if (response.type == commandType::KYBRD_CMD) // TODO THIS NEEDS TO BE FIXED NOW! Feb 6 TODO.
-        //{
-        //    handleKybrdCommand(response);
-        //}
+        else if (response.type == commandType::KYBRD_CMD) // TODO THIS NEEDS TO BE FIXED NOW! Feb 6 TODO.
+        {
+            gf->handleKybrdCommand(response, true);
+        }
         // TODO - figure out if this is necessary here... cant make work easily as functions
         // cant simply be converted to static. But... probably should make it work... Need to figure out.
 

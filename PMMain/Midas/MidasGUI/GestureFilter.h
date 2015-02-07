@@ -55,6 +55,8 @@ public:
      */
     void process();
 
+    filterDataMap getExtraDataForSCD();
+
     /**
     * return actual handle to gestSeqRecorder
     */
@@ -62,7 +64,12 @@ public:
 
     static void handleStateChange(commandData response);
 
+    friend void setupCallbackThread(GestureFilter *gf);
+    friend void callbackThreadWrapper(GestureFilter *gf);
+
 private:
+
+    filterDataMap extraDataForSCD;
 
     /**
      * Translates gestures into corresponding mouse and keyboard commands.
@@ -76,7 +83,7 @@ private:
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
     void handleMouseCommand(commandData response);
-    void handleKybrdCommand(commandData response);
+    void handleKybrdCommand(commandData response, bool addToExtra = false);
 
     void emitPoseData(int poseInt);
 
@@ -93,8 +100,5 @@ private:
 
     SequenceImageManager imageManager;
 };
-
-void setupCallbackThread(GestureFilter *gf);
-void callbackThreadWrapper(GestureFilter *gf);
 
 #endif /* _GESTURE_FILTER_H */
