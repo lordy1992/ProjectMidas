@@ -28,6 +28,7 @@ void SCDDigester::digest()
     switch (nextCmd.type)
     {
     case KYBRD_CMD:
+        digestKybdCmd(nextCmd);
         break;
     case KYBRD_GUI_CMD:
         break;
@@ -80,24 +81,18 @@ void SCDDigester::digest()
             // threadHandle->emitDebugInfo(x, y);
         }
 
-        digestKeyboardData(nextCmd);
+        digestKeyboardGUIData(nextCmd);
     }
 
     count++;
 }
 
-void SCDDigester::digestKeyboardData(commandData nextCommand)
+void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
 {
     keyboardAngle currAngle;
     int ringKeySelIdx;
     char key;
-    if (nextCommand.type == KYBRD_CMD)
-    {
-        // handle as regular keyboard command input
-        kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
-        kybrdCtrl->sendData();
-    }
-    else if (nextCommand.type == KYBRD_GUI_CMD)
+    if (nextCommand.type == KYBRD_GUI_CMD)
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
 
@@ -183,6 +178,12 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
         }
     }
+}
+
+void SCDDigester::digestKybdCmd(commandData nextCommand)
+{
+    kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
+    kybrdCtrl->sendData();
 }
 
 // MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.

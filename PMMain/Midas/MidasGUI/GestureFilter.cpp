@@ -237,7 +237,7 @@ void GestureFilter::registerStateSequences(void)
     // Register sequence from Keyboard Mode to Mouse Mode
     sequence kybrdToMouseSeq;
     kybrdToMouseSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
-    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));
+    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveOut));
     commandData kybrdToMouseResponse;
     kybrdToMouseResponse.name = "Keyboard To Mouse";
     kybrdToMouseResponse.type = commandType::STATE_CHANGE;
@@ -261,7 +261,7 @@ void GestureFilter::registerStateSequences(void)
     // From Keyboard:
     toLockResponse.name = "Keyboard To Lock"; // OVERRIDE for Keyboard.
     toLockSeq[0] = (SeqElement(Pose::Type::thumbToPinky));
-    toLockSeq[1] = (SeqElement(Pose::Type::waveOut));
+    toLockSeq[1] = (SeqElement(Pose::Type::waveIn));
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse, "Keyboard to Lock");
 
     // Register sequence from Gesture Mode to Gesture Hold Modes
