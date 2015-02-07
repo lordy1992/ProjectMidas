@@ -5,8 +5,6 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Midas", "Midas\Midas.vcxproj", "{C09B4F72-1850-4195-B5AC-1B169E682019}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasTest", "MidasTest\MidasTest.vcxproj", "{81E2C2FB-0D2C-407D-93E3-468B79561804}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasLib", "MidasLib\MidasLib.vcxproj", "{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUI", "MidasGUI\MidasGUI.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
@@ -14,6 +12,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUILib", "MidasGUILib\MidasGUILib.vcxproj", "{151F24B2-6E57-4C05-8702-62C682C5CDDE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUIQTest", "MidasGUIQTest\MidasGUIQTest.vcxproj", "{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasTest", "MidasTest\MidasTest.vcxproj", "{81E2C2FB-0D2C-407D-93E3-468B79561804}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,18 +41,6 @@ Global
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Release|Win32.Build.0 = Release|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Release|x64.ActiveCfg = Release|x64
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Release|x64.Build.0 = Release|x64
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Win32.ActiveCfg = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Win32.Build.0 = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|x64.ActiveCfg = Debug|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Any CPU.ActiveCfg = Release|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.ActiveCfg = Release|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.Build.0 = Release|Win32
-		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|x64.ActiveCfg = Release|Win32
 		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{CCDEC793-12ED-4941-87FB-CE69AFF28CBD}.Debug|Mixed Platforms.Build.0 = Debug|Win32
@@ -101,6 +89,18 @@ Global
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|Win32.ActiveCfg = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|Win32.Build.0 = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|x64.ActiveCfg = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Win32.ActiveCfg = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|Win32.Build.0 = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Debug|x64.ActiveCfg = Debug|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Any CPU.ActiveCfg = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.ActiveCfg = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|Win32.Build.0 = Release|Win32
+		{81E2C2FB-0D2C-407D-93E3-468B79561804}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
