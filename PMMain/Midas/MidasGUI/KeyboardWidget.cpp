@@ -13,20 +13,14 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
         keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
         selectedKey(-1), holdFont("Times", 9, QFont::Normal), timesFont("Times", 16, QFont::DemiBold)
 {
-   // setWindowOpacity(0.75);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
-    //QPalette pal;
-    //pal.setColor(QPalette::Background, QColor(205, 205, 193));
-   // setAutoFillBackground(true);
-   // setPalette(pal);
 
     setFixedSize(radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST, radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST);
 
     selectedWheel = 0;
  
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
-    connect(mainThread, SIGNAL(emitKeyboardData(int, double)), this, SLOT(handleKeyboardData(int, double)));
 
     connect(mainThread, SIGNAL(emitDebugInfo(int, int)), this, SLOT(handleDebugInfo(int, int)));
 }
@@ -64,16 +58,6 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ring
         outerSelected = false;
         selectedKey = -1;
     }
-
-    //tempDebugText1 = std::to_string(currAngle).c_str();
-    update();
-}
-
-void KeyboardWidget::handleKeyboardData(int wheelNumber, double currAngle)
-{
-    selectedWheel = wheelNumber / 2;
-    outerSelected = (wheelNumber % 2 == 0);
-    selectedKey = getSelectedKeyFromAngle(currAngle);
 
     //tempDebugText1 = std::to_string(currAngle).c_str();
     update();

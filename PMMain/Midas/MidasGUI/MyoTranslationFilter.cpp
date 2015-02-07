@@ -74,7 +74,6 @@ void MyoTranslationFilter::process()
         } 
         else if (controlStateHandle->getMode() == KEYBOARD_MODE)
         {
-            //keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
             keyboardAngle myoAngle;
 
             point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
@@ -82,7 +81,7 @@ void MyoTranslationFilter::process()
             myoAngle.ringThreshReached = false;
             if (magnitude > KEYBOARD_THRESH_MAG)
             {
-                myoAngle.ringThreshReached = true; // TODO
+                myoAngle.ringThreshReached = true;
             }
 
             // TEMP TODO for debug only
@@ -98,8 +97,6 @@ void MyoTranslationFilter::process()
             }
             
             myoAngle.angle = myoAngleDegree;
-
-            // TODO - this should actually also determine if the pose is being held. if it is, it should send that too. (keyboardAngle needs that added).
 
             outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
         }
@@ -195,17 +192,4 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
     }
 
     return delta;
-}
-
-keyboardAngle MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
-{
-    keyboardAngle retVal;
-    float angle, x, y;
-    x = cos(orientation.yaw)*cos(orientation.pitch);
-    y = sin(orientation.yaw)*cos(orientation.pitch);
-    retVal.angle = tan(x / y);
-
-    retVal.ringThreshReached = true; // TODO - force this to actually care about absolute value of pitch/yaw
-
-    return retVal;
 }

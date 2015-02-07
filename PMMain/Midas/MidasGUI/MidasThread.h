@@ -29,8 +29,6 @@ signals:
 
     void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
 
-    void emitKeyboardData(int, double);
-
     void emitDebugInfo(int, int);
 };
 

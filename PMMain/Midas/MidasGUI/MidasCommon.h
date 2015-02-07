@@ -182,11 +182,4 @@ struct keyboardAngle {
     int x, y;
 };
 
-struct orientation_data {
-    float roll, pitch, yaw;
-    orientation_data(float rollVal = 0, float pitchVal = 0, float yawVal = 0) : roll(rollVal), pitch(pitchVal), yaw(yawVal) { }
-};
-
-
-
 #endif /* _MIDAS_COMMON_H */

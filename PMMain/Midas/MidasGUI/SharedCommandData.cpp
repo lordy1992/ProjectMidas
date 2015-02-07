@@ -144,46 +144,6 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
     return locked;
 }
 
-
-void SharedCommandData::setMyoOrientation(orientation_data orientation)
-{
-    myoOrientationMutex.lock();
-    myoOrientation = orientation;
-    myoOrientationMutex.unlock();
-}
-
-bool SharedCommandData::trySetMyoOrientation(orientation_data orientation)
-{
-    bool locked = myoOrientationMutex.try_lock();
-    if (locked) {
-        myoOrientation = orientation;
-        myoOrientationMutex.unlock();
-    }
-
-    return locked;
-}
-
-orientation_data SharedCommandData::getMyoOrientation()
-{
-    myoOrientationMutex.lock();
-    orientation_data orientation = myoOrientation;
-    myoOrientationMutex.unlock();
-
-    return orientation;
-}
-
-
-bool SharedCommandData::tryGetMyoOrientation(orientation_data& outMyoOrientation)
-{
-    bool locked = myoOrientationMutex.try_lock();
-    if (locked) {
-        outMyoOrientation = myoOrientation;
-        myoOrientationMutex.unlock();
-    }
-
-    return locked;
-}
-
 void SharedCommandData::setKeySelectAngle(keyboardAngle angle)
 {
     keySelectAngleMutex.lock();

@@ -193,7 +193,7 @@ void GestureFilter::registerStateSequences(void)
 {
     // Register sequence from lock to Mouse Mode
     sequence lockToMouseSeq;
-    lockToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));// thumbToPinky)); // TODO TEMPPPP -- move back to t2p. 
+    lockToMouseSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
     lockToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));
     lockToMouseSeq.push_back(SeqElement(Pose::Type::waveOut));
     commandData lockToMouseResponse;
@@ -388,11 +388,11 @@ void callbackThreadWrapper(GestureFilter *gf)
         {
             GestureFilter::handleStateChange(response);
         }
-        //else if (response.type == commandType::MOUSE_CMD)
-        //{
-        //    handleMouseCommand(response);
-        //}
-        else if (response.type == commandType::KYBRD_CMD) // TODO THIS NEEDS TO BE FIXED NOW! Feb 6 TODO.
+        else if (response.type == commandType::MOUSE_CMD)
+        {
+            gf->handleMouseCommand(response);
+        }
+        else if (response.type == commandType::KYBRD_CMD)
         {
             gf->handleKybrdCommand(response, true);
         }
@@ -400,8 +400,5 @@ void callbackThreadWrapper(GestureFilter *gf)
         {
             gf->handleKybrdCommand(response, true);
         }
-        // TODO - figure out if this is necessary here... cant make work easily as functions
-        // cant simply be converted to static. But... probably should make it work... Need to figure out.
-
     } while (true);
 }
