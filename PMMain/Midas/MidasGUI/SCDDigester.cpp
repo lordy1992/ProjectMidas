@@ -160,16 +160,23 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             EXACT same thing as select except that the HOLD character is used, rather than the regular character.
             // in the discusion of RingData, this would correspond to the "*Hold vectors"
             */
-//            currAngle = scdHandle->getKeySelectAngle();
-//            ringSegmentAngle = 360 / (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->size();
-//            ringKeySelIdx = floor(currAngle.angle / ringSegmentAngle);
-//
-//            key = (*kybrdRingData)[kybdGUISel].getRingInVectorHandle()->at(ringKeySelIdx).hold;
-//
-//            kybrdCtrl->setKeyChar(key);
-//            kybrdCtrl->sendData();
-//
-//            threadHandle->emitUpdateKeyboard(kybdGUISel, 30, false, true);
+            currAngle = scdHandle->getKeySelectAngle();
+
+            if (kybdGUISel % 2 == 0)
+            {
+                ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle());
+                key = (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle()->at(ringKeySelIdx).hold;
+            }
+            else
+            {
+                ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle());
+                key = (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle()->at(ringKeySelIdx).hold;
+            }
+
+            kybrdCtrl->setKeyChar(key);
+            kybrdCtrl->sendData();
+
+            //threadHandle->animateSelection();
 
             break;
         default:
