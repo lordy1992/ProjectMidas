@@ -28,8 +28,6 @@ public:
     void digest();
 
 private:
-    void digestKybdCmd(commandData nextCommand);
-
     void digestKeyboardData(commandData nextCommand);
 
     int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);

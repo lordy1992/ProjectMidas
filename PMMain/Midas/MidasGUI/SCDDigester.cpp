@@ -28,7 +28,6 @@ void SCDDigester::digest()
     switch (nextCmd.type)
     {
     case KYBRD_CMD:
-        digestKybdCmd(nextCmd);
         break;
     case KYBRD_GUI_CMD:
         break;
@@ -184,12 +183,6 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             break;
         }
     }
-}
-
-void SCDDigester::digestKybdCmd(commandData nextCommand)
-{
-    kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
-    kybrdCtrl->sendData();
 }
 
 // MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
