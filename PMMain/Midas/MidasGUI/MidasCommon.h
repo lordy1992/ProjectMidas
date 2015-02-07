@@ -177,6 +177,9 @@ struct point {
 struct keyboardAngle {
     int angle;
     bool ringThreshReached = true;
+    
+    // below are temporary values for debugging purposes!
+    int x, y;
 };
 
 struct orientation_data {

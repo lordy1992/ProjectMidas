@@ -75,20 +75,27 @@ void MyoTranslationFilter::process()
         else if (controlStateHandle->getMode() == KEYBOARD_MODE)
         {
             //keyboardAngle myoAngle = keySelectAngle(orientation_data(roll, pitch, yaw));
+            keyboardAngle myoAngle;
 
             point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
             unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
-            if (magnitude > 20)
+            myoAngle.ringThreshReached = false;
+            if (magnitude > KEYBOARD_THRESH_MAG)
             {
-                // TODO this needs to be changed!
-                // myoAngle.ringThreshReached = asdfasdf; // TODO
+                myoAngle.ringThreshReached = true; // TODO
             }
 
-            int myoAngleDegree = 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
+            // TEMP TODO for debug only
+            myoAngle.x = myoAnglePoint.x;
+            myoAngle.y = myoAnglePoint.y;
+
+            // TODO - verify/disprove this function 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x);
+            // using 90 instead of 180 *seems* to make it better, but then the upper left quadrant is unnaccessable.
+            int myoAngleDegree = 90 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
             
-            keyboardAngle myoAngle;
             myoAngle.angle = myoAngleDegree;
-            myoAngle.ringThreshReached = true; // TODO
+
+            // TODO - this should actually also determine if the pose is being held. if it is, it should send that too. (keyboardAngle needs that added).
 
             outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
         }

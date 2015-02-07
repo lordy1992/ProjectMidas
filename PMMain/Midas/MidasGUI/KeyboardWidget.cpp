@@ -31,6 +31,8 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
     connect(mainThread, SIGNAL(emitKeyboardData(int, double)), this, SLOT(handleKeyboardData(int, double)));
 
+    connect(mainThread, SIGNAL(emitDebugInfo(int, int)), this, SLOT(handleDebugInfo(int, int)));
+
     tempDebugText1 = "text1";
     tempDebugText2 = "text2";
     tempDebugText3 = "text3";
@@ -55,11 +57,20 @@ void KeyboardWidget::clearWheels()
     wheels.clear();
 }
 
-void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool center, bool held)
+void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ringThreshReached, bool held)
 {
     selectedWheel = wheelNumber / 2;
-    outerSelected = (wheelNumber % 2 == 0);
-    selectedKey = getSelectedKeyFromAngle(currAngle);
+    if (ringThreshReached)
+    {
+        outerSelected = (wheelNumber % 2 == 0);
+        selectedKey = getSelectedKeyFromAngle(currAngle);
+    }
+    else
+    {
+        // TODO highlight center GUI
+        outerSelected = false;
+        selectedKey = -1;
+    }
 
     update();
 }
@@ -73,6 +84,12 @@ void KeyboardWidget::handleKeyboardData(int wheelNumber, double currAngle)
     tempDebugText1 = std::to_string(currAngle).c_str();
 
     update();
+}
+
+void KeyboardWidget::handleDebugInfo(int x, int y)
+{
+    tempDebugText2 = std::to_string(x).c_str();
+    tempDebugText3 = std::to_string(y).c_str();
 }
 
 int KeyboardWidget::getSelectedKeyFromAngle(double angle)

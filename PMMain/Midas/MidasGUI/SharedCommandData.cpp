@@ -86,7 +86,7 @@ void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
     kybdGuiSelMutex.lock();
     if (kybdGuiSel <= maxKybdGuiSel)
     {
-        kybdGuiSel = kybdGuiSel;
+        this->kybdGuiSel = kybdGuiSel;
     }
     kybdGuiSelMutex.unlock();
 }
@@ -97,7 +97,7 @@ bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
     if (locked) {
         if (kybdGuiSel <= maxKybdGuiSel)
         {
-            kybdGuiSel = kybdGuiSel;
+            this->kybdGuiSel = kybdGuiSel;
             kybdGuiSelMutex.unlock();
         }
     }

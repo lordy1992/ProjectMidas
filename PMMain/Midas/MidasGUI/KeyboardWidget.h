@@ -24,6 +24,8 @@ public slots:
     void updateKeyboard(int, double, bool, bool);
     void handleKeyboardData(int, double);
 
+    void handleDebugInfo(int, int);
+
 protected:
     /**
     * The event that is called when the GUI needs to paint itself.
