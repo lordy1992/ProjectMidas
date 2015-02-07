@@ -11,7 +11,7 @@
 KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidth, QWidget *parent)
     : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint), 
         keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
-    selectedKey(-1)
+        selectedKey(-1), holdFont("Times", 9, QFont::Normal), timesFont("Times", 16, QFont::DemiBold)
 {
    // setWindowOpacity(0.75);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -23,20 +23,12 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
 
     setFixedSize(radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST, radius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST);
 
-    // Temporary Test:
     selectedWheel = 0;
-    //selectedKey = 5;
-    //outerSelected = true;
  
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
     connect(mainThread, SIGNAL(emitKeyboardData(int, double)), this, SLOT(handleKeyboardData(int, double)));
 
     connect(mainThread, SIGNAL(emitDebugInfo(int, int)), this, SLOT(handleDebugInfo(int, int)));
-
-    tempDebugText1 = "text1";
-    tempDebugText2 = "text2";
-    tempDebugText3 = "text3";
-    tempDebugText4 = "text4";
 }
 
 void KeyboardWidget::addWheel(ringData wheel)
@@ -73,7 +65,7 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ring
         selectedKey = -1;
     }
 
-    tempDebugText1 = std::to_string(currAngle).c_str();
+    //tempDebugText1 = std::to_string(currAngle).c_str();
     update();
 }
 
@@ -83,15 +75,14 @@ void KeyboardWidget::handleKeyboardData(int wheelNumber, double currAngle)
     outerSelected = (wheelNumber % 2 == 0);
     selectedKey = getSelectedKeyFromAngle(currAngle);
 
-    tempDebugText1 = std::to_string(currAngle).c_str();
-
+    //tempDebugText1 = std::to_string(currAngle).c_str();
     update();
 }
 
 void KeyboardWidget::handleDebugInfo(int x, int y)
 {
-    tempDebugText2 = std::to_string(x).c_str();
-    tempDebugText3 = std::to_string(y).c_str();
+    //tempDebugText2 = std::to_string(x).c_str();
+    //tempDebugText3 = std::to_string(y).c_str();
 }
 
 // MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
@@ -167,13 +158,43 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
 
     if (centerSelected) painter.setPen(selectPen);
 
+    // Draw center circle/text
     painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+    
+    QString mainText = QString(CENTER_MAIN);
+    QString holdText = QString(CENTER_HOLD);
 
-    QString temp;
-    painter.drawText(QPoint(0, 30), tempDebugText1);
+    painter.setFont(timesFont);
+    QFontMetrics fontMetrics = painter.fontMetrics();
+    int mainTextWidth = fontMetrics.width(mainText);
+    int mainTextY = (-fontMetrics.height() / 1.25) + fontMetrics.height() / 2;
+
+    painter.setFont(holdFont);
+    fontMetrics = painter.fontMetrics();
+    int holdTextWidth = fontMetrics.width(holdText);
+    int holdTextY = (fontMetrics.height() / 1.25) + fontMetrics.height() / 2;
+
+    int mainTextX = - mainTextWidth / 2;
+    int holdTextX = - holdTextWidth / 2;  
+
+    QPoint mainTextPoint;
+    mainTextPoint.setX(mainTextX);
+    mainTextPoint.setY(mainTextY);
+
+    QPoint holdTextPoint;
+    holdTextPoint.setX(holdTextX);
+    holdTextPoint.setY(holdTextY);
+
+    painter.setFont(timesFont);
+    painter.drawText(mainTextPoint, mainText);
+
+    painter.setFont(holdFont);
+    painter.drawText(holdTextPoint, holdText);
+
+    /*painter.drawText(QPoint(0, 30), tempDebugText1);
     painter.drawText(QPoint(0, 10), tempDebugText2);
     painter.drawText(QPoint(0, -10), tempDebugText3);
-    painter.drawText(QPoint(0, -30), tempDebugText4);
+    painter.drawText(QPoint(0, -30), tempDebugText4);*/
 }
 
 void KeyboardWidget::drawRing(QPainter &painter, std::vector<ringData::keyboardValue> *ring, int ringInnerRad, bool isSelected)
@@ -246,8 +267,6 @@ void KeyboardWidget::drawKey(QPainter &painter, int ringInnerRad, qreal currAngl
     painter.setBrush(fillBrush);
     painter.drawPath(path);
 
-    QFont holdFont("Times", 9, QFont::Normal);
-    QFont timesFont("Times", 16, QFont::DemiBold);
     painter.setFont(timesFont);
     painter.setPen(textPen);
 

@@ -4,6 +4,7 @@
 #include "DraggableWidget.h"
 #include "RingData.h"
 #include "MidasThread.h"
+#include "MyoCommon.h"
 
 #define KEYBOARD_RADIUS 200
 #define RING_WIDTH 50
@@ -53,6 +54,9 @@ private:
     int selectedWheel;
     int selectedKey;
     bool outerSelected, centerSelected;
+
+    QFont holdFont;
+    QFont timesFont;
 
     QString tempDebugText1;
     QString tempDebugText2;

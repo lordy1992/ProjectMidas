@@ -32,7 +32,6 @@ signals:
     void emitKeyboardData(int, double);
 
     void emitDebugInfo(int, int);
-    
 };
 
 #endif // MIDASTHREAD_H
