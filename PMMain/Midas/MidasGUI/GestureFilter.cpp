@@ -377,7 +377,7 @@ void callbackThreadWrapper(GestureFilter *gf)
         //{
         //    handleMouseCommand(response);
         //}
-        //else if (response.type == commandType::KYBRD_CMD)
+        //else if (response.type == commandType::KYBRD_CMD) // TODO THIS NEEDS TO BE FIXED NOW! Feb 6 TODO.
         //{
         //    handleKybrdCommand(response);
         //}
