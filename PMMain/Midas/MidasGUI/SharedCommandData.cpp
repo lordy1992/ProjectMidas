@@ -262,21 +262,6 @@ void SharedCommandData::extractPoint(boost::any value)
     }
 }
 
-
-void SharedCommandData::extractOrientation(boost::any value)
-{
-    if (value.type() != typeid(orientation_data))
-    {
-        Filter::setFilterError(filterError::INVALID_INPUT);
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
-    }
-    else
-    {
-        orientation_data orientation = boost::any_cast<orientation_data> (value);
-        setMyoOrientation(orientation);
-    }
-}
-
 void SharedCommandData::extractKeySelectAngle(boost::any value)
 {
     if (value.type() != typeid(keyboardAngle))
@@ -290,7 +275,3 @@ void SharedCommandData::extractKeySelectAngle(boost::any value)
         setKeySelectAngle(angle);
     }
 }
-
-
-
-

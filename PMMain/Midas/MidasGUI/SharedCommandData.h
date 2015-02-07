@@ -140,7 +140,6 @@ public:
 
 private:
     point mouseVelocity;
-    orientation_data myoOrientation;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;
@@ -154,7 +153,6 @@ private:
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-    void extractOrientation(boost::any value);
     void extractKeySelectAngle(boost::any value);
 };
 
