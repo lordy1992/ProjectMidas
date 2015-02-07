@@ -92,6 +92,10 @@ void MyoTranslationFilter::process()
             // TODO - verify/disprove this function 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x);
             // using 90 instead of 180 *seems* to make it better, but then the upper left quadrant is unnaccessable.
             int myoAngleDegree = 90 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
+            while (myoAngleDegree < 0)
+            {
+                myoAngleDegree += 360;
+            }
             
             myoAngle.angle = myoAngleDegree;
 
