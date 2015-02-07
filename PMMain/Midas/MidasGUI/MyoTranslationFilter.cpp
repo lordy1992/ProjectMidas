@@ -32,14 +32,11 @@ void MyoTranslationFilter::process()
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
     int rollDeg = (int)(getRollFromQuaternion(quatX, quatY, quatZ, quatW) * (180 / M_PI));
 
-    if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
+    if ((previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE) ||
+        (previousMode != KEYBOARD_MODE && controlStateHandle->getMode() == KEYBOARD_MODE))
     {
-        basePitch = pitch;
-        baseYaw = yaw;
-    }
-
-    if (previousMode != KEYBOARD_MODE && controlStateHandle->getMode() == KEYBOARD_MODE)
-    {
+        // in both MOUSE_MODE and KEYBOARD_MODE, our angles are based off of a base frame of
+        // reference recorded here.
         basePitch = pitch;
         baseYaw = yaw;
     }
