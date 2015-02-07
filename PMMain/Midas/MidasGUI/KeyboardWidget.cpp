@@ -73,6 +73,7 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ring
         selectedKey = -1;
     }
 
+    tempDebugText1 = std::to_string(currAngle).c_str();
     update();
 }
 
@@ -108,10 +109,10 @@ int KeyboardWidget::getSelectedKeyFromAngle(double angle)
     }
 
     qreal deltaAngle = 360.0 / ring->size();
-    //qreal startAngle = 90.0 + deltaAngle / 2; // TODO - normalize on backend side.
+    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
 
     // TODO: May have to change later, based on received angle
-    return (int)((angle) / deltaAngle);
+    return (int)(adjustedAngle / deltaAngle);
 }
 
 void KeyboardWidget::paintEvent(QPaintEvent *event)

@@ -195,8 +195,8 @@ void SCDDigester::digestKybdCmd(commandData nextCommand)
 int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
 {
     qreal deltaAngle = 360.0 / ring->size();
-    //qreal startAngle = 90.0 + deltaAngle / 2; // TODO - normalize on backend side.
+    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
 
     // TODO: May have to change later, based on received angle
-    return (int)((angle) / deltaAngle);
+    return (int)(adjustedAngle / deltaAngle);
 }
