@@ -62,12 +62,13 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ring
     selectedWheel = wheelNumber / 2;
     if (ringThreshReached)
     {
+        centerSelected = false;
         outerSelected = (wheelNumber % 2 == 0);
         selectedKey = getSelectedKeyFromAngle(currAngle);
     }
     else
     {
-        // TODO highlight center GUI
+        centerSelected = true;
         outerSelected = false;
         selectedKey = -1;
     }
@@ -128,23 +129,14 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
     painter.setBrush(Qt::NoBrush);
 
     // Draw the borders.
-    int keyboardBorderRad = keyboardRadius - (penWidth / 2);
-    int keyboardDiam = keyboardBorderRad * 2;
     int outerRingBorderRadius = keyboardRadius - ringWidth;
     int outerRingBorderDiam = outerRingBorderRadius * 2;
     int innerRingBorderRadius = outerRingBorderRadius - ringWidth;
     int innerRingBorderDiam = innerRingBorderRadius * 2;
-    //painter.drawEllipse(-keyboardBorderRad, -keyboardBorderRad, keyboardDiam, keyboardDiam);
-    //painter.drawEllipse(-outerRingBorderRadius, -outerRingBorderRadius, outerRingBorderDiam, outerRingBorderDiam);
-    QBrush fillCenterBrush(QColor(205, 205, 193));
-    painter.setBrush(fillCenterBrush);
-    painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
 
-    QString temp;
-    painter.drawText(QPoint(0, 30), tempDebugText1);
-    painter.drawText(QPoint(0, 10), tempDebugText2);
-    painter.drawText(QPoint(0, -10), tempDebugText3);
-    painter.drawText(QPoint(0, -30), tempDebugText4);
+    QBrush centerSelectBrush(QColor(200, 0, 0));
+    QPen selectPen(centerSelectBrush, penWidth);
+    QBrush fillCenterBrush(QColor(205, 205, 193));
 
     // Draw the key squares.
     if (selectedWheel >= 0)
@@ -166,6 +158,21 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
             drawRing(painter, innerRing, innerRingBorderRadius - 2, !outerSelected);
         }
     }
+
+    painter.setPen(pen);
+    painter.setBrush(Qt::NoBrush);
+
+    painter.setBrush(fillCenterBrush);
+
+    if (centerSelected) painter.setPen(selectPen);
+
+    painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+
+    QString temp;
+    painter.drawText(QPoint(0, 30), tempDebugText1);
+    painter.drawText(QPoint(0, 10), tempDebugText2);
+    painter.drawText(QPoint(0, -10), tempDebugText3);
+    painter.drawText(QPoint(0, -30), tempDebugText4);
 }
 
 void KeyboardWidget::drawRing(QPainter &painter, std::vector<ringData::keyboardValue> *ring, int ringInnerRad, bool isSelected)

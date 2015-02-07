@@ -52,7 +52,7 @@ private:
     int keyboardRadius, ringWidth;
     int selectedWheel;
     int selectedKey;
-    bool outerSelected;
+    bool outerSelected, centerSelected;
 
     QString tempDebugText1;
     QString tempDebugText2;
