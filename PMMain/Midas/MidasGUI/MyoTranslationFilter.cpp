@@ -32,6 +32,8 @@ void MyoTranslationFilter::process()
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
     int rollDeg = (int)(getRollFromQuaternion(quatX, quatY, quatZ, quatW) * (180 / M_PI));
 
+    
+  
     if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
     {
         basePitch = pitch;
@@ -42,9 +44,12 @@ void MyoTranslationFilter::process()
     {
         if (previousMode == MOUSE_MODE)
         {
+            int test = keySelectAngle(orientation_data(roll, pitch, yaw));
+
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
-        }    
+            
+        }
 
         if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
         {
@@ -168,12 +173,13 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
     return delta;
 }
 
-int MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
+float MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
 {
-    float angle, x, y;
-    x = cos(orientation.yaw)*cos(orientation.pitch);
-    y = sin(orientation.yaw)*cos(orientation.pitch);
+    float angle, x, y,z;
+    x = -cos(orientation.pitch)*sin(orientation.yaw);
+    y = -sin(orientation.yaw);
+    z = cos(orientation.pitch)*cos(orientation.yaw);
     angle = tan(x / y);
-
-    return int(angle);
+    return angle;// *(180 / 3.14);
+ 
 }

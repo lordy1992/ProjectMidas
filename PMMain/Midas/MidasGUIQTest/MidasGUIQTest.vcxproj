@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}</ProjectGuid>
+    <Keyword>Qt4VSv1.0</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.30501.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <IncludePath>"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib";$(IncludePath);$(ProjectDir)\..\MidasGUI\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\MidasGUI\myo\include\</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_CORE_LIB;QT_GUI_LIB;QT_TESTLIB_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Optimization>Disabled</Optimization>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib;$(ProjectDir)\..\MidasGUI\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\MidasGUI\myo\include\;.\GeneratedFiles;.;C:\Qt\5.4\msvc2013_opengl\include;.\GeneratedFiles\$(ConfigurationName);C:\Qt\5.4\msvc2013_opengl\include\QtCore;C:\Qt\5.4\msvc2013_opengl\include\QtGui;C:\Qt\5.4\msvc2013_opengl\include\QtWidgets;$(ProjectDir)\myoSim\include;$(ProjectDir)\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories);C:\Qt\5.4\msvc2013_opengl\include\QtTest</AdditionalIncludeDirectories>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUILib";$(ProjectDir)\lib;"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib";$(ProjectDir)..\MidasGUI\myo\lib;%(AdditionalLibraryDirectories);"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUI";C:\Qt\5.4\msvc2013_opengl\lib</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>"C:\Qt\5.4\msvc2013_opengl\lib\qtmaind.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Cored.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Guid.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Testd.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Widgetsd.lib";myo32.lib;gtestd.lib;gtest_main-mdd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>UNICODE;WIN32;WIN64;QT_DLL;QT_NO_DEBUG;NDEBUG;QT_CORE_LIB;QT_GUI_LIB;QT_TESTLIB_LIB;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat />
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>.;C:\Qt\5.4\msvc2013_opengl\include;.\GeneratedFiles\$(ConfigurationName);C:\Qt\5.4\msvc2013_opengl\include\QtCore;C:\Qt\5.4\msvc2013_opengl\include\QtGui;C:\Qt\5.4\msvc2013_opengl\include\QtTest;C:\Qt\5.4\msvc2013_opengl\include\QtWidgets;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
+      <AdditionalLibraryDirectories>C:\Qt\5.4\msvc2013_opengl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalDependencies>C:\Qt\5.4\msvc2013_opengl\lib\qtmain.lib;C:\Qt\5.4\msvc2013_opengl\lib\Qt5Core.lib;C:\Qt\5.4\msvc2013_opengl\lib\Qt5Gui.lib;C:\Qt\5.4\msvc2013_opengl\lib\Qt5Test.lib;C:\Qt\5.4\msvc2013_opengl\lib\Qt5Widgets.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AveragingFiter_Test.cpp" />
+    <ClCompile Include="ControlState_Test.cpp" />
+    <ClCompile Include="FilterPipeline_Test.cpp" />
+    <ClCompile Include="GestureFilter_Test.cpp" />
+    <ClCompile Include="GestureSeqRecorder_Test.cpp" />
+    <ClCompile Include="KeyboardSettingFileReader_Test.cpp" />
+    <ClCompile Include="KybrdCtrl_Test.cpp" />
+    <ClCompile Include="MouseCtrl_Test.cpp" />
+    <ClCompile Include="MyoDevice_Test.cpp" />
+    <ClCompile Include="MyoTranslationFilter_Test.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MidasGUILib\MidasGUILib.vcxproj">
+      <Project>{151f24b2-6e57-4c05-8702-62c682c5cdde}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties MocDir=".\GeneratedFiles\$(ConfigurationName)" UicDir=".\GeneratedFiles" RccDir=".\GeneratedFiles" lupdateOptions="" lupdateOnBuild="0" lreleaseOptions="" MocOptions="" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
