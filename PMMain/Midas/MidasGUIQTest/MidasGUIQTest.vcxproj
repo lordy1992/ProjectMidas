@@ -38,7 +38,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
-    <IncludePath>"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib";$(IncludePath);$(ProjectDir)\..\MidasGUI\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\MidasGUI\myo\include\</IncludePath>
+    <IncludePath>$(IncludePath);$(ProjectDir)\..\MidasGUI\;$(ProjectDir)\lib\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\MidasGUI\myo\include\</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
@@ -49,15 +49,15 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib;$(ProjectDir)\..\MidasGUI\;$(ProjectDir)\include\;C:\Program Files\boost\boost_1_57_0\;$(ProjectDir)\..\MidasGUI\myo\include\;.\GeneratedFiles;.;C:\Qt\5.4\msvc2013_opengl\include;.\GeneratedFiles\$(ConfigurationName);C:\Qt\5.4\msvc2013_opengl\include\QtCore;C:\Qt\5.4\msvc2013_opengl\include\QtGui;C:\Qt\5.4\msvc2013_opengl\include\QtWidgets;$(ProjectDir)\myoSim\include;$(ProjectDir)\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories);C:\Qt\5.4\msvc2013_opengl\include\QtTest</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtWidgets;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtGui;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtCore;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include;$(ProjectDir)\..\MidasGUI\;$(QTDIR)\include\;$(ProjectDir)\include\;$(ProjectDir)\..\MidasGUI\myo\include\;.\GeneratedFiles;.\GeneratedFiles\$(ConfigurationName);$(ProjectDir)\myoSim\include;$(ProjectDir)\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>"C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\Win32\Debug";C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUILib;$(ProjectDir)\lib;C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUIQTest\lib;$(ProjectDir)..\MidasGUI\myo\lib;%(AdditionalLibraryDirectories);C:\Users\Owen\Documents\GitHub\ProjectMidas\PMMain\Midas\MidasGUI;C:\Qt\5.4\msvc2013_opengl\lib</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\lib;$(ProjectDir)..\MidasGUI\myo\lib;$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>"C:\Qt\5.4\msvc2013_opengl\lib\qtmaind.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Cored.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Guid.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Testd.lib";"C:\Qt\5.4\msvc2013_opengl\lib\Qt5Widgetsd.lib";myo32.lib;gtestd.lib;gtest_main-mdd.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(QTDIR)\Qt5Widgetsd.lib;$(QTDIR)\Qt5Testd.lib;$(QTDIR)\Qt5Guid.lib;$(QTDIR)\Qt5Cored.lib;$(QTDIR)\qtmaind.lib;myo32.lib;gtestd.lib;gtest_main-mdd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
