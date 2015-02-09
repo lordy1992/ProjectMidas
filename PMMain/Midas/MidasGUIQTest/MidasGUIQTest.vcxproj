@@ -49,13 +49,13 @@
       <Optimization>Disabled</Optimization>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <AdditionalIncludeDirectories>$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtWidgets;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtGui;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include\QtCore;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\lib;$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\include;$(ProjectDir)\..\MidasGUI\;$(QTDIR)\include\;$(ProjectDir)\include\;$(ProjectDir)\..\MidasGUI\myo\include\;.\GeneratedFiles;.\GeneratedFiles\$(ConfigurationName);$(ProjectDir)\myoSim\include;$(ProjectDir)\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(QTDIR)\include\QtGui;$(QTDIR)\include\QtCore;$(QTDIR)\include;$(QTDIR)\include\QtWidgets;$(ProjectDir)\..\MidasGUI\;$(QTDIR)\include\;$(ProjectDir)\include\;$(ProjectDir)\..\MidasGUI\myo\include\;.\GeneratedFiles;.\GeneratedFiles\$(ConfigurationName);$(ProjectDir)\myoSim\include;$(ProjectDir)\myo\include;C:\Program Files\boost\boost_1_57_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <OutputFile>$(OutDir)\$(ProjectName).exe</OutputFile>
-      <AdditionalLibraryDirectories>$(QTDIR)\..\..\..\Qt\5.4\msvc2013_opengl\lib;$(ProjectDir)..\MidasGUI\myo\lib;$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(ProjectDir)..\MidasGUI\myo\lib;$(ProjectDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>$(QTDIR)\lib\qtmaind.lib;$(QTDIR)\lib\Qt5Cored.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Testd.lib;myo32.lib;gtestd.lib;gtest_main-mdd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
