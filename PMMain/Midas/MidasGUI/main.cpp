@@ -15,9 +15,6 @@ int main(int argc, char *argv[])
     readFile.readKeyboardSetupFile(kybrdRingData);
 
     MidasThread midasThread(&kybrdRingData);
-    KeyboardWidget keyboard(&midasThread);
-
-    keyboard.addWheels(&kybrdRingData);
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");
@@ -26,7 +23,6 @@ int main(int argc, char *argv[])
     midasThread.setMainGuiHandle(&mainDisplay);
     midasThread.start();
 
-    keyboard.show();
     mainDisplay.show();
     return a.exec();
 }

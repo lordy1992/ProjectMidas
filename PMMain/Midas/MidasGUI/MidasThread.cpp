@@ -14,6 +14,11 @@ MidasThread::~MidasThread()
 {
 }
 
+std::vector<ringData>* MidasThread::getKybrdRingData()
+{
+    return kybrdRingData;
+}
+
 void MidasThread::setMainGuiHandle(MainGUI *mainGui)
 {
     this->mainGui = mainGui;

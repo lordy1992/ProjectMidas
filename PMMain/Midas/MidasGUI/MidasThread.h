@@ -19,6 +19,7 @@ public:
 
     void setMainGuiHandle(MainGUI *mainGui);
     void run();
+    std::vector<ringData>* getKybrdRingData();
 
 private:
     MainGUI *mainGui;

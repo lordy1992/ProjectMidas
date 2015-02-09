@@ -25,6 +25,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGU
 
     mainGui->connectSignallerToInfoIndicator(&signaller);
     mainGui->connectSignallerToPoseDisplayer(&signaller);
+    mainGui->connectSignallerToKeyboardToggle(&signaller);
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
     emitPoseData(Pose::rest);
@@ -317,6 +318,11 @@ void GestureFilter::handleStateChange(commandData response)
     {
         // Should NOT have made it here
         return;
+    }
+
+    if (response.action.mode == midasMode::KEYBOARD_MODE || controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
+    {
+        signaller.emitToggleKeyboard();
     }
 
     signaller.emitStateString(QTranslator::tr((modeToString(response.action.mode)).c_str()));
