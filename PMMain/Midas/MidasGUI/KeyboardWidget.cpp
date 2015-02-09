@@ -114,6 +114,12 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
     QPen selectPen(centerSelectBrush, penWidth);
     QBrush fillCenterBrush(QColor(205, 205, 193));
 
+    painter.setBrush(fillCenterBrush);
+    if (!centerSelected)
+    {
+        painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+    }
+
     // Draw the key squares.
     if (selectedWheel >= 0)
     {
@@ -140,11 +146,13 @@ void KeyboardWidget::paintEvent(QPaintEvent *event)
 
     painter.setBrush(fillCenterBrush);
 
-    if (centerSelected) painter.setPen(selectPen);
+    if (centerSelected)
+    {
+        painter.setPen(selectPen);
 
-    // Draw center circle/text
-    painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
-    
+        // Draw center circle/text
+        painter.drawEllipse(-innerRingBorderRadius, -innerRingBorderRadius, innerRingBorderDiam, innerRingBorderDiam);
+    }
     QString mainText = QString(CENTER_MAIN);
     QString holdText = QString(CENTER_HOLD);
 
