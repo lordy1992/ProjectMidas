@@ -1,6 +1,7 @@
 #include "MidasThread.h"
 #include "MouseCtrl.h"
 #include "MainGUI.h"
+#include <string>
 
 #include <QtWidgets/QApplication>
 
@@ -17,7 +18,7 @@ int main(int argc, char *argv[])
 
     midasThread.setMainGuiHandle(&mainDisplay);
     midasThread.start();
-
+   // std::string qt = $(QTDIR);
     mainDisplay.show();
     return a.exec();
 }
