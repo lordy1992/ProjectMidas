@@ -258,11 +258,17 @@
     <ClInclude Include="RingData.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MidasGUI.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="keyboardData.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="MidasGUI.ico" />
   </ItemGroup>
 </Project>

@@ -16,6 +16,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
 
+    //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
 
@@ -32,11 +33,11 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
-    
+     
     setLayout(layout);
 
-    int totalWidth = std::max(sequenceDisplayer->width(), 
-                        std::max(infoIndicator->width(), mouseIndicator->width()));
+    int totalWidth = max(sequenceDisplayer->width(), 
+                        max(infoIndicator->width(), mouseIndicator->width()));
     int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);

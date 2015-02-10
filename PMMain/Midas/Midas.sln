@@ -26,6 +26,7 @@ Global
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Mixed Platforms.Deploy.0 = Debug|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Win32.ActiveCfg = Debug|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|Win32.Build.0 = Debug|Win32
 		{C09B4F72-1850-4195-B5AC-1B169E682019}.Debug|x64.ActiveCfg = Debug|x64
