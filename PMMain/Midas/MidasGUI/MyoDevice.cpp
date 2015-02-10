@@ -60,6 +60,14 @@ void MyoDevice::runDeviceLoop()
             {
                 break;
             }
+
+            filterDataMap extraData = gestureFilter.getExtraDataForSCD();
+            if (extraData.size() > 0)
+            {
+                WearableDevice::sharedData->setInput(extraData);
+                WearableDevice::sharedData->process();
+            }
+
             hub.run(durationInMilliseconds);
         }
     }

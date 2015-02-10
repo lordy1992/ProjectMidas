@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "MainGUI.h"
 #include <QApplication.h>
 #include <QDesktopWidget.h>
@@ -36,13 +38,28 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
      
     setLayout(layout);
 
-    int totalWidth = max(sequenceDisplayer->width(), 
-                        max(infoIndicator->width(), mouseIndicator->width()));
+    keyboard = new KeyboardWidget(mainThread);
+    keyboard->addWheels(mainThread->getKybrdRingData());
+
+    int totalWidth = std::max(sequenceDisplayer->width(), 
+                        std::max(infoIndicator->width(), mouseIndicator->width()));
     int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER, screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
         totalWidth, totalHeight);
+}
+
+void MainGUI::toggleKeyboard()
+{
+    if (keyboard->isVisible())
+    {
+        keyboard->setVisible(false);
+    }
+    else
+    {
+        keyboard->setVisible(true);
+    }
 }
 
 MainGUI::~MainGUI()
@@ -80,4 +97,10 @@ void MainGUI::connectSignallerToPoseDisplayer(GestureSignaller *signaller)
 {
     QObject::connect(signaller, SIGNAL(emitPoseImages(std::vector<sequenceImageSet>)),
         poseDisplayer, SLOT(handlePoseImages(std::vector<sequenceImageSet>)));
+}
+
+void MainGUI::connectSignallerToKeyboardToggle(GestureSignaller *signaller)
+{
+    QObject::connect(signaller, SIGNAL(emitToggleKeyboard()),
+        this, SLOT(toggleKeyboard()));
 }

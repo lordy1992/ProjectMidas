@@ -1,7 +1,8 @@
 #include "SCDDigester.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> kybrdRingData)
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
+    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -9,6 +10,7 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
     this->kybrdRingData = kybrdRingData;
+    this->keyboardWidget = keyboardWidget;
     count = 0;
 }
 
@@ -58,28 +60,39 @@ void SCDDigester::digest()
         mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
     }
 
-    if (count % 100 == 0)
+    if (count % 1000 == 0)
     {
         threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
     }
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
-        digestKeyboardData(nextCmd);
+        unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
+        keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
+
+        if (count % 1000 == 0)
+        {
+            double angleAsDouble = (double)currKeyAngle.angle;
+            threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
+
+            // // TEMP TODO for debug only
+            // int x = currKeyAngle.x;
+            // int y = currKeyAngle.y;
+            // threadHandle->emitDebugInfo(x, y);
+        }
+
+        digestKeyboardGUIData(nextCmd);
     }
 
     count++;
 }
 
-void SCDDigester::digestKeyboardData(commandData nextCommand)
+void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
 {
-    if (nextCommand.type == KYBRD_CMD)
-    {
-        // handle as regular keyboard command input
-        kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
-        kybrdCtrl->sendData();
-    }
-    else if (nextCommand.type == KYBRD_GUI_CMD)
+    keyboardAngle currAngle;
+    int ringKeySelIdx;
+    char key;
+    if (nextCommand.type == KYBRD_GUI_CMD)
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
 
@@ -89,7 +102,7 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
         case kybdGUICmds::SWAP_RING_FOCUS:
             // Swap which ring is focussed on (out/in) 
             // based on RingData structure: adding 1 will go from outer to inner ring and sub 1 will go from inner to outer
-            if (kybdGUISel % 4 == 0)
+            if (kybdGUISel % 2 == 0)
             {
                 kybdGUISel += 1;
             }
@@ -97,58 +110,69 @@ void SCDDigester::digestKeyboardData(commandData nextCommand)
             {
                 kybdGUISel -= 1;
             }
-            //threadHandle->UpdateGUIToSwapRingFocus TODO
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
 
         case kybdGUICmds::CHANGE_WHEELS:
             // go to next wheel
-            kybdGUISel += 4;
+            kybdGUISel += 2;
             kybdGUISel %= (scdHandle->getKybdGuiSelMax());
-            //threadHandle->UpdateGUIToChangeWheels TODO
             scdHandle->setKybdGuiSel(kybdGUISel);
             break;
 
         case kybdGUICmds::SELECT:
-            /*
-            keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
+            currAngle = scdHandle->getKeySelectAngle();
 
-            if (need to add correct select logic)
+            if (currAngle.ringThreshReached)
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).main);
+                if (kybdGUISel % 2 == 0)
+                {
+                    ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle());
+                    key = (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle()->at(ringKeySelIdx).main;
+                }
+                else
+                {
+                    ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle());
+                    key = (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle()->at(ringKeySelIdx).main;
+                }
             }
             else
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).main);
+                key = CENTER_MAIN_KEY;
             }
+
+            kybrdCtrl->setKeyChar(key);
             kybrdCtrl->sendData();
-            */
-            /* Todo, pseudocode written 
-            1) pass this character to the keyboard as such
-                kybrdCtrl->setKeyChar(charThatWasDetermined);
-                kybrdCtrl->sendData();    
-            2) tell the GUI that this was selected and that it should play some sort of animation *small flash or something, etc*
-            */
+
+            //threadHandle->animateSelection(); // TODO
             
             break;
         case kybdGUICmds::HOLD_SELECT:
-            /* Todo, pseudocode written
-            EXACT same thing as select except that the HOLD character is used, rather than the regular character.
-            // in the discusion of RingData, this would correspond to the "*Hold vectors"
-            */
-            /*
-            keySelect = scdHandle->getKeySelectAngle() / (360 / kybrdRingData[kybdGUISel].getRingInVectorHandle()->size());
-            
-            if ( need to add correct select logic)
+            currAngle = scdHandle->getKeySelectAngle();
+
+            if (currAngle.ringThreshReached)
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingInVectorHandle()->at(keySelect).hold);
+                if (kybdGUISel % 2 == 0)
+                {
+                    ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle());
+                    key = (*kybrdRingData)[kybdGUISel / 2].getRingOutVectorHandle()->at(ringKeySelIdx).hold;
+                }
+                else
+                {
+                    ringKeySelIdx = getSelectedKeyFromAngle(currAngle.angle, (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle());
+                    key = (*kybrdRingData)[kybdGUISel / 2].getRingInVectorHandle()->at(ringKeySelIdx).hold;
+                }
             }
             else
             {
-                kybrdCtrl->setKeyChar(kybrdRingData[kybdGUISel].getRingOutVectorHandle()->at(keySelect).hold);
+                key = CENTER_HOLD_KEY;
             }
+
+            kybrdCtrl->setKeyChar(key);
             kybrdCtrl->sendData();
-            */
+
+            //threadHandle->animateSelection(); // TODO
+
             break;
         default:
             break;
@@ -160,4 +184,14 @@ void SCDDigester::digestKybdCmd(commandData nextCommand)
 {
     kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
     kybrdCtrl->sendData();
+}
+
+// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
+int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
+{
+    qreal deltaAngle = 360.0 / ring->size();
+    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
+
+    // TODO: May have to change later, based on received angle
+    return (int)(adjustedAngle / deltaAngle);
 }
