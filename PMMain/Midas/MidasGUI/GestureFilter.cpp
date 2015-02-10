@@ -25,6 +25,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGU
 
     mainGui->connectSignallerToInfoIndicator(&signaller);
     mainGui->connectSignallerToPoseDisplayer(&signaller);
+    mainGui->connectSignallerToKeyboardToggle(&signaller);
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
     emitPoseData(Pose::rest);
@@ -237,7 +238,7 @@ void GestureFilter::registerStateSequences(void)
     // Register sequence from Keyboard Mode to Mouse Mode
     sequence kybrdToMouseSeq;
     kybrdToMouseSeq.push_back(SeqElement(Pose::Type::thumbToPinky));
-    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveIn));
+    kybrdToMouseSeq.push_back(SeqElement(Pose::Type::waveOut));
     commandData kybrdToMouseResponse;
     kybrdToMouseResponse.name = "Keyboard To Mouse";
     kybrdToMouseResponse.type = commandType::STATE_CHANGE;
@@ -261,7 +262,7 @@ void GestureFilter::registerStateSequences(void)
     // From Keyboard:
     toLockResponse.name = "Keyboard To Lock"; // OVERRIDE for Keyboard.
     toLockSeq[0] = (SeqElement(Pose::Type::thumbToPinky));
-    toLockSeq[1] = (SeqElement(Pose::Type::waveOut));
+    toLockSeq[1] = (SeqElement(Pose::Type::waveIn));
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::KEYBOARD_MODE, toLockSeq, toLockResponse, "Keyboard to Lock");
 
     // Register sequence from Gesture Mode to Gesture Hold Modes
@@ -319,6 +320,11 @@ void GestureFilter::handleStateChange(commandData response)
         return;
     }
 
+    if (response.action.mode == midasMode::KEYBOARD_MODE || controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
+    {
+        signaller.emitToggleKeyboard();
+    }
+
     signaller.emitStateString(QTranslator::tr((modeToString(response.action.mode)).c_str()));
 
     std::cout << "Transitioning to state: " << response.action.mode << std::endl;
@@ -341,7 +347,7 @@ void GestureFilter::handleMouseCommand(commandData response)
     }
 }
 
-void GestureFilter::handleKybrdCommand(commandData response)
+void GestureFilter::handleKybrdCommand(commandData response, bool addToExtra)
 {
     if (controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
@@ -350,8 +356,23 @@ void GestureFilter::handleKybrdCommand(commandData response)
         command = response;
 
         outputToSharedCommandData[COMMAND_INPUT] = command;
-        Filter::setOutput(outputToSharedCommandData);
+
+        if (addToExtra) 
+        {
+            extraDataForSCD = outputToSharedCommandData;
+        }
+        else
+        {
+            Filter::setOutput(outputToSharedCommandData);
+        }
     }
+}
+
+filterDataMap GestureFilter::getExtraDataForSCD()
+{
+    filterDataMap retVal = extraDataForSCD;
+    extraDataForSCD.clear();
+    return retVal;
 }
 
 void setupCallbackThread(GestureFilter *gf)
@@ -373,16 +394,17 @@ void callbackThreadWrapper(GestureFilter *gf)
         {
             GestureFilter::handleStateChange(response);
         }
-        //else if (response.type == commandType::MOUSE_CMD)
-        //{
-        //    handleMouseCommand(response);
-        //}
-        //else if (response.type == commandType::KYBRD_CMD)
-        //{
-        //    handleKybrdCommand(response);
-        //}
-        // TODO - figure out if this is necessary here... cant make work easily as functions
-        // cant simply be converted to static. But... probably should make it work... Need to figure out.
-
+        else if (response.type == commandType::MOUSE_CMD)
+        {
+            gf->handleMouseCommand(response);
+        }
+        else if (response.type == commandType::KYBRD_CMD)
+        {
+            gf->handleKybrdCommand(response, true);
+        }
+        else if (response.type == commandType::KYBRD_GUI_CMD)
+        {
+            gf->handleKybrdCommand(response, true);
+        }
     } while (true);
 }

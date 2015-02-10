@@ -83,29 +83,25 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
 
 void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
 {
+    kybdGuiSelMutex.lock();
     if (kybdGuiSel <= maxKybdGuiSel)
     {
-        kybdGuiSelMutex.lock();
-        kybdGuiSel = kybdGuiSel;
-        kybdGuiSelMutex.unlock();
+        this->kybdGuiSel = kybdGuiSel;
     }
+    kybdGuiSelMutex.unlock();
 }
 
 bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
 {
-    if (kybdGuiSel <= maxKybdGuiSel)
-    {
-        bool locked = kybdGuiSelMutex.try_lock();
-        if (locked) {
-            kybdGuiSel = kybdGuiSel;
+    bool locked = kybdGuiSelMutex.try_lock();
+    if (locked) {
+        if (kybdGuiSel <= maxKybdGuiSel)
+        {
+            this->kybdGuiSel = kybdGuiSel;
             kybdGuiSelMutex.unlock();
         }
-        return locked;
     }
-    else
-    {
-        return false;
-    }
+    return locked;
 }
 
 unsigned int SharedCommandData::getKybdGuiSel()
@@ -148,54 +144,14 @@ bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
     return locked;
 }
 
-
-void SharedCommandData::setMyoOrientation(orientation_data orientation)
-{
-    myoOrientationMutex.lock();
-    myoOrientation = orientation;
-    myoOrientationMutex.unlock();
-}
-
-bool SharedCommandData::trySetMyoOrientation(orientation_data orientation)
-{
-    bool locked = myoOrientationMutex.try_lock();
-    if (locked) {
-        myoOrientation = orientation;
-        myoOrientationMutex.unlock();
-    }
-
-    return locked;
-}
-
-orientation_data SharedCommandData::getMyoOrientation()
-{
-    myoOrientationMutex.lock();
-    orientation_data orientation = myoOrientation;
-    myoOrientationMutex.unlock();
-
-    return orientation;
-}
-
-
-bool SharedCommandData::tryGetMyoOrientation(orientation_data& outMyoOrientation)
-{
-    bool locked = myoOrientationMutex.try_lock();
-    if (locked) {
-        outMyoOrientation = myoOrientation;
-        myoOrientationMutex.unlock();
-    }
-
-    return locked;
-}
-
-void SharedCommandData::setKeySelectAngle(int angle)
+void SharedCommandData::setKeySelectAngle(keyboardAngle angle)
 {
     keySelectAngleMutex.lock();
     keySelectAngle = angle;
     keySelectAngleMutex.unlock();
 }
 
-bool SharedCommandData::trySetKeySelectAngle(int angle)
+bool SharedCommandData::trySetKeySelectAngle(keyboardAngle angle)
 {
     bool locked = keySelectAngleMutex.try_lock();
     if (locked) {
@@ -206,17 +162,17 @@ bool SharedCommandData::trySetKeySelectAngle(int angle)
     return locked;
 }
 
-int SharedCommandData::getKeySelectAngle()
+keyboardAngle SharedCommandData::getKeySelectAngle()
 {
     keySelectAngleMutex.lock();
-    int angle = keySelectAngle;
+    keyboardAngle angle = keySelectAngle;
     keySelectAngleMutex.unlock();
 
     return angle;
 }
 
 
-bool SharedCommandData::tryGetKeySelectAngle(int& outKeySelectAngle)
+bool SharedCommandData::tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle)
 {
     bool locked = keySelectAngleMutex.try_lock();
     if (locked) {
@@ -251,14 +207,10 @@ void SharedCommandData::process()
         extractPoint(value);
     }
 
-    if (input.find(ORIENTATION_INPUT) != input.end())
-    {
-        boost::any value = input[ORIENTATION_INPUT];
-        extractPoint(value);
-    }
     if (input.find(ANGLE_INPUT) != input.end())
     {
-        extractPoint(input);
+        boost::any value = input[ANGLE_INPUT];
+        extractKeySelectAngle(value);
     }
 }
 
@@ -310,26 +262,16 @@ void SharedCommandData::extractPoint(boost::any value)
     }
 }
 
-
-void SharedCommandData::extractOrientation(boost::any value)
+void SharedCommandData::extractKeySelectAngle(boost::any value)
 {
-    if (value.type() != typeid(orientation_data))
+    if (value.type() != typeid(keyboardAngle))
     {
         Filter::setFilterError(filterError::INVALID_INPUT);
         Filter::setFilterStatus(filterStatus::FILTER_ERROR);
     }
     else
     {
-        orientation_data orientation = boost::any_cast<orientation_data> (value);
-        setMyoOrientation(orientation);
+        keyboardAngle angle = boost::any_cast<keyboardAngle> (value);
+        setKeySelectAngle(angle);
     }
 }
-
-void SharedCommandData::extractKeySelectAngle(int angle)
-{
-    setKeySelectAngle(angle);
-}
-
-
-
-
