@@ -23,6 +23,16 @@ int main(int argc, char *argv[])
     midasThread.setMainGuiHandle(&mainDisplay);
     midasThread.start();
 
+    // TODO: This is a hack. It fixes the issue with the widgets not staying on top, but
+    // we still have to investigate why this works. Could be a bug with how we are creating
+    // our widgets, or it could be an issue in Qt (or we do not fully understand how Qt handles 
+    // showing widgets and windows that are always on top).
+    QLabel dummyLabel;
+
+    dummyLabel.show();
+    dummyLabel.setVisible(false);
+    // End hack
+
     mainDisplay.show();
     return a.exec();
 }
