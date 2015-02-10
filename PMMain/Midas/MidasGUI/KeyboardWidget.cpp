@@ -9,7 +9,7 @@
 #define EXTRA_WINDOW_DIST 10
 
 KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidth, QWidget *parent)
-    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint), 
+    : DraggableWidget(parent, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint | Qt::WindowDoesNotAcceptFocus), 
         keyboardRadius(radius), ringWidth(ringWidth), selectedWheel(-1),
         selectedKey(-1), holdFont("Times", 9, QFont::Normal), timesFont("Times", 16, QFont::DemiBold)
 {
@@ -23,6 +23,8 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
     connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
 
     connect(mainThread, SIGNAL(emitDebugInfo(int, int)), this, SLOT(handleDebugInfo(int, int)));
+
+    setAttribute(Qt::WA_ShowWithoutActivating);
 }
 
 void KeyboardWidget::addWheel(ringData wheel)

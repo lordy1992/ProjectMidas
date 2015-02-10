@@ -1,3 +1,5 @@
+#define NOMINMAX
+
 #include "MainGUI.h"
 #include <QApplication.h>
 #include <QDesktopWidget.h>
@@ -38,8 +40,8 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     keyboard = new KeyboardWidget(mainThread);
     keyboard->addWheels(mainThread->getKybrdRingData());
 
-    int totalWidth = max(sequenceDisplayer->width(), 
-                        max(infoIndicator->width(), mouseIndicator->width()));
+    int totalWidth = std::max(sequenceDisplayer->width(), 
+                        std::max(infoIndicator->width(), mouseIndicator->width()));
     int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
