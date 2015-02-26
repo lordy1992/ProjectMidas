@@ -23,6 +23,8 @@ using namespace myo;
 #define MAX_PITCH_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 #define MAX_YAW_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 
+#define KEYBOARD_THRESH_MAG 30
+
 /**
  * Consult Filter.h for concepts regarding Filters.
  * Handles translating from Myo orientation data to mouse movement information.
@@ -105,8 +107,6 @@ private:
     * and y being the percent of the total velocity along the y axis.
     */
     point getMouseUnitVelocity(float pitch, float yaw);
-
-    float keySelectAngle(orientation_data data);
 
     ControlState* controlStateHandle;
     midasMode previousMode;

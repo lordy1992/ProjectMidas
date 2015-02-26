@@ -6,6 +6,11 @@
 #include <iostream>
 #include <QLabel.h>
 
+#define CENTER_MAIN "Space"
+#define CENTER_HOLD "Enter"
+#define CENTER_MAIN_KEY 0x20
+#define CENTER_HOLD_KEY 0x0D
+
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
 using namespace myoSim;

@@ -32,10 +32,11 @@ void MyoTranslationFilter::process()
     float yaw = getYawFromQuaternion(quatX, quatY, quatZ, quatW);
     int rollDeg = (int)(getRollFromQuaternion(quatX, quatY, quatZ, quatW) * (180 / M_PI));
 
-    
-  
-    if (previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE)
+    if ((previousMode != MOUSE_MODE && controlStateHandle->getMode() == MOUSE_MODE) ||
+        (previousMode != KEYBOARD_MODE && controlStateHandle->getMode() == KEYBOARD_MODE))
     {
+        // in both MOUSE_MODE and KEYBOARD_MODE, our angles are based off of a base frame of
+        // reference recorded here.
         basePitch = pitch;
         baseYaw = yaw;
     }
@@ -44,8 +45,6 @@ void MyoTranslationFilter::process()
     {
         if (previousMode == MOUSE_MODE)
         {
-            int test = keySelectAngle(orientation_data(roll, pitch, yaw));
-
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
             
@@ -70,15 +69,35 @@ void MyoTranslationFilter::process()
                 command.action.kybd = kybdCmds::VOLUME_DOWN;
                 outputToSharedCommandData[COMMAND_INPUT] = command;
             }
-        }
-    }
-    else if (controlStateHandle->getMode() == KEYBOARD_MODE)
-    {
-        filterDataMap outputToSharedCommandData;
-        int mouseOrientationForKeyboard = keySelectAngle(orientation_data(roll, pitch, yaw));
-        outputToSharedCommandData[ORIENTATION_INPUT] = mouseOrientationForKeyboard;
-        Filter::setOutput(outputToSharedCommandData);
+        } 
+        else if (controlStateHandle->getMode() == KEYBOARD_MODE)
+        {
+            keyboardAngle myoAngle;
 
+            point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
+            unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
+            myoAngle.ringThreshReached = false;
+            if (magnitude > KEYBOARD_THRESH_MAG)
+            {
+                myoAngle.ringThreshReached = true;
+            }
+
+            // TEMP TODO for debug only
+            myoAngle.x = myoAnglePoint.x;
+            myoAngle.y = myoAnglePoint.y;
+
+            // TODO - verify/disprove this function 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x);
+            // using 90 instead of 180 *seems* to make it better, but then the upper left quadrant is unnaccessable.
+            int myoAngleDegree = 90 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
+            while (myoAngleDegree < 0)
+            {
+                myoAngleDegree += 360;
+            }
+            
+            myoAngle.angle = myoAngleDegree;
+
+            outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
+        }
     }
     else
     {
@@ -141,7 +160,7 @@ float MyoTranslationFilter::getRollFromQuaternion(float x, float y, float z, flo
 float MyoTranslationFilter::calcRingDelta(float current, float base)
 {
     // Assert angles are within range of a circle [0, 2Pi)
-    if (current >= 2 * M_PI || base >= 2 * M_PI || current <  0 || base < 0)
+    if (current >= 2 * M_PI || base >= 2 * M_PI || current < 0 || base < 0)
     {
         return 0.0;
     }
@@ -155,7 +174,7 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
         }
         else
         {
-            delta = -((2*M_PI - current) + base);
+            delta = -((2 * M_PI - current) + base);
         }
     }
     else
@@ -166,20 +185,9 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
         }
         else
         {
-            delta = (2*M_PI - base) + current;
+            delta = (2 * M_PI - base) + current;
         }
     }
 
     return delta;
-}
-
-float MyoTranslationFilter::keySelectAngle(orientation_data orientation) //WIP
-{
-    float angle, x, y,z;
-    x = -cos(orientation.pitch)*sin(orientation.yaw);
-    y = -sin(orientation.yaw);
-    z = cos(orientation.pitch)*cos(orientation.yaw);
-    angle = tan(x / y);
-    return angle;// *(180 / 3.14);
- 
 }

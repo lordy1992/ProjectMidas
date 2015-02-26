@@ -20,12 +20,11 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
     std::vector<std::string> temp;
     std::string line;
 
-    currentRing currentRing = ringIn;
+    currentRing currentRing = ringOut;
     bool holdkeyCheck = false;
 
     ringData::keyboardValue keyTemp('\0');
     ringData *ringTemp = new ringData();
-
 
     if (ringDataFile.is_open())
     {
@@ -36,7 +35,6 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
 
             for (int i = 0; i < temp.size(); i++)
             {
-
                 for (char & key : temp[i])
                 {
 
@@ -47,12 +45,10 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
                         if (currentRing == ringIn)
                         {
                             ringTemp->getRingInVectorHandle()->push_back(keyTemp);
-
                         }
                         else
                         {
                             ringTemp->getRingOutVectorHandle()->push_back(keyTemp);
-
                         }
                     }
                     else
@@ -77,25 +73,21 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
                             keyTemp.main = key;
                             holdkeyCheck = true;
                         }
-
                     }
                 }
-
             }
 
-            if (currentRing == ringIn)
-            {
-                currentRing = ringOut;
-            }
-            else if (currentRing == ringOut)
+            if (currentRing == ringOut)
             {
                 currentRing = ringIn;
+            }
+            else if (currentRing == ringIn)
+            {
+                currentRing = ringOut;
                 ringDataHandle.push_back(*ringTemp);
                 ringTemp = new ringData();
             }
-
         }
-
     }
     else
     {
@@ -103,6 +95,4 @@ void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDa
     }
     ringDataFile.close();
     ringTemp->~ringData();
-
-
 }
