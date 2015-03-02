@@ -92,7 +92,7 @@ void SCDDigester::digest()
         if (count % 1000 == 0)
         {
             double angleAsDouble = (double)currKeyAngle.angle;
-            threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
+            threadHandle->emitUpdateKeyboard(kybdGUISel, ringKeySelIdx, currKeyAngle.ringThreshReached, false);
         }
 
         digestKeyboardGUIData(nextCmd, selRing, centerSelect);

@@ -28,7 +28,7 @@ private:
 signals:
     void emitVeloc(int, int);
 
-    void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
+    void emitUpdateKeyboard(int, int, bool, bool);  // kybdGUISel, keySelect, center, held
 
     void emitDebugInfo(int, int);
 };

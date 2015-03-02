@@ -22,7 +22,7 @@ public:
     void clearWheels();
 
 public slots:
-    void updateKeyboard(int, double, bool, bool);
+    void updateKeyboard(int, int, bool, bool);
 
     void handleDebugInfo(int, int);
 
@@ -42,7 +42,6 @@ protected:
     void resizeEvent(QResizeEvent *event);
 
 private:
-    int getSelectedKeyFromAngle(double angle);
     void drawRing(QPainter &painter, std::vector<ringData::keyboardValue> *ring, int ringInnerRad, bool isSelected);
     void drawKey(QPainter &painter, int ringInnerRad, qreal currAngle, qreal deltaAngle,
         QRectF& outerRect, QRectF& innerRect, ringData::keyboardValue keyDat, QColor& lineColour, int distBetween);

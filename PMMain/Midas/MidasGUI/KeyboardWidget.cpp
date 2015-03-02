@@ -20,7 +20,7 @@ KeyboardWidget::KeyboardWidget(MidasThread *mainThread, int radius, int ringWidt
 
     selectedWheel = 0;
  
-    connect(mainThread, SIGNAL(emitUpdateKeyboard(int, double, bool, bool)), this, SLOT(updateKeyboard(int, double, bool, bool)));
+    connect(mainThread, SIGNAL(emitUpdateKeyboard(int, int, bool, bool)), this, SLOT(updateKeyboard(int, int, bool, bool)));
 
     connect(mainThread, SIGNAL(emitDebugInfo(int, int)), this, SLOT(handleDebugInfo(int, int)));
 
@@ -45,14 +45,14 @@ void KeyboardWidget::clearWheels()
     wheels.clear();
 }
 
-void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ringThreshReached, bool held)
+void KeyboardWidget::updateKeyboard(int wheelNumber, int keySelect, bool ringThreshReached, bool held)
 {
     selectedWheel = wheelNumber / 2;
     if (ringThreshReached)
     {
         centerSelected = false;
         outerSelected = (wheelNumber % 2 == 0);
-        selectedKey = getSelectedKeyFromAngle(currAngle);
+        selectedKey = keySelect;
     }
     else
     {
@@ -61,7 +61,6 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, double currAngle, bool ring
         selectedKey = -1;
     }
 
-    //tempDebugText1 = std::to_string(currAngle).c_str();
     update();
 }
 
@@ -69,27 +68,6 @@ void KeyboardWidget::handleDebugInfo(int x, int y)
 {
     //tempDebugText2 = std::to_string(x).c_str();
     //tempDebugText3 = std::to_string(y).c_str();
-}
-
-// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
-int KeyboardWidget::getSelectedKeyFromAngle(double angle)
-{
-    std::vector<ringData::keyboardValue> *ring;
-
-    if (outerSelected)
-    {
-        ring = wheels[selectedWheel].getRingOutVectorHandle();
-    }
-    else
-    {
-        ring = wheels[selectedWheel].getRingInVectorHandle();
-    }
-
-    qreal deltaAngle = 360.0 / ring->size();
-    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
-
-    // TODO: May have to change later, based on received angle
-    return (int)(adjustedAngle / deltaAngle);
 }
 
 void KeyboardWidget::paintEvent(QPaintEvent *event)
