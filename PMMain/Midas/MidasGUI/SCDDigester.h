@@ -30,7 +30,7 @@ public:
 private:
     void digestKybdCmd(commandData nextCommand);
 
-    void digestKeyboardGUIData(commandData nextCommand);
+    void digestKeyboardGUIData(commandData nextCommand, ringData::keyboardValue selRing, bool inCenter);
 
     int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);
 

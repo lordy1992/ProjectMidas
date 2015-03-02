@@ -12,7 +12,7 @@ public:
     struct keyboardValue
     {
         char main, hold;
-        keyboardValue(char mainVal, char holdVal = '\0') : main(mainVal), hold(holdVal) { }
+        keyboardValue(char mainVal = '\0', char holdVal = '\0') : main(mainVal), hold(holdVal) { }
     };
 
 
