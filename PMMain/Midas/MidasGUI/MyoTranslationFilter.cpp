@@ -39,6 +39,9 @@ void MyoTranslationFilter::process()
         // reference recorded here.
         basePitch = pitch;
         baseYaw = yaw;
+#ifdef VERSION2
+        baseRoll = rollDeg;
+#endif
     }
 
     if (controlStateHandle->getMode() != MOUSE_MODE)
@@ -74,6 +77,15 @@ void MyoTranslationFilter::process()
         {
             keyboardAngle myoAngle;
 
+#ifdef VERSION2
+            deltaRoll = rollDeg - baseRoll;
+
+            myoAngle.ringThreshReached = true;
+            myoAngle.angle = deltaRoll;
+
+            outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
+#else
+
             point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
             unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
             myoAngle.ringThreshReached = false;
@@ -97,6 +109,7 @@ void MyoTranslationFilter::process()
             myoAngle.angle = myoAngleDegree;
 
             outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
+#endif
         }
     }
     else

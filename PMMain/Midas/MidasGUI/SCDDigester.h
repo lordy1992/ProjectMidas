@@ -40,7 +40,9 @@ private:
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     int count;
-
+#ifdef VERSION2
+    int currKeySelect;
+#endif
     KeyboardWidget *keyboardWidget;
     std::vector<ringData> *kybrdRingData;
 };

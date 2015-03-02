@@ -11,6 +11,10 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
     this->kybrdCtrl = kybrdCtrl;
     this->kybrdRingData = kybrdRingData;
     this->keyboardWidget = keyboardWidget;
+
+#ifdef VERSION2
+    currKeySelect = 0;
+#endif
     count = 0;
 }
 
@@ -73,7 +77,44 @@ void SCDDigester::digest()
         ringData::keyboardValue selRing;
         ringData ringDat = kybrdRingData->at(kybdGUISel / 2);
         bool centerSelect = true;
+#ifdef VERSION2
 
+        centerSelect = false;
+        std::vector<ringData::keyboardValue> *whichRing;
+        if (kybdGUISel % 2 == 0)
+        {
+            whichRing = ringDat.getRingOutVectorHandle();
+        }
+        else
+        {
+            whichRing = ringDat.getRingInVectorHandle();
+        }
+
+        if (count % 10000 == 0)
+        {
+            if (currKeyAngle.angle > 20) 
+            {
+                currKeySelect++;
+            }
+            else if (currKeyAngle.angle < -20)
+            {
+                currKeySelect--;
+            }
+
+            if (currKeySelect < 0)
+            {
+                currKeySelect = whichRing->size() - 1;
+            } 
+            else if (currKeySelect >= whichRing->size())
+            {
+                currKeySelect = 0;
+            } 
+
+            threadHandle->emitUpdateKeyboard(kybdGUISel, currKeySelect, currKeyAngle.ringThreshReached, false);
+        }
+
+        selRing = whichRing->at(currKeySelect);
+#else
         if (currKeyAngle.ringThreshReached)
         {
             centerSelect = false;
@@ -94,7 +135,7 @@ void SCDDigester::digest()
             double angleAsDouble = (double)currKeyAngle.angle;
             threadHandle->emitUpdateKeyboard(kybdGUISel, ringKeySelIdx, currKeyAngle.ringThreshReached, false);
         }
-
+#endif
         digestKeyboardGUIData(nextCmd, selRing, centerSelect);
     }
 
