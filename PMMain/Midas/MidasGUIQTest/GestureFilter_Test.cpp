@@ -1,12 +1,12 @@
-//#include "GestureFilter.h"
-//#include <gtest\gtest.h>
-//#include <Windows.h>
-//
+#include "GestureFilter.h"
+#include <gtest\gtest.h>
+#include <Windows.h>
+
 //TEST(GestureFiltTest1, constructorTest) {
-//    SharedCommandData *scd = new SharedCommandData();
+//    SharedCommandData *scd = new SharedCommandData(1);
 //    ControlState *cs = new ControlState(scd);
 //
-//    GestureFilter *gestFilt = new GestureFilter(cs, 0);
+//    GestureFilter *gestFilt = new GestureFilter(cs, 0, NULL);
 //
 //    filterError fErr = gestFilt->getFilterError();
 //    ASSERT_EQ(filterError::NO_FILTER_ERROR, fErr);
@@ -17,10 +17,10 @@
 //}
 //
 //TEST(GestureFiltTest2, timingTest) {
-//    SharedCommandData *scd = new SharedCommandData();
+//    SharedCommandData *scd = new SharedCommandData(1);
 //    ControlState *cs = new ControlState(scd);
 //
-//    GestureFilter *gestFilt = new GestureFilter(cs, 20);
+//    GestureFilter *gestFilt = new GestureFilter(cs, 20, NULL);
 //
 //    midasMode mm = cs->getMode();
 //    ASSERT_EQ(midasMode::LOCK_MODE, mm);
@@ -85,10 +85,10 @@
 //}
 //
 //TEST(GestureFiltTest3, timingTest2) {
-//    SharedCommandData *scd = new SharedCommandData();
+//    SharedCommandData *scd = new SharedCommandData(1);
 //    ControlState *cs = new ControlState(scd);
 //
-//    GestureFilter *gestFilt = new GestureFilter(cs, 20);
+//    GestureFilter *gestFilt = new GestureFilter(cs, 20, NULL);
 //
 //    midasMode mm = cs->getMode();
 //    ASSERT_EQ(midasMode::LOCK_MODE, mm);
@@ -122,10 +122,10 @@
 //}
 //
 //TEST(GestureFiltTest4, stateMachineTest) {
-//    SharedCommandData *scd = new SharedCommandData();
+//    SharedCommandData *scd = new SharedCommandData(1);
 //    ControlState *cs = new ControlState(scd);
 //
-//    GestureFilter *gestFilt = new GestureFilter(cs, 0);
+//    GestureFilter *gestFilt = new GestureFilter(cs, 0, NULL);
 //
 //    midasMode mm = cs->getMode();
 //    ASSERT_EQ(midasMode::LOCK_MODE, mm);
