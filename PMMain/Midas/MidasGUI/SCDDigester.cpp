@@ -103,9 +103,9 @@ void SCDDigester::digest()
 
             if (currKeySelect < 0)
             {
-                currKeySelect = whichRing->size() - 1;
+                currKeySelect = whichRing->size();
             } 
-            else if (currKeySelect >= whichRing->size())
+            else if (currKeySelect > whichRing->size())
             {
                 currKeySelect = 0;
             } 
@@ -113,7 +113,14 @@ void SCDDigester::digest()
             threadHandle->emitUpdateKeyboard(kybdGUISel, currKeySelect, currKeyAngle.ringThreshReached, false);
         }
 
-        selRing = whichRing->at(currKeySelect);
+        if (currKeySelect > 0)
+        {
+            selRing = whichRing->at(currKeySelect - 1);
+        }
+        else
+        {
+            centerSelect = true;
+        }
 #else
         if (currKeyAngle.ringThreshReached)
         {
@@ -181,7 +188,7 @@ void SCDDigester::digestKeyboardGUIData(commandData nextCommand, ringData::keybo
 
             break;
         case kybdGUICmds::HOLD_SELECT:
-            key = (inCenter) ? CENTER_MAIN_KEY : selRing.hold;
+            key = (inCenter) ? CENTER_HOLD_KEY : selRing.hold;
 
             kybrdCtrl->setKeyChar(key);
             kybrdCtrl->sendData();

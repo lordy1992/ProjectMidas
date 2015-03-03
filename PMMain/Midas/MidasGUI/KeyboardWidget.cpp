@@ -48,6 +48,21 @@ void KeyboardWidget::clearWheels()
 void KeyboardWidget::updateKeyboard(int wheelNumber, int keySelect, bool ringThreshReached, bool held)
 {
     selectedWheel = wheelNumber / 2;
+
+#ifdef VERSION2
+    if (!keySelect)
+    {
+        centerSelected = true;
+        outerSelected = false;
+        selectedKey = -1;
+    }
+    else
+    {
+        centerSelected = false;
+        outerSelected = (wheelNumber % 2 == 0);
+        selectedKey = keySelect - 1;
+    }
+#else
     if (ringThreshReached)
     {
         centerSelected = false;
@@ -60,6 +75,7 @@ void KeyboardWidget::updateKeyboard(int wheelNumber, int keySelect, bool ringThr
         outerSelected = false;
         selectedKey = -1;
     }
+#endif
 
     update();
 }
