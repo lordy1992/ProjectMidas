@@ -15,25 +15,25 @@ void MouseCtrlTest::testMouseSquare(DWORD mouseRate)
     DWORD t2 = clock() * (1000 / CLOCKS_PER_SEC);
     while (t2 - t1 < loopTime)
     {
-        mc->sendCommand(mouseCmds::MOVE_UP, true, mouseRate);
+//        mc->sendCommand(mouseCmds::MOVE_UP, true, mouseRate);
         t2 = clock() * (1000 / CLOCKS_PER_SEC);
     }
     t1 = t2;
     while (t2 - t1 < loopTime)
     {
-        mc->sendCommand(mouseCmds::MOVE_RIGHT, true, mouseRate);
+ //       mc->sendCommand(mouseCmds::MOVE_RIGHT, true, mouseRate);
         t2 = clock() * (1000 / CLOCKS_PER_SEC);
     }
     t1 = t2;
     while (t2 - t1 < loopTime)
     {
-        mc->sendCommand(mouseCmds::MOVE_DOWN, true, mouseRate);
+   //     mc->sendCommand(mouseCmds::MOVE_DOWN, true, mouseRate);
         t2 = clock() * (1000 / CLOCKS_PER_SEC);
     }
     t1 = t2;
     while (t2 - t1 < loopTime)
     {
-        mc->sendCommand(mouseCmds::MOVE_LEFT, true, mouseRate);
+ //       mc->sendCommand(mouseCmds::MOVE_LEFT, true, mouseRate);
         t2 = clock() * (1000 / CLOCKS_PER_SEC);
     }
 
