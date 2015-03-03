@@ -574,5 +574,8 @@ void GestureSeqRecorder::printStatus(bool verbose)
 
 void GestureSeqRecorder::connectGuiSignals()
 {
-    mainGui->connectSignallerToSequenceDisplayer(&signaller);
+    if (mainGui)
+    {
+        mainGui->connectSignallerToSequenceDisplayer(&signaller);
+    }
 }

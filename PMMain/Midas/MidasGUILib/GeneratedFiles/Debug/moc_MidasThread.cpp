@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MidasThread_t {
-    QByteArrayData data[3];
-    char stringdata[23];
+    QByteArrayData data[5];
+    char stringdata[56];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -31,10 +31,13 @@ static const qt_meta_stringdata_MidasThread_t qt_meta_stringdata_MidasThread = {
     {
 QT_MOC_LITERAL(0, 0, 11), // "MidasThread"
 QT_MOC_LITERAL(1, 12, 9), // "emitVeloc"
-QT_MOC_LITERAL(2, 22, 0) // ""
+QT_MOC_LITERAL(2, 22, 0), // ""
+QT_MOC_LITERAL(3, 23, 18), // "emitUpdateKeyboard"
+QT_MOC_LITERAL(4, 42, 13) // "emitDebugInfo"
 
     },
-    "MidasThread\0emitVeloc\0"
+    "MidasThread\0emitVeloc\0\0emitUpdateKeyboard\0"
+    "emitDebugInfo"
 };
 #undef QT_MOC_LITERAL
 
@@ -44,17 +47,21 @@ static const uint qt_meta_data_MidasThread[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       3,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       1,       // signalCount
+       3,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    2,   19,    2, 0x06 /* Public */,
+       1,    2,   29,    2, 0x06 /* Public */,
+       3,    4,   34,    2, 0x06 /* Public */,
+       4,    2,   43,    2, 0x06 /* Public */,
 
  // signals: parameters
+    QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
+    QMetaType::Void, QMetaType::Int, QMetaType::Double, QMetaType::Bool, QMetaType::Bool,    2,    2,    2,    2,
     QMetaType::Void, QMetaType::Int, QMetaType::Int,    2,    2,
 
        0        // eod
@@ -66,6 +73,8 @@ void MidasThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
         MidasThread *_t = static_cast<MidasThread *>(_o);
         switch (_id) {
         case 0: _t->emitVeloc((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 1: _t->emitUpdateKeyboard((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< double(*)>(_a[2])),(*reinterpret_cast< bool(*)>(_a[3])),(*reinterpret_cast< bool(*)>(_a[4]))); break;
+        case 2: _t->emitDebugInfo((*reinterpret_cast< int(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -75,6 +84,18 @@ void MidasThread::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id,
             typedef void (MidasThread::*_t)(int , int );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MidasThread::emitVeloc)) {
                 *result = 0;
+            }
+        }
+        {
+            typedef void (MidasThread::*_t)(int , double , bool , bool );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MidasThread::emitUpdateKeyboard)) {
+                *result = 1;
+            }
+        }
+        {
+            typedef void (MidasThread::*_t)(int , int );
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&MidasThread::emitDebugInfo)) {
+                *result = 2;
             }
         }
     }
@@ -105,13 +126,13 @@ int MidasThread::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 1)
+        if (_id < 3)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 1;
+        _id -= 3;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 1)
+        if (_id < 3)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 1;
+        _id -= 3;
     }
     return _id;
 }
@@ -121,5 +142,19 @@ void MidasThread::emitVeloc(int _t1, int _t2)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
     QMetaObject::activate(this, &staticMetaObject, 0, _a);
+}
+
+// SIGNAL 1
+void MidasThread::emitUpdateKeyboard(int _t1, double _t2, bool _t3, bool _t4)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)), const_cast<void*>(reinterpret_cast<const void*>(&_t3)), const_cast<void*>(reinterpret_cast<const void*>(&_t4)) };
+    QMetaObject::activate(this, &staticMetaObject, 1, _a);
+}
+
+// SIGNAL 2
+void MidasThread::emitDebugInfo(int _t1, int _t2)
+{
+    void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)), const_cast<void*>(reinterpret_cast<const void*>(&_t2)) };
+    QMetaObject::activate(this, &staticMetaObject, 2, _a);
 }
 QT_END_MOC_NAMESPACE

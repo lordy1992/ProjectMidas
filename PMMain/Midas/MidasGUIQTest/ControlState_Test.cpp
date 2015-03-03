@@ -2,9 +2,9 @@
 #include "SharedCommandData.h"
 #include <gtest\gtest.h>
 
-/*
+
 TEST(ControlStateTest1, testConstruct) {
-    SharedCommandData *scd = new SharedCommandData();
+    SharedCommandData *scd = new SharedCommandData(1);
     ControlState *cs = new ControlState(scd);
 
     midasMode mm = cs->getMode();
@@ -15,7 +15,7 @@ TEST(ControlStateTest1, testConstruct) {
 }
 
 TEST(ControlStateTest2, testSet) {
-    SharedCommandData *scd = new SharedCommandData();
+    SharedCommandData *scd = new SharedCommandData(1);
     ControlState *cs = new ControlState(scd);
 
     midasMode mm = cs->getMode();
@@ -38,7 +38,7 @@ TEST(ControlStateTest2, testSet) {
 }
 
 TEST(ControlStateTest3, testTrySet) {
-    SharedCommandData *scd = new SharedCommandData();
+    SharedCommandData *scd = new SharedCommandData(1);
     ControlState *cs = new ControlState(scd);
 
     midasMode mm = cs->getMode();
@@ -59,4 +59,3 @@ TEST(ControlStateTest3, testTrySet) {
     delete scd;
     delete cs;
 }
-*/
