@@ -2,6 +2,9 @@
 #include "GestureFilter.h"
 #include "MyoTranslationFilter.h"
 #include "AveragingFilter.h"
+#include <cstdint>
+#include <iostream>
+#include <fstream>
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle)
@@ -39,6 +42,10 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
+    AveragingFilter rssiAveragingFilter(5);
+    rssiPipeline.registerFilter(&rssiAveragingFilter);
+    rssiPipeline.registerFilter(WearableDevice::sharedData);
+
     try
     {
         Hub hub(appIdentifier);
@@ -68,7 +75,9 @@ void MyoDevice::runDeviceLoop()
                 WearableDevice::sharedData->process();
             }
 
+            myo->requestRssi();
             hub.run(durationInMilliseconds);
+            
         }
     }
     catch (const std::exception& e)
@@ -123,6 +132,7 @@ void MyoDevice::MyoCallbacks::onOrientationData(Myo* myo, uint64_t timestamp, co
     input[GYRO_DATA_X] = 0.0f;
     input[GYRO_DATA_Y] = 0.0f;
     input[GYRO_DATA_Z] = 0.0f;
+    input[RSSI] = (int8_t)0;
     
     parent.orientationPipeline.startPipeline(input);
 }
@@ -131,8 +141,8 @@ void MyoDevice::MyoCallbacks::onAccelerometerData(Myo* myo, uint64_t timestamp, 
 {
     filterDataMap input;
     input[ACCEL_DATA_X] = accel.x();
-    input[ACCEL_DATA_X] = accel.y();
-    input[ACCEL_DATA_X] = accel.z();
+    input[ACCEL_DATA_Y] = accel.y();
+    input[ACCEL_DATA_Z] = accel.z();
 
     // The following is junk data. The averaging filter should be modified so
     // that it doesn't deal with the data so specifically.
@@ -143,6 +153,9 @@ void MyoDevice::MyoCallbacks::onAccelerometerData(Myo* myo, uint64_t timestamp, 
     input[GYRO_DATA_X] = 0.0f;
     input[GYRO_DATA_Y] = 0.0f;
     input[GYRO_DATA_Z] = 0.0f;
+    input[RSSI] = (int8_t)0;
+    input[INPUT_ARM] = parent.arm;
+    input[INPUT_X_DIRECTION] = parent.xDirection;
 
     //parent.orientationPipeline.startPipeline(input); //TODO - solve race condition and enable this
 }
@@ -161,8 +174,11 @@ void MyoDevice::MyoCallbacks::onGyroscopeData(Myo* myo, uint64_t timestamp, cons
     input[QUAT_DATA_Z] = 0.0f;
     input[QUAT_DATA_W] = 0.0f;
     input[ACCEL_DATA_X] = 0.0f;
-    input[ACCEL_DATA_X] = 0.0f;
-    input[ACCEL_DATA_X] = 0.0f;
+    input[ACCEL_DATA_Y] = 0.0f;
+    input[ACCEL_DATA_Z] = 0.0f;
+    input[RSSI] = (int8_t)0;
+    input[INPUT_ARM] = parent.arm;
+    input[INPUT_X_DIRECTION] = parent.xDirection;
 
     //parent.orientationPipeline.startPipeline(input); //TODO - solve race condition and enable this
 }
@@ -191,5 +207,29 @@ void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) {
     std::cout << "on arm unsync." << std::endl; 
 }
 void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) { 
-    std::cout << "on rssi." << std::endl; 
+    std::cout << "on rssi. " << rssi << std::endl; 
+    filterDataMap input;
+    input[RSSI] = rssi;
+
+    // The following is junk data. The averaging filter should be modified so
+    // that it doesn't deal with the data so specifically.
+    input[GYRO_DATA_X] = 0.0f;
+    input[GYRO_DATA_Y] = 0.0f;
+    input[GYRO_DATA_Z] = 0.0f;
+    input[QUAT_DATA_X] = 0.0f;
+    input[QUAT_DATA_Y] = 0.0f;
+    input[QUAT_DATA_Z] = 0.0f;
+    input[QUAT_DATA_W] = 0.0f;
+    input[ACCEL_DATA_X] = 0.0f;
+    input[ACCEL_DATA_Y] = 0.0f;
+    input[ACCEL_DATA_Z] = 0.0f;
+    input[INPUT_ARM] = parent.arm; //TDOO: pass in unknown
+    input[INPUT_X_DIRECTION] = parent.xDirection;//TDOO: pass in unknown
+    parent.rssiPipeline.startPipeline(input);
+
+    std::ofstream file_stream;
+    file_stream.open("testRssi.txt", std::ios::out|std::ios::app);
+    file_stream << (int)rssi << std::endl;
+    file_stream.close();
+
 }

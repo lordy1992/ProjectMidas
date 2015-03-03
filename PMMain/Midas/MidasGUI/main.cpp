@@ -35,6 +35,8 @@ int main(int argc, char *argv[])
     dummyLabel.setVisible(false);
     // End hack
 
+    QIcon *icon = new QIcon(TASK_BAR_ICON_PATH);
+    mainDisplay.setWindowIcon(*icon);
     mainDisplay.show();
     return a.exec();
     system("PAUSE");

@@ -183,6 +183,12 @@ bool SharedCommandData::tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle)
     return locked;
 }
 
+void SharedCommandData::setRssi(float rssi)
+{
+    rssiMutex.lock();
+    rssi = rssi;
+    rssiMutex.unlock();
+}
 
 bool SharedCommandData::isCommandQueueEmpty()
 {
@@ -211,6 +217,12 @@ void SharedCommandData::process()
     {
         boost::any value = input[ANGLE_INPUT];
         extractKeySelectAngle(value);
+    }
+
+    if (input.find(RSSI) != input.end())
+    {
+        boost::any value = input[RSSI];
+        extractRssi(value);
     }
 }
 
@@ -273,5 +285,19 @@ void SharedCommandData::extractKeySelectAngle(boost::any value)
     {
         keyboardAngle angle = boost::any_cast<keyboardAngle> (value);
         setKeySelectAngle(angle);
+    }
+}
+
+void SharedCommandData::extractRssi(boost::any value)
+{
+    if (value.type() != typeid(float))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        float rssi = boost::any_cast<float> (value);
+        setRssi(rssi);
     }
 }

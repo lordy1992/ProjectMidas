@@ -3,6 +3,7 @@
 
 #include "Filter.h"
 #include <deque>
+#include <cstdint>
 
 #define DEFAULT_AVG_COUNT 20
 #define QUAT_DATA_X "quatDataX"
@@ -15,6 +16,7 @@
 #define GYRO_DATA_X "gyroDataX"
 #define GYRO_DATA_Y "gyroDataY"
 #define GYRO_DATA_Z "gyroDataZ"
+#define RSSI        "rssi"
 // TODO - These should not actually be here. Once Many to one filters are implemented,
 // Remove from this filter, as they are simply being passed through....
 #define INPUT_ARM "arm"
@@ -63,9 +65,10 @@ private:
      * front of dq to ensure only max avgCount elements
      *
      * @param elem - a float to be added to deque
-     * @param dq -  a deque containing <= avgCount floats      
+     * @param dq -  a deque containing <= avgCount floats
      */
     void insertAvgElement(float elem, std::deque<float>& dq);
+    void insertAvgElement(float elem, std::deque<int8_t>& dq);
 
     /**
      * Calculate the average of the contents in the deque.
@@ -74,6 +77,7 @@ private:
      * @return float - the average of the contents of the deque                  
      */
     float calcAvg(std::deque<float>& dq);
+    float calcAvg(std::deque<int8_t>& dq);
 
     // Number of floats to average. This value dictates max size of deques.
     unsigned int avgCount;
@@ -91,6 +95,7 @@ private:
     std::deque<float> gyroXDeque;
     std::deque<float> gyroYDeque;
     std::deque<float> gyroZDeque;
+    std::deque<int8_t> rssiDeque;
 };
 
 #endif /* _AVERAGING_FILTER_H */
