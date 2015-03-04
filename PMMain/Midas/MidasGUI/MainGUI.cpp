@@ -32,6 +32,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
+    boxLayout->addWidget(distanceDisplayer);
     layout->addLayout(boxLayout);
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
