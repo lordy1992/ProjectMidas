@@ -182,6 +182,9 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KeyboardWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="GestureHoldModeAction.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -268,6 +271,9 @@
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
     <ClInclude Include="RingData.h">
+      <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="GestureHoldModeAction.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>

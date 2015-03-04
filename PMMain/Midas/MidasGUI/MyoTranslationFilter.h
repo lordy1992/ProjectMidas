@@ -3,6 +3,7 @@
 
 #include "Filter.h"
 #include "ControlState.h"
+#include "GestureHoldModeAction.h"
 #include "myo\myo.hpp"
 
 #ifdef USE_SIMULATOR
@@ -108,9 +109,19 @@ private:
     */
     point getMouseUnitVelocity(float pitch, float yaw);
 
+    void performHoldModeFunc(unsigned int holdNum, filterDataMap& outputToSharedCommandData);
+    void performMouseModeFunc(filterDataMap& outputToSharedCommandData);
+    void performeKybdModeFunc(filterDataMap& outputToSharedCommandData);
+
+    bool initGestHoldModeActionArr(void);
+
     ControlState* controlStateHandle;
     midasMode previousMode;
-    float basePitch, baseYaw, prevRoll, deltaRoll;
+    float pitch, basePitch, prevPitch, deltaPitch, 
+        yaw, baseYaw, prevYaw, deltaYaw, 
+        roll, baseRoll, prevRoll, deltaRoll;
+
+    GestureHoldModeAction gestHoldModeAction[5];
 };
 
 #endif
