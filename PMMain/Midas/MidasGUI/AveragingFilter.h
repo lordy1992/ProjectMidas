@@ -68,7 +68,6 @@ private:
      * @param dq -  a deque containing <= avgCount floats
      */
     void insertAvgElement(float elem, std::deque<float>& dq);
-    void insertAvgElement(float elem, std::deque<int8_t>& dq);
 
     /**
      * Calculate the average of the contents in the deque.
@@ -77,7 +76,6 @@ private:
      * @return float - the average of the contents of the deque                  
      */
     float calcAvg(std::deque<float>& dq);
-    float calcAvg(std::deque<int8_t>& dq);
 
     // Number of floats to average. This value dictates max size of deques.
     unsigned int avgCount;
@@ -95,7 +93,7 @@ private:
     std::deque<float> gyroXDeque;
     std::deque<float> gyroYDeque;
     std::deque<float> gyroZDeque;
-    std::deque<int8_t> rssiDeque;
+    std::deque<float> rssiDeque;
 };
 
 #endif /* _AVERAGING_FILTER_H */

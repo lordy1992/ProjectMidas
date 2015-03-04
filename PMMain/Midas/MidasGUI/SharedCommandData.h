@@ -156,7 +156,7 @@ public:
 
 private:
     point mouseVelocity;
-    float rssi;
+    float rssiAVG;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;

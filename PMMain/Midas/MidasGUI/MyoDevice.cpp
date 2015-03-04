@@ -223,8 +223,8 @@ void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) 
     input[ACCEL_DATA_X] = 0.0f;
     input[ACCEL_DATA_Y] = 0.0f;
     input[ACCEL_DATA_Z] = 0.0f;
-    input[INPUT_ARM] = parent.arm; //TDOO: pass in unknown
-    input[INPUT_X_DIRECTION] = parent.xDirection;//TDOO: pass in unknown
+    input[INPUT_ARM] = armUnknown;
+    input[INPUT_X_DIRECTION] = xDirectionUnknown;
     parent.rssiPipeline.startPipeline(input);
 
     std::ofstream file_stream;

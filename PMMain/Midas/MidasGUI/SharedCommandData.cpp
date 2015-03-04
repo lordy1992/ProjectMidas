@@ -183,10 +183,19 @@ bool SharedCommandData::tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle)
     return locked;
 }
 
+float SharedCommandData::getRssi()
+{
+    // Do we really need locks for get?
+    rssiMutex.lock();
+    float rssi = rssiAVG;
+    rssiMutex.unlock();
+    return rssi;
+}
+
 void SharedCommandData::setRssi(float rssi)
 {
     rssiMutex.lock();
-    rssi = rssi;
+    rssiAVG = rssi;
     rssiMutex.unlock();
 }
 

@@ -55,7 +55,7 @@ void AveragingFilter::process()
     insertAvgElement(gyroX, gyroXDeque);
     insertAvgElement(gyroY, gyroYDeque);
     insertAvgElement(gyroZ, gyroZDeque);
-    insertAvgElement(rssi, rssiDeque);
+    insertAvgElement((float)rssi, rssiDeque);
 
     filterDataMap output;
 
@@ -69,24 +69,23 @@ void AveragingFilter::process()
     output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
     output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
     output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
-    output[RSSI] = calcAvg(rssiDeque);
+    float tempRssiAvg = calcAvg(rssiDeque);
+    output[RSSI] = tempRssiAvg;
     output[INPUT_ARM] = arm;
     output[INPUT_X_DIRECTION] = xDirection;
+
+    if (rssi != (int8_t)0)
+    {
+        std::ofstream file_stream;
+        file_stream.open("testRssiAVG.txt", std::ios::out | std::ios::app);
+        file_stream << tempRssiAvg << std::endl;
+        file_stream.close();
+    }
 
     Filter::setOutput(output);
 }
 
 void AveragingFilter::insertAvgElement(float elem, std::deque<float>& dq)
-{
-    dq.push_back(elem);
-    while (dq.size() > avgCount) {
-        // discard element so that average is only based on
-        // avgCount elements.
-        dq.pop_front();
-    }
-}
-
-void AveragingFilter::insertAvgElement(float elem, std::deque<int8_t>& dq)
 {
     dq.push_back(elem);
     while (dq.size() > avgCount) {
@@ -110,28 +109,5 @@ float AveragingFilter::calcAvg(std::deque<float>& dq)
     {
         sum += *it++;
     }
-    /*
-    std::ofstream file_stream;
-    file_stream.open("testRssiAVG.txt", std::ios::out|std::ios::app);
-    file_stream << (float)sum/denom << std::endl;
-    file_stream.close();
-    */
-    return (float)sum / denom;
-}
-float AveragingFilter::calcAvg(std::deque<int8_t>& dq)
-{
-    float sum = 0;
-    float denom = dq.size();
-    if (denom == 0)
-    {
-        return 0;
-    }
-    
-    std::deque<int8_t>::iterator it = dq.begin();
-    while (it != dq.end())
-    {
-        sum += *it++;
-    }
-
     return (float)sum / denom;
 }

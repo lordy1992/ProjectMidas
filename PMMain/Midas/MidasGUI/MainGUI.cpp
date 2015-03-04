@@ -17,6 +17,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
+    distanceDisplayer = new DistanceWidget(mainThread, this);
 
     //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);

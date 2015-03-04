@@ -182,6 +182,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_KeyboardWidget.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="DistanceWidget.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_DistanceWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_DistanceWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -209,6 +218,9 @@
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
     <CustomBuild Include="KeyboardWidget.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="DistanceWidget.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>

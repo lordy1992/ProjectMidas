@@ -8,6 +8,7 @@
 #include "GestureSignaller.h"
 #include "PoseDisplayer.h"
 #include "KeyboardWidget.h"
+#include "DistanceWidget.h"
 
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
@@ -44,6 +45,7 @@ private:
     SequenceDisplayer *sequenceDisplayer;
     PoseDisplayer *poseDisplayer;
     KeyboardWidget* keyboard;
+    DistanceWidget* distanceDisplayer;
 };
 
 #endif
