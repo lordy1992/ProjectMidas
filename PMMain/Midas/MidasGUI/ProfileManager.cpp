@@ -47,7 +47,7 @@ profile ProfileManager::extractProfileInformation(const boost::property_tree::pt
     return pr;
 }
 
-sequence extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
+sequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
 {
     using boost::property_tree::ptree;
 
