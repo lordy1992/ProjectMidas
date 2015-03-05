@@ -17,6 +17,6 @@ class KeyboardSettingsReader
 public:
     KeyboardSettingsReader();
     ~KeyboardSettingsReader();
-    void readKeyboardSetupFile(std::vector<ringData> &ringDataHandle);
+    void readKeyboardSetupFile(std::vector<ringData> &ringDataHandle, std::string fileName );
 };
 
