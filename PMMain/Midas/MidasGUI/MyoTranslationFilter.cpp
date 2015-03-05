@@ -356,10 +356,14 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
 {
     //TODO - use setting defined values for this part. Temporarily hard coded to test concept.
 
+    bool initOkay = true;
+
     angleData ad;
     ad.angleType = angleData::AngleType::ROLL;
     ad.anglePositive = true;
-    gestHoldModeAction[2].addToActionMap(ad, kybdCmds::VOLUME_UP);
+    initOkay &= gestHoldModeAction[2].addToActionMap(ad, kybdCmds::VOLUME_UP);
     ad.anglePositive = false;
-    gestHoldModeAction[2].addToActionMap(ad, kybdCmds::VOLUME_DOWN);
+    initOkay &= gestHoldModeAction[2].addToActionMap(ad, kybdCmds::VOLUME_DOWN);
+
+    return initOkay;
 }
