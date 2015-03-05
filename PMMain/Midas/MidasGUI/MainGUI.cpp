@@ -74,6 +74,8 @@ MainGUI::~MainGUI()
     sequenceDisplayer = NULL;
     delete poseDisplayer;
     poseDisplayer = NULL;
+    delete distanceDisplayer;
+    distanceDisplayer = NULL;
     delete layout;
     layout = NULL;
 }

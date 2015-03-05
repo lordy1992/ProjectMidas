@@ -65,6 +65,13 @@ void SCDDigester::digest()
         threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
     }
 
+    /* Don't update rssi too frequently */
+    if (count % 50000 == 0)
+    {
+        float rssi = scdHandle->getRssi();
+        threadHandle->emitRssi(rssi);
+    }
+
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
@@ -83,7 +90,7 @@ void SCDDigester::digest()
 
         digestKeyboardGUIData(nextCmd);
     }
-
+    
     count++;
 }
 

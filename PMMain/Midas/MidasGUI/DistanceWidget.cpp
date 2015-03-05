@@ -1,7 +1,7 @@
 #include <cstdlib>
+#include <cstring>
 #include "DistanceWidget.h"
 #include "qboxlayout.h"
-#include "qlabel.h"
 
 
 DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent)
@@ -14,6 +14,7 @@ DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent)
     distanceLabel->setFont(font);
     distanceLabel->setText("0m");
     layout->addWidget(distanceLabel);
+
     setLayout(layout);
 
     connect(mainThread, SIGNAL(emitRssi(float)), this, SLOT(updateDistanceLabel(float)));

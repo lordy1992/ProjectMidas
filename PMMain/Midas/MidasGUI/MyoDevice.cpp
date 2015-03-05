@@ -42,7 +42,7 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
-    AveragingFilter rssiAveragingFilter(5);
+    AveragingFilter rssiAveragingFilter(20);
     rssiPipeline.registerFilter(&rssiAveragingFilter);
     rssiPipeline.registerFilter(WearableDevice::sharedData);
 
