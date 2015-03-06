@@ -69,7 +69,7 @@ void AveragingFilter::process()
     output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
     output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
     output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
-    float tempRssiAvg = calcAvg(rssiDeque);
+    float tempRssiAvg = calcAvg(rssiDeque); /* This is here just to print to txt file. Remove when done */
     output[RSSI] = tempRssiAvg;
     output[INPUT_ARM] = arm;
     output[INPUT_X_DIRECTION] = xDirection;
