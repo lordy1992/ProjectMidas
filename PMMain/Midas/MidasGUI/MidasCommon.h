@@ -62,7 +62,11 @@ enum kybdCmds {
     CONTROL,
     VOLUME_UP,
     VOLUME_DOWN,
-    BACKSPACE
+    BACKSPACE,
+    UP_ARROW,
+    RIGHT_ARROW,
+    DOWN_ARROW,
+    LEFT_ARROW
 };
 
 /**

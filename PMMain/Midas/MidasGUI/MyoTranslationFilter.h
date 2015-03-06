@@ -26,6 +26,12 @@ using namespace myo;
 
 #define KEYBOARD_THRESH_MAG 30
 
+#define GESTURE_THUMB_TO_PINKY 0 // used as indexes into gestHoldModeAction
+#define GESTURE_FINGERS_SPREAD 1
+#define GESTURE_FIST 2
+#define GESTURE_WAVE_IN 3
+#define GESTURE_WAVE_OUT 4
+
 /**
  * Consult Filter.h for concepts regarding Filters.
  * Handles translating from Myo orientation data to mouse movement information.
@@ -50,10 +56,10 @@ public:
     /**
     * Calculates the delta (in radians) between a base angle and a
     * current angle, with respect to a ring. The pupose is to ensure that wrapping
-    * around the 0 radian section of the ring has no effect on the output
+    * around the crossover section of the ring has no effect on the output
     * which should safely range from -pi to +pi.
     *
-    * @param current The current angle (in radians) that is being compared (from 0 - 2pi rad)
+    * @param current The current angle (in radians) that is being compared (from -Pi to pi rad)
     * @param base The base angle (in radians) that is being compared against
     * @return a value from -pi to +pi representing the delta between two input angles
     */
@@ -117,9 +123,9 @@ private:
 
     ControlState* controlStateHandle;
     midasMode previousMode;
-    float pitch, basePitch, prevPitch, deltaPitch, 
-        yaw, baseYaw, prevYaw, deltaYaw, 
-        roll, baseRoll, prevRoll, deltaRoll;
+    float pitch, basePitch, prevPitch, deltaPitchDeg, 
+        yaw, baseYaw, prevYaw, deltaYawDeg,
+        roll, baseRoll, prevRoll, deltaRollDeg;
 
     GestureHoldModeAction gestHoldModeAction[5];
 };

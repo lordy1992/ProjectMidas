@@ -117,6 +117,18 @@ void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
     case BACKSPACE:
         inputVK(VK_BACK);
         break;
+    case UP_ARROW:
+        inputVK(VK_UP);
+        break;
+    case RIGHT_ARROW:
+        inputVK(VK_RIGHT);
+        break;
+    case DOWN_ARROW:
+        inputVK(VK_DOWN);
+        break;
+    case LEFT_ARROW:
+        inputVK(VK_LEFT);
+        break;
     default:
         break;
     }
