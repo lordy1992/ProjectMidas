@@ -2,7 +2,6 @@
 #include "SharedCommandData.h"
 #include <gtest\gtest.h>
 
-
 TEST(ControlStateTest1, testConstruct) {
     SharedCommandData *scd = new SharedCommandData();
     ControlState *cs = new ControlState(scd);
