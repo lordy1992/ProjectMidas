@@ -24,6 +24,19 @@ private:
     QLabel *distanceLabel;
     float distance;
 
+    /* iOS immediate < 0.5m, near = a little more, far = a few metres 
+     * http://www.devfright.com/ibeacons-tutorial-ios-7-clbeaconregion-clbeacon/
+     */
+
+    /**
+     * Calculate the distance from the give db value returned from myo rssi
+     * request. The formula used is based off of measured values.
+     *
+     * @param db Float value corresponding to the db received from the myo
+     * @return Float that represents an approximate distance.
+     */
+    inline float dbToDist(float db);
+
 };
 
 #endif /* DISTANCE_WIDGET_H */
