@@ -6,7 +6,7 @@
 #include <iostream>
 #include <fstream>
 
-#define MIN_RSSI_DELAY 300
+#define MIN_RSSI_DELAY 200
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle)
@@ -44,7 +44,7 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
-    AveragingFilter rssiAveragingFilter(20);
+    AveragingFilter rssiAveragingFilter(5);
     rssiPipeline.registerFilter(&rssiAveragingFilter);
     rssiPipeline.registerFilter(WearableDevice::sharedData);
 
@@ -241,9 +241,11 @@ void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) 
     input[INPUT_X_DIRECTION] = xDirectionUnknown;
     parent.rssiPipeline.startPipeline(input);
 
+    /* Print out to file for debugging purposes
     std::ofstream file_stream;
     file_stream.open("testRssi.txt", std::ios::out|std::ios::app);
     file_stream << (int)rssi << std::endl;
     file_stream.close();
+    */
 
 }

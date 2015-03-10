@@ -77,6 +77,13 @@ private:
      */
     float calcAvg(std::deque<float>& dq);
 
+    /**
+     * Replace the last element of dq with elem
+     *
+     * @param elem - the value that will replace the last element of the deque
+     */
+    void replaceLastElement(float elem, std::deque<float>& dq);
+
     // Number of floats to average. This value dictates max size of deques.
     unsigned int avgCount;
 

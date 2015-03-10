@@ -74,6 +74,7 @@ void AveragingFilter::process()
     output[INPUT_ARM] = arm;
     output[INPUT_X_DIRECTION] = xDirection;
 
+    /* Print averaged rssi to file for debugging
     if (rssi != (int8_t)0)
     {
         std::ofstream file_stream;
@@ -81,6 +82,7 @@ void AveragingFilter::process()
         file_stream << tempRssiAvg << std::endl;
         file_stream.close();
     }
+    */
 
     Filter::setOutput(output);
 }
@@ -110,4 +112,10 @@ float AveragingFilter::calcAvg(std::deque<float>& dq)
         sum += *it++;
     }
     return (float)sum / denom;
+}
+
+void AveragingFilter::replaceLastElement(float elem, std::deque<float>&dq)
+{
+    dq.pop_back();
+    dq.push_back(elem);
 }
