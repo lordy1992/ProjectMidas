@@ -111,6 +111,10 @@ private:
     ControlState* controlStateHandle;
     midasMode previousMode;
     float basePitch, baseYaw, prevRoll, deltaRoll;
+
+#ifdef VERSION2
+    int baseRoll;
+#endif
 };
 
 #endif
