@@ -40,6 +40,7 @@ private:
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     int count;
+    clock_t start_kbd;
 #ifdef VERSION2
     int currKeySelect;
 #endif

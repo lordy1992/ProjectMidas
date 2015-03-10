@@ -16,6 +16,7 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
     currKeySelect = 0;
 #endif
     count = 0;
+    start_kbd = clock();
 }
 
 
@@ -90,8 +91,10 @@ void SCDDigester::digest()
             whichRing = ringDat.getRingInVectorHandle();
         }
 
-        if (count % 10000 == 0)
+        clock_t elapsed = clock() - start_kbd;
+        if (elapsed > CLOCKS_PER_SEC / 4)
         {
+            // 1 second latency
             if (currKeyAngle.angle > 20) 
             {
                 currKeySelect++;
@@ -111,6 +114,7 @@ void SCDDigester::digest()
             } 
 
             threadHandle->emitUpdateKeyboard(kybdGUISel, currKeySelect, currKeyAngle.ringThreshReached, false);
+            start_kbd = clock();
         }
 
         if (currKeySelect > 0)
