@@ -34,10 +34,13 @@ public:
     ~ProfileWriter();
     
     void writeProfiles(std::string filename, std::vector<Profile> profiles);
+    std::vector<Profile> loadProfilesFromFile(std::string fileName);
 
 private:
     void writeProfile(boost::property_tree::ptree &profileNode, Profile profile);
     void writeSequence(boost::property_tree::ptree &sequenceNode, Sequence sequence);
+    Profile extractProfileInformation(const boost::property_tree::ptree::value_type & parentProfile, std::string profileName);
+    Sequence extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState);
 };
 
 #endif /* PROFILE_WRITER_H */
