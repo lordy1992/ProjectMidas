@@ -117,6 +117,15 @@ void SCDDigester::digest()
             start_kbd = clock();
         }
 
+        if (currKeySelect < 0)
+        {
+            currKeySelect = whichRing->size();
+        }
+        else if (currKeySelect > whichRing->size())
+        {
+            currKeySelect = 0;
+        }
+
         if (currKeySelect > 0)
         {
             selRing = whichRing->at(currKeySelect - 1);
