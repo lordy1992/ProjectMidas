@@ -10,11 +10,7 @@ GestureHoldModeAction::GestureHoldModeAction(unsigned int minIntervalLen) : minI
 
 bool GestureHoldModeAction::addToActionMap(angleData ad, kybdCmds command)
 {
-    commandData cd;
-    cd.type = commandType::KYBRD_CMD;
-    cd.action.kybd = command;
-
-    actionMap[ad.hash()] = cd;
+    actionMap[ad.hash()] = command;
 
     if (actionMap.find(ad.hash()) == actionMap.end())
     {
@@ -23,12 +19,11 @@ bool GestureHoldModeAction::addToActionMap(angleData ad, kybdCmds command)
     return true;
 }
 
-commandData GestureHoldModeAction::getAction(angleData ad)
+kybdCmds GestureHoldModeAction::getAction(angleData ad)
 {
     if (actionMap.find(ad.hash()) == actionMap.end())
     {
-        commandData defaultRet;
-        defaultRet.type = commandType::NONE;
+        return kybdCmds::NO_CMD;
     }
 
     return actionMap[ad.hash()];

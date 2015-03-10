@@ -51,10 +51,6 @@ void MyoTranslationFilter::process()
         baseYaw = yaw;
     }
 
-    float temp1 = calcRingDelta(pitch, basePitch);
-    float temp2 = calcRingDelta(prevPitch, basePitch);
-    float temp3 = radToDeg(temp1 - temp2);
-
     deltaRollDeg = radToDeg(calcRingDelta(roll, baseRoll) - calcRingDelta(prevRoll, baseRoll)); // normalized to avoid overflow
     prevRoll = roll;
     prevRollDeg = (int)(prevRoll * (180 / M_PI));
@@ -264,6 +260,11 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
 
 void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataMap& outputToSharedCommandData)
 {
+    commandData command;
+    command.type = commandType::KYBRD_CMD;
+    command.name = "HoldMode Command";
+    command.action.kybd = kybdCmds::NO_CMD;
+
     GestureHoldModeAction currentHoldModeAction = gestHoldModeAction[holdNum];
     float thresh = .1;
     
@@ -285,11 +286,8 @@ void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataM
     }
     if (tryAction)
     {
-        cd = currentHoldModeAction.getAction(ad);
-        if (cd.type != commandType::NONE || cd.type != commandType::UNKNOWN_COMMAND)
-        {
-            outputToSharedCommandData[COMMAND_INPUT] = cd;
-        }
+        command.action.kybd = kybdCmds((unsigned int)command.action.kybd | (unsigned int)currentHoldModeAction.getAction(ad));
+        outputToSharedCommandData[COMMAND_INPUT] = command;
     }
 
     tryAction = false;
@@ -306,11 +304,8 @@ void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataM
     }
     if (tryAction)
     {
-        cd = currentHoldModeAction.getAction(ad);
-        if (cd.type != commandType::NONE || cd.type != commandType::UNKNOWN_COMMAND)
-        {
-            outputToSharedCommandData[COMMAND_INPUT] = cd;
-        }
+        command.action.kybd = kybdCmds((unsigned int)command.action.kybd | (unsigned int)currentHoldModeAction.getAction(ad));
+        outputToSharedCommandData[COMMAND_INPUT] = command;
     }
 
     tryAction = false;
@@ -327,11 +322,8 @@ void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataM
     }
     if (tryAction)
     {
-        cd = currentHoldModeAction.getAction(ad);
-        if (cd.type != commandType::NONE || cd.type != commandType::UNKNOWN_COMMAND)
-        {
-            outputToSharedCommandData[COMMAND_INPUT] = cd;
-        }
+        command.action.kybd = kybdCmds((unsigned int)command.action.kybd | (unsigned int)currentHoldModeAction.getAction(ad));
+        outputToSharedCommandData[COMMAND_INPUT] = command;
     }
 }
 
@@ -391,9 +383,9 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
 
     ad.angleType = angleData::AngleType::YAW;
     ad.anglePositive = true;
-    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::RIGHT_ARROW);
+    initOkay &= gestHoldModeAction[GESTURE_FINGERS_SPREAD].addToActionMap(ad, kybdCmds::RIGHT_ARROW);
     ad.anglePositive = false;
-    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::LEFT_ARROW);
+    initOkay &= gestHoldModeAction[GESTURE_FINGERS_SPREAD].addToActionMap(ad, kybdCmds::LEFT_ARROW);
 
     return initOkay;
 }

@@ -39,7 +39,7 @@ public:
 
     bool addToActionMap(angleData ad, kybdCmds command);
 
-    commandData getAction(angleData ad);
+    kybdCmds getAction(angleData ad);
 
 private:
     // TODO - actually care about this type. In the meantime, coding Interval_delta since it's easiest.
@@ -49,7 +49,7 @@ private:
     //     ABSOLUTE_DELTA_VELOCITY // Based on delta, continue spewing actions
     // };
 
-    std::unordered_map<int, commandData> actionMap;
+    std::unordered_map<int, kybdCmds> actionMap;
 
     unsigned int minIntervalLen; // between sampling signals and sending actions // TODO - make this useful
     
