@@ -228,9 +228,9 @@ void SharedCommandData::process()
         extractKeySelectAngle(value);
     }
 
-    if (input.find(RSSI) != input.end())
+    if (input.find(RSSI_INPUT) != input.end())
     {
-        boost::any value = input[RSSI];
+        boost::any value = input[RSSI_INPUT];
         extractRssi(value);
     }
 }

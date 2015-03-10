@@ -9,7 +9,7 @@
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
 #define ANGLE_INPUT "angle"
-#define RSSI "rssi"
+#define RSSI_INPUT "rssi"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 

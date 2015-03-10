@@ -66,9 +66,9 @@ void SCDDigester::digest()
     }
 
     /* Don't update rssi too frequently */
-    if (count % 50000 == 0)
+    float rssi = scdHandle->getRssi();
+    if (count % 50000 == 0 && rssi < 0)
     {
-        float rssi = scdHandle->getRssi();
         threadHandle->emitRssi(rssi);
     }
 

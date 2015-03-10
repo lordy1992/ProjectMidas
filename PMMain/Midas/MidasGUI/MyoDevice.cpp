@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 
+#define MIN_RSSI_DELAY 300
+
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
@@ -46,6 +48,11 @@ void MyoDevice::runDeviceLoop()
     rssiPipeline.registerFilter(&rssiAveragingFilter);
     rssiPipeline.registerFilter(WearableDevice::sharedData);
 
+    std::chrono::milliseconds rssi_start =
+        std::chrono::duration_cast<std::chrono::milliseconds>(
+            std::chrono::steady_clock::now().time_since_epoch()); /* Used to control when to request rssi */
+    std::chrono::milliseconds rssi_finish;
+
     try
     {
         Hub hub(appIdentifier);
@@ -75,7 +82,14 @@ void MyoDevice::runDeviceLoop()
                 WearableDevice::sharedData->process();
             }
 
-            myo->requestRssi();
+            rssi_finish = std::chrono::duration_cast<std::chrono::milliseconds>(
+                std::chrono::steady_clock::now().time_since_epoch());
+            if ((rssi_finish - rssi_start).count() > MIN_RSSI_DELAY)
+            {
+                myo->requestRssi();
+                rssi_start = std::chrono::duration_cast<std::chrono::milliseconds>(
+                    std::chrono::steady_clock::now().time_since_epoch());
+            }
             hub.run(durationInMilliseconds);
             
         }

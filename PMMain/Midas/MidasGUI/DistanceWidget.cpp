@@ -5,8 +5,8 @@
 #include "qboxlayout.h"
 
 
-DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent)
-    : QWidget(parent, Qt::FramelessWindowHint), distance(0)
+DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent, int width, int height)
+    : QWidget(parent, Qt::FramelessWindowHint), distance(0), dispWidth(width), dispHeight(height)
 {
     distanceLabel = new QLabel;
     QVBoxLayout *layout = new QVBoxLayout;
@@ -16,6 +16,14 @@ DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent)
     distanceLabel->setText("0m");
     layout->addWidget(distanceLabel);
 
+    setWindowOpacity(0.75);
+    QPalette pal;
+    pal.setColor(QPalette::Background, QColor(205, 205, 193));
+    setAutoFillBackground(true);
+    setPalette(pal);
+
+    setFixedSize(dispWidth, dispHeight);
+
     setLayout(layout);
 
     connect(mainThread, SIGNAL(emitRssi(float)), this, SLOT(updateDistanceLabel(float)));
@@ -24,11 +32,26 @@ DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent)
 void DistanceWidget::updateDistanceLabel(float db)
 {
     distance = dbToDist(db);
-    //distance = (float)(db - BASE_DB)/DB_PER_M;
-    distanceLabel->setText(QString::number(distance) + "m");
+
+    if (distance < 0.5)
+    {
+        distanceLabel->setText(QString::number(distance) + "m\nImmediate");
+    }
+    else if (distance < 4)
+    {
+        distanceLabel->setText(QString::number(distance) + "m\nNear");
+    }
+    else
+    {
+        distanceLabel->setText(QString::number(distance) + "m\nFar");
+    }
 }
 
 inline float DistanceWidget::dbToDist(float db)
 {
-    return -0.0001*std::pow(db, 3) - 0.0223*std::pow(db, 2) - 1.3376*db - 26.071;
+    return 3.8429*std::pow(10, -6)*std::pow(db, 4) +
+        7.55606*std::pow(10, -4)*std::pow(db, 3) +
+        5.34042218*std::pow(10, -2)*std::pow(db, 2) +
+        1.5151387757*db +
+        13.8505553761;
 }

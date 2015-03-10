@@ -7,22 +7,23 @@
 #include "qlabel.h"
 #include "qpushbutton.h"
 
-#define BASE_DB -40
-//#define DB_PER_M -11.45
-#define DB_PER_M -15
 
 class DistanceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    DistanceWidget(MidasThread *mainThread, QWidget *parent = 0);
+    DistanceWidget(MidasThread *mainThread, QWidget *parent = 0,
+        int width = DISTANCE_DISPLAY_WIDTH, 
+        int height = MOUSE_INDICATOR_SIZE);
     
 public slots:
     void updateDistanceLabel(float db);
 
 private:
     QLabel *distanceLabel;
-    float distance;
+    float   distance;
+    int     dispWidth;
+    int     dispHeight;
 
     /* iOS immediate < 0.5m, near = a little more, far = a few metres 
      * http://www.devfright.com/ibeacons-tutorial-ios-7-clbeaconregion-clbeacon/
