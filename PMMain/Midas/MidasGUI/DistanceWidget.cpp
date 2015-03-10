@@ -35,15 +35,15 @@ void DistanceWidget::updateDistanceLabel(float db)
 
     if (distance < 0.5)
     {
-        distanceLabel->setText(QString::number(distance) + "m\nImmediate");
+        distanceLabel->setText(QString::number(distance,'f',2) + "m\nImmediate");
     }
     else if (distance < 4)
     {
-        distanceLabel->setText(QString::number(distance) + "m\nNear");
+        distanceLabel->setText(QString::number(distance,'f',2) + "m\nNear");
     }
     else
     {
-        distanceLabel->setText(QString::number(distance) + "m\nFar");
+        distanceLabel->setText(QString::number(distance,'f',2) + "m\nFar");
     }
 }
 

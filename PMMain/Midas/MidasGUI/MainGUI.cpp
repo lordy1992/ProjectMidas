@@ -32,6 +32,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     layout->addWidget(infoIndicator);
 
     boxLayout->addWidget(distanceDisplayer, 1, Qt::AlignRight);
+    boxLayout->addSpacing(-50);
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
     layout->addLayout(boxLayout);
@@ -45,8 +46,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     keyboard->addWheels(mainThread->getKybrdRingData());
 
     int totalWidth = std::max(sequenceDisplayer->width(), 
-                        std::max(distanceDisplayer->width(),
-                            std::max(infoIndicator->width(), mouseIndicator->width())));
+                        distanceDisplayer->width() + infoIndicator->width() + mouseIndicator->width());
     int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
