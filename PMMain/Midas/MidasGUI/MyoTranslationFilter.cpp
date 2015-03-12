@@ -387,5 +387,17 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
     ad.anglePositive = false;
     initOkay &= gestHoldModeAction[GESTURE_FINGERS_SPREAD].addToActionMap(ad, kybdCmds::LEFT_ARROW);
 
+    ad.angleType = angleData::AngleType::PITCH;
+    ad.anglePositive = true;
+    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::ZOOM_IN);
+    ad.anglePositive = false;
+    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::ZOOM_OUT);
+
+    ad.angleType = angleData::AngleType::YAW;
+    ad.anglePositive = false;
+    initOkay &= gestHoldModeAction[GESTURE_WAVE_IN].addToActionMap(ad, kybdCmds::UNDO);
+    ad.anglePositive = true;
+    initOkay &= gestHoldModeAction[GESTURE_WAVE_OUT].addToActionMap(ad, kybdCmds::REDO);
+
     return initOkay;
 }

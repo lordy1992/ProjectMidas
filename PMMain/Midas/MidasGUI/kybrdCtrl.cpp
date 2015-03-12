@@ -15,11 +15,16 @@ KybrdCtrl::~KybrdCtrl()
 {
 }
 
-void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
+void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys, bool holdShift)
 {
     this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
+
+    if (holdShift)
+    {
+        inputVK(VK_SHIFT);
+    }
 
     for (int i = 1; i < ULONG_MAX/2; i *= 2)
     {

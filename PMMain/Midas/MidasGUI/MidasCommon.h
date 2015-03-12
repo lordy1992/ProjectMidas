@@ -70,11 +70,6 @@ enum kybdCmds{
     LEFT_ARROW = 268435456 // 2^28 ... NEXT = 536870912
 };
 
-//kybdCmds& operator|=(kybdCmds& v1, kybdCmds& v2)
-//{
-//    return v1 = kybdCmds((unsigned int(v1)) | (unsigned int(v2)));
-//}
-
 /**
  * Mouse commands caused by buttons, wheels and other features
  * that are a part of a mouse.
@@ -162,7 +157,7 @@ enum kybdStatus {
 
 /**
  * This struct bundles the Midas command data. It represents
- * either all Midas command types.
+ * all Midas command types.
  */
 struct commandData {
     commandType type = commandType::NONE;
@@ -171,9 +166,8 @@ struct commandData {
         kybdGUICmds kybdGUI;
         mouseCmds mouse;
         midasMode mode;
-    }; // TODO TAKING THIS OUT SHOULD WORK... if stuff starts failing, return to original and find another way.
+    };
     action action;
-    //unsigned int action;
 
     std::string name = "";
 };
