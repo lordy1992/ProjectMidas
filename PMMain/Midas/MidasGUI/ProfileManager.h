@@ -34,6 +34,8 @@ public:
 
     void loadProfilesFromFile(std::string fileName);
 
+    std::vector<profile>* getProfiles();
+
 private:
     profile extractProfileInformation(const boost::property_tree::ptree::value_type & parentProfile, std::string profileName);
     sequence extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState);

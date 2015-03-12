@@ -1,5 +1,6 @@
 #include "GestureFilter.h"
 #include "MyoCommon.h"
+#include "ProfileManager.h"
 #include <time.h>
 #include <thread>
 #include <qtranslator.h>
@@ -410,4 +411,33 @@ void callbackThreadWrapper(GestureFilter *gf)
             gf->handleKybrdCommand(response, true);
         }
     } while (true);
+}
+
+void GestureFilter::dynamicallyRegisterSequences(void)
+{
+    gestSeqRecorder->unregisterAll();
+
+    ProfileManager pm;
+    pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
+    std::vector<profile>* profiles = pm.getProfiles();
+
+    int ss = (int)SequenceStatus::SUCCESS;
+    for (std::vector<profile>::iterator it = profiles->begin(); it != profiles->end(); ++it)
+    {
+        sequence seq;
+        /* for ... seq.push_back(SeqElement(Pose::Type::XXX), XXXLENXXX)*/
+        /* */
+        commandData command;
+        command.name = "XXXName";
+        command.type = commandType::STATE_CHANGE; // XXXCOMMAND_TYPE TODO
+        command.action.mode = midasMode::MOUSE_MODE; // XXXMIDAS_MODE TODO
+
+        midasMode tempXXX = midasMode::LOCK_MODE;
+        ss | (int)gestSeqRecorder->registerSequence(tempXXX, seq, command, "XXXSEQUENCENAME");
+
+        if (ss != (int)SequenceStatus::SUCCESS)
+        {
+            throw new std::exception("registerSequenceException: XXXSEQUENCENAME");
+        }
+    }
 }

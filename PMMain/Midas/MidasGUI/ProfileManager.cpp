@@ -29,6 +29,11 @@ void ProfileManager::loadProfilesFromFile(std::string fileName)
     profileFile.close();
 }
 
+std::vector<profile>* ProfileManager::getProfiles()
+{
+    return &profiles;
+}
+
 profile ProfileManager::extractProfileInformation(const boost::property_tree::ptree::value_type & parentProfile, std::string profileName)
 {
     using boost::property_tree::ptree;

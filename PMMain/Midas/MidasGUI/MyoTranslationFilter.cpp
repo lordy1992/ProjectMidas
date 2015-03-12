@@ -298,6 +298,8 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
 {
     //TODO - use setting defined values for this part. Temporarily hard coded to test concept.
 
+    // Use ProfileManager here.
+
     bool initOkay = true;
 
     angleData ad;

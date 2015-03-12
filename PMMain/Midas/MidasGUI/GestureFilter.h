@@ -87,6 +87,8 @@ private:
 
     void emitPoseData(int poseInt);
 
+    void dynamicallyRegisterSequences(void);
+
     Pose::Type lastPoseType;
     
     static ControlState* controlStateHandle;
