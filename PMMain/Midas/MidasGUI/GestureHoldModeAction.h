@@ -37,6 +37,8 @@ public:
     GestureHoldModeAction();
     GestureHoldModeAction(unsigned int minIntervalLen);
 
+    void clearMap();
+
     bool addToActionMap(angleData ad, kybdCmds command);
 
     kybdCmds getAction(angleData ad);

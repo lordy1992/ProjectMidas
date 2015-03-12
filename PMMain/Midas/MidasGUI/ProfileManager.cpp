@@ -45,18 +45,18 @@ profile ProfileManager::extractProfileInformation(const boost::property_tree::pt
         if (vt.first == "sequence")
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");
-            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin));
+            pr.profileSequences.push_back(extractSequenceInformation(vt, sequenceStateBegin));
         }
     }
 
     return pr;
 }
 
-sequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
+profileSequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
 {
     using boost::property_tree::ptree;
 
-    sequence seq;
+    profileSequence seq;
     std::vector<gesture> gestures;
 
     BOOST_FOREACH(const ptree::value_type & vt, parentSequence.second.get_child("gestures")) {

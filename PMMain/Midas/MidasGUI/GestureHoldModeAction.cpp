@@ -8,6 +8,11 @@ GestureHoldModeAction::GestureHoldModeAction(unsigned int minIntervalLen) : minI
 
 }
 
+void GestureHoldModeAction::clearMap()
+{
+    actionMap.clear();
+}
+
 bool GestureHoldModeAction::addToActionMap(angleData ad, kybdCmds command)
 {
     actionMap[ad.hash()] = command;

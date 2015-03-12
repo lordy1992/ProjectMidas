@@ -433,7 +433,7 @@ void GestureFilter::dynamicallyRegisterSequences(void)
         command.action.mode = midasMode::MOUSE_MODE; // XXXMIDAS_MODE TODO
 
         midasMode tempXXX = midasMode::LOCK_MODE;
-        ss | (int)gestSeqRecorder->registerSequence(tempXXX, seq, command, "XXXSEQUENCENAME");
+        ss |= (int)gestSeqRecorder->registerSequence(tempXXX, seq, command, "XXXSEQUENCENAME");
 
         if (ss != (int)SequenceStatus::SUCCESS)
         {

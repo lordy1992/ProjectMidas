@@ -1,5 +1,6 @@
 #define NOMINMAX
 #include "MyoTranslationFilter.h"
+#include "ProfileManager.h"
 #include <math.h>
 #include <iostream>
 
@@ -334,4 +335,35 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
     initOkay &= gestHoldModeAction[GESTURE_WAVE_OUT].addToActionMap(ad, kybdCmds::REDO);
 
     return initOkay;
+}
+
+void MyoTranslationFilter::unregisterHoldModeActions(void)
+{
+    for (int i = 0; i < NUM_GESTURES; i++)
+    {
+        gestHoldModeAction[i].clearMap();
+    }
+}
+
+void MyoTranslationFilter::dynRegHoldModeActionArr(void)
+{
+    this->unregisterHoldModeActions();
+
+    ProfileManager pm;
+    pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
+    std::vector<profile>* profiles = pm.getProfiles();
+
+    bool okay = true;
+    angleData ad;
+    for (std::vector<profile>::iterator it = profiles->begin(); it != profiles->end(); ++it)
+    {
+        ad.angleType = angleData::AngleType::ROLL; // TODO make dynamic from it
+        ad.anglePositive = true; //TODO make dynamic from it
+        okay &= gestHoldModeAction[GESTURE_FIST].addToActionMap(ad, kybdCmds::VOLUME_UP); //TODO make dynamic from it
+        
+        if (okay = false)
+        {
+            throw new std::exception("registerHoldModeActionException: XXXSEQUENCENAME");
+        }
+    }
 }

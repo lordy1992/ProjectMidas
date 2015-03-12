@@ -26,6 +26,7 @@ using namespace myo;
 
 #define KEYBOARD_THRESH_MAG 30
 
+#define NUM_GESTURES 5
 #define GESTURE_THUMB_TO_PINKY 0 // used as indexes into gestHoldModeAction
 #define GESTURE_FINGERS_SPREAD 1
 #define GESTURE_FIST 2
@@ -120,6 +121,8 @@ private:
     void performeKybdModeFunc(filterDataMap& outputToSharedCommandData);
 
     bool initGestHoldModeActionArr(void);
+    void unregisterHoldModeActions(void);
+    void dynRegHoldModeActionArr(void);
 
     ControlState* controlStateHandle;
     midasMode previousMode;
