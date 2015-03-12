@@ -1,4 +1,5 @@
 #include "ProfileCreatorGUI.h"
+#include "ProfileWidget.h"
 
 ProfileCreatorGUI::ProfileCreatorGUI()
 {
@@ -34,7 +35,7 @@ void ProfileCreatorGUI::createMainGUI()
     addTabButton->setAutoRaise(true);
 
     tabWidget->setCornerWidget(addTabButton, Qt::TopLeftCorner);
-    tabWidget->addTab(new QWidget(), "Test");
+    tabWidget->addTab(new ProfileWidget(), "Test");
 
     setCentralWidget(tabWidget);
     createActions();

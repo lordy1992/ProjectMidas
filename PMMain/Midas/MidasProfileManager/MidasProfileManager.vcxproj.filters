@@ -53,6 +53,15 @@
     <ClCompile Include="ProfileWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProfileWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ProfileWidget.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ProfileWidget.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasprofilemanager.ui">
@@ -64,6 +73,12 @@
     <CustomBuild Include="ProfileCreatorGUI.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="ProfileWidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ProfileWidget.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_midasprofilemanager.h">
@@ -71,6 +86,9 @@
     </ClInclude>
     <ClInclude Include="ProfileWriter.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_ProfileWidget.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

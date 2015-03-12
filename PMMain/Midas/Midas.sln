@@ -9,8 +9,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUILib", "MidasGUILib\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUIQTest", "MidasGUIQTest\MidasGUIQTest.vcxproj", "{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProfileGUI", "ProfileGUI\ProfileGUI.vcxproj", "{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasProfileManager", "MidasProfileManager\MidasProfileManager.vcxproj", "{99F0E931-C14B-467A-AFCD-A9109AC71405}"
 EndProject
 Global
@@ -61,18 +59,6 @@ Global
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|Win32.ActiveCfg = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|Win32.Build.0 = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.Release|x64.ActiveCfg = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|Win32.ActiveCfg = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|Win32.Build.0 = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Debug|x64.ActiveCfg = Debug|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|Any CPU.ActiveCfg = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|Win32.ActiveCfg = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|Win32.Build.0 = Release|Win32
-		{1C25E08D-CD83-4A3D-A190-7E8CD062DFE8}.Release|x64.ActiveCfg = Release|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.Debug|Mixed Platforms.Build.0 = Debug|Win32
