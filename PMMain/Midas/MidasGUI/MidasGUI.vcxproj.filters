@@ -183,6 +183,9 @@
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="GestureHoldModeAction.cpp">
+	  <Filter>Source Files\Midas</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileManager.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
   </ItemGroup>
@@ -274,6 +277,9 @@
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
     <ClInclude Include="GestureHoldModeAction.h">
+	  <Filter>Header Files\Midas</Filter>
+    </ClInclude>
+    <ClInclude Include="ProfileManager.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
