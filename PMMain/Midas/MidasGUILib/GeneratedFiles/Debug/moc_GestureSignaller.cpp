@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_GestureSignaller_t {
-    QByteArrayData data[10];
-    char stringdata[180];
+    QByteArrayData data[11];
+    char stringdata[199];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -37,15 +37,17 @@ QT_MOC_LITERAL(4, 69, 17), // "emitShowSequences"
 QT_MOC_LITERAL(5, 87, 33), // "std::vector<sequenceProgressD..."
 QT_MOC_LITERAL(6, 121, 15), // "emitStateString"
 QT_MOC_LITERAL(7, 137, 14), // "emitPoseImages"
-QT_MOC_LITERAL(8, 152, 19), // "handleShowAllToggle"
-QT_MOC_LITERAL(9, 172, 7) // "showAll"
+QT_MOC_LITERAL(8, 152, 18), // "emitToggleKeyboard"
+QT_MOC_LITERAL(9, 171, 19), // "handleShowAllToggle"
+QT_MOC_LITERAL(10, 191, 7) // "showAll"
 
     },
     "GestureSignaller\0emitRegisterSequence\0"
     "\0std::vector<sequenceImageSet>\0"
     "emitShowSequences\0std::vector<sequenceProgressData>\0"
     "emitStateString\0emitPoseImages\0"
-    "handleShowAllToggle\0showAll"
+    "emitToggleKeyboard\0handleShowAllToggle\0"
+    "showAll"
 };
 #undef QT_MOC_LITERAL
 
@@ -55,30 +57,32 @@ static const uint qt_meta_data_GestureSignaller[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       5,   14, // methods
+       6,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
-       4,       // signalCount
+       5,       // signalCount
 
  // signals: name, argc, parameters, tag, flags
-       1,    3,   39,    2, 0x06 /* Public */,
-       4,    1,   46,    2, 0x06 /* Public */,
-       6,    1,   49,    2, 0x06 /* Public */,
-       7,    1,   52,    2, 0x06 /* Public */,
+       1,    3,   44,    2, 0x06 /* Public */,
+       4,    1,   51,    2, 0x06 /* Public */,
+       6,    1,   54,    2, 0x06 /* Public */,
+       7,    1,   57,    2, 0x06 /* Public */,
+       8,    0,   60,    2, 0x06 /* Public */,
 
  // slots: name, argc, parameters, tag, flags
-       8,    1,   55,    2, 0x0a /* Public */,
+       9,    1,   61,    2, 0x0a /* Public */,
 
  // signals: parameters
     QMetaType::Void, QMetaType::Int, QMetaType::QString, 0x80000000 | 3,    2,    2,    2,
     QMetaType::Void, 0x80000000 | 5,    2,
     QMetaType::Void, QMetaType::QString,    2,
     QMetaType::Void, 0x80000000 | 3,    2,
+    QMetaType::Void,
 
  // slots: parameters
-    QMetaType::Void, QMetaType::Bool,    9,
+    QMetaType::Void, QMetaType::Bool,   10,
 
        0        // eod
 };
@@ -92,7 +96,8 @@ void GestureSignaller::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
         case 1: _t->emitShowSequences((*reinterpret_cast< std::vector<sequenceProgressData>(*)>(_a[1]))); break;
         case 2: _t->emitStateString((*reinterpret_cast< QString(*)>(_a[1]))); break;
         case 3: _t->emitPoseImages((*reinterpret_cast< std::vector<sequenceImageSet>(*)>(_a[1]))); break;
-        case 4: _t->handleShowAllToggle((*reinterpret_cast< bool(*)>(_a[1]))); break;
+        case 4: _t->emitToggleKeyboard(); break;
+        case 5: _t->handleShowAllToggle((*reinterpret_cast< bool(*)>(_a[1]))); break;
         default: ;
         }
     } else if (_c == QMetaObject::IndexOfMethod) {
@@ -120,6 +125,12 @@ void GestureSignaller::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int
             typedef void (GestureSignaller::*_t)(std::vector<sequenceImageSet> );
             if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GestureSignaller::emitPoseImages)) {
                 *result = 3;
+            }
+        }
+        {
+            typedef void (GestureSignaller::*_t)();
+            if (*reinterpret_cast<_t *>(func) == static_cast<_t>(&GestureSignaller::emitToggleKeyboard)) {
+                *result = 4;
             }
         }
     }
@@ -150,13 +161,13 @@ int GestureSignaller::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 5)
+        if (_id < 6)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 5;
+        _id -= 6;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 5)
+        if (_id < 6)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 5;
+        _id -= 6;
     }
     return _id;
 }
@@ -187,5 +198,11 @@ void GestureSignaller::emitPoseImages(std::vector<sequenceImageSet> _t1)
 {
     void *_a[] = { Q_NULLPTR, const_cast<void*>(reinterpret_cast<const void*>(&_t1)) };
     QMetaObject::activate(this, &staticMetaObject, 3, _a);
+}
+
+// SIGNAL 4
+void GestureSignaller::emitToggleKeyboard()
+{
+    QMetaObject::activate(this, &staticMetaObject, 4, Q_NULLPTR);
 }
 QT_END_MOC_NAMESPACE

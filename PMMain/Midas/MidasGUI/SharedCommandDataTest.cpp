@@ -1,5 +1,5 @@
 #include "SharedCommandDataTest.h"
-
+/*
 void SharedCommandDataTest::testQueue(void)
 {
     SharedCommandData sharedData;
@@ -24,4 +24,4 @@ void SharedCommandDataTest::testQueue(void)
             if (testDevice->isDone()) break;
         }
     }
-}
+}*/
