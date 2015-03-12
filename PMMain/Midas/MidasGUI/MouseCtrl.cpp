@@ -43,7 +43,6 @@ void MouseCtrl::setMinMoveYTimeDelta(unsigned int rate)
 
 unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
 {
-#ifdef VERSION1
     if (rate < MOVE_RATE_DEADZONE)
     {
         return MAXUINT;
@@ -68,11 +67,6 @@ unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
     }
 
     return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
-#else ifdef VERSION2
-    int moveRate = min(rate, 100);
-
-    return max(MAX_MOVE_TIME_DELTA - ((rate / 100.0) * MAX_MOVE_TIME_DELTA), MIN_MOVE_TIME_DELTA);
-#endif    
 }
 
 void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
