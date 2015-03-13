@@ -47,7 +47,8 @@ void MyoTranslationFilter::process()
         {
             point mouseUnitVelocity = point(0, 0);
             outputToSharedCommandData[VELOCITY_INPUT] = mouseUnitVelocity;
-        }    
+            
+        }
 
         if (controlStateHandle->getMode() == GESTURE_HOLD_THREE)
         {
@@ -159,7 +160,7 @@ float MyoTranslationFilter::getRollFromQuaternion(float x, float y, float z, flo
 float MyoTranslationFilter::calcRingDelta(float current, float base)
 {
     // Assert angles are within range of a circle [0, 2Pi)
-    if (current >= 2 * M_PI || base >= 2 * M_PI || current <  0 || base < 0)
+    if (current >= 2 * M_PI || base >= 2 * M_PI || current < 0 || base < 0)
     {
         return 0.0;
     }
@@ -173,7 +174,7 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
         }
         else
         {
-            delta = -((2*M_PI - current) + base);
+            delta = -((2 * M_PI - current) + base);
         }
     }
     else
@@ -184,7 +185,7 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
         }
         else
         {
-            delta = (2*M_PI - base) + current;
+            delta = (2 * M_PI - base) + current;
         }
     }
 
