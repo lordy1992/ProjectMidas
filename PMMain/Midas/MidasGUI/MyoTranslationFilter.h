@@ -122,7 +122,8 @@ private:
 
     bool initGestHoldModeActionArr(void);
     void unregisterHoldModeActions(void);
-    void dynRegHoldModeActionArr(void);
+    virtual filterError updateBasedOnProfile(ProfileManager pm);
+
 
     ControlState* controlStateHandle;
     midasMode previousMode;

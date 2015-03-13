@@ -413,11 +413,10 @@ void callbackThreadWrapper(GestureFilter *gf)
     } while (true);
 }
 
-void GestureFilter::dynamicallyRegisterSequences(void)
+void GestureFilter::dynamicallyRegisterSequences(ProfileManager pm)
 {
     gestSeqRecorder->unregisterAll();
 
-    ProfileManager pm;
     pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
     std::vector<profile>* profiles = pm.getProfiles();
 

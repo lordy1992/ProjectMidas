@@ -49,3 +49,8 @@ void Filter::clearOutput(void)
 {
     outputData = filterDataMap();
 }
+
+filterError Filter::updateBasedOnProfile()
+{
+    return NO_FILTER_ERROR;
+}

@@ -345,11 +345,10 @@ void MyoTranslationFilter::unregisterHoldModeActions(void)
     }
 }
 
-void MyoTranslationFilter::dynRegHoldModeActionArr(void)
+filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager pm)
 {
     this->unregisterHoldModeActions();
 
-    ProfileManager pm;
     pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
     std::vector<profile>* profiles = pm.getProfiles();
 

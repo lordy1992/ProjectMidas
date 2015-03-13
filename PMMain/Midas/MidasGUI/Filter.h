@@ -86,6 +86,13 @@ public:
      */
     filterError getFilterError();
 
+    /**
+     * Update filters internal mechanisms if the profile changes.
+     *
+     * @return The error code of the filter after completion.
+     */
+    filterError updateBasedOnProfile();
+
 protected:
     /**
      * Retrieve the input to the filter. Only a subclass of Filter can access

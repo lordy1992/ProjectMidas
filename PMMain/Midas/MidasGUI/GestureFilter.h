@@ -87,7 +87,7 @@ private:
 
     void emitPoseData(int poseInt);
 
-    void dynamicallyRegisterSequences(void);
+    virtual filterError updateBasedOnProfile(ProfileManager pm);
 
     Pose::Type lastPoseType;
     

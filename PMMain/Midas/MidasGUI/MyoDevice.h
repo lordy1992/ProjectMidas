@@ -71,6 +71,13 @@ public:
      */
     int getDeviceError();
 
+    /**
+     * Update filters internal mechanisms if the profile changes.
+     *
+     * @return void.
+     */
+    void updateProfiles(void);
+
 private:
     /**
      * This class implements all of the callback functions from the Myo DeviceListener
