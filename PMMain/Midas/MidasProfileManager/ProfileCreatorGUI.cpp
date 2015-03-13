@@ -40,7 +40,7 @@ void ProfileCreatorGUI::createMainGUI()
     setCentralWidget(tabWidget);
     createActions();
     createMenu();
-    createToolBar();
+    //createToolBar();
 }
 
 void ProfileCreatorGUI::createActions()
