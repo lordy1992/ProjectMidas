@@ -36,6 +36,7 @@ void ProfileWriter::writeProfile(boost::property_tree::ptree &profileNode, Profi
     {
         ptree &sequenceNode = profileNode.add("sequence", "");
         sequenceNode.put("<xmlattr>.state", sequence.state);
+        sequenceNode.put("<xmlattr>.name", sequence.name);
         writeSequence(sequenceNode, sequence);
     }
 }
@@ -94,14 +95,16 @@ Profile ProfileWriter::extractProfileInformation(const boost::property_tree::ptr
         if (vt.first == "sequence")
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");
-            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin));
+            std::string sequenceName = vt.second.get<std::string>("<xmlattr>.name");
+            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin, sequenceName));
         }
     }
 
     return pr;
 }
 
-Sequence ProfileWriter::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
+Sequence ProfileWriter::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence,
+    std::string sequenceState, std::string sequenceName)
 {
     using boost::property_tree::ptree;
 
@@ -133,6 +136,7 @@ Sequence ProfileWriter::extractSequenceInformation(const boost::property_tree::p
     seq.cmd = cmd;
     seq.gestures = gestures;
     seq.state = sequenceState;
+    seq.name = sequenceName;
 
     return seq;
 }

@@ -4,17 +4,20 @@
 #include <QWidget>
 #include <QScrollArea.h>
 #include <QLayout.h>
+#include "ProfileWriter.h"
 
-class ProfileWidget : public QWidget
+class ProfileWidget : public QScrollArea
 {
     Q_OBJECT
 
 public:
-    ProfileWidget(QWidget *parent = 0);
+    ProfileWidget(Profile profile, QWidget *parent = 0);
     ~ProfileWidget();
 
 private:
-    QScrollArea* scrollArea;
+    void drawProfile(Profile profile);
+    void drawSequence(Sequence sequence);
+    Profile prof;
     QVBoxLayout* vlayout;
 
 };

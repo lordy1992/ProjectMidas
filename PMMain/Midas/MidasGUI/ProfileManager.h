@@ -17,6 +17,7 @@ struct gesture {
 
 struct sequence {
     std::string state;
+    std::string name;
     std::vector<gesture> gestures;
     command cmd;
 };
@@ -36,7 +37,8 @@ public:
 
 private:
     profile extractProfileInformation(const boost::property_tree::ptree::value_type & parentProfile, std::string profileName);
-    sequence extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState);
+    sequence extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, 
+        std::string sequenceState, std::string sequenceName);
     std::vector<profile> profiles;
 };
 

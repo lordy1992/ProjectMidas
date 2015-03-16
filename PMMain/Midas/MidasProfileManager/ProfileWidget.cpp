@@ -4,52 +4,95 @@
 #include <QListWidget.h>
 #include <QPushButton.h>
 
-ProfileWidget::ProfileWidget(QWidget *parent)
-    : QWidget(parent)
+ProfileWidget::ProfileWidget(Profile profile, QWidget *parent)
+    : QScrollArea(parent)
 {
-    scrollArea = new QScrollArea();
-    vlayout = new QVBoxLayout(scrollArea);
+    drawProfile(profile);
+    prof = profile;
+}
+
+ProfileWidget::~ProfileWidget()
+{
+
+}
+
+void ProfileWidget::drawProfile(Profile profile)
+{
+    this->setWidgetResizable(true);
+    QWidget* holdingWidget = new QWidget(this);
+
+    vlayout = new QVBoxLayout();
     vlayout->setAlignment(Qt::AlignTop);
+    vlayout->setSizeConstraint(QLayout::SetMinAndMaxSize);
 
-    scrollArea->setWidget(vlayout->widget());
-
-    QLabel* profileLab = new QLabel("Profile: Default");
+    std::string profileLabVal = "Profile: " + profile.profileName;
+    QLabel* profileLab = new QLabel(QString(profileLabVal.c_str()));
     vlayout->addWidget(profileLab);
     vlayout->setAlignment(profileLab, Qt::AlignTop);
 
-    QGroupBox* grouper = new QGroupBox(tr("Sequence 1"));
+   // For each sequence.. drawSequence
+    std::vector<Sequence> sequences = profile.sequences;
+    for (int i = 0; i < sequences.size(); i++)
+    {
+        drawSequence(sequences[i]);
+    }
+
+    QPushButton* addSequenceButton = new QPushButton();
+    addSequenceButton->setMaximumSize(91, 23);
+
+    addSequenceButton->setText("Add Sequence");
+
+    vlayout->addWidget(addSequenceButton);
+    vlayout->setAlignment(addSequenceButton, Qt::AlignTop);
+    vlayout->setSizeConstraint(QLayout::SetMinimumSize);
+
+    holdingWidget->setLayout(vlayout);
+    this->setWidget(holdingWidget);
+}
+
+void ProfileWidget::drawSequence(Sequence sequence)
+{
+    std::string title = "Sequence " + sequence.name;
+    QGroupBox* grouper = new QGroupBox(tr(title.c_str()));
     grouper->setMaximumSize(400, 310);
 
     QVBoxLayout* sequenceLayout = new QVBoxLayout();
 
-    QLabel* sequenceTitle = new QLabel("Sequence Seq1 from LOCKED state");
+    std::string stateTitle = "Begins in state '" + sequence.state + "'";
+    QLabel* sequenceTitle = new QLabel(QString(stateTitle.c_str()));
     sequenceLayout->addWidget(sequenceTitle);
 
     QListWidget* sequences = new QListWidget();
-    QListWidgetItem* item1 = new QListWidgetItem("tap ThumbToPinky");
-    QListWidgetItem* item2 = new QListWidgetItem("tap WaveIn");
-    QListWidgetItem* item3 = new QListWidgetItem("tap WaveOut");
-    QListWidgetItem* item4 = new QListWidgetItem("tap Fist");
+
+    std::vector<Gesture> gestures = sequence.gestures;
+    std::vector<Gesture>::iterator it;
 
     sequences->setMaximumSize(256, 72);
-
-    sequences->addItem(item1);
-    sequences->addItem(item2);
-    sequences->addItem(item3);
-    sequences->addItem(item4);
+    for (it = gestures.begin(); it != gestures.end(); it++)
+    {
+        std::string itemVal = it->type + " " + it->name;
+        QListWidgetItem* item = new QListWidgetItem(QString(itemVal.c_str()));
+        sequences->addItem(item);
+    }
 
     sequenceLayout->addWidget(sequences);
 
-    QLabel* commandTitle = new QLabel("Command type STATE_CHANGE");
+    std::string cmdLabel = "Command type " + sequence.cmd.type;
+    QLabel* commandTitle = new QLabel(QString(cmdLabel.c_str()));
     sequenceLayout->addWidget(commandTitle);
 
     QListWidget* actions = new QListWidget();
-    QListWidgetItem* action1 = new QListWidgetItem("mouseMode");
-
     actions->setMaximumSize(256, 72);
 
-    actions->addItem(action1);
-    
+    std::vector<std::string> actionList = sequence.cmd.actions;
+    std::vector<std::string>::iterator actionIt;
+
+    for (actionIt = actionList.begin(); actionIt != actionList.end(); actionIt++)
+    {
+        QListWidgetItem* action = new QListWidgetItem(QString(actionIt->c_str()));
+        actions->addItem(action);
+    }
+
     sequenceLayout->addWidget(actions);
 
     QPushButton* editSequenceButton = new QPushButton();
@@ -61,19 +104,4 @@ ProfileWidget::ProfileWidget(QWidget *parent)
 
     vlayout->addWidget(grouper);
     vlayout->setAlignment(grouper, Qt::AlignTop);
-
-    QPushButton* addSequenceButton = new QPushButton();
-    addSequenceButton->setMaximumSize(91, 23);
-
-    addSequenceButton->setText("Add Sequence");
-
-    vlayout->addWidget(addSequenceButton);
-    vlayout->setAlignment(addSequenceButton, Qt::AlignTop);
-
-    setLayout(vlayout);
-}
-
-ProfileWidget::~ProfileWidget()
-{
-
 }

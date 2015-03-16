@@ -35,7 +35,13 @@ void ProfileCreatorGUI::createMainGUI()
     addTabButton->setAutoRaise(true);
 
     tabWidget->setCornerWidget(addTabButton, Qt::TopLeftCorner);
-    tabWidget->addTab(new ProfileWidget(), "Test");
+
+    // Testing
+    ProfileWriter writer;
+    std::vector<Profile> profiles = writer.loadProfilesFromFile("tst.xml");
+    // End Testing
+
+    tabWidget->addTab(new ProfileWidget(profiles.at(0)), "Test");
 
     setCentralWidget(tabWidget);
     createActions();

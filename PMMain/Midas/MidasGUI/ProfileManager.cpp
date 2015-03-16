@@ -40,14 +40,16 @@ profile ProfileManager::extractProfileInformation(const boost::property_tree::pt
         if (vt.first == "sequence")
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");
-            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin));
+            std::string sequenceName = vt.second.get<std::string>("<xmlattr>.name");
+            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin, sequenceName));
         }
     }
 
     return pr;
 }
 
-sequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, std::string sequenceState)
+sequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, 
+    std::string sequenceState, std::string sequenceName)
 {
     using boost::property_tree::ptree;
 
@@ -79,6 +81,7 @@ sequence ProfileManager::extractSequenceInformation(const boost::property_tree::
     seq.cmd = cmd;
     seq.gestures = gestures;
     seq.state = sequenceState;
+    seq.name = sequenceName;
 
     return seq;
 }
