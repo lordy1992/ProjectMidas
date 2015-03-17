@@ -3,6 +3,7 @@
 #include <QGroupBox.h>
 #include <QListWidget.h>
 #include <QPushButton.h>
+#include "SequenceEditor.h"
 
 ProfileWidget::ProfileWidget(Profile profile, QWidget *parent)
     : QScrollArea(parent)
@@ -31,11 +32,13 @@ void ProfileWidget::drawProfile(Profile profile)
     vlayout->setAlignment(profileLab, Qt::AlignTop);
 
    // For each sequence.. drawSequence
+    mapper = new QSignalMapper(this);
     std::vector<Sequence> sequences = profile.sequences;
     for (int i = 0; i < sequences.size(); i++)
     {
-        drawSequence(sequences[i]);
+        drawSequence(sequences[i], i);
     }
+    connect(mapper, SIGNAL(mapped(int)), this, SLOT(editButtonClicked(int)));
 
     QPushButton* addSequenceButton = new QPushButton();
     addSequenceButton->setMaximumSize(91, 23);
@@ -50,7 +53,7 @@ void ProfileWidget::drawProfile(Profile profile)
     this->setWidget(holdingWidget);
 }
 
-void ProfileWidget::drawSequence(Sequence sequence)
+void ProfileWidget::drawSequence(Sequence sequence, int ind)
 {
     std::string title = "Sequence " + sequence.name;
     QGroupBox* grouper = new QGroupBox(tr(title.c_str()));
@@ -98,10 +101,22 @@ void ProfileWidget::drawSequence(Sequence sequence)
     QPushButton* editSequenceButton = new QPushButton();
     editSequenceButton->setMaximumSize(51, 23);
     editSequenceButton->setText("Edit");
+
+    connect(editSequenceButton, SIGNAL(released()), mapper, SLOT(map()));
+    mapper->setMapping(editSequenceButton, ind);
     sequenceLayout->addWidget(editSequenceButton);
 
     grouper->setLayout(sequenceLayout);
 
     vlayout->addWidget(grouper);
     vlayout->setAlignment(grouper, Qt::AlignTop);
+}
+
+void ProfileWidget::editButtonClicked(int id)
+{
+    SequenceEditor editor;
+    if (editor.exec())
+    {
+        // Done...
+    }
 }

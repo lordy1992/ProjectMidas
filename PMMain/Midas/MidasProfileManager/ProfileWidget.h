@@ -5,6 +5,7 @@
 #include <QScrollArea.h>
 #include <QLayout.h>
 #include "ProfileWriter.h"
+#include <QSignalMapper>
 
 class ProfileWidget : public QScrollArea
 {
@@ -16,9 +17,13 @@ public:
 
 private:
     void drawProfile(Profile profile);
-    void drawSequence(Sequence sequence);
+    void drawSequence(Sequence sequence, int ind);
     Profile prof;
     QVBoxLayout* vlayout;
+    QSignalMapper* mapper;
+
+public slots:
+    void editButtonClicked(int id);
 
 };
 

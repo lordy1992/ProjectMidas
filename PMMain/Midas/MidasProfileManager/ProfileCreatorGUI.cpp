@@ -41,7 +41,13 @@ void ProfileCreatorGUI::createMainGUI()
     std::vector<Profile> profiles = writer.loadProfilesFromFile("tst.xml");
     // End Testing
 
-    tabWidget->addTab(new ProfileWidget(profiles.at(0)), "Test");
+    setWindowTitle("tst - Project Midas Profile Manager");
+
+    std::vector<Profile>::iterator it;
+    for (it = profiles.begin(); it != profiles.end(); it++)
+    {
+        tabWidget->addTab(new ProfileWidget(*it), QString(it->profileName.c_str()));
+    }
 
     setCentralWidget(tabWidget);
     createActions();
