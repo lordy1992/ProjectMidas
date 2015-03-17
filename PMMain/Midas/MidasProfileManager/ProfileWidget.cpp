@@ -117,6 +117,6 @@ void ProfileWidget::editButtonClicked(int id)
     SequenceEditor editor;
     if (editor.exec())
     {
-        // Done...
+        Sequence seq = editor.getSequence();
     }
 }
