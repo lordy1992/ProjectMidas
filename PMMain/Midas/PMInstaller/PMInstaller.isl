@@ -339,7 +339,7 @@
 		<col def="S0">ISDotNetInstallerArgsCommit</col>
 		<col def="S0">ISDotNetInstallerArgsUninstall</col>
 		<col def="S0">ISDotNetInstallerArgsRollback</col>
-		<row><td>ISX_DEFAULTCOMPONENT</td><td>{ECDFD62D-3C0D-46D9-9149-964D9C999CD7}</td><td>SOURCE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td>{B1AC2B11-07F0-4C71-BC11-F3DFD15C9CD7}</td><td>SOURCE</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT17</td><td>{BFA64770-E521-4EE6-8210-C281BF502D23}</td><td>INSTALLDIR</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT18</td><td>{7061E82D-EE86-495C-B70D-EFD7ACA9434C}</td><td>RESOURCES1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT19</td><td>{E44D69ED-815B-4A4B-840C-8CAFFED184A1}</td><td>_00PXIMGS1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
@@ -349,7 +349,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT23</td><td>{3F3FA4B0-A6DB-4C1C-A818-DA04D215F88E}</td><td>POST200PXIMGS1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>ISX_DEFAULTCOMPONENT24</td><td>{1F5A538D-E118-4F80-B03E-94D9B9F99EBD}</td><td>TEMP1</td><td>2</td><td/><td/><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>MidasGUI.Primary_Output</td><td>{340EC79A-10C1-45C8-9645-122AEFF511AF}</td><td>INSTALLDIR</td><td>2</td><td/><td>midasgui.primary_output</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
-		<row><td>MidasGUI.Source_Files</td><td>{D2ECEA64-D399-4C77-ABC2-06BB63CFBB3F}</td><td>SOURCE</td><td>2</td><td/><td>midasgui.source_files</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
+		<row><td>MidasGUI.Source_Files</td><td>{14934CDC-1205-4DB9-AE85-B22BF199D860}</td><td>SOURCE</td><td>2</td><td/><td>midasgui.source_files</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>myo32.dll</td><td>{EEEB9B12-32CE-4D57-9F31-88D54D0EE774}</td><td>INSTALLDIR</td><td>2</td><td/><td>myo32.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 		<row><td>myo64.dll</td><td>{221D0CF7-5EEC-4D1B-97EC-2CEACEC1C764}</td><td>INSTALLDIR</td><td>2</td><td/><td>myo64.dll</td><td>17</td><td/><td/><td/><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td><td>/LogFile=</td></row>
 	</table>
@@ -1174,7 +1174,7 @@
 		<row><td>ProgramMenuFolder</td><td>TARGETDIR</td><td>.:Programs</td><td/><td>3</td><td/></row>
 		<row><td>RESOURCES1</td><td>INSTALLDIR</td><td>RESOUR~1|Resources</td><td/><td>0</td><td/></row>
 		<row><td>RecentFolder</td><td>TARGETDIR</td><td>.:Recent</td><td/><td>0</td><td/></row>
-		<row><td>SOURCE</td><td>UBC_CAPSTONG_GROUP_53</td><td>source</td><td/><td>0</td><td/></row>
+		<row><td>SOURCE</td><td>UBC_CAPSTONE_GROUP_53</td><td>source</td><td/><td>0</td><td/></row>
 		<row><td>SendToFolder</td><td>TARGETDIR</td><td>.:SendTo</td><td/><td>3</td><td/></row>
 		<row><td>StartMenuFolder</td><td>TARGETDIR</td><td>.:STARTM~1|Start Menu</td><td/><td>3</td><td/></row>
 		<row><td>StartupFolder</td><td>TARGETDIR</td><td>.:StartUp</td><td/><td>3</td><td/></row>
@@ -1191,7 +1191,9 @@
 		<row><td>WindowsFolder</td><td>TARGETDIR</td><td>.:Windows</td><td/><td>0</td><td/></row>
 		<row><td>WindowsVolume</td><td>TARGETDIR</td><td>.:WinRoot</td><td/><td>0</td><td/></row>
 		<row><td>_00PXIMGS1</td><td>RESOURCES1</td><td>200PXI~1|200PxImgs</td><td/><td>0</td><td/></row>
+		<row><td>project_midas</td><td>ubccap_1_ubc_capstone_group_53</td><td>PROJEC~1|project midas</td><td/><td>1</td><td/></row>
 		<row><td>setup2</td><td>ubccap_1_ubc_capstong_group_53</td><td>Setup2</td><td/><td>1</td><td/></row>
+		<row><td>ubccap_1_ubc_capstone_group_53</td><td>ProgramMenuFolder</td><td>ubccap~1|ubc capstone group 53</td><td/><td>1</td><td/></row>
 		<row><td>ubccap_1_ubc_capstong_group_53</td><td>ProgramMenuFolder</td><td>UBCCAP~1|UBC Capstong Group 53</td><td/><td>1</td><td/></row>
 	</table>
 
@@ -2091,7 +2093,7 @@
 		<col def="S0">FTPLocation</col>
 		<col def="S0">HTTPLocation</col>
 		<col def="S0">Miscellaneous</col>
-		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_92A6A33D_98D3_41E6_A043_C32C077721B6_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>ISX_DEFAULTCOMPONENT</td><td/><td/><td>_6F70A1B7_59C1_4503_98B5_A6524053E999_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT17</td><td/><td/><td>_28F23535_2AED_4F3A_97AF_B8799F9CD545_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT18</td><td/><td/><td>_EC9392A8_742A_473A_8A1A_43EE86903152_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT19</td><td/><td/><td>_066803C3_3CCA_4A29_9729_FFD44A437E61_FILTER</td><td/><td/><td/><td/></row>
@@ -2101,7 +2103,7 @@
 		<row><td>ISX_DEFAULTCOMPONENT23</td><td/><td/><td>_370C4A0E_30A9_42A3_81D7_78878209D04E_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>ISX_DEFAULTCOMPONENT24</td><td/><td/><td>_AB1A42F0_A3ED_46B9_BAB9_0F53E8027A33_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>MidasGUI.Primary_Output</td><td/><td/><td>_03373D7B_B006_49B8_B690_9BD84727AA6B_FILTER</td><td/><td/><td/><td/></row>
-		<row><td>MidasGUI.Source_Files</td><td/><td/><td>_38057501_7C8D_48A2_A681_D77D3E6ED34C_FILTER</td><td/><td/><td/><td/></row>
+		<row><td>MidasGUI.Source_Files</td><td/><td/><td>_1E6D84BB_263E_41A8_9325_5008EF1D8F19_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>myo32.dll</td><td/><td/><td>_F577827A_DCFC_4B76_B8E4_4804F4F77DEF_FILTER</td><td/><td/><td/><td/></row>
 		<row><td>myo64.dll</td><td/><td/><td>_389EC9BB_0D68_43E3_B722_03BF8752B5CB_FILTER</td><td/><td/><td/><td/></row>
 	</table>
@@ -3942,8 +3944,6 @@
 		<row><td>_12804C0B8E97441DA816D40A64E1F844.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Release\MidasGUI.exe</td><td>0</td></row>
 		<row><td>_71FAAA0C16F442E1A2200CD8C22EB37D.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Debug\MidasGUI.exe</td><td>0</td></row>
 		<row><td>_AF28802C921D4F9885ABCE4E0567922A.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Release\MidasGUI.exe</td><td>0</td></row>
-		<row><td>_Built11_E373C40DD2134B759154601DF027638B.exe</td><td/><td>&lt;VSSolutionFolder&gt;\MidasGUI\Resources\ProjectMidasLogo.ico</td><td>0</td></row>
-		<row><td>_Built1_C54038397D1947799773A99D81B45049.exe</td><td/><td>&lt;VSSolutionFolder&gt;\MidasGUI\Resources\ProjectMidasLogo.ico</td><td>0</td></row>
 		<row><td>_CC6BAFBC7F8D44D6A44B42BDED5DD5DC.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Release\MidasGUI.exe</td><td>0</td></row>
 		<row><td>_CD39A467C9D84776865B990889BA15AA.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Release\MidasGUI.exe</td><td>0</td></row>
 		<row><td>_F9A06809D8BA40348CD2318D460BEF0A.exe</td><td/><td>C:\Users\Frederick\Source\Repos\ProjectMidas\PMMain\Midas\Win32\Release\MidasGUI.exe</td><td>0</td></row>
@@ -4529,7 +4529,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="L255">FileName</col>
 		<col def="s72">DirProperty</col>
 		<col def="i2">InstallMode</col>
-		<row><td>_Built11</td><td>MidasGUI.Primary_Output</td><td/><td>setup2</td><td>2</td></row>
 	</table>
 
 	<table name="RemoveIniFile">
@@ -4615,8 +4614,6 @@ UwBpAG4AZwBsAGUASQBtAGEAZwBlAAEARQB4AHAAcgBlAHMAcwA=
 		<col def="S255">ISComments</col>
 		<col def="S255">ISShortcutName</col>
 		<col def="I4">ISAttributes</col>
-		<row><td>_Built1</td><td>DesktopFolder</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>MidasGUI.Primary_Output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built1_C54038397D1947799773A99D81B45049.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
-		<row><td>_Built11</td><td>setup2</td><td>##IDS_SHORTCUT_DISPLAY_NAME2##</td><td>MidasGUI.Primary_Output</td><td>AlwaysInstall</td><td/><td/><td/><td>_Built11_E373C40DD2134B759154601DF027638B.exe</td><td>0</td><td>1</td><td/><td/><td/><td/><td/><td/><td/><td/></row>
 	</table>
 
 	<table name="Signature">
