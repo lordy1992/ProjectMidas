@@ -1,15 +1,12 @@
 #include "ProfileWidget.h"
-#include <QLabel.h>
-#include <QGroupBox.h>
-#include <QListWidget.h>
 #include <QPushButton.h>
 #include "SequenceEditor.h"
 
 ProfileWidget::ProfileWidget(Profile profile, QWidget *parent)
     : QScrollArea(parent)
 {
-    drawProfile(profile);
     prof = profile;
+    drawProfile(profile);
 }
 
 ProfileWidget::~ProfileWidget()
@@ -98,6 +95,15 @@ void ProfileWidget::drawSequence(Sequence sequence, int ind)
 
     sequenceLayout->addWidget(actions);
 
+    sequenceWidgets seqWidgets;
+    seqWidgets.actions = actions; 
+    seqWidgets.commandTitle = commandTitle;
+    seqWidgets.sequences = sequences;
+    seqWidgets.stateTitle = sequenceTitle;
+    seqWidgets.grouper = grouper;
+
+    seqWidgetList.push_back(seqWidgets);
+
     QPushButton* editSequenceButton = new QPushButton();
     editSequenceButton->setMaximumSize(51, 23);
     editSequenceButton->setText("Edit");
@@ -112,11 +118,48 @@ void ProfileWidget::drawSequence(Sequence sequence, int ind)
     vlayout->setAlignment(grouper, Qt::AlignTop);
 }
 
+void ProfileWidget::modifySequence(int ind, Sequence seq)
+{
+    sequenceWidgets seqWidgets = seqWidgetList[ind];
+
+    std::string title = "Sequence " + seq.name;
+    seqWidgets.grouper->setTitle(tr(title.c_str()));
+
+    std::string stateTitle = "Begins in state '" + seq.state + "'";
+    seqWidgets.stateTitle->setText(QString(stateTitle.c_str()));
+
+    std::vector<Gesture> gestures = seq.gestures;
+    std::vector<Gesture>::iterator it;
+
+    seqWidgets.sequences->clear();
+    for (it = gestures.begin(); it != gestures.end(); it++)
+    {
+        std::string itemVal = it->type + " " + it->name;
+        QListWidgetItem* item = new QListWidgetItem(QString(itemVal.c_str()));
+        seqWidgets.sequences->addItem(item);
+    }
+
+    std::string cmdLabel = "Command type " + seq.cmd.type;
+    seqWidgets.commandTitle->setText(QString(cmdLabel.c_str()));
+
+    std::vector<std::string> actionList = seq.cmd.actions;
+    std::vector<std::string>::iterator actionIt;
+
+    seqWidgets.actions->clear();
+    for (actionIt = actionList.begin(); actionIt != actionList.end(); actionIt++)
+    {
+        QListWidgetItem* action = new QListWidgetItem(QString(actionIt->c_str()));
+        seqWidgets.actions->addItem(action);
+    }
+}
+
 void ProfileWidget::editButtonClicked(int id)
 {
     SequenceEditor editor;
     if (editor.exec())
     {
         Sequence seq = editor.getSequence();
+        prof.sequences[id] = seq;
+        modifySequence(id, seq);
     }
 }

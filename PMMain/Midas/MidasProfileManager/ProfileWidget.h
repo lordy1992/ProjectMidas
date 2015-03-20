@@ -6,6 +6,17 @@
 #include <QLayout.h>
 #include "ProfileWriter.h"
 #include <QSignalMapper>
+#include <QGroupBox.h>
+#include <QLabel.h>
+#include <QListWidget.h>
+
+struct sequenceWidgets {
+    QGroupBox* grouper;
+    QLabel* stateTitle;
+    QListWidget* sequences;
+    QLabel* commandTitle;
+    QListWidget* actions;
+};
 
 class ProfileWidget : public QScrollArea
 {
@@ -18,9 +29,11 @@ public:
 private:
     void drawProfile(Profile profile);
     void drawSequence(Sequence sequence, int ind);
+    void modifySequence(int ind, Sequence seq);
     Profile prof;
     QVBoxLayout* vlayout;
     QSignalMapper* mapper;
+    std::vector<sequenceWidgets> seqWidgetList;
 
 public slots:
     void editButtonClicked(int id);
