@@ -28,7 +28,7 @@ public:
 
 private:
     void drawProfile(Profile profile);
-    void drawSequence(Sequence sequence, int ind);
+    void drawSequence(Sequence sequence, int ind, bool insertBefore = false);
     void modifySequence(int ind, Sequence seq);
     Profile prof;
     QVBoxLayout* vlayout;
@@ -37,6 +37,7 @@ private:
 
 public slots:
     void editButtonClicked(int id);
+    void addSequenceButtonClicked();
 
 };
 

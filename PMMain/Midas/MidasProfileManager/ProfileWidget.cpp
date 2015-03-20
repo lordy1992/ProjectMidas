@@ -46,11 +46,13 @@ void ProfileWidget::drawProfile(Profile profile)
     vlayout->setAlignment(addSequenceButton, Qt::AlignTop);
     vlayout->setSizeConstraint(QLayout::SetMinimumSize);
 
+    connect(addSequenceButton, SIGNAL(released()), this, SLOT(addSequenceButtonClicked()));
+
     holdingWidget->setLayout(vlayout);
     this->setWidget(holdingWidget);
 }
 
-void ProfileWidget::drawSequence(Sequence sequence, int ind)
+void ProfileWidget::drawSequence(Sequence sequence, int ind, bool insertBefore)
 {
     std::string title = "Sequence " + sequence.name;
     QGroupBox* grouper = new QGroupBox(tr(title.c_str()));
@@ -114,7 +116,15 @@ void ProfileWidget::drawSequence(Sequence sequence, int ind)
 
     grouper->setLayout(sequenceLayout);
 
-    vlayout->addWidget(grouper);
+    if (insertBefore)
+    {
+        vlayout->insertWidget(vlayout->count() - 1, grouper);
+    }
+    else
+    {
+        vlayout->addWidget(grouper);
+    }
+
     vlayout->setAlignment(grouper, Qt::AlignTop);
 }
 
@@ -161,5 +171,16 @@ void ProfileWidget::editButtonClicked(int id)
         Sequence seq = editor.getSequence();
         prof.sequences[id] = seq;
         modifySequence(id, seq);
+    }
+}
+
+void ProfileWidget::addSequenceButtonClicked()
+{
+    SequenceEditor editor;
+    if (editor.exec())
+    {
+        Sequence seq = editor.getSequence();
+        prof.sequences.push_back(seq);
+        drawSequence(seq, prof.sequences.size()-1, true);
     }
 }
