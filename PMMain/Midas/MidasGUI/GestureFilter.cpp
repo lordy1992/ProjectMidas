@@ -413,7 +413,7 @@ void callbackThreadWrapper(GestureFilter *gf)
     } while (true);
 }
 
-void GestureFilter::dynamicallyRegisterSequences(ProfileManager pm)
+filterError GestureFilter::updateBasedOnProfile(ProfileManager pm)
 {
     gestSeqRecorder->unregisterAll();
 
@@ -434,21 +434,39 @@ void GestureFilter::dynamicallyRegisterSequences(ProfileManager pm)
             seq.push_back(SeqElement(type, len));
         }
 
-        // TODO: Add translations for actions
+        commandData response;
+        response.name = it->name;
+        response.type = profileCommandToCommandTypeMap[it->cmd.type];
 
-        /* for ... seq.push_back(SeqElement(Pose::Type::XXX), XXXLENXXX)*/
-        /* */
-        commandData command;
-        command.name = "XXXName";
-        command.type = commandType::STATE_CHANGE; // XXXCOMMAND_TYPE TODO
-        command.action.mode = midasMode::MOUSE_MODE; // XXXMIDAS_MODE TODO
+        // Currently only supporting one action, rather than a list.
+        // The XML format supports a list so that it can be extended in Midas easily.
+        std::string action = it->cmd.actions[0];
+        switch (response.type)
+        {
+            case commandType::KYBRD_CMD:
+                response.action.kybd = profileActionToKybd[action];
+            break;
+            case commandType::KYBRD_GUI_CMD:
+                response.action.kybdGUI = profileActionToKybdGui[action];
+            break;
+            case commandType::MOUSE_CMD:
+                response.action.mouse = profileActionToMouseCommands[action];
+            break;
+            case commandType::STATE_CHANGE:
+                response.action.mode = profileActionToStateChange[action];
+            break;
+            default:
+            break;
+        }
 
-        midasMode tempXXX = midasMode::LOCK_MODE;
-        ss |= (int)gestSeqRecorder->registerSequence(tempXXX, seq, command, "XXXSEQUENCENAME");
+        midasMode startState = profileActionToStateChange[it->state];
+        ss |= (int)gestSeqRecorder->registerSequence(startState, seq, response, it->name);
 
         if (ss != (int)SequenceStatus::SUCCESS)
         {
-            throw new std::exception("registerSequenceException: XXXSEQUENCENAME");
+            throw new std::exception(("registerSequenceException: " + it->name).c_str());
         }
     }
+
+    return filterError::NO_FILTER_ERROR;
 }

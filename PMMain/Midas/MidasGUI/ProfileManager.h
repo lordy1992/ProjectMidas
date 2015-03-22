@@ -2,6 +2,7 @@
 #define PROFILE_MANAGER_H
 
 #include "MyoCommon.h"
+#include "MidasCommon.h"
 #include <string>
 #include <vector>
 #include <boost/property_tree/ptree.hpp>
@@ -45,7 +46,7 @@ std::map<std::string, kybdGUICmds> profileActionToKybdGui =
     { "holdSelect", HOLD_SELECT },
 };
 
-std::map<std::string, kybdCmds> profileActionToKybdGui =
+std::map<std::string, kybdCmds> profileActionToKybd =
 {
     { "none", NO_CMD },
     { "undo", UNDO },

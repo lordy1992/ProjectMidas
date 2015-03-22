@@ -50,7 +50,7 @@ void Filter::clearOutput(void)
     outputData = filterDataMap();
 }
 
-filterError Filter::updateBasedOnProfile()
+filterError Filter::updateBasedOnProfile(ProfileManager pm)
 {
     return filterError::NO_FILTER_ERROR;
 }

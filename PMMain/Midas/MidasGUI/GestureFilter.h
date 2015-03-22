@@ -57,6 +57,8 @@ public:
 
     filterDataMap getExtraDataForSCD();
 
+    filterError updateBasedOnProfile(ProfileManager pm);
+
     /**
     * return actual handle to gestSeqRecorder
     */
@@ -86,8 +88,6 @@ private:
     void handleKybrdCommand(commandData response, bool addToExtra = false);
 
     void emitPoseData(int poseInt);
-
-    virtual filterError updateBasedOnProfile(ProfileManager pm);
 
     Pose::Type lastPoseType;
     

@@ -4,6 +4,7 @@
 #include "Filter.h"
 #include "ControlState.h"
 #include "GestureHoldModeAction.h"
+#include "ProfileManager.h"
 #include "myo\myo.hpp"
 
 #ifdef USE_SIMULATOR
@@ -66,6 +67,8 @@ public:
     */
     static float calcRingDelta(float current, float base);
 
+    filterError updateBasedOnProfile(ProfileManager pm);
+
 private:
     /**
      * Calculate the 'pitch' angle from the supplied quaternion, consisting of x, y, z and w,
@@ -122,8 +125,6 @@ private:
 
     bool initGestHoldModeActionArr(void);
     void unregisterHoldModeActions(void);
-    virtual filterError updateBasedOnProfile(ProfileManager pm);
-
 
     ControlState* controlStateHandle;
     midasMode previousMode;
