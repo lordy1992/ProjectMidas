@@ -2,6 +2,7 @@
 #define _MIDAS_COMMON_H
 
 #include <string>
+#include <map>
 
 #define MOUSE_INDICATOR_SIZE 100
 #define INFO_INDICATOR_WIDTH   250
@@ -37,7 +38,7 @@ enum kybdGUICmds {
  * High-level keyboard commands that represent common actions.
  */
 // TODO - CHANGE THESE TO BINARY so that GestureHoldModeAction can emit more than one at once.
-enum kybdCmds{
+enum kybdCmds {
     NO_CMD = 0,
     UNDO = 1,
     REDO = 2,

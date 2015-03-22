@@ -52,5 +52,5 @@ void Filter::clearOutput(void)
 
 filterError Filter::updateBasedOnProfile()
 {
-    return NO_FILTER_ERROR;
+    return filterError::NO_FILTER_ERROR;
 }

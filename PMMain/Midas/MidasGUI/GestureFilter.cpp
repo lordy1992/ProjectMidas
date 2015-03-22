@@ -420,10 +420,22 @@ void GestureFilter::dynamicallyRegisterSequences(ProfileManager pm)
     pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
     std::vector<profile>* profiles = pm.getProfiles();
 
+    // TODO: Select profile based on user choice
+    profile prof = profiles->at(0);
+
     int ss = (int)SequenceStatus::SUCCESS;
-    for (std::vector<profile>::iterator it = profiles->begin(); it != profiles->end(); ++it)
+    for (std::vector<profileSequence>::iterator it = prof.profileSequences.begin(); it != prof.profileSequences.end(); ++it)
     {
         sequence seq;
+        for (std::vector<gesture>::iterator gestureIt = it->gestures.begin(); gestureIt != it->gestures.end(); ++gestureIt)
+        {
+            SeqElement::PoseLength len = profileGestureTypeToPoseLength[gestureIt->type];
+            Pose::Type type = profileGestureNameToType[gestureIt->name];
+            seq.push_back(SeqElement(type, len));
+        }
+
+        // TODO: Add translations for actions
+
         /* for ... seq.push_back(SeqElement(Pose::Type::XXX), XXXLENXXX)*/
         /* */
         commandData command;
