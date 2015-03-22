@@ -67,7 +67,7 @@ public:
     */
     static float calcRingDelta(float current, float base);
 
-    filterError updateBasedOnProfile(ProfileManager pm);
+    filterError updateBasedOnProfile(ProfileManager& pm);
 
 private:
     /**

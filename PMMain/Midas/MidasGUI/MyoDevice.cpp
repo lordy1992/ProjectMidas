@@ -199,17 +199,18 @@ void MyoDevice::updateProfiles(void)
 {
     ProfileManager pm;
     std::list<Filter*>* filters = posePipeline.getFilters();
+    pm.loadProfilesFromFile("midas_profile.xml");
 
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile();
+        error |= (int)(*it)->updateBasedOnProfile(pm);
     }
 
     filters = orientationPipeline.getFilters();
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile();
+        error |= (int)(*it)->updateBasedOnProfile(pm);
     }
 
     if (error != (int)filterError::NO_FILTER_ERROR)

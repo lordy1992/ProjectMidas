@@ -345,24 +345,66 @@ void MyoTranslationFilter::unregisterHoldModeActions(void)
     }
 }
 
-filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager pm)
+filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager& pm)
 {
     this->unregisterHoldModeActions();
 
-    pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
     std::vector<profile>* profiles = pm.getProfiles();
+
+    // TODO: Select profile based on user choice
+    profile prof = profiles->at(0);
 
     bool okay = true;
     angleData ad;
-    for (std::vector<profile>::iterator it = profiles->begin(); it != profiles->end(); ++it)
+    for (std::vector<hold>::iterator it = prof.holds.begin(); it != prof.holds.end(); ++it)
     {
-        ad.angleType = angleData::AngleType::ROLL; // TODO make dynamic from it
-        ad.anglePositive = true; //TODO make dynamic from it
-        okay &= gestHoldModeAction[GESTURE_FIST].addToActionMap(ad, kybdCmds::VOLUME_UP); //TODO make dynamic from it
-        
-        if (okay = false)
+        int gestType;
+        if (it->gesture == "fist")
         {
-            throw new std::exception("registerHoldModeActionException: XXXSEQUENCENAME");
+            gestType = GESTURE_FIST;
+        }
+        else if (it->gesture == "fingersSpread")
+        {
+            gestType = GESTURE_FINGERS_SPREAD;
+        }
+        else if (it->gesture == "thumbToPinky")
+        {
+            gestType = GESTURE_THUMB_TO_PINKY;
+        }
+        else if (it->gesture == "waveIn")
+        {
+            gestType = GESTURE_WAVE_IN;
+        }
+        else if (it->gesture == "waveOut")
+        {
+            gestType = GESTURE_WAVE_OUT;
+        }
+
+        for (std::vector<angleAction>::iterator angleIt = it->angles.begin(); angleIt != it->angles.end(); ++angleIt)
+        {
+            angleData ad;
+            if (angleIt->type == "roll")
+            {
+                ad.angleType = angleData::AngleType::ROLL;
+            }
+            else if (angleIt->type == "pitch")
+            {
+                ad.angleType = angleData::AngleType::PITCH;
+            }
+            else
+            {
+                ad.angleType = angleData::AngleType::YAW;
+            }
+
+            ad.anglePositive = true;
+            okay &= gestHoldModeAction[gestType].addToActionMap(ad, profileActionToKybd[angleIt->anglePositive]);
+            ad.anglePositive = false;
+            okay &= gestHoldModeAction[gestType].addToActionMap(ad, profileActionToKybd[angleIt->angleNegative]);
+
+            if (!okay)
+            {
+                throw new std::exception("registerHoldModeActionException");
+            }
         }
     }
 }

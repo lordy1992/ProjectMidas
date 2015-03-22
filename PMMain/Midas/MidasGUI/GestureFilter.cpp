@@ -413,11 +413,10 @@ void callbackThreadWrapper(GestureFilter *gf)
     } while (true);
 }
 
-filterError GestureFilter::updateBasedOnProfile(ProfileManager pm)
+filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm)
 {
     gestSeqRecorder->unregisterAll();
 
-    pm.loadProfilesFromFile("TODO - THIS NEEDS A CONSTANT FILE NAME");
     std::vector<profile>* profiles = pm.getProfiles();
 
     // TODO: Select profile based on user choice
