@@ -22,11 +22,22 @@ struct Sequence {
     Command cmd;
 };
 
+struct AngleAction {
+    std::string type;
+    std::string anglePositive;
+    std::string angleNegative;
+};
+
+struct Hold {
+    std::string gesture;
+    std::vector<AngleAction> angles;
+};
+
 struct Profile {
     std::string profileName;
     std::vector<Sequence> sequences;
+    std::vector<Hold> holds;
 };
-
 
 class ProfileWriter
 {

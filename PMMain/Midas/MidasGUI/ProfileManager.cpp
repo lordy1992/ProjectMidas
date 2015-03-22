@@ -41,7 +41,7 @@ profile ProfileManager::extractProfileInformation(const boost::property_tree::pt
     profile pr; 
     pr.profileName = profileName;
 
-    BOOST_FOREACH(const ptree::value_type & vt, parentProfile.second) {
+    BOOST_FOREACH(const ptree::value_type & vt, parentProfile.second.get_child("sequences")) {
         if (vt.first == "sequence")
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");

@@ -24,9 +24,21 @@ struct profileSequence {
     command cmd;
 };
 
+struct angleAction {
+    std::string type;
+    std::string anglePositive;
+    std::string angleNegative;
+};
+
+struct hold {
+    std::string gesture;
+    std::vector<angleAction> angles;
+};
+
 struct profile {
     std::string profileName;
     std::vector<profileSequence> profileSequences;
+    std::vector<hold> holds;
 };
 
 std::map<std::string, commandType> profileCommandToCommandTypeMap =

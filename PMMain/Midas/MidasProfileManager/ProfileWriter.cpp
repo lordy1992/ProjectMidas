@@ -34,10 +34,25 @@ void ProfileWriter::writeProfile(boost::property_tree::ptree &profileNode, Profi
 
     BOOST_FOREACH(Sequence sequence, profile.sequences)
     {
-        ptree &sequenceNode = profileNode.add("sequence", "");
+        ptree &sequenceNode = profileNode.add("sequences.sequence", "");
         sequenceNode.put("<xmlattr>.state", sequence.state);
         sequenceNode.put("<xmlattr>.name", sequence.name);
         writeSequence(sequenceNode, sequence);
+    }
+
+    BOOST_FOREACH(Hold hold, profile.holds)
+    {
+        ptree &holdNode = profileNode.add("holds.hold", "");
+        holdNode.put("<xmlattr>.gesture", hold.gesture);
+        
+        BOOST_FOREACH(AngleAction angleAction, hold.angles)
+        {
+            ptree &angleNode = holdNode.add("angle", "");
+            angleNode.put("<xmlattr>.type", angleAction.type);
+            
+            angleNode.add("anglePositive", angleAction.anglePositive);
+            angleNode.add("angleNegative", angleAction.angleNegative);
+        }
     }
 }
 
