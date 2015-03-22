@@ -106,12 +106,39 @@ Profile ProfileWriter::extractProfileInformation(const boost::property_tree::ptr
     Profile pr;
     pr.profileName = profileName;
 
-    BOOST_FOREACH(const ptree::value_type & vt, parentProfile.second) {
+    BOOST_FOREACH(const ptree::value_type & vt, parentProfile.second.get_child("sequences")) {
         if (vt.first == "sequence")
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");
             std::string sequenceName = vt.second.get<std::string>("<xmlattr>.name");
             pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin, sequenceName));
+        }
+    }
+
+    BOOST_FOREACH(const ptree::value_type & vt, parentProfile.second.get_child("holds"))
+    {
+        if (vt.first == "hold")
+        {
+            Hold currHold;
+            std::string gesture = vt.second.get<std::string>("<xmlattr>.gesture");
+            currHold.gesture = gesture;
+
+            BOOST_FOREACH(const ptree::value_type & angleVt, vt.second)
+            {
+                if (angleVt.first == "angle")
+                {
+                    AngleAction currAngle;
+                    std::string angleType = angleVt.second.get<std::string>("<xmlattr>.type");
+                    std::string anglePositive = angleVt.second.get_child("anglePositive").get_value<std::string>();
+                    std::string angleNegative = angleVt.second.get_child("angleNegative").get_value<std::string>();
+                    currAngle.anglePositive = anglePositive;
+                    currAngle.angleNegative = angleNegative;
+                    currAngle.type = angleType;
+                    currHold.angles.push_back(currAngle);
+                }
+            }
+
+            pr.holds.push_back(currHold);
         }
     }
 
