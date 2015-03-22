@@ -28,3 +28,8 @@ void FilterPipeline::startPipeline(filterDataMap input)
         nextInput = currentFilter->getOutput();
     }
 }
+
+std::list<Filter*>* FilterPipeline::getFilters(void)
+{
+    return &filters;
+}

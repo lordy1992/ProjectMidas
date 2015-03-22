@@ -36,32 +36,38 @@ enum kybdGUICmds {
 /**
  * High-level keyboard commands that represent common actions.
  */
-enum kybdCmds {
-    UNDO,
-    REDO,
-    ZOOM_IN,
-    ZOOM_OUT,
-    ZOOM_100,
-    ESCAPE,
-    ENTER,
-    TAB,
-    SWITCH_WIN_FORWARD,
-    SWITCH_WIN_REVERSE,
-    COPY,
-    PASTE,
-    CUT,
-    FILE_MENU,
-    NEW_BROWSER,
-    GOTO_ADDR_BAR,
-    LOCK_DESKTOP,
-    EDIT_MENU,
-    VIEW_MENU,
-    WIN_HOME,
-    HIDE_APPS,
-    CONTROL,
-    VOLUME_UP,
-    VOLUME_DOWN,
-    BACKSPACE
+// TODO - CHANGE THESE TO BINARY so that GestureHoldModeAction can emit more than one at once.
+enum kybdCmds{
+    NO_CMD = 0,
+    UNDO = 1,
+    REDO = 2,
+    ZOOM_IN = 4,
+    ZOOM_OUT = 8,
+    ZOOM_100 = 16,
+    ESCAPE = 32,
+    ENTER = 64,
+    TAB = 128,
+    SWITCH_WIN_FORWARD = 256,
+    SWITCH_WIN_REVERSE = 512,
+    COPY = 1024,
+    PASTE = 2048,
+    CUT = 4096,
+    FILE_MENU = 8192,
+    NEW_BROWSER = 16384,
+    GOTO_ADDR_BAR = 32768,
+    LOCK_DESKTOP = 65536,
+    EDIT_MENU = 131072,
+    VIEW_MENU = 262144,
+    WIN_HOME = 524288,
+    HIDE_APPS = 1048576,
+    CONTROL = 2097152,
+    VOLUME_UP = 4194304,
+    VOLUME_DOWN = 8388608,
+    BACKSPACE = 16777216,
+    UP_ARROW = 33554432,
+    RIGHT_ARROW = 67108864,
+    DOWN_ARROW = 134217728,
+    LEFT_ARROW = 268435456 // 2^28 ... NEXT = 536870912
 };
 
 /**
@@ -151,7 +157,7 @@ enum kybdStatus {
 
 /**
  * This struct bundles the Midas command data. It represents
- * either all Midas command types.
+ * all Midas command types.
  */
 struct commandData {
     commandType type = commandType::NONE;

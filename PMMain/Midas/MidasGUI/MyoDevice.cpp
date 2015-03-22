@@ -2,6 +2,7 @@
 #include "GestureFilter.h"
 #include "MyoTranslationFilter.h"
 #include "AveragingFilter.h"
+#include "ProfileManager.h"
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle)
@@ -192,4 +193,27 @@ void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) {
 }
 void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) { 
     std::cout << "on rssi." << std::endl; 
+}
+
+void MyoDevice::updateProfiles(void)
+{
+    ProfileManager pm;
+    std::list<Filter*>* filters = posePipeline.getFilters();
+
+    int error = (int)filterError::NO_FILTER_ERROR;
+    for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
+    {
+        error |= (int)(*it)->updateBasedOnProfile();
+    }
+
+    filters = orientationPipeline.getFilters();
+    for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
+    {
+        error |= (int)(*it)->updateBasedOnProfile();
+    }
+
+    if (error != (int)filterError::NO_FILTER_ERROR)
+    {
+        throw new std::exception("updateProfileException");
+    }
 }

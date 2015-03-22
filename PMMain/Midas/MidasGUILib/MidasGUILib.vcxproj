@@ -82,6 +82,7 @@
     <ClCompile Include="..\MidasGUI\Filter.cpp" />
     <ClCompile Include="..\MidasGUI\FilterPipeline.cpp" />
     <ClCompile Include="..\MidasGUI\GestureFilter.cpp" />
+    <ClCompile Include="..\MidasGUI\GestureHoldModeAction.cpp" />
     <ClCompile Include="..\MidasGUI\GestureSeqRecorder.cpp" />
     <ClCompile Include="..\MidasGUI\GestureSignaller.cpp" />
     <ClCompile Include="..\MidasGUI\InfoIndicator.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\MidasGUI\Filter.h" />
     <ClInclude Include="..\MidasGUI\FilterPipeline.h" />
     <ClInclude Include="..\MidasGUI\GestureFilter.h" />
+    <ClInclude Include="..\MidasGUI\GestureHoldModeAction.h" />
     <ClInclude Include="..\MidasGUI\GestureSeqRecorder.h" />
     <ClInclude Include="..\MidasGUI\KeyboardSettingsReader.h" />
     <ClInclude Include="..\MidasGUI\kybrdCtrl.h" />

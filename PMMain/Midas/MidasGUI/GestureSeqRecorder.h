@@ -63,6 +63,8 @@ public:
     GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager);
     ~GestureSeqRecorder();
 
+    void unregisterAll();
+
     /**
     * Register a sequence of gestures with this call. A registered sequence is associated with a 
     * midasMode. When in that mode, any progression of gestures from the Myo will be compared

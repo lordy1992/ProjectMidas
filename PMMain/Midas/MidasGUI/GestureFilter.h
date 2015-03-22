@@ -87,6 +87,8 @@ private:
 
     void emitPoseData(int poseInt);
 
+    virtual filterError updateBasedOnProfile(ProfileManager pm);
+
     Pose::Type lastPoseType;
     
     static ControlState* controlStateHandle;

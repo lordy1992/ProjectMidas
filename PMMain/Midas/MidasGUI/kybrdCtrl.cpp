@@ -2,6 +2,8 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <limits>
+
 KybrdCtrl::KybrdCtrl()
 {
     this->kiVec.clear();
@@ -13,112 +15,136 @@ KybrdCtrl::~KybrdCtrl()
 {
 }
 
-void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys)
+void KybrdCtrl::setKeyCmd(kybdCmds kybdCmd, bool releaseKeys, bool holdShift)
 {
     this->kiWillReleaseKeys = releaseKeys;
     this->kiVec.clear();
     ZeroMemory(&ki, sizeof(KEYBDINPUT));
 
-    switch (kybdCmd) 
+    if (holdShift)
     {
-    case UNDO:
-        inputVK(VK_CONTROL);
-        inputVK(0x5A); // 'Z' key
-        break;
-    case REDO:
-        inputVK(VK_CONTROL);
-        inputVK(0x59); // 'Y' key
-        break;
-    case ZOOM_IN:
-        inputVK(VK_CONTROL);
-        inputVK(VK_OEM_PLUS);
-        break;
-    case ZOOM_OUT:
-        inputVK(VK_CONTROL);
-        inputVK(VK_OEM_MINUS);
-        break;
-    case ZOOM_100:
-        inputVK(VK_CONTROL);
-        inputVK(0x30); // '0' key
-        break;
-    case ESCAPE:
-        inputVK(VK_ESCAPE);
-        break;
-    case ENTER:
-        inputVK(VK_RETURN);
-        break;
-    case TAB:
-        inputVK(VK_TAB);
-        break;
-    case SWITCH_WIN_FORWARD:
-        // This only works if uiAccess is set to True.
-        inputVK(VK_MENU);
-        inputVK(VK_TAB);
-        break;
-    case SWITCH_WIN_REVERSE:
-        // This only works if uiAccess is set to True.
-        inputVK(VK_MENU);
-        inputVK(VK_LSHIFT);
-        inputVK(VK_TAB);
-        break;
-    case COPY:
-        inputVK(VK_CONTROL);
-        inputVK(0x43); // 'C' key
-        break;
-    case PASTE:
-        inputVK(VK_CONTROL);
-        inputVK(0x56); // 'V' key
-        break;
-    case CUT:
-        inputVK(VK_CONTROL);
-        inputVK(0x58); // 'X' key
-        break;
-    case FILE_MENU:
-        inputVK(VK_MENU);
-        inputVK(0x46); // 'F' key
-        break;
-    case NEW_BROWSER:
-        inputVK(VK_CONTROL);
-        inputVK(0x4E); // 'N' key
-        break;
-    case GOTO_ADDR_BAR:
-        inputVK(VK_MENU);
-        inputVK(0x44); // 'D' key
-        break;
-    case LOCK_DESKTOP:
-        // THIS ONE IS NOT WORKING TODO
-        inputVK(VK_LWIN);
-        inputVK(0x4C); // 'L' key
-        break;
-    case EDIT_MENU:
-        inputVK(VK_MENU);
-        inputVK(0x45); // 'E' key
-        break;
-    case VIEW_MENU:
-        inputVK(VK_MENU);
-        inputVK(0x56); // 'V' key
-        break;
-    case WIN_HOME:
-        inputVK(VK_LWIN);
-        break;
-    case HIDE_APPS:
-        inputVK(VK_LWIN);
-        inputVK(0x44); // 'D' key
-        break;
-    case CONTROL:
-        inputVK(VK_CONTROL);
-        break;
-    case VOLUME_UP:
-        inputVK(VK_VOLUME_UP);
-        break;
-    case VOLUME_DOWN:
-        inputVK(VK_VOLUME_DOWN);
-        break;
-    case BACKSPACE:
-        inputVK(VK_BACK);
-        break;
-    default:
-        break;
+        inputVK(VK_SHIFT);
+    }
+
+    for (int i = 1; i < ULONG_MAX/2; i *= 2)
+    {
+        // loop through all kybdCmds and input any that show up, squashing them 
+        // after each loop.
+        switch (kybdCmds(unsigned int(kybdCmd & i)))
+        {
+        case UNDO:
+            inputVK(VK_CONTROL);
+            inputVK(0x5A); // 'Z' key
+            break;
+        case REDO:
+            inputVK(VK_CONTROL);
+            inputVK(0x59); // 'Y' key
+            break;
+        case ZOOM_IN:
+            inputVK(VK_CONTROL);
+            inputVK(VK_OEM_PLUS);
+            break;
+        case ZOOM_OUT:
+            inputVK(VK_CONTROL);
+            inputVK(VK_OEM_MINUS);
+            break;
+        case ZOOM_100:
+            inputVK(VK_CONTROL);
+            inputVK(0x30); // '0' key
+            break;
+        case ESCAPE:
+            inputVK(VK_ESCAPE);
+            break;
+        case ENTER:
+            inputVK(VK_RETURN);
+            break;
+        case TAB:
+            inputVK(VK_TAB);
+            break;
+        case SWITCH_WIN_FORWARD:
+            // This only works if uiAccess is set to True.
+            inputVK(VK_MENU);
+            inputVK(VK_TAB);
+            break;
+        case SWITCH_WIN_REVERSE:
+            // This only works if uiAccess is set to True.
+            inputVK(VK_MENU);
+            inputVK(VK_LSHIFT);
+            inputVK(VK_TAB);
+            break;
+        case COPY:
+            inputVK(VK_CONTROL);
+            inputVK(0x43); // 'C' key
+            break;
+        case PASTE:
+            inputVK(VK_CONTROL);
+            inputVK(0x56); // 'V' key
+            break;
+        case CUT:
+            inputVK(VK_CONTROL);
+            inputVK(0x58); // 'X' key
+            break;
+        case FILE_MENU:
+            inputVK(VK_MENU);
+            inputVK(0x46); // 'F' key
+            break;
+        case NEW_BROWSER:
+            inputVK(VK_CONTROL);
+            inputVK(0x4E); // 'N' key
+            break;
+        case GOTO_ADDR_BAR:
+            inputVK(VK_MENU);
+            inputVK(0x44); // 'D' key
+            break;
+        case LOCK_DESKTOP:
+            // THIS ONE IS NOT WORKING TODO
+            inputVK(VK_LWIN);
+            inputVK(0x4C); // 'L' key
+            break;
+        case EDIT_MENU:
+            inputVK(VK_MENU);
+            inputVK(0x45); // 'E' key
+            break;
+        case VIEW_MENU:
+            inputVK(VK_MENU);
+            inputVK(0x56); // 'V' key
+            break;
+        case WIN_HOME:
+            inputVK(VK_LWIN);
+            break;
+        case HIDE_APPS:
+            inputVK(VK_LWIN);
+            inputVK(0x44); // 'D' key
+            break;
+        case CONTROL:
+            inputVK(VK_CONTROL);
+            break;
+        case VOLUME_UP:
+            inputVK(VK_VOLUME_UP);
+            break;
+        case VOLUME_DOWN:
+            inputVK(VK_VOLUME_DOWN);
+            break;
+        case BACKSPACE:
+            inputVK(VK_BACK);
+            break;
+        case UP_ARROW:
+            inputVK(VK_UP);
+            break;
+        case RIGHT_ARROW:
+            inputVK(VK_RIGHT);
+            break;
+        case DOWN_ARROW:
+            inputVK(VK_DOWN);
+            break;
+        case LEFT_ARROW:
+            inputVK(VK_LEFT);
+            break;
+        default:
+            break;
+        }
+
+        kybdCmd = kybdCmds(unsigned int(kybdCmd) & ~i);
     }
 
     // Ensure that all keys that were pressed down are now 'pressed up'

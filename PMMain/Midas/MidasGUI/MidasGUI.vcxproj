@@ -136,6 +136,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GestureFilter.cpp" />
+    <ClCompile Include="GestureHoldModeAction.cpp" />
     <ClCompile Include="GestureSeqRecorder.cpp" />
     <ClCompile Include="GestureSignaller.cpp" />
     <ClCompile Include="InfoIndicator.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Filter.h" />
     <ClInclude Include="FilterPipeline.h" />
     <ClInclude Include="GestureFilter.h" />
+    <ClInclude Include="GestureHoldModeAction.h" />
     <ClInclude Include="GestureSeqRecorder.h" />
     <CustomBuild Include="GestureSignaller.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

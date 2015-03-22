@@ -30,6 +30,13 @@ public:
      */
     void startPipeline(filterDataMap input);
 
+    /**
+     * Returns the list of registered filters.
+     *
+     * @return The list of registered filters.
+     */
+    std::list<Filter*>* getFilters(void);
+
 private:
     std::list<Filter*> filters;
 };

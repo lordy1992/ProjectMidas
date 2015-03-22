@@ -29,6 +29,11 @@ void ProfileManager::loadProfilesFromFile(std::string fileName)
     profileFile.close();
 }
 
+std::vector<profile>* ProfileManager::getProfiles()
+{
+    return &profiles;
+}
+
 profile ProfileManager::extractProfileInformation(const boost::property_tree::ptree::value_type & parentProfile, std::string profileName)
 {
     using boost::property_tree::ptree;
@@ -41,19 +46,19 @@ profile ProfileManager::extractProfileInformation(const boost::property_tree::pt
         {
             std::string sequenceStateBegin = vt.second.get<std::string>("<xmlattr>.state");
             std::string sequenceName = vt.second.get<std::string>("<xmlattr>.name");
-            pr.sequences.push_back(extractSequenceInformation(vt, sequenceStateBegin, sequenceName));
+            pr.profileSequences.push_back(extractSequenceInformation(vt, sequenceStateBegin, sequenceName));
         }
     }
 
     return pr;
 }
 
-sequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, 
+profileSequence ProfileManager::extractSequenceInformation(const boost::property_tree::ptree::value_type & parentSequence, 
     std::string sequenceState, std::string sequenceName)
 {
     using boost::property_tree::ptree;
 
-    sequence seq;
+    profileSequence seq;
     std::vector<gesture> gestures;
 
     BOOST_FOREACH(const ptree::value_type & vt, parentSequence.second.get_child("gestures")) {
