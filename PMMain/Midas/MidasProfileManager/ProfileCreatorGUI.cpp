@@ -20,7 +20,9 @@ void ProfileCreatorGUI::newFile()
     profileWidgets.clear();
     tabWidget->clear();
 
-    ProfileWidget* profileWidget = new ProfileWidget(Profile());
+    Profile newProfile;
+    newProfile.profileName = "default";
+    ProfileWidget* profileWidget = new ProfileWidget(newProfile);
     profileWidgets.push_back(profileWidget);
     tabWidget->addTab(profileWidget, "default");
 }

@@ -299,6 +299,7 @@ void ProfileWidget::modifySequence(int ind, Sequence seq)
 void ProfileWidget::editButtonClicked(int id)
 {
     SequenceEditor editor;
+    editor.setOtherSequences(&prof.sequences);
     if (editor.exec())
     {
         Sequence seq = editor.getSequence();
@@ -321,6 +322,7 @@ void ProfileWidget::holdEditButtonClicked(int id)
 void ProfileWidget::addSequenceButtonClicked()
 {
     SequenceEditor editor;
+    editor.setOtherSequences(&prof.sequences);
     if (editor.exec())
     {
         Sequence seq = editor.getSequence();

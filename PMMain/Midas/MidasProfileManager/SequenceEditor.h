@@ -14,6 +14,7 @@ public:
     ~SequenceEditor();
 
     Sequence getSequence();
+    void setOtherSequences(std::vector<Sequence>* otherSequences);
 
 private:
     void formCommandComboBox();
@@ -21,9 +22,11 @@ private:
     void formMouseActions();
     void formKybdActions();
     void formKybdGUIActions();
+    bool checkPrefixConstraint(std::string &errorMessage);
 
     Ui::SequenceEditor ui;
     Sequence returnSequence;
+    std::vector<Sequence>* otherSequences;
 
 public slots:
     void handleAddGesture();

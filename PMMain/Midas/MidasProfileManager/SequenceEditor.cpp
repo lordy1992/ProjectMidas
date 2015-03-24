@@ -1,11 +1,13 @@
 #include "SequenceEditor.h"
 #include <QListWidgetItem>
+#include <QMessageBox.h>
 
 SequenceEditor::SequenceEditor(QWidget *parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
 
+    otherSequences = NULL;
     formCommandComboBox();
 
     connect(ui.addGestureButton, SIGNAL(released()), this, SLOT(handleAddGesture()));
@@ -17,6 +19,89 @@ SequenceEditor::SequenceEditor(QWidget *parent)
 SequenceEditor::~SequenceEditor()
 {
 
+}
+
+bool SequenceEditor::checkPrefixConstraint(std::string &errorMessage)
+{
+    if (otherSequences == NULL) 
+    {
+        errorMessage = "Did not receive other sequences to check against.";
+        return false;
+    }
+
+    // Check for incorrect immediates
+    for (int i = 0; i < returnSequence.gestures.size(); i++)
+    {
+        if (returnSequence.gestures.at(i).type == "immediate" && returnSequence.gestures.size() > 1)
+        {
+            // Can only have length 1 immediates.
+            errorMessage = "Cannot have gestures of type 'immediate' in sequences with more than 1 gesture.";
+            return false;
+        }
+    }
+
+    std::vector<Sequence>::iterator seqIt;
+    std::vector<std::string> conflictingSequences;
+    for (seqIt = otherSequences->begin(); seqIt != otherSequences->end(); seqIt++)
+    {
+        if (seqIt->state != returnSequence.state) continue;
+
+        Sequence *shortSeq, *longSeq;
+        if (returnSequence.gestures.size() <= seqIt->gestures.size())
+        {
+            shortSeq = &returnSequence;
+            longSeq = &(*seqIt);
+        }
+        else
+        {
+            shortSeq = &(*seqIt);
+            longSeq = &returnSequence;
+        }
+
+        bool conflict = true;
+        for (int i = 0; i < shortSeq->gestures.size(); i++)
+        {
+            Gesture shortGest = shortSeq->gestures.at(i);
+            Gesture longGest = longSeq->gestures.at(i);
+
+            if (shortGest.type == "immediate" || longGest.type == "immediate")
+            {
+                if (shortGest.name == longGest.name) break;
+            }
+
+            if (shortGest.name != longGest.name)
+            {
+                // Difference in prefixes, so no conflict.
+                conflict = false;
+                break;
+            }
+        }
+
+        if (conflict)
+        {
+            conflictingSequences.push_back(seqIt->name);
+        }
+    }
+
+    errorMessage = "";
+    if (!conflictingSequences.empty())
+    {
+        errorMessage += "Sequence conflicts exist with: ";
+        for (int i = 0; i < conflictingSequences.size(); i++)
+        {
+            errorMessage += conflictingSequences[i];
+
+            if (i != conflictingSequences.size() - 1) errorMessage += ", ";
+        }
+        return false;
+    }
+
+    return true;
+}
+
+void SequenceEditor::setOtherSequences(std::vector<Sequence>* otherSequences)
+{
+    this->otherSequences = otherSequences;
 }
 
 Sequence SequenceEditor::getSequence()
@@ -68,7 +153,15 @@ void SequenceEditor::handleDone()
     returnSequence.cmd.type = ui.commandComboBox->currentText().toStdString();
     returnSequence.cmd.actions = actions;
 
-    this->accept();
+    std::string errorMsg;
+    if (checkPrefixConstraint(errorMsg))
+    {
+        this->accept();
+    }
+    else
+    {
+        QMessageBox::warning(this, tr("Invalid Sequence"), tr(errorMsg.c_str()));
+    }
 }
 
 void SequenceEditor::handleActivateCommandBox(const QString & text)
@@ -186,4 +279,34 @@ void SequenceEditor::formKybdGUIActions()
     ui.actionComboBox->addItem(QString("changeWheels"));
     ui.actionComboBox->addItem(QString("select"));
     ui.actionComboBox->addItem(QString("holdSelect"));
+    ui.actionComboBox->addItem(QString("undo"));
+    ui.actionComboBox->addItem(QString("redo"));
+    ui.actionComboBox->addItem(QString("zoomIn"));
+    ui.actionComboBox->addItem(QString("zoomOut"));
+    ui.actionComboBox->addItem(QString("zoom100"));
+    ui.actionComboBox->addItem(QString("escape"));
+    ui.actionComboBox->addItem(QString("enter"));
+    ui.actionComboBox->addItem(QString("tab"));
+    ui.actionComboBox->addItem(QString("switchWinForward"));
+    ui.actionComboBox->addItem(QString("switchWinReverse"));
+    ui.actionComboBox->addItem(QString("copy"));
+    ui.actionComboBox->addItem(QString("paste"));
+    ui.actionComboBox->addItem(QString("cut"));
+    ui.actionComboBox->addItem(QString("fileMenu"));
+    ui.actionComboBox->addItem(QString("newBrowser"));
+    ui.actionComboBox->addItem(QString("gotoAddrBar"));
+    ui.actionComboBox->addItem(QString("lockDesktop"));
+    ui.actionComboBox->addItem(QString("editMenu"));
+    ui.actionComboBox->addItem(QString("viewMenu"));
+    ui.actionComboBox->addItem(QString("winHome"));
+    ui.actionComboBox->addItem(QString("hideApps"));
+    ui.actionComboBox->addItem(QString("control"));
+    ui.actionComboBox->addItem(QString("volumeUp"));
+    ui.actionComboBox->addItem(QString("volumeDown"));
+    ui.actionComboBox->addItem(QString("backspace"));
+    ui.actionComboBox->addItem(QString("upArrow"));
+    ui.actionComboBox->addItem(QString("downArrow"));
+    ui.actionComboBox->addItem(QString("rightArrow"));
+    ui.actionComboBox->addItem(QString("leftArrow"));
+    ui.actionComboBox->addItem(QString("none"));
 }
