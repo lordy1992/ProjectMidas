@@ -9,6 +9,8 @@
 #include <QToolBar.h>
 #include <QAction.h>
 #include <QMenu.h>
+#include "ProfileWriter.h"
+#include "ProfileWidget.h"
 
 class ProfileCreatorGUI : public QMainWindow
 {
@@ -18,16 +20,20 @@ public:
     ProfileCreatorGUI();
     ~ProfileCreatorGUI();
 
-    private slots:
-    void newProfile();
+    QSize sizeHint() const;
+
+private slots:
+    void newFile();
     void open();
     void save();
+    void newProfile();
 
 private:
     void createMainGUI();
     void createActions();
     void createMenu();
     void createToolBar();
+    void loadProfiles(std::string filename);
 
     QTabWidget* tabWidget;
     QToolBar* toolBar;
@@ -36,7 +42,7 @@ private:
     QAction* newAction;
     QAction* openAction;
     QAction* saveAction;
-
+    std::vector<ProfileWidget*> profileWidgets;
 };
 
 #endif /* PROFILE_CREATOR_GUI_H */

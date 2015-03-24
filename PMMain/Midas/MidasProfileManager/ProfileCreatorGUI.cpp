@@ -1,5 +1,9 @@
 #include "ProfileCreatorGUI.h"
-#include "ProfileWidget.h"
+#include <QInputDialog.h>
+#include <QFileDialog.h>
+
+#define DEFAULT_WIDTH 400
+#define DEFAULT_HEIGHT 480
 
 ProfileCreatorGUI::ProfileCreatorGUI()
 {
@@ -11,19 +15,72 @@ ProfileCreatorGUI::~ProfileCreatorGUI()
 {
 }
 
+void ProfileCreatorGUI::newFile()
+{
+    profileWidgets.clear();
+    tabWidget->clear();
+
+    ProfileWidget* profileWidget = new ProfileWidget(Profile());
+    profileWidgets.push_back(profileWidget);
+    tabWidget->addTab(profileWidget, "default");
+}
+
 void ProfileCreatorGUI::newProfile()
 {
+    bool ok;
+    QString text = QInputDialog::getText(this, tr("New Profile"),
+        tr("Profile name:"), QLineEdit::Normal, QString(), &ok);
 
+    if (ok && !text.isEmpty())
+    {
+        Profile profile;
+        profile.profileName = text.toStdString();
+        ProfileWidget* profileWidget = new ProfileWidget(profile);
+        profileWidgets.push_back(profileWidget);
+        tabWidget->addTab(profileWidget, QString(profile.profileName.c_str()));  
+    }
 }
 
 void ProfileCreatorGUI::open()
 {
-
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("XML files(*.xml)"));
+    ProfileWriter writer;
+    loadProfiles(filename.toStdString());
 }
 
 void ProfileCreatorGUI::save()
 {
+    std::vector<Profile> profiles;
+    for (int i = 0; i < profileWidgets.size(); i++)
+    {
+        profiles.push_back(profileWidgets[i]->getProfile());
+    }
 
+    QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), QString(), tr("XML files(*.xml)"));
+
+    std::string title = filename.toStdString() + " - Project Midas Profile Manager";
+    setWindowTitle(QString(title.c_str()));
+
+    ProfileWriter writer;
+    writer.writeProfiles(filename.toStdString(), profiles);
+}
+
+void ProfileCreatorGUI::loadProfiles(std::string filename)
+{
+    ProfileWriter writer;
+    std::vector<Profile> profiles = writer.loadProfilesFromFile(filename);
+
+    std::string title = filename + " - Project Midas Profile Manager";
+    setWindowTitle(QString(title.c_str()));
+
+    tabWidget->clear();
+    std::vector<Profile>::iterator it;
+    for (it = profiles.begin(); it != profiles.end(); it++)
+    {
+        ProfileWidget* profileWidget = new ProfileWidget(*it);
+        profileWidgets.push_back(profileWidget);
+        tabWidget->addTab(profileWidget, QString(it->profileName.c_str()));
+    }
 }
 
 void ProfileCreatorGUI::createMainGUI()
@@ -34,25 +91,24 @@ void ProfileCreatorGUI::createMainGUI()
     addTabButton->setIcon(QIcon(":/MidasProfileManager/Resources/newTab.png"));
     addTabButton->setAutoRaise(true);
 
+    connect(addTabButton, SIGNAL(clicked()), this, SLOT(newProfile()));
+
     tabWidget->setCornerWidget(addTabButton, Qt::TopLeftCorner);
 
-    // Testing
-    ProfileWriter writer;
-    std::vector<Profile> profiles = writer.loadProfilesFromFile("tst.xml");
-    // End Testing
+    setWindowTitle("Project Midas Profile Manager");
 
-    setWindowTitle("tst - Project Midas Profile Manager");
-
-    std::vector<Profile>::iterator it;
-    for (it = profiles.begin(); it != profiles.end(); it++)
-    {
-        tabWidget->addTab(new ProfileWidget(*it), QString(it->profileName.c_str()));
-    }
+    ProfileWidget* profileWidget = new ProfileWidget(Profile());
+    profileWidgets.push_back(profileWidget);
+    tabWidget->addTab(profileWidget, "default");
 
     setCentralWidget(tabWidget);
     createActions();
     createMenu();
-    //createToolBar();
+}
+
+QSize ProfileCreatorGUI::sizeHint() const
+{
+    return QSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 }
 
 void ProfileCreatorGUI::createActions()
@@ -60,7 +116,7 @@ void ProfileCreatorGUI::createActions()
     newAction = new QAction(tr("&New"), this);
     newAction->setShortcuts(QKeySequence::New);
     newAction->setStatusTip(tr("Create a new profile."));
-    connect(newAction, SIGNAL(triggered()), this, SLOT(newProfile()));
+    connect(newAction, SIGNAL(triggered()), this, SLOT(newFile()));
 
     openAction = new QAction(tr("&Open"), this);
     openAction->setShortcuts(QKeySequence::Open);

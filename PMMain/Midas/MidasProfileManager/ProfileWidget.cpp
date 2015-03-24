@@ -14,6 +14,11 @@ ProfileWidget::~ProfileWidget()
 
 }
 
+Profile ProfileWidget::getProfile()
+{
+    return prof;
+}
+
 void ProfileWidget::drawProfile(Profile profile)
 {
     this->setWidgetResizable(true);

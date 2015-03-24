@@ -26,6 +26,8 @@ public:
     ProfileWidget(Profile profile, QWidget *parent = 0);
     ~ProfileWidget();
 
+    Profile getProfile();
+
 private:
     void drawProfile(Profile profile);
     void drawSequence(Sequence sequence, int ind, bool insertBefore = false);

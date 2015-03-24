@@ -16,6 +16,11 @@ public:
     Sequence getSequence();
 
 private:
+    void formCommandComboBox();
+    void formStateChangeActions();
+    void formMouseActions();
+    void formKybdActions();
+    void formKybdGUIActions();
 
     Ui::SequenceEditor ui;
     Sequence returnSequence;
@@ -24,6 +29,7 @@ public slots:
     void handleAddGesture();
     void handleAddAction();
     void handleDone();
+    void handleActivateCommandBox(const QString & text);
 };
 
 #endif // SEQUENCEEDITOR_H

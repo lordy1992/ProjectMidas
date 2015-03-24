@@ -32,26 +32,40 @@ void ProfileWriter::writeProfile(boost::property_tree::ptree &profileNode, Profi
 {
     using boost::property_tree::ptree;
 
-    BOOST_FOREACH(Sequence sequence, profile.sequences)
+    if (profile.sequences.empty())
     {
-        ptree &sequenceNode = profileNode.add("sequences.sequence", "");
-        sequenceNode.put("<xmlattr>.state", sequence.state);
-        sequenceNode.put("<xmlattr>.name", sequence.name);
-        writeSequence(sequenceNode, sequence);
+        profileNode.add("sequences", "");
+    }
+    else
+    {
+        BOOST_FOREACH(Sequence sequence, profile.sequences)
+        {
+            ptree &sequenceNode = profileNode.add("sequences.sequence", "");
+            sequenceNode.put("<xmlattr>.state", sequence.state);
+            sequenceNode.put("<xmlattr>.name", sequence.name);
+            writeSequence(sequenceNode, sequence);
+        }
     }
 
-    BOOST_FOREACH(Hold hold, profile.holds)
+    if (profile.holds.empty())
     {
-        ptree &holdNode = profileNode.add("holds.hold", "");
-        holdNode.put("<xmlattr>.gesture", hold.gesture);
-        
-        BOOST_FOREACH(AngleAction angleAction, hold.angles)
+        profileNode.add("holds", "");
+    }
+    else
+    {
+        BOOST_FOREACH(Hold hold, profile.holds)
         {
-            ptree &angleNode = holdNode.add("angle", "");
-            angleNode.put("<xmlattr>.type", angleAction.type);
-            
-            angleNode.add("anglePositive", angleAction.anglePositive);
-            angleNode.add("angleNegative", angleAction.angleNegative);
+            ptree &holdNode = profileNode.add("holds.hold", "");
+            holdNode.put("<xmlattr>.gesture", hold.gesture);
+
+            BOOST_FOREACH(AngleAction angleAction, hold.angles)
+            {
+                ptree &angleNode = holdNode.add("angle", "");
+                angleNode.put("<xmlattr>.type", angleAction.type);
+
+                angleNode.add("anglePositive", angleAction.anglePositive);
+                angleNode.add("angleNegative", angleAction.angleNegative);
+            }
         }
     }
 }

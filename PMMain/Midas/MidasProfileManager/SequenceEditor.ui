@@ -60,22 +60,22 @@
    </property>
    <item>
     <property name="text">
-     <string>locked</string>
+     <string>lockMode</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>mouse</string>
+     <string>mouseMode</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>keyboard</string>
+     <string>keyboardMode</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>gesture</string>
+     <string>gestureMode</string>
     </property>
    </item>
   </widget>
@@ -138,7 +138,7 @@
    </item>
    <item>
     <property name="text">
-     <string>spreadFingers</string>
+     <string>fingersSpread</string>
     </property>
    </item>
    <item>
@@ -149,6 +149,11 @@
    <item>
     <property name="text">
      <string>waveOut</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>rest</string>
     </property>
    </item>
   </widget>
