@@ -407,4 +407,6 @@ filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager& pm)
             }
         }
     }
+
+    return filterError::NO_FILTER_ERROR;
 }

@@ -40,6 +40,8 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
+    updateProfiles();
+
     try
     {
         Hub hub(appIdentifier);
@@ -199,7 +201,7 @@ void MyoDevice::updateProfiles(void)
 {
     ProfileManager pm;
     std::list<Filter*>* filters = posePipeline.getFilters();
-    pm.loadProfilesFromFile("midas_profile.xml");
+    pm.loadProfilesFromFile("profile_test.xml");
 
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
