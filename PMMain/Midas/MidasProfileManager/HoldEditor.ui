@@ -1,0 +1,1158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>HoldEditor</class>
+ <widget class="QDialog" name="HoldEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>384</width>
+    <height>375</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>HoldEditor</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gesture:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="gestureComboBox">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>10</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>thumbToPinky</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>fist</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>fingersSpread</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>waveIn</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>waveOut</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>261</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Roll</string>
+   </property>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Positive Action:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Negative Action:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="rollPositiveComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="rollNegativeComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>140</y>
+     <width>261</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Pitch</string>
+   </property>
+   <widget class="QLabel" name="label_5">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Positive Action:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_6">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Negative Action:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="pitchPositiveComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="pitchNegativeComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="groupBox_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>240</y>
+     <width>261</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Yaw</string>
+   </property>
+   <widget class="QLabel" name="label_7">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Positive Action:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_8">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>50</y>
+      <width>81</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Negative Action:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="yawPositiveComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>20</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+   <widget class="QComboBox" name="yawNegativeComboBox">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>50</y>
+      <width>111</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>none</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>undo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>redo</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomIn</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoomOut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>zoom100</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>escape</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>enter</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>tab</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinForward</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>switchWinReverse</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>copy</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>paste</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>cut</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>fileMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>newBrowser</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>gotoAddrBar</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>lockDesktop</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>editMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>viewMenu</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>winHome</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>hideApps</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>control</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeUp</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>volumeDown</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>backspace</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>upArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>downArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>rightArrow</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>leftArrow</string>
+     </property>
+    </item>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="doneButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>340</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Done</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

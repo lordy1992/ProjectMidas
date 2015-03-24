@@ -71,6 +71,15 @@
     <ClCompile Include="GeneratedFiles\Release\moc_SequenceEditor.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="HoldEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_HoldEditor.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_HoldEditor.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="midasprofilemanager.ui">
@@ -94,6 +103,12 @@
     <CustomBuild Include="SequenceEditor.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="HoldEditor.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="HoldEditor.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_midasprofilemanager.h">
@@ -106,6 +121,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_SequenceEditor.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_HoldEditor.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>

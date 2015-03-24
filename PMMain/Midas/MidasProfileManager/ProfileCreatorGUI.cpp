@@ -44,8 +44,11 @@ void ProfileCreatorGUI::newProfile()
 void ProfileCreatorGUI::open()
 {
     QString filename = QFileDialog::getOpenFileName(this, tr("Open File"), QString(), tr("XML files(*.xml)"));
-    ProfileWriter writer;
-    loadProfiles(filename.toStdString());
+    if (!filename.isNull())
+    {
+        ProfileWriter writer;
+        loadProfiles(filename.toStdString());
+    }
 }
 
 void ProfileCreatorGUI::save()
@@ -58,11 +61,14 @@ void ProfileCreatorGUI::save()
 
     QString filename = QFileDialog::getSaveFileName(this, tr("Save File"), QString(), tr("XML files(*.xml)"));
 
-    std::string title = filename.toStdString() + " - Project Midas Profile Manager";
-    setWindowTitle(QString(title.c_str()));
+    if (!filename.isNull())
+    {
+        std::string title = filename.toStdString() + " - Project Midas Profile Manager";
+        setWindowTitle(QString(title.c_str()));
 
-    ProfileWriter writer;
-    writer.writeProfiles(filename.toStdString(), profiles);
+        ProfileWriter writer;
+        writer.writeProfiles(filename.toStdString(), profiles);
+    }
 }
 
 void ProfileCreatorGUI::loadProfiles(std::string filename)

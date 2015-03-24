@@ -1,6 +1,6 @@
 #include "ProfileWidget.h"
-#include <QPushButton.h>
 #include "SequenceEditor.h"
+#include "HoldEditor.h"
 
 ProfileWidget::ProfileWidget(Profile profile, QWidget *parent)
     : QScrollArea(parent)
@@ -42,19 +42,147 @@ void ProfileWidget::drawProfile(Profile profile)
     }
     connect(mapper, SIGNAL(mapped(int)), this, SLOT(editButtonClicked(int)));
 
+    holdMapper = new QSignalMapper(this);
+    std::vector<Hold> holds = profile.holds;
+    for (int i = 0; i < holds.size(); i++)
+    {
+        drawHold(holds[i], i);
+    }
+    connect(holdMapper, SIGNAL(mapped(int)), this, SLOT(holdEditButtonClicked(int)));
+
+    QHBoxLayout* horLayout = new QHBoxLayout();
+    horLayout->setAlignment(Qt::AlignLeft);
     QPushButton* addSequenceButton = new QPushButton();
     addSequenceButton->setMaximumSize(91, 23);
-
     addSequenceButton->setText("Add Sequence");
 
-    vlayout->addWidget(addSequenceButton);
+    QPushButton* addHoldButton = new QPushButton();
+    addHoldButton->setMaximumSize(91, 23);
+    addHoldButton->setText("Add Hold");
+    horLayout->addWidget(addSequenceButton);
+    horLayout->addWidget(addHoldButton);
+    horLayout->setAlignment(addSequenceButton, Qt::AlignLeft);
+    horLayout->setAlignment(addHoldButton, Qt::AlignLeft);
+
+    vlayout->addLayout(horLayout);
     vlayout->setAlignment(addSequenceButton, Qt::AlignTop);
     vlayout->setSizeConstraint(QLayout::SetMinimumSize);
 
     connect(addSequenceButton, SIGNAL(released()), this, SLOT(addSequenceButtonClicked()));
+    connect(addHoldButton, SIGNAL(released()), this, SLOT(addHoldButtonClicked()));
 
     holdingWidget->setLayout(vlayout);
     this->setWidget(holdingWidget);
+}
+
+void ProfileWidget::drawHold(Hold hold, int ind, bool insertBefore)
+{
+    std::string title = "Hold for gesture " + hold.gesture;
+    QGroupBox* grouper = new QGroupBox(tr(title.c_str()));
+    grouper->setMaximumSize(400, 310);
+
+    QVBoxLayout* holdLayout = new QVBoxLayout();
+    
+    for (int i = 0; i < hold.angles.size(); i++)
+    {
+        AngleAction angle = hold.angles[i];
+        std::string angleTitle = "Angle '" + angle.type + "':";
+        QLabel* angleLabel = new QLabel(QString(angleTitle.c_str()));
+        holdLayout->addWidget(angleLabel);
+
+        std::string positiveText = "    On positive angle, do action '" + angle.anglePositive + "'";
+        std::string negativeText = "    On negative angle, do action '" + angle.angleNegative + "'";
+        QLabel* positiveLabel = new QLabel(QString(positiveText.c_str()));
+        QLabel* negativeLabel = new QLabel(QString(negativeText.c_str()));
+
+        holdLayout->addWidget(positiveLabel);
+        holdLayout->addWidget(negativeLabel);
+    }
+
+    QPushButton* editHoldButton = new QPushButton();
+    editHoldButton->setMaximumSize(51, 23);
+    editHoldButton->setText("Edit");
+
+    connect(editHoldButton, SIGNAL(released()), holdMapper, SLOT(map()));
+    holdMapper->setMapping(editHoldButton, ind);
+    holdLayout->addWidget(editHoldButton);
+
+    grouper->setLayout(holdLayout);
+
+    holdWidgets widgets;
+    widgets.editHoldButton = editHoldButton;
+    widgets.grouper = grouper;
+    widgets.holdLayout = holdLayout;
+
+    holdWidgetList.push_back(widgets);
+
+    if (insertBefore)
+    {
+        vlayout->insertWidget(vlayout->count() - 1, grouper);
+    }
+    else
+    {
+        vlayout->addWidget(grouper);
+    }
+
+    vlayout->setAlignment(grouper, Qt::AlignTop);
+}
+
+void ProfileWidget::modifyHold(int ind, Hold hold)
+{
+    holdWidgets holdWidgets = holdWidgetList[ind];
+
+    std::string title = "Hold for gesture " + hold.gesture;
+    holdWidgets.grouper->setTitle(tr(title.c_str()));
+
+    QLayoutItem *item;
+
+    while ((item = holdWidgets.holdLayout->takeAt(0)) != 0)
+    {
+        holdWidgets.holdLayout->removeItem(item);
+
+        if (item->widget() != 0)
+        {
+            item->widget()->hide();
+            delete item->widget();
+        }
+        else
+        {
+            delete item;
+        }
+    }
+
+    delete holdWidgets.holdLayout;
+
+    QVBoxLayout* holdLayout = new QVBoxLayout();
+    holdWidgetList[ind].holdLayout = holdLayout;
+
+    for (int i = 0; i < hold.angles.size(); i++)
+    {
+        AngleAction angle = hold.angles[i];
+        std::string angleTitle = "Angle '" + angle.type + "':";
+        QLabel* angleLabel = new QLabel(QString(angleTitle.c_str()));
+        holdLayout->addWidget(angleLabel);
+
+        std::string positiveText = "    On positive angle, do action '" + angle.anglePositive + "'";
+        std::string negativeText = "    On negative angle, do action '" + angle.angleNegative + "'";
+        QLabel* positiveLabel = new QLabel(QString(positiveText.c_str()));
+        QLabel* negativeLabel = new QLabel(QString(negativeText.c_str()));
+
+        holdLayout->addWidget(positiveLabel);
+        holdLayout->addWidget(negativeLabel);
+    }
+
+    QPushButton* editHoldButton = new QPushButton();
+    editHoldButton->setMaximumSize(51, 23);
+    editHoldButton->setText("Edit");
+    holdWidgetList[ind].editHoldButton = editHoldButton;
+
+    connect(editHoldButton, SIGNAL(released()), holdMapper, SLOT(map()));
+    holdMapper->setMapping(editHoldButton, ind);
+    holdLayout->addWidget(editHoldButton);
+
+    holdWidgets.grouper->setLayout(holdLayout);
 }
 
 void ProfileWidget::drawSequence(Sequence sequence, int ind, bool insertBefore)
@@ -179,6 +307,17 @@ void ProfileWidget::editButtonClicked(int id)
     }
 }
 
+void ProfileWidget::holdEditButtonClicked(int id)
+{
+    HoldEditor editor;
+    if (editor.exec())
+    {
+        Hold hold = editor.getReturnHold();
+        prof.holds[id] = hold;
+        modifyHold(id, hold);
+    }
+}
+
 void ProfileWidget::addSequenceButtonClicked()
 {
     SequenceEditor editor;
@@ -187,5 +326,16 @@ void ProfileWidget::addSequenceButtonClicked()
         Sequence seq = editor.getSequence();
         prof.sequences.push_back(seq);
         drawSequence(seq, prof.sequences.size()-1, true);
+    }
+}
+
+void ProfileWidget::addHoldButtonClicked()
+{
+    HoldEditor editor;
+    if (editor.exec())
+    {
+        Hold hold = editor.getReturnHold();
+        prof.holds.push_back(hold);
+        drawHold(hold, prof.holds.size() - 1, true);
     }
 }
