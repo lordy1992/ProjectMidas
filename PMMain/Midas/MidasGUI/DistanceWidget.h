@@ -1,11 +1,10 @@
 #ifndef DISTANCE_WIDGET_H
 #define DISTANCE_WIDGET_H
 
-#include "DraggableWidget.h"
+#include "DistanceBar.h"
 #include "MidasCommon.h"
 #include "MidasThread.h"
 #include "qlabel.h"
-#include "qpushbutton.h"
 
 
 class DistanceWidget : public QWidget
@@ -20,10 +19,10 @@ public slots:
     void updateDistanceLabel(float db);
 
 private:
-    QLabel *distanceLabel;
-    float   distance;
-    int     dispWidth;
-    int     dispHeight;
+    distanceBar    *bar;
+    float           distance;
+    int             dispWidth;
+    int             dispHeight;
 
     /* iOS immediate < 0.5m, near = a little more, far = a few metres 
      * http://www.devfright.com/ibeacons-tutorial-ios-7-clbeaconregion-clbeacon/

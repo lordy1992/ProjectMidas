@@ -33,6 +33,8 @@ signals:
     void emitDebugInfo(int, int);
 
     void emitRssi(float);
+
+    void emitDisconnect();
 };
 
 #endif // MIDASTHREAD_H

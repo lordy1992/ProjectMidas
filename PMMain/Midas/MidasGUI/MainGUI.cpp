@@ -17,8 +17,8 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
-    distanceDisplayer = new DistanceWidget(mainThread, this, DISTANCE_DISPLAY_WIDTH,
-        MOUSE_INDICATOR_SIZE);
+    distanceDisplayer = new DistanceWidget(mainThread, this, INFO_INDICATOR_WIDTH,
+        DISTANCE_DISPLAY_HEIGHT);
 
     //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -30,27 +30,31 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
+    layout->addWidget(distanceDisplayer);
 
-    boxLayout->addWidget(distanceDisplayer, 1, Qt::AlignRight);
-    boxLayout->addSpacing(-50);
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
     layout->addLayout(boxLayout);
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
+    layout->setAlignment(distanceDisplayer, Qt::AlignRight);
+    layout->setStretchFactor(distanceDisplayer, 0);
      
     setLayout(layout);
 
     keyboard = new KeyboardWidget(mainThread);
     keyboard->addWheels(mainThread->getKybrdRingData());
 
-    int totalWidth = std::max(sequenceDisplayer->width(), 
-                        distanceDisplayer->width() + infoIndicator->width() + mouseIndicator->width());
-    int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
+    int totalWidth = std::max(std::max(sequenceDisplayer->width(), 
+                              infoIndicator->width() + mouseIndicator->width()),
+                              distanceDisplayer->width());
+    int totalHeight = sequenceDisplayer->height() + distanceDisplayer->height()
+        + infoIndicator->height() + mouseIndicator->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
-    setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER, screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
+    setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER,
+        screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
         totalWidth, totalHeight);
 }
 
