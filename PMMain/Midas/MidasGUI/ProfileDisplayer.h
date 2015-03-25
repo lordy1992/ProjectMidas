@@ -34,6 +34,9 @@ private:
     int indWidth, indHeight;
     QGridLayout *layout;
     std::string profileName;
+
+signals:
+    void emitChangeProfile(QString);
 };
 
 #endif // PROFILEDISPLAYER_H

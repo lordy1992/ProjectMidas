@@ -197,6 +197,15 @@
     <ClCompile Include="ProfileDisplayer.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ProfileSignaller.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ProfileSignaller.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
+    <ClCompile Include="ProfileSignaller.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -228,6 +237,9 @@
     </CustomBuild>
     <CustomBuild Include="ProfileDisplayer.h">
       <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ProfileSignaller.h">
+      <Filter>Header Files\Midas</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

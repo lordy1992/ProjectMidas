@@ -30,7 +30,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     layout->addWidget(infoIndicator);
 
     // Testing
-    ProfileDisplayer* displayer = new ProfileDisplayer("Default");
+    ProfileDisplayer* displayer = new ProfileDisplayer("crazy");
     profileWidgets.push_back(displayer);
     layout->addWidget(displayer, 0, Qt::AlignRight);
     // End Testing
@@ -80,6 +80,14 @@ MainGUI::~MainGUI()
     poseDisplayer = NULL;
     delete layout;
     layout = NULL;
+}
+
+void MainGUI::connectSignallerToProfileWidgets(ProfileSignaller* signaller)
+{
+    for (int i = 0; i < profileWidgets.size(); i++)
+    {
+        QObject::connect(profileWidgets[i], SIGNAL(emitChangeProfile(QString)), signaller, SLOT(handleProfilePress(QString)));
+    }
 }
 
 void MainGUI::connectSignallerToInfoIndicator(GestureSignaller *signaller)

@@ -38,7 +38,6 @@ ProfileDisplayer::ProfileDisplayer(std::string name, int widgetWidth, int widget
 
 ProfileDisplayer::~ProfileDisplayer()
 {
-
 }
 
 void ProfileDisplayer::mousePressEvent(QMouseEvent *event)
@@ -55,6 +54,7 @@ void ProfileDisplayer::mouseReleaseEvent(QMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
         setFrameShadow(QFrame::Shadow::Raised);
+        emitChangeProfile(QString(profileName.c_str()));
         event->accept();
     }
 }

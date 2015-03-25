@@ -5,6 +5,7 @@
 #include "myo\myo.hpp"
 #include "MainGUI.h"
 #include "ProfileSignaller.h"
+#include "ProfileManager.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -35,7 +36,7 @@ public:
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
     MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, 
-        MainGUI *mainGuiHandle);
+        MainGUI *mainGuiHandle, ProfileManager* profileManagerHandle);
     ~MyoDevice();
 
     /**
@@ -116,9 +117,11 @@ private:
     ControlState* state;
     FilterPipeline posePipeline, orientationPipeline;
     MainGUI *mainGui;
+    std::string prevProfileName;
 
     Arm arm;
     XDirection xDirection;
     static ProfileSignaller profileSignaller;
+    ProfileManager *profileManager;
 };
 

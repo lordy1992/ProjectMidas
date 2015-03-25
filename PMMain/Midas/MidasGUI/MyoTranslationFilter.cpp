@@ -345,14 +345,24 @@ void MyoTranslationFilter::unregisterHoldModeActions(void)
     }
 }
 
-filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager& pm)
+filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager& pm, std::string name)
 {
     this->unregisterHoldModeActions();
 
     std::vector<profile>* profiles = pm.getProfiles();
 
-    // TODO: Select profile based on user choice
-    profile prof = profiles->at(0);
+    profile prof;
+    bool foundProfile = false;
+    for (int i = 0; i < profiles->size(); i++)
+    {
+        if (name == profiles->at(i).profileName)
+        {
+            prof = profiles->at(i);
+            foundProfile = true;
+        }
+    }
+
+    if (!foundProfile) return filterError::PROCESSING_ERROR;
 
     bool okay = true;
     angleData ad;

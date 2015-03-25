@@ -8,7 +8,7 @@ class ProfileSignaller : public QObject
     Q_OBJECT
 
 public:
-    ProfileSignaller(QObject *parent);
+    ProfileSignaller(QObject *parent = 0);
     ~ProfileSignaller();
 
     std::string getProfileName();

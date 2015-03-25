@@ -2,16 +2,16 @@
 #include "GestureFilter.h"
 #include "MyoTranslationFilter.h"
 #include "AveragingFilter.h"
-#include "ProfileManager.h"
 
 ProfileSignaller MyoDevice::profileSignaller;
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
-    std::string applicationIdentifier, MainGUI *mainGuiHandle)
+    std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
     durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), 
-    xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle)
+    xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
 {
+    prevProfileName = "";
 }
 
 MyoDevice::~MyoDevice()
@@ -42,7 +42,7 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
-    updateProfiles();
+    mainGui->connectSignallerToProfileWidgets(&profileSignaller);
 
     try
     {
@@ -71,6 +71,12 @@ void MyoDevice::runDeviceLoop()
             {
                 WearableDevice::sharedData->setInput(extraData);
                 WearableDevice::sharedData->process();
+            }
+
+            if (profileSignaller.getProfileName() != prevProfileName)
+            {
+                prevProfileName = profileSignaller.getProfileName();
+                updateProfiles();
             }
 
             hub.run(durationInMilliseconds);
@@ -201,20 +207,18 @@ void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) 
 
 void MyoDevice::updateProfiles(void)
 {
-    ProfileManager pm;
     std::list<Filter*>* filters = posePipeline.getFilters();
-    pm.loadProfilesFromFile("profile_test.xml");
 
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile(pm);
+        error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
 
     filters = orientationPipeline.getFilters();
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile(pm);
+        error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
 
     if (error != (int)filterError::NO_FILTER_ERROR)

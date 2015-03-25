@@ -92,7 +92,7 @@ public:
      *
      * @return The error code of the filter after completion.
      */
-    virtual filterError updateBasedOnProfile(ProfileManager& pm);
+    virtual filterError updateBasedOnProfile(ProfileManager& pm, std::string name);
 
 protected:
     /**

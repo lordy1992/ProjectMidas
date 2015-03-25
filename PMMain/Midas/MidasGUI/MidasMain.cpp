@@ -79,9 +79,11 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData>
 #endif
 
 #ifdef MAIN_MODE
+    ProfileManager pm;
+    pm.loadProfilesFromFile("profile_test.xml");
     SharedCommandData sharedData(kybrdRingData->size() * 2);
     ControlState controlState(&sharedData);
-    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui);
+    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui, &pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 
