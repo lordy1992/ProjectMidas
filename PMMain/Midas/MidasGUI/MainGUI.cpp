@@ -1,6 +1,7 @@
 #define NOMINMAX
 
 #include "MainGUI.h"
+#include "ProfileDisplayer.h"
 #include <QApplication.h>
 #include <QDesktopWidget.h>
 #include <algorithm>
@@ -27,6 +28,11 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
+
+    // Testing
+    ProfileDisplayer* displayer = new ProfileDisplayer("Default");
+    layout->addWidget(displayer, 0, Qt::AlignRight);
+    // End Testing
 
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
