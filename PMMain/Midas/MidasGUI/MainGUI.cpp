@@ -9,7 +9,7 @@
 #define SCREEN_RIGHT_BUFFER    20 
 #define SCREEN_BOTTOM_BUFFER   30
 
-MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
+MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
     : DraggableWidget(NULL, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
     mouseIndicator = new MouseIndicator(mainThread, deadZoneRad, MOUSE_INDICATOR_SIZE,
@@ -28,12 +28,17 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     layout->addWidget(sequenceDisplayer);
     layout->addWidget(infoIndicator);
-
-    // Testing
-    ProfileDisplayer* displayer = new ProfileDisplayer("crazy");
-    profileWidgets.push_back(displayer);
-    layout->addWidget(displayer, 0, Qt::AlignRight);
-    // End Testing
+    
+    std::vector<profile>* profiles = pm->getProfiles();
+    std::vector<profile>::iterator it;
+    int profileHeights = 0;
+    for (it = profiles->begin(); it != profiles->end(); it++)
+    {
+        ProfileDisplayer* displayer = new ProfileDisplayer(it->profileName, PROF_INDICATOR_WIDTH, PROF_INDICATOR_HEIGHT, this);
+        profileHeights += displayer->height();
+        profileWidgets.push_back(displayer);
+        layout->addWidget(displayer, 0, Qt::AlignRight);
+    }
 
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
@@ -49,7 +54,8 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     int totalWidth = std::max(sequenceDisplayer->width(), 
                         std::max(infoIndicator->width(), mouseIndicator->width()));
-    int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + mouseIndicator->height();
+    int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
+        mouseIndicator->height() + profileHeights;
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER, screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,

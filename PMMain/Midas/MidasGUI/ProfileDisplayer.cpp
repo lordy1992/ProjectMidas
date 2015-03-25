@@ -40,6 +40,11 @@ ProfileDisplayer::~ProfileDisplayer()
 {
 }
 
+QSize ProfileDisplayer::sizeHint() const
+{
+    return QSize(indWidth, indHeight);
+}
+
 void ProfileDisplayer::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton)

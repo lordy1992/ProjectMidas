@@ -15,6 +15,8 @@ public:
         int widgetHeight = PROF_INDICATOR_HEIGHT, QWidget *parent = 0);
     ~ProfileDisplayer();
 
+    QSize sizeHint() const;
+
 protected:
     /**
     * The event handler function that is called when the widget is clicked on by the mouse.
