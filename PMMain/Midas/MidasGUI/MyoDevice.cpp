@@ -4,6 +4,8 @@
 #include "AveragingFilter.h"
 #include "ProfileManager.h"
 
+ProfileSignaller MyoDevice::profileSignaller;
+
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),

@@ -4,6 +4,7 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 #include "MainGUI.h"
+#include "ProfileSignaller.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -118,5 +119,6 @@ private:
 
     Arm arm;
     XDirection xDirection;
+    static ProfileSignaller profileSignaller;
 };
 

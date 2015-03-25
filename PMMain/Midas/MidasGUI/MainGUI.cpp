@@ -31,6 +31,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     // Testing
     ProfileDisplayer* displayer = new ProfileDisplayer("Default");
+    profileWidgets.push_back(displayer);
     layout->addWidget(displayer, 0, Qt::AlignRight);
     // End Testing
 
