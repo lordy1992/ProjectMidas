@@ -18,6 +18,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
 
+    //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
 
@@ -34,7 +35,7 @@ MainGUI::MainGUI(MidasThread *mainThread, int deadZoneRad)
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
-    
+     
     setLayout(layout);
 
     keyboard = new KeyboardWidget(mainThread);

@@ -59,3 +59,7 @@ testDev/
 #QT stuff
 PMMain/Midas/MidasGUI/Debug/
 PMMain/Midas/MidasGUI/GeneratedFiles/
+
+# PMInstaller log files
+PMMain/Midas/MidasGUI/PMInstaller/*/LogFiles/
+PMMain/Midas/MidasGUI/PMInstaller/*/Reports/

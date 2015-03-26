@@ -272,9 +272,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MidasGUI.rc" />
+    <Text Include="keyboardData.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="keyboardData.txt" />
+    <Image Include="MidasGUI.ico" />
   </ItemGroup>
 </Project>
