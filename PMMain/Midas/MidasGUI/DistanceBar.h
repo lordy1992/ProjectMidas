@@ -33,8 +33,6 @@ private:
     QWidget *parent;
 
     QRect *long_bar;
-    QGraphicsRectItem *med_bar;
-    QGraphicsRectItem *short_bar;
     QLabel  *dist_text;
     QColor  colour;
     QString current_bin_text;

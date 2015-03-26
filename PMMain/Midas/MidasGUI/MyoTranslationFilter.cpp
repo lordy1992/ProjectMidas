@@ -3,7 +3,6 @@
 #include "ProfileManager.h"
 #include <math.h>
 #include <iostream>
-#include <fstream>
 
 float radToDeg(float rad)
 {

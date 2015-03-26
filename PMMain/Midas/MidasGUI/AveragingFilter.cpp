@@ -69,20 +69,9 @@ void AveragingFilter::process()
     output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
     output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
     output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
-    float tempRssiAvg = calcAvg(rssiDeque); /* This is here just to print to txt file. Remove when done */
-    output[RSSI] = tempRssiAvg;
+    output[RSSI] = calcAvg(rssiDeque);
     output[INPUT_ARM] = arm;
     output[INPUT_X_DIRECTION] = xDirection;
-
-    /* Print averaged rssi to file for debugging
-    if (rssi != (int8_t)0)
-    {
-        std::ofstream file_stream;
-        file_stream.open("testRssiAVG.txt", std::ios::out | std::ios::app);
-        file_stream << tempRssiAvg << std::endl;
-        file_stream.close();
-    }
-    */
 
     Filter::setOutput(output);
 }
