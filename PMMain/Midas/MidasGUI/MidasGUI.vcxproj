@@ -310,9 +310,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="MidasGUI.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="keyboardData.txt" />
   </ItemGroup>
   <ItemGroup>

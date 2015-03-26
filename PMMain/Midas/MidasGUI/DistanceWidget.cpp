@@ -7,7 +7,7 @@
 #include "qboxlayout.h"
 
 
-DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent, int width, int height)
+DistanceWidget::DistanceWidget(MidasThread* mainThread, int width, int height, QWidget *parent)
     : QWidget(parent, Qt::FramelessWindowHint), distance(0), dispWidth(width), dispHeight(height)
 {
     bar = new distanceBar(0, 0, this, width, height);
