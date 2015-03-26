@@ -42,7 +42,7 @@ void distanceBar::paintEvent(QPaintEvent *e)
     QRect rect = e->rect();
     QPainter painter(this);
     QBrush brush(colour, Qt::SolidPattern);
-    QFont font("Courier", 18, QFont::Bold);
+    QFont font("Times", 9, QFont::Bold);
     
     painter.setBrush(brush);
     painter.setPen(Qt::black);
