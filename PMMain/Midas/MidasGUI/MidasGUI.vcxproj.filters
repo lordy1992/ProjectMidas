@@ -258,7 +258,7 @@
     </CustomBuild>
     <CustomBuild Include="ProfileSignaller.h">
       <Filter>Header Files\Midas</Filter>
-	</CustomBuild>
+    </CustomBuild>
     <CustomBuild Include="DistanceWidget.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
@@ -330,9 +330,6 @@
     <ClInclude Include="ProfileManager.h">
       <Filter>Header Files\Midas</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="MidasGUI.rc" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="keyboardData.txt" />
