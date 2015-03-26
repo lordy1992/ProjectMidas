@@ -34,7 +34,7 @@ signals:
 
     void emitRssi(float);
 
-    void emitDisconnect();
+    void emitDisconnect(bool);
 };
 
 #endif // MIDASTHREAD_H

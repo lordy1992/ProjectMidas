@@ -16,17 +16,18 @@ public:
         int height = MOUSE_INDICATOR_SIZE);
     
 public slots:
+    /* iOS immediate < 0.5m, near = a little more, far = a few metres 
+     * http://www.devfright.com/ibeacons-tutorial-ios-7-clbeaconregion-clbeacon/
+     */
     void updateDistanceLabel(float db);
+
+    void signalLoss(bool isConnected);
 
 private:
     distanceBar    *bar;
     float           distance;
     int             dispWidth;
     int             dispHeight;
-
-    /* iOS immediate < 0.5m, near = a little more, far = a few metres 
-     * http://www.devfright.com/ibeacons-tutorial-ios-7-clbeaconregion-clbeacon/
-     */
 
     /**
      * Calculate the distance from the give db value returned from myo rssi

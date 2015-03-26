@@ -1,7 +1,7 @@
 #include "DistanceBar.h"
 
 distanceBar::distanceBar(qreal x, qreal y, QWidget *parent, qreal width,
-    qreal height)
+    qreal height) : parent(parent)
 {
     //long_bar = new QRect(x, y, bar_width, long_bar_height);
     long_bar = new QRect(x, y, width, height);
@@ -32,7 +32,8 @@ void distanceBar::setValue(int bin)
             current_bin_text = *sOutOfRange;
             break;
         }
-        update();
+        parent->update();
+        current_bin = bin;
     }
 }
 
@@ -41,7 +42,7 @@ void distanceBar::paintEvent(QPaintEvent *e)
     QRect rect = e->rect();
     QPainter painter(this);
     QBrush brush(colour, Qt::SolidPattern);
-    QFont font("Courier", 20, QFont::Bold);
+    QFont font("Courier", 18, QFont::Bold);
     
     painter.setBrush(brush);
     painter.setPen(Qt::black);

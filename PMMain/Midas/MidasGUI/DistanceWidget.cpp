@@ -37,6 +37,7 @@ DistanceWidget::DistanceWidget(MidasThread* mainThread, QWidget *parent, int wid
     setLayout(layout);
 
     connect(mainThread, SIGNAL(emitRssi(float)), this, SLOT(updateDistanceLabel(float)));
+    connect(mainThread, SIGNAL(emitDisconnect(bool)), this, SLOT(signalLoss(bool)));
 }
 
 void DistanceWidget::updateDistanceLabel(float db)
@@ -54,6 +55,14 @@ void DistanceWidget::updateDistanceLabel(float db)
     else
     {
         bar->setValue((int)distanceBar::bins::SIG_FAR);
+    }
+}
+
+void DistanceWidget::signalLoss(bool isConnected)
+{
+    if (!isConnected)
+    {
+        bar->setValue((int)distanceBar::bins::SIG_OOR);
     }
 }
 

@@ -17,7 +17,7 @@ public:
         qreal height = DISTANCE_DISPLAY_HEIGHT);
  
     enum class bins{
-        OOR = 0,
+        SIG_OOR = 0,
         SIG_FAR = 1,
         SIG_NEAR = 2,
         SIG_IMMEDIATE = 3
@@ -30,6 +30,8 @@ protected:
     void paintEvent(QPaintEvent *e);
         
 private:
+    QWidget *parent;
+
     QRect *long_bar;
     QGraphicsRectItem *med_bar;
     QGraphicsRectItem *short_bar;

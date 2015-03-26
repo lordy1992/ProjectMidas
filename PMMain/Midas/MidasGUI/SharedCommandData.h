@@ -10,6 +10,7 @@
 #define VELOCITY_INPUT "velocity"
 #define ANGLE_INPUT "angle"
 #define RSSI_INPUT "rssi"
+#define ISCONNECTED_INPUT "isConnected"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
@@ -127,6 +128,20 @@ public:
     void setRssi(float rssi);
 
     /**
+     * Returns whether the device is connected or not
+     * 
+     * @return A boolean for whether or not the device is connected
+     */
+    bool getIsConnected(void);
+
+    /**
+     * Sets the device connected flag
+     *
+     * @param bool isConnected
+     */
+    void setIsConnected(bool connected);
+
+    /**
      * Returns true if the command queue is empty, otherwise false.
      *
      * @return True if the command queue is empty, otherwise false.
@@ -169,11 +184,13 @@ private:
     std::mutex myoOrientationMutex;
     std::mutex keySelectAngleMutex;
     std::mutex rssiMutex;
+    std::mutex isConnectedMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
     void extractKeySelectAngle(boost::any value);
     void extractRssi(boost::any value);
+    void extractIsConnected(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

@@ -198,6 +198,21 @@ void SharedCommandData::setRssi(float rssi)
     rssiMutex.unlock();
 }
 
+bool SharedCommandData::getIsConnected()
+{
+    isConnectedMutex.lock();
+    bool connected = isConnected;
+    isConnectedMutex.unlock();
+    return connected;
+}
+
+void SharedCommandData::setIsConnected(bool connected)
+{
+    isConnectedMutex.lock();
+    isConnected = connected;
+    isConnectedMutex.unlock();
+}
+
 bool SharedCommandData::isCommandQueueEmpty()
 {
     return commandQueue.empty();
@@ -231,6 +246,12 @@ void SharedCommandData::process()
     {
         boost::any value = input[RSSI_INPUT];
         extractRssi(value);
+    }
+
+    if (input.find(ISCONNECTED_INPUT) != input.end())
+    {
+        boost::any value = input[ISCONNECTED_INPUT];
+        extractIsConnected(value);
     }
 }
 
@@ -307,5 +328,19 @@ void SharedCommandData::extractRssi(boost::any value)
     {
         float rssi = boost::any_cast<float> (value);
         setRssi(rssi);
+    }
+}
+
+void SharedCommandData::extractIsConnected(boost::any value)
+{
+    if (value.type() != typeid(bool))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        bool isConnected = boost::any_cast<bool> (value);
+        setIsConnected(isConnected);
     }
 }

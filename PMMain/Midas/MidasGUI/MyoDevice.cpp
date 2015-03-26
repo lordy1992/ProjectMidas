@@ -48,6 +48,8 @@ void MyoDevice::runDeviceLoop()
     rssiPipeline.registerFilter(&rssiAveragingFilter);
     rssiPipeline.registerFilter(WearableDevice::sharedData);
 
+    connectPipeline.registerFilter(WearableDevice::sharedData);
+
     std::chrono::milliseconds rssi_start =
         std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::steady_clock::now().time_since_epoch()); /* Used to control when to request rssi */
@@ -206,9 +208,18 @@ void MyoDevice::MyoCallbacks::onUnpair(Myo* myo, uint64_t timestamp) {
 }
 void MyoDevice::MyoCallbacks::onConnect(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { 
     std::cout << "on connect." << std::endl; 
+    filterDataMap input;
+    input[ISCONNECTED_INPUT] = true;
+
+    parent.connectPipeline.startPipeline(input);
 }
 void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) { 
     std::cout << "on disconnect." << std::endl; 
+    filterDataMap input;
+    input[ISCONNECTED_INPUT] = false;
+
+    parent.connectPipeline.startPipeline(input);
+
 }
 void MyoDevice::MyoCallbacks::onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { 
     parent.arm = arm;

@@ -22,7 +22,9 @@ SCDDigester::~SCDDigester()
 void SCDDigester::digest()
 {
     commandData nextCmd;
-    
+    static bool isConnected = true;
+    static bool testConnected = true;
+
     bool consumed = scdHandle->consumeCommand(nextCmd);
 
     switch (nextCmd.type)
@@ -63,13 +65,25 @@ void SCDDigester::digest()
     if (count % 1000 == 0)
     {
         threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
-    }
 
-    /* Don't update rssi too frequently */
-    if (count % 1000 == 0)
-    {
-        float rssi = scdHandle->getRssi();
-        threadHandle->emitRssi(rssi);
+        /* Only update GUI if the connection status changed*/
+        testConnected = scdHandle->getIsConnected();
+        if (isConnected != testConnected)
+        {
+            if (!testConnected)
+            {
+                threadHandle->emitDisconnect(testConnected);
+            }
+        }
+        isConnected = testConnected;
+
+        /* Only update RSSI if device connected */
+        if (isConnected)
+        {
+            float rssi = scdHandle->getRssi();
+            threadHandle->emitRssi(rssi);
+        }
+
     }
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)

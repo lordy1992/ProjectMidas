@@ -106,7 +106,8 @@ private:
     unsigned int durationInMilliseconds;
     std::string appIdentifier;
     ControlState* state;
-    FilterPipeline posePipeline, orientationPipeline, rssiPipeline;
+    FilterPipeline posePipeline, orientationPipeline, rssiPipeline,
+        connectPipeline;
     MainGUI *mainGui;
 
     Arm arm;
