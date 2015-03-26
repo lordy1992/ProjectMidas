@@ -11,9 +11,8 @@ class DistanceWidget : public QWidget
 {
     Q_OBJECT
 public:
-    DistanceWidget(MidasThread *mainThread, QWidget *parent = 0,
-        int width = DISTANCE_DISPLAY_WIDTH, 
-        int height = MOUSE_INDICATOR_SIZE);
+    DistanceWidget(MidasThread *mainThread, int width, int height,
+        QWidget *parent = 0);
     
 public slots:
     /* iOS immediate < 0.5m, near = a little more, far = a few metres 

@@ -2,7 +2,6 @@
 #include "MyoTranslationFilter.h"
 #include <math.h>
 #include <iostream>
-#include <fstream>
 
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState)
     : controlStateHandle(controlState), previousMode(LOCK_MODE), basePitch(0), baseYaw(0), prevRoll(0), deltaRoll(0)
