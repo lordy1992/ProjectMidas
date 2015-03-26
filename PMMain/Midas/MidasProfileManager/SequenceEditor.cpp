@@ -1,6 +1,7 @@
 #include "SequenceEditor.h"
 #include <QListWidgetItem>
 #include <QMessageBox.h>
+#include <QMenu.h>
 
 SequenceEditor::SequenceEditor(QWidget *parent)
     : QDialog(parent)
@@ -69,7 +70,7 @@ bool SequenceEditor::checkPrefixConstraint(std::string &errorMessage)
                 if (shortGest.name == longGest.name) break;
             }
 
-            if (shortGest.name != longGest.name)
+            if (shortGest.name != longGest.name || shortGest.type != longGest.type)
             {
                 // Difference in prefixes, so no conflict.
                 conflict = false;

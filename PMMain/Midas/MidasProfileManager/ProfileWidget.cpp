@@ -299,7 +299,9 @@ void ProfileWidget::modifySequence(int ind, Sequence seq)
 void ProfileWidget::editButtonClicked(int id)
 {
     SequenceEditor editor;
-    editor.setOtherSequences(&prof.sequences);
+    std::vector<Sequence> otherSequences = prof.sequences;
+    otherSequences.erase(otherSequences.begin() + id);
+    editor.setOtherSequences(&otherSequences);
     if (editor.exec())
     {
         Sequence seq = editor.getSequence();
