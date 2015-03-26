@@ -183,6 +183,35 @@ bool SharedCommandData::tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle)
     return locked;
 }
 
+float SharedCommandData::getRssi()
+{
+    rssiMutex.lock();
+    float rssi = rssiAVG;
+    rssiMutex.unlock();
+    return rssi;
+}
+
+void SharedCommandData::setRssi(float rssi)
+{
+    rssiMutex.lock();
+    rssiAVG = rssi;
+    rssiMutex.unlock();
+}
+
+bool SharedCommandData::getIsConnected()
+{
+    isConnectedMutex.lock();
+    bool connected = isConnected;
+    isConnectedMutex.unlock();
+    return connected;
+}
+
+void SharedCommandData::setIsConnected(bool connected)
+{
+    isConnectedMutex.lock();
+    isConnected = connected;
+    isConnectedMutex.unlock();
+}
 
 bool SharedCommandData::isCommandQueueEmpty()
 {
@@ -211,6 +240,18 @@ void SharedCommandData::process()
     {
         boost::any value = input[ANGLE_INPUT];
         extractKeySelectAngle(value);
+    }
+
+    if (input.find(RSSI_INPUT) != input.end())
+    {
+        boost::any value = input[RSSI_INPUT];
+        extractRssi(value);
+    }
+
+    if (input.find(ISCONNECTED_INPUT) != input.end())
+    {
+        boost::any value = input[ISCONNECTED_INPUT];
+        extractIsConnected(value);
     }
 }
 
@@ -273,5 +314,33 @@ void SharedCommandData::extractKeySelectAngle(boost::any value)
     {
         keyboardAngle angle = boost::any_cast<keyboardAngle> (value);
         setKeySelectAngle(angle);
+    }
+}
+
+void SharedCommandData::extractRssi(boost::any value)
+{
+    if (value.type() != typeid(float))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        float rssi = boost::any_cast<float> (value);
+        setRssi(rssi);
+    }
+}
+
+void SharedCommandData::extractIsConnected(boost::any value)
+{
+    if (value.type() != typeid(bool))
+    {
+        Filter::setFilterError(filterError::INVALID_INPUT);
+        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+    }
+    else
+    {
+        bool isConnected = boost::any_cast<bool> (value);
+        setIsConnected(isConnected);
     }
 }

@@ -34,6 +34,10 @@ signals:
     void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
 
     void emitDebugInfo(int, int);
+
+    void emitRssi(float);
+
+    void emitDisconnect(bool);
 };
 
 #endif // MIDASTHREAD_H

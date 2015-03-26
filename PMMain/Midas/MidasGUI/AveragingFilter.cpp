@@ -1,3 +1,5 @@
+#include <fstream>
+#include <iostream>
 #include "AveragingFilter.h"
 #include "myo\myo.hpp"
 
@@ -38,6 +40,7 @@ void AveragingFilter::process()
     float gyroX  = boost::any_cast<float>(input[GYRO_DATA_X ]);
     float gyroY  = boost::any_cast<float>(input[GYRO_DATA_Y ]);
     float gyroZ  = boost::any_cast<float>(input[GYRO_DATA_Z ]);
+    int8_t rssi  = boost::any_cast<int8_t>(input[RSSI]);
 
     Arm arm = boost::any_cast<Arm>(input[INPUT_ARM]);
     XDirection xDirection = boost::any_cast<XDirection>(input[INPUT_X_DIRECTION]);
@@ -52,6 +55,7 @@ void AveragingFilter::process()
     insertAvgElement(gyroX, gyroXDeque);
     insertAvgElement(gyroY, gyroYDeque);
     insertAvgElement(gyroZ, gyroZDeque);
+    insertAvgElement((float)rssi, rssiDeque);
 
     filterDataMap output;
 
@@ -65,8 +69,20 @@ void AveragingFilter::process()
     output[GYRO_DATA_X]  = calcAvg(gyroXDeque);
     output[GYRO_DATA_Y]  = calcAvg(gyroYDeque);
     output[GYRO_DATA_Z]  = calcAvg(gyroZDeque);
+    float tempRssiAvg = calcAvg(rssiDeque); /* This is here just to print to txt file. Remove when done */
+    output[RSSI] = tempRssiAvg;
     output[INPUT_ARM] = arm;
     output[INPUT_X_DIRECTION] = xDirection;
+
+    /* Print averaged rssi to file for debugging
+    if (rssi != (int8_t)0)
+    {
+        std::ofstream file_stream;
+        file_stream.open("testRssiAVG.txt", std::ios::out | std::ios::app);
+        file_stream << tempRssiAvg << std::endl;
+        file_stream.close();
+    }
+    */
 
     Filter::setOutput(output);
 }
@@ -95,6 +111,11 @@ float AveragingFilter::calcAvg(std::deque<float>& dq)
     {
         sum += *it++;
     }
+    return (float)sum / denom;
+}
 
-    return sum / denom;
+void AveragingFilter::replaceLastElement(float elem, std::deque<float>&dq)
+{
+    dq.pop_back();
+    dq.push_back(elem);
 }

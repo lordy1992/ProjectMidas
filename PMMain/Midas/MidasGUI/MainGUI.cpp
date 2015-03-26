@@ -18,7 +18,10 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
+    distanceDisplayer = new DistanceWidget(mainThread, this, INFO_INDICATOR_WIDTH,
+        DISTANCE_DISPLAY_HEIGHT);
 
+    //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
 
@@ -39,6 +42,8 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         profileWidgets.push_back(displayer);
         layout->addWidget(displayer, 0, Qt::AlignRight);
     }
+	
+    layout->addWidget(distanceDisplayer);
 
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
@@ -46,19 +51,22 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
-    
+    layout->setAlignment(distanceDisplayer, Qt::AlignRight);
+    layout->setStretchFactor(distanceDisplayer, 0);
+     
     setLayout(layout);
 
     keyboard = new KeyboardWidget(mainThread);
     keyboard->addWheels(mainThread->getKybrdRingData());
 
-    int totalWidth = std::max(sequenceDisplayer->width(), 
-                        std::max(infoIndicator->width(), mouseIndicator->width()));
+    int totalWidth = std::max(sequenceDisplayer->width(), infoIndicator->width(), 
+						      mouseIndicator->width(), distanceDisplayer->width()));
     int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
-        mouseIndicator->height() + profileHeights;
+        mouseIndicator->height() + profileHeights + distanceDisplayer->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
-    setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER, screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
+    setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER,
+        screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
         totalWidth, totalHeight);
 }
 
@@ -84,6 +92,8 @@ MainGUI::~MainGUI()
     sequenceDisplayer = NULL;
     delete poseDisplayer;
     poseDisplayer = NULL;
+    delete distanceDisplayer;
+    distanceDisplayer = NULL;
     delete layout;
     layout = NULL;
 }
