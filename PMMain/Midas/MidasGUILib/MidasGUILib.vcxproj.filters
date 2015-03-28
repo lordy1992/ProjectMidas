@@ -176,6 +176,9 @@
     <ClCompile Include="..\MidasGUI\WearableDevice.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\MidasGUI\GestureHoldModeAction.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="midasguilib.h">
@@ -245,6 +248,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\MidasGUI\WearableDevice.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\MidasGUI\GestureHoldModeAction.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

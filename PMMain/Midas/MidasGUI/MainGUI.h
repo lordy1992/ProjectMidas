@@ -8,6 +8,9 @@
 #include "GestureSignaller.h"
 #include "PoseDisplayer.h"
 #include "KeyboardWidget.h"
+#include "ProfileDisplayer.h"
+#include "ProfileSignaller.h"
+#include "ProfileManager.h"
 
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
@@ -26,8 +29,10 @@ public:
      * @param mainThread The main Midas thread; used to pass information between the GUI and back-end.
      * @param deadZoneRad The radius of the dead zone in the mouse indicator.
      */
-    MainGUI(MidasThread *mainThread, int deadZoneRad);
+    MainGUI(MidasThread *mainThread, ProfileManager* pm, int deadZoneRad);
     ~MainGUI();
+
+    void connectSignallerToProfileWidgets(ProfileSignaller* signaller);
 
     void connectSignallerToInfoIndicator(GestureSignaller *signaller);
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
@@ -44,6 +49,8 @@ private:
     SequenceDisplayer *sequenceDisplayer;
     PoseDisplayer *poseDisplayer;
     KeyboardWidget* keyboard;
+    std::vector<ProfileDisplayer*> profileWidgets;
+    int totalWidth, totalHeight;
 };
 
 #endif

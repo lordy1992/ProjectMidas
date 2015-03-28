@@ -24,8 +24,13 @@ void MidasThread::setMainGuiHandle(MainGUI *mainGui)
     this->mainGui = mainGui;
 }
 
+void MidasThread::setProfileManagerHandle(ProfileManager *profileManager)
+{
+    this->profileManager = profileManager;
+}
+
 void MidasThread::run()
 {
-    midasMain(this, mainGui, kybrdRingData);
+    midasMain(this, mainGui, profileManager, kybrdRingData);
 }
 

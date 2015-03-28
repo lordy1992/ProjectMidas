@@ -6,6 +6,8 @@
 
 #include <QtWidgets/QApplication>
 
+#include "ProfileManager.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
@@ -19,7 +21,11 @@ int main(int argc, char *argv[])
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");
 
-    MainGUI mainDisplay(&midasThread, MOVE_RATE_DEADZONE);
+    ProfileManager pm;
+    pm.loadProfilesFromFile("profile_test.xml");
+
+    MainGUI mainDisplay(&midasThread, &pm, MOVE_RATE_DEADZONE);
+    midasThread.setProfileManagerHandle(&pm);
     midasThread.setMainGuiHandle(&mainDisplay);
     midasThread.start();
 

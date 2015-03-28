@@ -3,6 +3,8 @@
 
 #include "Filter.h"
 #include "ControlState.h"
+#include "GestureHoldModeAction.h"
+#include "ProfileManager.h"
 #include "myo\myo.hpp"
 
 #ifdef USE_SIMULATOR
@@ -24,6 +26,13 @@ using namespace myo;
 #define MAX_YAW_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 
 #define KEYBOARD_THRESH_MAG 30
+
+#define NUM_GESTURES 5
+#define GESTURE_THUMB_TO_PINKY 0 // used as indexes into gestHoldModeAction
+#define GESTURE_FINGERS_SPREAD 1
+#define GESTURE_FIST 2
+#define GESTURE_WAVE_IN 3
+#define GESTURE_WAVE_OUT 4
 
 /**
  * Consult Filter.h for concepts regarding Filters.
@@ -49,14 +58,16 @@ public:
     /**
     * Calculates the delta (in radians) between a base angle and a
     * current angle, with respect to a ring. The pupose is to ensure that wrapping
-    * around the 0 radian section of the ring has no effect on the output
+    * around the crossover section of the ring has no effect on the output
     * which should safely range from -pi to +pi.
     *
-    * @param current The current angle (in radians) that is being compared (from 0 - 2pi rad)
+    * @param current The current angle (in radians) that is being compared (from -Pi to pi rad)
     * @param base The base angle (in radians) that is being compared against
     * @return a value from -pi to +pi representing the delta between two input angles
     */
     static float calcRingDelta(float current, float base);
+
+    filterError updateBasedOnProfile(ProfileManager& pm, std::string name);
 
 private:
     /**
@@ -108,9 +119,20 @@ private:
     */
     point getMouseUnitVelocity(float pitch, float yaw);
 
+    void performHoldModeFunc(unsigned int holdNum, filterDataMap& outputToSharedCommandData);
+    void performMouseModeFunc(filterDataMap& outputToSharedCommandData);
+    void performeKybdModeFunc(filterDataMap& outputToSharedCommandData);
+
+    bool initGestHoldModeActionArr(void);
+    void unregisterHoldModeActions(void);
+
     ControlState* controlStateHandle;
     midasMode previousMode;
-    float basePitch, baseYaw, prevRoll, deltaRoll;
+    float pitch, basePitch, prevPitch, deltaPitchDeg, 
+        yaw, baseYaw, prevYaw, deltaYawDeg,
+        roll, baseRoll, prevRoll, deltaRollDeg;
+
+    GestureHoldModeAction gestHoldModeAction[5];
 };
 
 #endif

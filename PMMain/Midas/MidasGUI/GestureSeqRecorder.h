@@ -63,6 +63,8 @@ public:
     GestureSeqRecorder(ControlState* controlStateHandle, MainGUI* mainGuiHandle, SequenceImageManager imageManager);
     ~GestureSeqRecorder();
 
+    void unregisterAll();
+
     /**
     * Register a sequence of gestures with this call. A registered sequence is associated with a 
     * midasMode. When in that mode, any progression of gestures from the Myo will be compared
@@ -147,6 +149,12 @@ public:
     */
     void printStatus(bool verbose = false);
 
+    /**
+    * Updates the sequence displayer GUI with the latest sequence information. This should be
+    * called upon any update to the sequences.
+    */
+    void updateGuiSequences();
+
 private:
     SequenceStatus checkLegalRegister(midasMode mode, sequenceInfo seqInfo) const;
 
@@ -178,12 +186,6 @@ private:
     * @return x Same as progressSequence.
     */
     SequenceStatus findActivation(Pose::Type gesture, ControlState state, commandData& response);
-
-    /**
-     * Updates the sequence displayer GUI with the latest sequence information. This should be
-     * called upon any update to the sequences.
-     */
-    void updateGuiSequences();
 
     /**
      * Loads the images needed for the sequence GUI and connects the signals of the GestureSignaller to the
