@@ -18,7 +18,7 @@
  * velocity, the sequence displayer shows the gesture sequences, and the info indicator shows the
  * current status of Midas.
  */
-class MainGUI : public DraggableWidget
+class MainGUI : public QWidget //public DraggableWidget
 {
     Q_OBJECT
 
@@ -50,6 +50,7 @@ private:
     PoseDisplayer *poseDisplayer;
     KeyboardWidget* keyboard;
     std::vector<ProfileDisplayer*> profileWidgets;
+    int totalWidth, totalHeight;
 };
 
 #endif

@@ -5,12 +5,13 @@
 #include <QApplication.h>
 #include <QDesktopWidget.h>
 #include <algorithm>
+#include <QEvent.h>
 
 #define SCREEN_RIGHT_BUFFER    20 
 #define SCREEN_BOTTOM_BUFFER   30
 
 MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
-    : DraggableWidget(NULL, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
+    : /*DraggableWidget*/QWidget(NULL, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
     mouseIndicator = new MouseIndicator(mainThread, deadZoneRad, MOUSE_INDICATOR_SIZE,
         MOUSE_INDICATOR_SIZE, this);
@@ -52,9 +53,9 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
     keyboard = new KeyboardWidget(mainThread);
     keyboard->addWheels(mainThread->getKybrdRingData());
 
-    int totalWidth = std::max(sequenceDisplayer->width(), 
+    totalWidth = std::max(sequenceDisplayer->width(), 
                         std::max(infoIndicator->width(), mouseIndicator->width()));
-    int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
+    totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
         mouseIndicator->height() + profileHeights;
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
