@@ -63,3 +63,13 @@ void ProfileDisplayer::mouseReleaseEvent(QMouseEvent *event)
         event->accept();
     }
 }
+
+void ProfileDisplayer::mouseMoveEvent(QMouseEvent *event)
+{
+    if (event->buttons() & Qt::LeftButton)
+    {
+        // Override so that the profile buttons cannot drag the main GUI (since main GUI
+        // is a draggable widget).
+        event->accept();
+    }
+}

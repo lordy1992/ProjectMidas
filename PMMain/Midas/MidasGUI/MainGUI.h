@@ -18,7 +18,7 @@
  * velocity, the sequence displayer shows the gesture sequences, and the info indicator shows the
  * current status of Midas.
  */
-class MainGUI : public QWidget //public DraggableWidget
+class MainGUI : public DraggableWidget
 {
     Q_OBJECT
 
