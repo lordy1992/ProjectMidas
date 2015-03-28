@@ -25,8 +25,10 @@ public:
      * @param keybdCmd The high-level command to the keyboard.
      * @param releaseKeys If this is true, the key(s) will be released after being pressed. Otherwise, 
      * it (or they) will just be pressed.
+     * @param holdShift If set to true, shift will be held before all keys in the keybdCmd will be added,
+     * then at the end it will be released.
      */
-    void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true);
+    void setKeyCmd(kybdCmds keybdCmd, bool releaseKeys = true, bool holdShift = false);
 
     /**
      * This function configures the keyboard controller state based on a single character

@@ -2,6 +2,7 @@
 #include <string>
 #include <map>
 #include <boost/any.hpp>
+#include "ProfileManager.h"
 
 /**
  * An enumeration of the possible states of error for a filter. It includes
@@ -85,6 +86,13 @@ public:
      * @return The error code of the filter after completion.
      */
     filterError getFilterError();
+
+    /**
+     * Update filters internal mechanisms if the profile changes.
+     *
+     * @return The error code of the filter after completion.
+     */
+    virtual filterError updateBasedOnProfile(ProfileManager& pm, std::string name);
 
 protected:
     /**

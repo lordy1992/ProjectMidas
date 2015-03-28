@@ -6,29 +6,33 @@
 // response is what was registered.
 TEST(gestSeqRecorder, basicRegisterAndRespond)
 {
-    GestureSeqRecorder gsr = GestureSeqRecorder(midasMode::LOCK_MODE, 100);
-
-    sequence seq1;
-    seq1.push_back(Pose::Type::thumbToPinky);
-    sequenceResponse seqResp1;
-    seqResp1.responseType = ResponseType::STATE_CHANGE;
-    seqResp1.responseAction.mode = midasMode::GESTURE_MODE;
-    
-    SequenceStatus ss = gsr.registerSequence(midasMode::LOCK_MODE, seq1, seqResp1);
-
-    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
-
-    SharedCommandData *scd = new SharedCommandData();
+    SharedCommandData *scd = new SharedCommandData(1);
     ControlState cs = ControlState(scd);
     cs.setMode(midasMode::LOCK_MODE);
 
-    sequenceResponse response;
+    SequenceImageManager sim;
+
+    GestureSeqRecorder gsr = GestureSeqRecorder(&cs, NULL, sim);
+
+    sequence seq1;
+    seq1.push_back(Pose::Type::thumbToPinky);
+    commandData seqResp1;
+    seqResp1.type = commandType::STATE_CHANGE;
+    seqResp1.action.mode = midasMode::GESTURE_MODE;
+    
+    SequenceStatus ss = gsr.registerSequence(midasMode::LOCK_MODE, seq1, seqResp1, "dontcare");
+
+    ASSERT_EQ(ss, SequenceStatus::SUCCESS);
+
+    commandData response;
     ss = gsr.progressSequence(Pose::Type::thumbToPinky, cs, response);
 
     ASSERT_EQ(ss, SequenceStatus::SUCCESS);
-    ASSERT_EQ(response.responseType, ResponseType::STATE_CHANGE);
-    ASSERT_EQ(response.responseAction.mode, midasMode::GESTURE_MODE);
-}
+    ASSERT_EQ(response.type, commandType::STATE_CHANGE);
+    ASSERT_EQ(response.action.mode, midasMode::GESTURE_MODE);
+}*/
+
+/*
 
 // register a two pose sequence, progress with that sequence in that mode, and verify
 // response is what was registered. Then, repeat the process and ensure the same thing

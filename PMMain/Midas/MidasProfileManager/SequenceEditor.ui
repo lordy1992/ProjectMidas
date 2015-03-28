@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SequenceEditor</class>
+ <widget class="QDialog" name="SequenceEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>387</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SequenceEditor</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Name:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>10</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_2">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>31</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>State:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="stateComboBox">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>40</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>lockMode</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>mouseMode</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>keyboardMode</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>gestureMode</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>70</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gestures:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="gestureTypeComboBox">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>70</y>
+     <width>81</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>tap</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>hold</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>immediate</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QComboBox" name="gestureComboBox">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>70</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>thumbToPinky</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>fist</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>fingersSpread</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>waveIn</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>waveOut</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>rest</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="addGestureButton">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>70</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="gestureList">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>100</y>
+     <width>211</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="dragEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="dragDropMode">
+    <enum>QAbstractItemView::InternalMove</enum>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>200</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Command:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="commandComboBox">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>200</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>mouse</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>keyboard</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>stateChange</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>230</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Actions:</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="addActionButton">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>230</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="actionComboBox">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>230</y>
+     <width>111</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>leftClick</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>rightClick</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>zoomIn</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>mouseMode</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QListWidget" name="actionList">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>260</y>
+     <width>211</width>
+     <height>81</height>
+    </rect>
+   </property>
+   <property name="dragEnabled">
+    <bool>true</bool>
+   </property>
+   <property name="dragDropMode">
+    <enum>QAbstractItemView::InternalMove</enum>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="doneButton">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>360</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Done</string>
+   </property>
+  </widget>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>

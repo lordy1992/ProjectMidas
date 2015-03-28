@@ -4,6 +4,8 @@
 #include "ControlState.h"
 #include "myo\myo.hpp"
 #include "MainGUI.h"
+#include "ProfileSignaller.h"
+#include "ProfileManager.h"
 
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
@@ -34,7 +36,7 @@ public:
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
     MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, 
-        MainGUI *mainGuiHandle);
+        MainGUI *mainGuiHandle, ProfileManager* profileManagerHandle);
     ~MyoDevice();
 
     /**
@@ -71,6 +73,13 @@ public:
      */
     int getDeviceError();
 
+    /**
+     * Update filters internal mechanisms if the profile changes.
+     *
+     * @return void.
+     */
+    void updateProfiles(void);
+
 private:
     /**
      * This class implements all of the callback functions from the Myo DeviceListener
@@ -106,10 +115,14 @@ private:
     unsigned int durationInMilliseconds;
     std::string appIdentifier;
     ControlState* state;
-    FilterPipeline posePipeline, orientationPipeline;
+    FilterPipeline posePipeline, orientationPipeline, rssiPipeline,
+        connectPipeline;
     MainGUI *mainGui;
+    std::string prevProfileName;
 
     Arm arm;
     XDirection xDirection;
+    static ProfileSignaller profileSignaller;
+    ProfileManager *profileManager;
 };
 
