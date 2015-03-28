@@ -533,5 +533,6 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
         throw new std::exception("registerSequenceException");
     }
 
+    gestSeqRecorder->updateGuiSequences();
     return filterError::NO_FILTER_ERROR;
 }

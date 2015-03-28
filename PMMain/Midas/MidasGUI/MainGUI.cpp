@@ -5,6 +5,7 @@
 #include <QApplication.h>
 #include <QDesktopWidget.h>
 #include <algorithm>
+#include <QEvent.h>
 
 #define SCREEN_RIGHT_BUFFER    20 
 #define SCREEN_BOTTOM_BUFFER   30
@@ -59,9 +60,10 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
     keyboard = new KeyboardWidget(mainThread);
     keyboard->addWheels(mainThread->getKybrdRingData());
 
-    int totalWidth = std::max(sequenceDisplayer->width(), std::max(infoIndicator->width(), 
-						      std::max(mouseIndicator->width(), distanceDisplayer->width())));
-    int totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
+    totalWidth = std::max(sequenceDisplayer->width(), 
+                        std::max(infoIndicator->width(),
+                        std::max(mouseIndicator->width(), distanceDisplayer->width())));
+    totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
         mouseIndicator->height() + profileHeights + distanceDisplayer->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);

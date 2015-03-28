@@ -52,6 +52,7 @@ private:
     KeyboardWidget* keyboard;
     std::vector<ProfileDisplayer*> profileWidgets;
     DistanceWidget* distanceDisplayer;
+    int totalWidth, totalHeight;
 };
 
 #endif
