@@ -11,6 +11,7 @@
 #include "ProfileDisplayer.h"
 #include "ProfileSignaller.h"
 #include "ProfileManager.h"
+#include "DistanceWidget.h"
 
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
@@ -50,6 +51,7 @@ private:
     PoseDisplayer *poseDisplayer;
     KeyboardWidget* keyboard;
     std::vector<ProfileDisplayer*> profileWidgets;
+    DistanceWidget* distanceDisplayer;
     int totalWidth, totalHeight;
 };
 

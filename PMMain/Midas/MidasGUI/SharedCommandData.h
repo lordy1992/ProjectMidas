@@ -9,11 +9,13 @@
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
 #define ANGLE_INPUT "angle"
+#define RSSI_INPUT "rssi"
+#define ISCONNECTED_INPUT "isConnected"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
  * queue of mouse and keyboard commands for the main thread to send to Windows, and contains 
- * the mouse velocity information.
+ * the mouse velocity information and rssi information.
  */
 class SharedCommandData : public Filter
 {
@@ -111,6 +113,35 @@ public:
     bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
 
     /**
+     * Returns a float value corresponding to the rssi. This will block
+     * if another thread is using it.
+     *
+     * @return The rssi value as a float.
+     */
+    float getRssi();
+
+    /**
+     * Sets the rssi. This will block if another thread is using it.
+     *
+     * @param float rssi
+     */
+    void setRssi(float rssi);
+
+    /**
+     * Returns whether the device is connected or not
+     * 
+     * @return A boolean for whether or not the device is connected
+     */
+    bool getIsConnected(void);
+
+    /**
+     * Sets the device connected flag
+     *
+     * @param bool isConnected
+     */
+    void setIsConnected(bool connected);
+
+    /**
      * Returns true if the command queue is empty, otherwise false.
      *
      * @return True if the command queue is empty, otherwise false.
@@ -140,6 +171,8 @@ public:
 
 private:
     point mouseVelocity;
+    float rssiAVG;
+    bool  isConnected;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     unsigned int maxKybdGuiSel;
@@ -150,10 +183,14 @@ private:
     std::mutex kybdGuiSelMutex;
     std::mutex myoOrientationMutex;
     std::mutex keySelectAngleMutex;
+    std::mutex rssiMutex;
+    std::mutex isConnectedMutex;
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
     void extractKeySelectAngle(boost::any value);
+    void extractRssi(boost::any value);
+    void extractIsConnected(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */
