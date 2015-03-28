@@ -6,13 +6,15 @@
 
 #include <QtWidgets/QApplication>
 
+const std::string keyboardFileName = "keyboardData.txt";
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
     std::vector<ringData> kybrdRingData;
     KeyboardSettingsReader readFile;
-    readFile.readKeyboardSetupFile(kybrdRingData,"keyboardData.txt");
+    readFile.readKeyboardSetupFile(kybrdRingData,keyboardFileName);
 
     MidasThread midasThread(&kybrdRingData);
 
