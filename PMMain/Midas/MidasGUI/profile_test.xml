@@ -309,6 +309,16 @@
                     </actions>
                 </command>
             </sequence>
+            <sequence state="keyboardMode" name="Change Wheels">
+                <gestures>
+                    <gesture type="tap">fingersSpread</gesture>
+                </gestures>
+                <command type="keyboardGui">
+                    <actions>
+                        <action>changeWheels</action>
+                    </actions>
+                </command>
+            </sequence>
             <sequence state="keyboardMode" name="Backspace">
                 <gestures>
                     <gesture type="tap">waveOut</gesture>
@@ -331,9 +341,9 @@
                     </actions>
                 </command>
             </sequence>
-            <sequence state="mouseMode" name="Swap Ring Focus">
+            <sequence state="keyboardMode" name="Swap Ring Focus">
                 <gestures>
-                    <gesture type="tap">waveOut</gesture>
+                    <gesture type="tap">waveIn</gesture>
                 </gestures>
                 <command type="keyboardGui">
                     <actions>
