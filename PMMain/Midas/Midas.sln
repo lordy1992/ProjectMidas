@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30501.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUI", "MidasGUI\MidasGUI.vcxproj", "{B12702AD-ABFB-343A-A199-8E24837244A3}"
 EndProject
@@ -9,8 +9,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUILib", "MidasGUILib\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasGUIQTest", "MidasGUIQTest\MidasGUIQTest.vcxproj", "{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}"
 EndProject
+<<<<<<< HEAD
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MidasProfileManager", "MidasProfileManager\MidasProfileManager.vcxproj", "{99F0E931-C14B-467A-AFCD-A9109AC71405}"
 EndProject
+=======
+>>>>>>> f6a8ca138b2bc156f61f2e76029007a1b0a9c2b5
 Project("{6141683F-8A12-4E36-9623-2EB02B2C2303}") = "PMInstaller", "PMInstaller\PMInstaller.isproj", "{A4557928-E704-42C4-9954-3B0FF673D6C7}"
 EndProject
 Global
@@ -128,6 +131,7 @@ Global
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.SingleImage|Win32.ActiveCfg = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.SingleImage|Win32.Build.0 = Release|Win32
 		{5F0508C3-EAE9-4B25-BCDD-D00452C05A30}.SingleImage|x64.ActiveCfg = Release|Win32
+<<<<<<< HEAD
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.CD_ROM|Any CPU.ActiveCfg = Release|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.CD_ROM|Mixed Platforms.ActiveCfg = Release|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.CD_ROM|Win32.ActiveCfg = Release|Win32
@@ -152,6 +156,8 @@ Global
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.SingleImage|Mixed Platforms.ActiveCfg = Release|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.SingleImage|Win32.ActiveCfg = Release|Win32
 		{99F0E931-C14B-467A-AFCD-A9109AC71405}.SingleImage|x64.ActiveCfg = Release|Win32
+=======
+>>>>>>> f6a8ca138b2bc156f61f2e76029007a1b0a9c2b5
 		{A4557928-E704-42C4-9954-3B0FF673D6C7}.CD_ROM|Any CPU.ActiveCfg = CD_ROM
 		{A4557928-E704-42C4-9954-3B0FF673D6C7}.CD_ROM|Any CPU.Build.0 = CD_ROM
 		{A4557928-E704-42C4-9954-3B0FF673D6C7}.CD_ROM|Mixed Platforms.ActiveCfg = CD_ROM

@@ -1,0 +1,12 @@
+1. Go to  https://msdn.microsoft.com/en-us/library/dn531020.aspx and follow
+   the instructions to install the installshield plugin for VS. This gives you
+   the limited version. 
+   NOTE: I believe this does not work with the express version of VS
+
+   More info and tutorial here:
+   http://www.flexerasoftware.com/producer/products/software-installation/installshield-software-installer/isle-getting-started/
+
+2. Setup install project and create installer.
+3. Run installer to install application.
+
+Example of what install contents look like provided in the ProjectMidas folder.

@@ -19,6 +19,9 @@
       <Extensions>moc;h;cpp</Extensions>
       <SourceControlFiles>False</SourceControlFiles>
     </Filter>
+    <Filter Include="project assistant">
+      <UniqueIdentifier>{9c736f2e-3281-4368-8177-e026ecb80811}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="KeyboardSettingFileReader_Test.cpp">
