@@ -3,12 +3,12 @@
 #include "MainGUI.h"
 #include "KeyboardWidget.h"
 #include "KeyboardSettingsReader.h"
-
+#include "ProfileManager.h"
 #include <QtWidgets/QApplication>
 
-#include "ProfileManager.h"
-
 #define TASK_BAR_ICON_PATH "Resources\\ProjectMidasLogo.ico"
+
+const std::string keyboardFileName = "keyboardData.txt";
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     std::vector<ringData> kybrdRingData;
     KeyboardSettingsReader readFile;
-    readFile.readKeyboardSetupFile(kybrdRingData);
+    readFile.readKeyboardSetupFile(kybrdRingData,keyboardFileName);
 
     MidasThread midasThread(&kybrdRingData);
 
