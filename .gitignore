@@ -60,14 +60,14 @@ testDev/
 PMMain/Midas/MidasGUI/Debug/
 PMMain/Midas/MidasGUI/GeneratedFiles/
 
-<<<<<<< HEAD
+
 #MISC
 PMMain/Midas/MidasProfileManager/GeneratedFiles/*
 *Thumbs.db
 PMMain/Midas/Win32/
 PMMain/Midas/ipch/
-=======
+
 # PMInstaller log files
 PMMain/Midas/MidasGUI/PMInstaller/*/LogFiles/
 PMMain/Midas/MidasGUI/PMInstaller/*/Reports/
->>>>>>> f6a8ca138b2bc156f61f2e76029007a1b0a9c2b5
+
