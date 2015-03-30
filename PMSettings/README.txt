@@ -1,1 +1,0 @@
-This project is intended to incorperate the code related to the Project Midas settings page. These settings will include any allowable customizations, such as gesture/posture mapping to keyboard commands.
