@@ -35,6 +35,9 @@
      <height>22</height>
     </rect>
    </property>
+   <property name="currentText">
+    <string>thumbToPinky</string>
+   </property>
    <item>
     <property name="text">
      <string>thumbToPinky</string>

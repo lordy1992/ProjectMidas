@@ -84,7 +84,7 @@
             </sequence>
             <sequence state="lockMode" name="Unlock">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveIn</gesture>
                     <gesture type="tap">waveOut</gesture>
                 </gestures>
@@ -96,7 +96,7 @@
             </sequence>
             <sequence state="mouseMode" name="Mouse to Gesture">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>
@@ -106,7 +106,7 @@
             </sequence>
             <sequence state="gestureMode" name="Gesture to Mouse">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>
@@ -116,7 +116,7 @@
             </sequence>
             <sequence state="keyboardMode" name="Keyboard to Mouse">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveOut</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -139,7 +139,7 @@
             <sequence state="mouseMode" name="Mouse to Lock">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>
@@ -150,7 +150,7 @@
             <sequence state="gestureMode" name="Gesture to Lock">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>
@@ -160,7 +160,7 @@
             </sequence>
             <sequence state="keyboardMode" name="Keyboard to Lock">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveIn</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -197,7 +197,7 @@
                     <angleNegative>leftArrow</angleNegative>
                 </angle>
             </hold>
-            <hold gesture="thumbToPinky">
+            <hold gesture="doubleTap">
                 <angle type="pitch">
                     <anglePositive>zoomIn</anglePositive>
                     <angleNegative>zoomOut</angleNegative>
@@ -215,7 +215,7 @@
         <sequences>
             <sequence state="lockMode" name="Unlock">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">fist</gesture>
                     <gesture type="tap">waveIn</gesture>
                     <gesture type="tap">waveOut</gesture>
@@ -229,7 +229,7 @@
             </sequence>
             <sequence state="mouseMode" name="Mouse to Gesture">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">fist</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -240,7 +240,7 @@
             </sequence>
             <sequence state="mouseMode" name="Mouse to Keyboard">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveIn</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -251,7 +251,7 @@
             </sequence>
             <sequence state="gestureMode" name="Gesture to Mouse">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">fist</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -262,7 +262,7 @@
             </sequence>
             <sequence state="keyboardMode" name="Keyboard to Mouse">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveOut</gesture>
                     <gesture type="tap">waveIn</gesture>
                 </gestures>
@@ -277,7 +277,7 @@
                     <gesture type="tap">waveIn</gesture>
                     <gesture type="tap">waveOut</gesture>
                     <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>
@@ -288,7 +288,7 @@
             <sequence state="gestureMode" name="Gesture to Lock">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveOut</gesture>
                 </gestures>
                 <command type="stateChange">
@@ -299,7 +299,7 @@
             </sequence>
             <sequence state="keyboardMode" name="Keyboard to Lock">
                 <gestures>
-                    <gesture type="tap">thumbToPinky</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                     <gesture type="tap">waveIn</gesture>
                     <gesture type="tap">waveOut</gesture>
                 </gestures>
