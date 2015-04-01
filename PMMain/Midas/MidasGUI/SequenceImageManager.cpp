@@ -46,8 +46,10 @@ void SequenceImageManager::loadImages()
     QImage fingerSpreadNext(QString(FINGER_SPREAD_NEXT_PATH));
     QImage fistLater(QString(FIST_LATER_PATH));
     QImage fistNext(QString(FIST_NEXT_PATH));
-    QImage pinkyToThumbLater(QString(PINKY_TO_THUMB_LATER_PATH));
-    QImage pinkyToThumbNext(QString(PINKY_TO_THUMB_NEXT_PATH));
+//    QImage pinkyToThumbLater(QString(PINKY_TO_THUMB_LATER_PATH));
+//    QImage pinkyToThumbNext(QString(PINKY_TO_THUMB_NEXT_PATH));
+    QImage doubleTapLater(QString(DOUBLE_TAP_LATER_PATH));
+    QImage doubleTapNext(QString(DOUBLE_TAP_NEXT_PATH));
     QImage waveInLater(QString(WAVE_IN_LATER_PATH));
     QImage waveInNext(QString(WAVE_IN_NEXT_PATH));
     QImage waveOutLater(QString(WAVE_OUT_LATER_PATH));
@@ -67,11 +69,17 @@ void SequenceImageManager::loadImages()
     fist.laterImage = QPixmap::fromImage(fistLater);
     idToImageMap[fist.actionTag] = fist;
 
-    sequenceImageSet pinkyToThumb;
-    pinkyToThumb.actionTag = Pose::thumbToPinky;
+    /*sequenceImageSet pinkyToThumb;
+    pinkyToThumb.actionTag = Pose::doubleTap;
     pinkyToThumb.nextImage = QPixmap::fromImage(pinkyToThumbNext);
     pinkyToThumb.laterImage = QPixmap::fromImage(pinkyToThumbLater);
-    idToImageMap[pinkyToThumb.actionTag] = pinkyToThumb;
+    idToImageMap[pinkyToThumb.actionTag] = pinkyToThumb;*/
+
+    sequenceImageSet doubleTap;
+    doubleTap.actionTag = Pose::doubleTap;
+    doubleTap.nextImage = QPixmap::fromImage(doubleTapNext);
+    doubleTap.laterImage = QPixmap::fromImage(doubleTapLater);
+    idToImageMap[doubleTap.actionTag] = doubleTap;
 
     sequenceImageSet waveIn;
     waveIn.actionTag = Pose::waveIn;

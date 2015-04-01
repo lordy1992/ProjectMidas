@@ -63,6 +63,7 @@ void MyoDevice::runDeviceLoop()
     try
     {
         Hub hub(appIdentifier);
+        hub.setLockingPolicy(hub.lockingPolicyNone);
         Myo* myo = hub.waitForMyo(myoFindTimeout);
 
         if (!myo)

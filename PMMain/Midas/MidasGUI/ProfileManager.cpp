@@ -103,7 +103,7 @@ std::map <std::string, Pose::Type> profileGestureNameToType =
     { "fingersSpread", Pose::Type::fingersSpread },
     { "fist", Pose::Type::fist },
     { "rest", Pose::Type::rest },
-    { "thumbToPinky", Pose::Type::thumbToPinky },
+    { "doubleTap", Pose::Type::doubleTap },
     { "waveIn", Pose::Type::waveIn },
     { "waveOut", Pose::Type::waveOut }
 };
