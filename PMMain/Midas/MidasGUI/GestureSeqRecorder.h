@@ -215,7 +215,7 @@ private:
     clock_t progressBaseTime;
 
     // Transition timeout value. For example, if to change a state,
-    // the user is required to perform "wave in, wave out, pinky-to-thumb", 
+    // the user is required to perform "wave in, wave out, double-tap", 
     // then when a wave in is recorded, the user has up to "TransMaxDeltaTime"
     // milliseconds to perform a wave out, or else the whole process needs to be repeated.
     clock_t progressMaxDeltaTime;

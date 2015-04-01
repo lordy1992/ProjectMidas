@@ -324,9 +324,9 @@ bool MyoTranslationFilter::initGestHoldModeActionArr(void)
 
     ad.angleType = angleData::AngleType::PITCH;
     ad.anglePositive = true;
-    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::ZOOM_IN);
+    initOkay &= gestHoldModeAction[GESTURE_DOUBLE_TAP].addToActionMap(ad, kybdCmds::ZOOM_IN);
     ad.anglePositive = false;
-    initOkay &= gestHoldModeAction[GESTURE_THUMB_TO_PINKY].addToActionMap(ad, kybdCmds::ZOOM_OUT);
+    initOkay &= gestHoldModeAction[GESTURE_DOUBLE_TAP].addToActionMap(ad, kybdCmds::ZOOM_OUT);
 
     ad.angleType = angleData::AngleType::YAW;
     ad.anglePositive = false;
@@ -377,9 +377,9 @@ filterError MyoTranslationFilter::updateBasedOnProfile(ProfileManager& pm, std::
         {
             gestType = GESTURE_FINGERS_SPREAD;
         }
-        else if (it->gesture == "thumbToPinky")
+        else if (it->gesture == "doubleTap")
         {
-            gestType = GESTURE_THUMB_TO_PINKY;
+            gestType = GESTURE_DOUBLE_TAP;
         }
         else if (it->gesture == "waveIn")
         {
