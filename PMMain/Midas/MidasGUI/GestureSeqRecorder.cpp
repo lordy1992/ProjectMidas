@@ -33,6 +33,17 @@ GestureSeqRecorder::~GestureSeqRecorder()
     delete seqMapPerMode;
 }
 
+void GestureSeqRecorder::unregisterAll()
+{
+    this->emptyActiveSequences();
+
+    for (int midasModeInt = midasMode::LOCK_MODE; midasModeInt <= midasMode::GESTURE_HOLD_FIVE; midasModeInt++)
+    {
+        midasMode mm = static_cast<midasMode>(midasModeInt);
+        (*seqMapPerMode)[mm]->clear();
+    }
+}
+
 SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, commandData seqResponse, std::string name)
 {
     sequenceInfo seqInfo;

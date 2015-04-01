@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MidasProfileManager">
+        <file>Resources/newTab.png</file>
+    </qresource>
+</RCC>

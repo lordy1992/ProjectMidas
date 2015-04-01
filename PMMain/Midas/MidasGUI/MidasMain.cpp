@@ -34,7 +34,7 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData> *kybrdRingData) {
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm, std::vector<ringData> *kybrdRingData) {
     std::cout << "starting Midas Main" << std::endl;
 
 #ifdef TEST_WEARABLE_DEVICE
@@ -81,7 +81,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, std::vector<ringData>
 #ifdef MAIN_MODE
     SharedCommandData sharedData(kybrdRingData->size() * 2);
     ControlState controlState(&sharedData);
-    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui);
+    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui, pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 

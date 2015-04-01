@@ -59,3 +59,9 @@ testDev/
 #QT stuff
 PMMain/Midas/MidasGUI/Debug/
 PMMain/Midas/MidasGUI/GeneratedFiles/
+
+#MISC
+PMMain/Midas/MidasProfileManager/GeneratedFiles/*
+*Thumbs.db
+PMMain/Midas/Win32/
+PMMain/Midas/ipch/

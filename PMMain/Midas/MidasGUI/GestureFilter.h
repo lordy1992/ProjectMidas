@@ -57,6 +57,8 @@ public:
 
     filterDataMap getExtraDataForSCD();
 
+    filterError updateBasedOnProfile(ProfileManager& pm, std::string name);
+
     /**
     * return actual handle to gestSeqRecorder
     */
