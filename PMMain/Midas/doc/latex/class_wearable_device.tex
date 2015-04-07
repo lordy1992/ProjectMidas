@@ -1,0 +1,119 @@
+\hypertarget{class_wearable_device}{\section{Wearable\+Device Class Reference}
+\label{class_wearable_device}\index{Wearable\+Device@{Wearable\+Device}}
+}
+
+
+{\ttfamily \#include $<$Wearable\+Device.\+h$>$}
+
+Inheritance diagram for Wearable\+Device\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_wearable_device}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wearable_device_a273b604df5c2136cf7f9c114e4258366}{{\bfseries Wearable\+Device} (\hyperlink{class_shared_command_data}{Shared\+Command\+Data} $\ast$shared\+Command\+Data)}\label{class_wearable_device_a273b604df5c2136cf7f9c114e4258366}
+
+\item 
+virtual void \hyperlink{class_wearable_device_a37bf388865b8bcf162e3fe89a23bd3e2}{run\+Device\+Loop} ()=0
+\item 
+virtual int \hyperlink{class_wearable_device_a1c0b4d47e9949bfcfc7111a2615538c0}{get\+Device\+Error} ()=0
+\item 
+device\+Status \hyperlink{class_wearable_device_a118d52d7bf27041ce997feb2eac5133d}{get\+Device\+Status} ()
+\item 
+void \hyperlink{class_wearable_device_abcb46cb71dc666394ba20f4ed52c19f1}{stop\+Device} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_wearable_device_a23a9fb3a9558d9a470ef26e59599a255}{set\+Device\+Status} (device\+Status new\+Status)
+\item 
+bool \hyperlink{class_wearable_device_a8adbcc671888137fcc2de3298e9bf84d}{stop\+Device\+Requested} ()
+\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_wearable_device_a28c355770020bcadc36655e5155ac875}{\hyperlink{class_shared_command_data}{Shared\+Command\+Data} $\ast$ {\bfseries shared\+Data}}\label{class_wearable_device_a28c355770020bcadc36655e5155ac875}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles a specific Midas device. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_wearable_device_a1c0b4d47e9949bfcfc7111a2615538c0}{\index{Wearable\+Device@{Wearable\+Device}!get\+Device\+Error@{get\+Device\+Error}}
+\index{get\+Device\+Error@{get\+Device\+Error}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{get\+Device\+Error}]{\setlength{\rightskip}{0pt plus 5cm}virtual int Wearable\+Device\+::get\+Device\+Error (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{class_wearable_device_a1c0b4d47e9949bfcfc7111a2615538c0}
+This returns a device-\/specific error code from the device, once it has stopped running. This is not necessarily thread-\/safe and should only be called once the device thread has stopped.
+
+\begin{DoxyReturn}{Returns}
+The device-\/specific error code. 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{class_test_wearable_class_ae6ba1ecadd22c18ed4ef7cf119bad740}{Test\+Wearable\+Class}, and \hyperlink{class_myo_device_a14db6f7115e407711091beed9b9992a6}{Myo\+Device}.
+
+\hypertarget{class_wearable_device_a118d52d7bf27041ce997feb2eac5133d}{\index{Wearable\+Device@{Wearable\+Device}!get\+Device\+Status@{get\+Device\+Status}}
+\index{get\+Device\+Status@{get\+Device\+Status}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{get\+Device\+Status}]{\setlength{\rightskip}{0pt plus 5cm}device\+Status Wearable\+Device\+::get\+Device\+Status (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_wearable_device_a118d52d7bf27041ce997feb2eac5133d}
+Returns the status of the device. This is thread-\/safe.
+
+\begin{DoxyReturn}{Returns}
+The status of the device. 
+\end{DoxyReturn}
+\hypertarget{class_wearable_device_a37bf388865b8bcf162e3fe89a23bd3e2}{\index{Wearable\+Device@{Wearable\+Device}!run\+Device\+Loop@{run\+Device\+Loop}}
+\index{run\+Device\+Loop@{run\+Device\+Loop}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{run\+Device\+Loop}]{\setlength{\rightskip}{0pt plus 5cm}virtual void Wearable\+Device\+::run\+Device\+Loop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{class_wearable_device_a37bf388865b8bcf162e3fe89a23bd3e2}
+Runs the device loop, handling specific event handling for the device. 
+
+Implemented in \hyperlink{class_myo_device_a263e12e527f3984e8e2946f52d4fa111}{Myo\+Device}, and \hyperlink{class_test_wearable_class_a77df79994b3f62110d884fd088388858}{Test\+Wearable\+Class}.
+
+\hypertarget{class_wearable_device_a23a9fb3a9558d9a470ef26e59599a255}{\index{Wearable\+Device@{Wearable\+Device}!set\+Device\+Status@{set\+Device\+Status}}
+\index{set\+Device\+Status@{set\+Device\+Status}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{set\+Device\+Status}]{\setlength{\rightskip}{0pt plus 5cm}void Wearable\+Device\+::set\+Device\+Status (
+\begin{DoxyParamCaption}
+\item[{device\+Status}]{new\+Status}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_wearable_device_a23a9fb3a9558d9a470ef26e59599a255}
+Sets the status of the device.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Status} & The new status of the device. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_wearable_device_abcb46cb71dc666394ba20f4ed52c19f1}{\index{Wearable\+Device@{Wearable\+Device}!stop\+Device@{stop\+Device}}
+\index{stop\+Device@{stop\+Device}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{stop\+Device}]{\setlength{\rightskip}{0pt plus 5cm}void Wearable\+Device\+::stop\+Device (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_wearable_device_abcb46cb71dc666394ba20f4ed52c19f1}
+Stops the device. This gives the device a chance to respond and perform cleanup before exiting. \hypertarget{class_wearable_device_a8adbcc671888137fcc2de3298e9bf84d}{\index{Wearable\+Device@{Wearable\+Device}!stop\+Device\+Requested@{stop\+Device\+Requested}}
+\index{stop\+Device\+Requested@{stop\+Device\+Requested}!Wearable\+Device@{Wearable\+Device}}
+\subsubsection[{stop\+Device\+Requested}]{\setlength{\rightskip}{0pt plus 5cm}bool Wearable\+Device\+::stop\+Device\+Requested (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_wearable_device_a8adbcc671888137fcc2de3298e9bf84d}
+Indicates if the device has been requested to stop (by the main thread). It is the device's responsibility to check this method and, if requested to stop, perform the necessary cleanup and exit the main loop. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Wearable\+Device.\+h\item 
+Wearable\+Device.\+cpp\end{DoxyCompactItemize}

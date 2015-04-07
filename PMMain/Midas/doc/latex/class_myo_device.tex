@@ -1,0 +1,133 @@
+\hypertarget{class_myo_device}{\section{Myo\+Device Class Reference}
+\label{class_myo_device}\index{Myo\+Device@{Myo\+Device}}
+}
+
+
+{\ttfamily \#include $<$Myo\+Device.\+h$>$}
+
+Inheritance diagram for Myo\+Device\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_myo_device}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_myo_device_aa6d9def395a5d1704f1734d944a1ab98}{Myo\+Device} (\hyperlink{class_shared_command_data}{Shared\+Command\+Data} $\ast$shared\+Command\+Data, \hyperlink{class_control_state}{Control\+State} $\ast$control\+State, std\+::string application\+Identifier, \hyperlink{class_main_g_u_i}{Main\+G\+U\+I} $\ast$main\+Gui\+Handle, \hyperlink{class_profile_manager}{Profile\+Manager} $\ast$profile\+Manager\+Handle)
+\item 
+void \hyperlink{class_myo_device_af446081b034056edff7d7132102f1a8c}{set\+Find\+Myo\+Timeout} (unsigned int milliseconds)
+\item 
+void \hyperlink{class_myo_device_a395ebe609f5ccc11e85a5aa3002dddb7}{set\+Myo\+Event\+Loop\+Duration} (unsigned int milliseconds)
+\item 
+void \hyperlink{class_myo_device_a263e12e527f3984e8e2946f52d4fa111}{run\+Device\+Loop} ()
+\item 
+int \hyperlink{class_myo_device_a14db6f7115e407711091beed9b9992a6}{get\+Device\+Error} ()
+\item 
+void \hyperlink{class_myo_device_a79f6967817e023bca1843028ad3a0329}{update\+Profiles} (void)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Handles the Myo device, collecting the data using the Myo A\+P\+I, and converting the data to keyboard and mouse commands by sending it through a data pipeline. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_myo_device_aa6d9def395a5d1704f1734d944a1ab98}{\index{Myo\+Device@{Myo\+Device}!Myo\+Device@{Myo\+Device}}
+\index{Myo\+Device@{Myo\+Device}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{Myo\+Device}]{\setlength{\rightskip}{0pt plus 5cm}Myo\+Device\+::\+Myo\+Device (
+\begin{DoxyParamCaption}
+\item[{{\bf Shared\+Command\+Data} $\ast$}]{shared\+Command\+Data, }
+\item[{{\bf Control\+State} $\ast$}]{control\+State, }
+\item[{std\+::string}]{application\+Identifier, }
+\item[{{\bf Main\+G\+U\+I} $\ast$}]{main\+Gui\+Handle, }
+\item[{{\bf Profile\+Manager} $\ast$}]{profile\+Manager\+Handle}
+\end{DoxyParamCaption}
+)}}\label{class_myo_device_aa6d9def395a5d1704f1734d944a1ab98}
+The constructor for the \hyperlink{class_myo_device}{Myo\+Device}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em shared\+Command\+Data} & A handle to the S\+C\+D so that the device can post commands. \\
+\hline
+{\em control\+State} & A handle to the \hyperlink{class_control_state}{Control\+State} object so that the application state can be changed, and so that the device can read the current state. \\
+\hline
+{\em application\+Identifier} & A myo-\/specific app identifier used to create the myo hub. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_myo_device_a14db6f7115e407711091beed9b9992a6}{\index{Myo\+Device@{Myo\+Device}!get\+Device\+Error@{get\+Device\+Error}}
+\index{get\+Device\+Error@{get\+Device\+Error}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{get\+Device\+Error}]{\setlength{\rightskip}{0pt plus 5cm}int Myo\+Device\+::get\+Device\+Error (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_myo_device_a14db6f7115e407711091beed9b9992a6}
+Returns an error code associated with the device, once the device thread has stopped running.
+
+\begin{DoxyReturn}{Returns}
+An error code. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_wearable_device_a1c0b4d47e9949bfcfc7111a2615538c0}{Wearable\+Device}.
+
+\hypertarget{class_myo_device_a263e12e527f3984e8e2946f52d4fa111}{\index{Myo\+Device@{Myo\+Device}!run\+Device\+Loop@{run\+Device\+Loop}}
+\index{run\+Device\+Loop@{run\+Device\+Loop}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{run\+Device\+Loop}]{\setlength{\rightskip}{0pt plus 5cm}void Myo\+Device\+::run\+Device\+Loop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_myo_device_a263e12e527f3984e8e2946f52d4fa111}
+Runs the device loop. This sets up the data pipeline, searches for a Myo device, registers the callback functions, and then enters a loop that waits for events and calls the callback functions. 
+
+Implements \hyperlink{class_wearable_device_a37bf388865b8bcf162e3fe89a23bd3e2}{Wearable\+Device}.
+
+\hypertarget{class_myo_device_af446081b034056edff7d7132102f1a8c}{\index{Myo\+Device@{Myo\+Device}!set\+Find\+Myo\+Timeout@{set\+Find\+Myo\+Timeout}}
+\index{set\+Find\+Myo\+Timeout@{set\+Find\+Myo\+Timeout}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{set\+Find\+Myo\+Timeout}]{\setlength{\rightskip}{0pt plus 5cm}void Myo\+Device\+::set\+Find\+Myo\+Timeout (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{milliseconds}
+\end{DoxyParamCaption}
+)}}\label{class_myo_device_af446081b034056edff7d7132102f1a8c}
+Sets the amount of time that should be spent looking for a Myo device. If a Myo cannot be found within this amount of time, the device thread will exit with an error.
+
+
+\begin{DoxyParams}{Parameters}
+{\em milliseconds} & Number of milliseconds to wait for a Myo. If this is a 0, it will search until one is found (indefinitely). \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_myo_device_a395ebe609f5ccc11e85a5aa3002dddb7}{\index{Myo\+Device@{Myo\+Device}!set\+Myo\+Event\+Loop\+Duration@{set\+Myo\+Event\+Loop\+Duration}}
+\index{set\+Myo\+Event\+Loop\+Duration@{set\+Myo\+Event\+Loop\+Duration}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{set\+Myo\+Event\+Loop\+Duration}]{\setlength{\rightskip}{0pt plus 5cm}void Myo\+Device\+::set\+Myo\+Event\+Loop\+Duration (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{milliseconds}
+\end{DoxyParamCaption}
+)}}\label{class_myo_device_a395ebe609f5ccc11e85a5aa3002dddb7}
+Sets the amount of time, in milliseconds, the Myo event loop should run. While the Myo event loop is running, Midas has no control over the device. The device can only be exited while outside of the Myo event loop.
+
+
+\begin{DoxyParams}{Parameters}
+{\em milliseconds} & Number of milliseconds to stay in the event loop. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_myo_device_a79f6967817e023bca1843028ad3a0329}{\index{Myo\+Device@{Myo\+Device}!update\+Profiles@{update\+Profiles}}
+\index{update\+Profiles@{update\+Profiles}!Myo\+Device@{Myo\+Device}}
+\subsubsection[{update\+Profiles}]{\setlength{\rightskip}{0pt plus 5cm}void Myo\+Device\+::update\+Profiles (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{class_myo_device_a79f6967817e023bca1843028ad3a0329}
+Update filters internal mechanisms if the profile changes.
+
+\begin{DoxyReturn}{Returns}
+void. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Myo\+Device.\+h\item 
+Myo\+Device.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,58 @@
+\hypertarget{class_test_wearable_class}{\section{Test\+Wearable\+Class Class Reference}
+\label{class_test_wearable_class}\index{Test\+Wearable\+Class@{Test\+Wearable\+Class}}
+}
+Inheritance diagram for Test\+Wearable\+Class\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_test_wearable_class}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_test_wearable_class_a1d767f72a3732af62ec5a81e564dd4c4}{{\bfseries Test\+Wearable\+Class} (\hyperlink{class_shared_command_data}{Shared\+Command\+Data} $\ast$shared\+Command\+Data)}\label{class_test_wearable_class_a1d767f72a3732af62ec5a81e564dd4c4}
+
+\item 
+void \hyperlink{class_test_wearable_class_a77df79994b3f62110d884fd088388858}{run\+Device\+Loop} ()
+\item 
+int \hyperlink{class_test_wearable_class_ae6ba1ecadd22c18ed4ef7cf119bad740}{get\+Device\+Error} ()
+\item 
+\hypertarget{class_test_wearable_class_a9a3ab0cac40204faca752a9d59297b59}{bool {\bfseries is\+Done} ()}\label{class_test_wearable_class_a9a3ab0cac40204faca752a9d59297b59}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_test_wearable_class_ae6ba1ecadd22c18ed4ef7cf119bad740}{\index{Test\+Wearable\+Class@{Test\+Wearable\+Class}!get\+Device\+Error@{get\+Device\+Error}}
+\index{get\+Device\+Error@{get\+Device\+Error}!Test\+Wearable\+Class@{Test\+Wearable\+Class}}
+\subsubsection[{get\+Device\+Error}]{\setlength{\rightskip}{0pt plus 5cm}int Test\+Wearable\+Class\+::get\+Device\+Error (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_test_wearable_class_ae6ba1ecadd22c18ed4ef7cf119bad740}
+This returns a device-\/specific error code from the device, once it has stopped running. This is not necessarily thread-\/safe and should only be called once the device thread has stopped.
+
+\begin{DoxyReturn}{Returns}
+The device-\/specific error code. 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{class_wearable_device_a1c0b4d47e9949bfcfc7111a2615538c0}{Wearable\+Device}.
+
+\hypertarget{class_test_wearable_class_a77df79994b3f62110d884fd088388858}{\index{Test\+Wearable\+Class@{Test\+Wearable\+Class}!run\+Device\+Loop@{run\+Device\+Loop}}
+\index{run\+Device\+Loop@{run\+Device\+Loop}!Test\+Wearable\+Class@{Test\+Wearable\+Class}}
+\subsubsection[{run\+Device\+Loop}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Wearable\+Class\+::run\+Device\+Loop (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}}\label{class_test_wearable_class_a77df79994b3f62110d884fd088388858}
+Runs the device loop, handling specific event handling for the device. 
+
+Implements \hyperlink{class_wearable_device_a37bf388865b8bcf162e3fe89a23bd3e2}{Wearable\+Device}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+Shared\+Command\+Data\+Test.\+h\end{DoxyCompactItemize}

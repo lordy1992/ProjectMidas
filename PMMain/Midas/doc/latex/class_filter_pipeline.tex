@@ -1,0 +1,68 @@
+\hypertarget{class_filter_pipeline}{\section{Filter\+Pipeline Class Reference}
+\label{class_filter_pipeline}\index{Filter\+Pipeline@{Filter\+Pipeline}}
+}
+
+
+{\ttfamily \#include $<$Filter\+Pipeline.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_filter_pipeline_aa82ad15039984a23c7eda82d6627dab0}{register\+Filter} (\hyperlink{class_filter}{Filter} $\ast$filter)
+\item 
+void \hyperlink{class_filter_pipeline_aaf057248479d00b97538cd09f584452d}{start\+Pipeline} (filter\+Data\+Map input)
+\item 
+std\+::list$<$ \hyperlink{class_filter}{Filter} $\ast$ $>$ $\ast$ \hyperlink{class_filter_pipeline_aca193c07f273ee7ceb2c4f296b3e6b2f}{get\+Filters} (void)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_filter_pipeline}{Filter\+Pipeline} class represents a linear sequence of filters through which data can flow. The data enters the pipeline and is passed into the first filter. The output of the first filter is piped into the second, and so on. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_filter_pipeline_aca193c07f273ee7ceb2c4f296b3e6b2f}{\index{Filter\+Pipeline@{Filter\+Pipeline}!get\+Filters@{get\+Filters}}
+\index{get\+Filters@{get\+Filters}!Filter\+Pipeline@{Filter\+Pipeline}}
+\subsubsection[{get\+Filters}]{\setlength{\rightskip}{0pt plus 5cm}std\+::list$<$ {\bf Filter} $\ast$ $>$ $\ast$ Filter\+Pipeline\+::get\+Filters (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{class_filter_pipeline_aca193c07f273ee7ceb2c4f296b3e6b2f}
+Returns the list of registered filters.
+
+\begin{DoxyReturn}{Returns}
+The list of registered filters. 
+\end{DoxyReturn}
+\hypertarget{class_filter_pipeline_aa82ad15039984a23c7eda82d6627dab0}{\index{Filter\+Pipeline@{Filter\+Pipeline}!register\+Filter@{register\+Filter}}
+\index{register\+Filter@{register\+Filter}!Filter\+Pipeline@{Filter\+Pipeline}}
+\subsubsection[{register\+Filter}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+Pipeline\+::register\+Filter (
+\begin{DoxyParamCaption}
+\item[{{\bf Filter} $\ast$}]{filter}
+\end{DoxyParamCaption}
+)}}\label{class_filter_pipeline_aa82ad15039984a23c7eda82d6627dab0}
+Registers a new filter with the pipeline. Adds it to the end of the pipeline.
+
+
+\begin{DoxyParams}{Parameters}
+{\em filter} & The filter to add to the pipeline. The input of the filter must match the output of the previous filter in the pipeline. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_pipeline_aaf057248479d00b97538cd09f584452d}{\index{Filter\+Pipeline@{Filter\+Pipeline}!start\+Pipeline@{start\+Pipeline}}
+\index{start\+Pipeline@{start\+Pipeline}!Filter\+Pipeline@{Filter\+Pipeline}}
+\subsubsection[{start\+Pipeline}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+Pipeline\+::start\+Pipeline (
+\begin{DoxyParamCaption}
+\item[{filter\+Data\+Map}]{input}
+\end{DoxyParamCaption}
+)}}\label{class_filter_pipeline_aaf057248479d00b97538cd09f584452d}
+Starts the pipeline with the given input.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & A map of name-\/value pairs that will be passed as the input to the first filter in the pipeline. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Filter\+Pipeline.\+h\item 
+Filter\+Pipeline.\+cpp\end{DoxyCompactItemize}

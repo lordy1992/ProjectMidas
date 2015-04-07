@@ -1,0 +1,102 @@
+\hypertarget{class_sequence_displayer}{\section{Sequence\+Displayer Class Reference}
+\label{class_sequence_displayer}\index{Sequence\+Displayer@{Sequence\+Displayer}}
+}
+
+
+{\ttfamily \#include $<$Sequence\+Displayer.\+h$>$}
+
+Inheritance diagram for Sequence\+Displayer\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_sequence_displayer}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_sequence_displayer_afcc86a900cb5bf28e1b3e6a09d6abeed}{register\+Sequence\+Images} (int, Q\+String, std\+::vector$<$ \hyperlink{structsequence_image_set}{sequence\+Image\+Set} $>$)
+\item 
+void \hyperlink{class_sequence_displayer_a78aa2211e005356237805dea967d8dda}{show\+Sequences} (std\+::vector$<$ \hyperlink{structsequence_progress_data}{sequence\+Progress\+Data} $>$)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_sequence_displayer_aa5f4a391a77a9b208ed0a075515ce554}{Sequence\+Displayer} (Q\+Widget $\ast$parent=0)
+\item 
+Q\+Size \hyperlink{class_sequence_displayer_ab8cad0c7ce49e97ed75af555b5e04556}{size\+Hint} () const 
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_sequence_displayer}{Sequence\+Displayer} class represents a G\+U\+I that can display Midas gesture sequences. These gesture sequences are made up of a series of images that should convey information to the user on what gesture they must perform next in the sequence. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_sequence_displayer_aa5f4a391a77a9b208ed0a075515ce554}{\index{Sequence\+Displayer@{Sequence\+Displayer}!Sequence\+Displayer@{Sequence\+Displayer}}
+\index{Sequence\+Displayer@{Sequence\+Displayer}!Sequence\+Displayer@{Sequence\+Displayer}}
+\subsubsection[{Sequence\+Displayer}]{\setlength{\rightskip}{0pt plus 5cm}Sequence\+Displayer\+::\+Sequence\+Displayer (
+\begin{DoxyParamCaption}
+\item[{Q\+Widget $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_sequence_displayer_aa5f4a391a77a9b208ed0a075515ce554}
+Constructor for the \hyperlink{class_sequence_displayer}{Sequence\+Displayer}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & The parent widget. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_sequence_displayer_afcc86a900cb5bf28e1b3e6a09d6abeed}{\index{Sequence\+Displayer@{Sequence\+Displayer}!register\+Sequence\+Images@{register\+Sequence\+Images}}
+\index{register\+Sequence\+Images@{register\+Sequence\+Images}!Sequence\+Displayer@{Sequence\+Displayer}}
+\subsubsection[{register\+Sequence\+Images}]{\setlength{\rightskip}{0pt plus 5cm}void Sequence\+Displayer\+::register\+Sequence\+Images (
+\begin{DoxyParamCaption}
+\item[{int}]{seq\+Id, }
+\item[{Q\+String}]{sequence\+Name, }
+\item[{std\+::vector$<$ {\bf sequence\+Image\+Set} $>$}]{sequence\+Images}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_sequence_displayer_afcc86a900cb5bf28e1b3e6a09d6abeed}
+Register a sequence, with an I\+D, name, and set of images.
+
+
+\begin{DoxyParams}{Parameters}
+{\em id} & The id of the sequence. \\
+\hline
+{\em name} & A human-\/readable name for the sequence. \\
+\hline
+{\em images} & The images that make up the sequence. Each element of the vector contains two images. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_sequence_displayer_a78aa2211e005356237805dea967d8dda}{\index{Sequence\+Displayer@{Sequence\+Displayer}!show\+Sequences@{show\+Sequences}}
+\index{show\+Sequences@{show\+Sequences}!Sequence\+Displayer@{Sequence\+Displayer}}
+\subsubsection[{show\+Sequences}]{\setlength{\rightskip}{0pt plus 5cm}void Sequence\+Displayer\+::show\+Sequences (
+\begin{DoxyParamCaption}
+\item[{std\+::vector$<$ {\bf sequence\+Progress\+Data} $>$}]{progress\+Pairs}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_sequence_displayer_a78aa2211e005356237805dea967d8dda}
+Show the provided sequences on the display. The caller supplied a vector of pairs; each pair has a sequence I\+D and a number that represents the current position in the sequence.
+
+
+\begin{DoxyParams}{Parameters}
+{\em sequence\+Id\+Progress\+Pairs} & A vector containing the pairs of sequence I\+Ds and sequence positions. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_sequence_displayer_ab8cad0c7ce49e97ed75af555b5e04556}{\index{Sequence\+Displayer@{Sequence\+Displayer}!size\+Hint@{size\+Hint}}
+\index{size\+Hint@{size\+Hint}!Sequence\+Displayer@{Sequence\+Displayer}}
+\subsubsection[{size\+Hint}]{\setlength{\rightskip}{0pt plus 5cm}Q\+Size Sequence\+Displayer\+::size\+Hint (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const}}\label{class_sequence_displayer_ab8cad0c7ce49e97ed75af555b5e04556}
+Returns the recommended size of the widget.
+
+\begin{DoxyReturn}{Returns}
+The recommended size of the widget. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Sequence\+Displayer.\+h\item 
+Sequence\+Displayer.\+cpp\end{DoxyCompactItemize}

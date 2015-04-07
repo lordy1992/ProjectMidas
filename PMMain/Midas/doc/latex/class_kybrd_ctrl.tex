@@ -1,0 +1,77 @@
+\hypertarget{class_kybrd_ctrl}{\section{Kybrd\+Ctrl Class Reference}
+\label{class_kybrd_ctrl}\index{Kybrd\+Ctrl@{Kybrd\+Ctrl}}
+}
+
+
+{\ttfamily \#include $<$kybrd\+Ctrl.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_kybrd_ctrl_a163732202391382b0c5a6602e0e2c084}{set\+Key\+Cmd} (kybd\+Cmds keybd\+Cmd, bool release\+Keys=true, bool hold\+Shift=false)
+\item 
+void \hyperlink{class_kybrd_ctrl_a4798efecf2e4778226abbecc9d283559}{set\+Key\+Char} (unsigned char c, bool release\+Keys=true)
+\item 
+int \hyperlink{class_kybrd_ctrl_a7b5f0eb6f2045476bde40f35c8e47562}{send\+Data} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles sending keyboard command data to Windows O\+S. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_kybrd_ctrl_a7b5f0eb6f2045476bde40f35c8e47562}{\index{Kybrd\+Ctrl@{Kybrd\+Ctrl}!send\+Data@{send\+Data}}
+\index{send\+Data@{send\+Data}!Kybrd\+Ctrl@{Kybrd\+Ctrl}}
+\subsubsection[{send\+Data}]{\setlength{\rightskip}{0pt plus 5cm}int Kybrd\+Ctrl\+::send\+Data (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_kybrd_ctrl_a7b5f0eb6f2045476bde40f35c8e47562}
+This executes the keyboard commands set for the keyboard controller by sending the data to Windows.
+
+\begin{DoxyReturn}{Returns}
+An integer representing the status of the action, as per kybd\+Status. 
+\end{DoxyReturn}
+\hypertarget{class_kybrd_ctrl_a4798efecf2e4778226abbecc9d283559}{\index{Kybrd\+Ctrl@{Kybrd\+Ctrl}!set\+Key\+Char@{set\+Key\+Char}}
+\index{set\+Key\+Char@{set\+Key\+Char}!Kybrd\+Ctrl@{Kybrd\+Ctrl}}
+\subsubsection[{set\+Key\+Char}]{\setlength{\rightskip}{0pt plus 5cm}void Kybrd\+Ctrl\+::set\+Key\+Char (
+\begin{DoxyParamCaption}
+\item[{unsigned char}]{c, }
+\item[{bool}]{release\+Keys = {\ttfamily true}}
+\end{DoxyParamCaption}
+)}}\label{class_kybrd_ctrl_a4798efecf2e4778226abbecc9d283559}
+This function configures the keyboard controller state based on a single character key. It results in a key press of a single character, c. If release\+Keys is true, the key press will be followed by a key release. This command sets the keyboard command, but to execute the command the user must call \hyperlink{class_kybrd_ctrl_a7b5f0eb6f2045476bde40f35c8e47562}{send\+Data()}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em c} & The character to be pressed. This is not confined to A\+S\+C\+I\+I, as this character will be treated as a U\+N\+I\+C\+O\+D\+E character. \\
+\hline
+{\em release\+Keys} & If this is true, the key press will be followed by a release. Otherwise, it will just cause a key press. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_kybrd_ctrl_a163732202391382b0c5a6602e0e2c084}{\index{Kybrd\+Ctrl@{Kybrd\+Ctrl}!set\+Key\+Cmd@{set\+Key\+Cmd}}
+\index{set\+Key\+Cmd@{set\+Key\+Cmd}!Kybrd\+Ctrl@{Kybrd\+Ctrl}}
+\subsubsection[{set\+Key\+Cmd}]{\setlength{\rightskip}{0pt plus 5cm}void Kybrd\+Ctrl\+::set\+Key\+Cmd (
+\begin{DoxyParamCaption}
+\item[{kybd\+Cmds}]{keybd\+Cmd, }
+\item[{bool}]{release\+Keys = {\ttfamily true}, }
+\item[{bool}]{hold\+Shift = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}}\label{class_kybrd_ctrl_a163732202391382b0c5a6602e0e2c084}
+This function configures the keyboard controller state based on high-\/level commands, such as Copy with no key release (which results in a keyboard state of Ctrl + 'c' pressed). Once the keyboard command is set, it can be executed by calling \hyperlink{class_kybrd_ctrl_a7b5f0eb6f2045476bde40f35c8e47562}{send\+Data()}. If release\+Keys is true, the keyboard command consists of a key press followed by a release of the same key(s). Otherwise, the key(s) is (or are) pressed down and never released.
+
+
+\begin{DoxyParams}{Parameters}
+{\em keybd\+Cmd} & The high-\/level command to the keyboard. \\
+\hline
+{\em release\+Keys} & If this is true, the key(s) will be released after being pressed. Otherwise, it (or they) will just be pressed. \\
+\hline
+{\em hold\+Shift} & If set to true, shift will be held before all keys in the keybd\+Cmd will be added, then at the end it will be released. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+kybrd\+Ctrl.\+h\item 
+kybrd\+Ctrl.\+cpp\end{DoxyCompactItemize}

@@ -1,0 +1,105 @@
+\hypertarget{class_mouse_ctrl}{\section{Mouse\+Ctrl Class Reference}
+\label{class_mouse_ctrl}\index{Mouse\+Ctrl@{Mouse\+Ctrl}}
+}
+
+
+{\ttfamily \#include $<$Mouse\+Ctrl.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mouse_ctrl_a60b729b0170498e6f0b56637d586b294}{set\+Scroll\+Rate} (int rate)
+\item 
+void \hyperlink{class_mouse_ctrl_a22affd642697e70425368142cf1c6527}{set\+Min\+Move\+X\+Time\+Delta} (unsigned int rate)
+\item 
+void \hyperlink{class_mouse_ctrl_a2775b509570ae17f165cb3491d9147eb}{set\+Min\+Move\+Y\+Time\+Delta} (unsigned int rate)
+\item 
+unsigned int \hyperlink{class_mouse_ctrl_a5f85704cc4b15be0c6371dd5cab7b958}{convert\+Rate\+To\+Delta} (unsigned int rate)
+\item 
+void \hyperlink{class_mouse_ctrl_aa07b6fbaa2ce6badb70176df214600b1}{send\+Command} (mouse\+Cmds mouse\+Cmd, int mouse\+Rate\+If\+Move=0)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Handles sending mouse data to Windows. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_mouse_ctrl_a5f85704cc4b15be0c6371dd5cab7b958}{\index{Mouse\+Ctrl@{Mouse\+Ctrl}!convert\+Rate\+To\+Delta@{convert\+Rate\+To\+Delta}}
+\index{convert\+Rate\+To\+Delta@{convert\+Rate\+To\+Delta}!Mouse\+Ctrl@{Mouse\+Ctrl}}
+\subsubsection[{convert\+Rate\+To\+Delta}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int Mouse\+Ctrl\+::convert\+Rate\+To\+Delta (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{rate}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_ctrl_a5f85704cc4b15be0c6371dd5cab7b958}
+Abstracts function for linearizing rate into velocity
+
+
+\begin{DoxyParams}{Parameters}
+{\em rate} & The rate to convert into a velocity (from 0 to 100) \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_ctrl_aa07b6fbaa2ce6badb70176df214600b1}{\index{Mouse\+Ctrl@{Mouse\+Ctrl}!send\+Command@{send\+Command}}
+\index{send\+Command@{send\+Command}!Mouse\+Ctrl@{Mouse\+Ctrl}}
+\subsubsection[{send\+Command}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Ctrl\+::send\+Command (
+\begin{DoxyParamCaption}
+\item[{mouse\+Cmds}]{mouse\+Cmd, }
+\item[{int}]{mouse\+Rate\+If\+Move = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_ctrl_aa07b6fbaa2ce6badb70176df214600b1}
+Sends a mouse command to the O\+S. This includes movement commands. The mouse\+Rate\+If\+Move parameter sets the rate of the mouse movement if it is nonnegative.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mouse\+Cmd} & The mouse command to send. \\
+\hline
+{\em mouse\+Rate\+If\+Move} & The new rate of the mouse movement. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_ctrl_a22affd642697e70425368142cf1c6527}{\index{Mouse\+Ctrl@{Mouse\+Ctrl}!set\+Min\+Move\+X\+Time\+Delta@{set\+Min\+Move\+X\+Time\+Delta}}
+\index{set\+Min\+Move\+X\+Time\+Delta@{set\+Min\+Move\+X\+Time\+Delta}!Mouse\+Ctrl@{Mouse\+Ctrl}}
+\subsubsection[{set\+Min\+Move\+X\+Time\+Delta}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Ctrl\+::set\+Min\+Move\+X\+Time\+Delta (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{rate}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_ctrl_a22affd642697e70425368142cf1c6527}
+Sets the rate at which the cursor should move in the X axis.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rate} & The rate of cursor movement in the X axis, between 0 and 100. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_ctrl_a2775b509570ae17f165cb3491d9147eb}{\index{Mouse\+Ctrl@{Mouse\+Ctrl}!set\+Min\+Move\+Y\+Time\+Delta@{set\+Min\+Move\+Y\+Time\+Delta}}
+\index{set\+Min\+Move\+Y\+Time\+Delta@{set\+Min\+Move\+Y\+Time\+Delta}!Mouse\+Ctrl@{Mouse\+Ctrl}}
+\subsubsection[{set\+Min\+Move\+Y\+Time\+Delta}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Ctrl\+::set\+Min\+Move\+Y\+Time\+Delta (
+\begin{DoxyParamCaption}
+\item[{unsigned int}]{rate}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_ctrl_a2775b509570ae17f165cb3491d9147eb}
+Sets the rate at which the cursor should move in the Y axis.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rate} & The rate of cursor movement in the Y axis, between 0 and 100. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_ctrl_a60b729b0170498e6f0b56637d586b294}{\index{Mouse\+Ctrl@{Mouse\+Ctrl}!set\+Scroll\+Rate@{set\+Scroll\+Rate}}
+\index{set\+Scroll\+Rate@{set\+Scroll\+Rate}!Mouse\+Ctrl@{Mouse\+Ctrl}}
+\subsubsection[{set\+Scroll\+Rate}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Ctrl\+::set\+Scroll\+Rate (
+\begin{DoxyParamCaption}
+\item[{int}]{rate}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_ctrl_a60b729b0170498e6f0b56637d586b294}
+Sets the scroll rate to control speed and direction.
+
+
+\begin{DoxyParams}{Parameters}
+{\em rate} & The rate of scrolling, between -\/120 and 120. A negative value represents a downward scroll, positive is upward. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Mouse\+Ctrl.\+h\item 
+Mouse\+Ctrl.\+cpp\end{DoxyCompactItemize}

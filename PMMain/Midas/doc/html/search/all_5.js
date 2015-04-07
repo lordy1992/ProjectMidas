@@ -1,0 +1,22 @@
+var searchData=
+[
+  ['gesture',['gesture',['../structgesture.html',1,'']]],
+  ['gesturefilter',['GestureFilter',['../class_gesture_filter.html',1,'GestureFilter'],['../class_gesture_filter.html#a7ec8f885370e67e108bd1f767e9f2769',1,'GestureFilter::GestureFilter()']]],
+  ['gestureholdmodeaction',['GestureHoldModeAction',['../class_gesture_hold_mode_action.html',1,'']]],
+  ['gestureseqrecorder',['GestureSeqRecorder',['../class_gesture_seq_recorder.html',1,'GestureSeqRecorder'],['../class_gesture_seq_recorder.html#a89617ae8b04c44b33006f14c388ed248',1,'GestureSeqRecorder::GestureSeqRecorder()']]],
+  ['gesturesignaller',['GestureSignaller',['../class_gesture_signaller.html',1,'']]],
+  ['getavgcount',['getAvgCount',['../class_averaging_filter.html#a41cf584c7e71f657edce9e26286a5dac',1,'AveragingFilter']]],
+  ['getdeviceerror',['getDeviceError',['../class_myo_device.html#a14db6f7115e407711091beed9b9992a6',1,'MyoDevice::getDeviceError()'],['../class_test_wearable_class.html#ae6ba1ecadd22c18ed4ef7cf119bad740',1,'TestWearableClass::getDeviceError()'],['../class_wearable_device.html#a1c0b4d47e9949bfcfc7111a2615538c0',1,'WearableDevice::getDeviceError()']]],
+  ['getdevicestatus',['getDeviceStatus',['../class_wearable_device.html#a118d52d7bf27041ce997feb2eac5133d',1,'WearableDevice']]],
+  ['getfiltererror',['getFilterError',['../class_filter.html#a833dd72086569814cab3316c9354063a',1,'Filter']]],
+  ['getfilters',['getFilters',['../class_filter_pipeline.html#aca193c07f273ee7ceb2c4f296b3e6b2f',1,'FilterPipeline']]],
+  ['getfilterstatus',['getFilterStatus',['../class_filter.html#a547427e3f17dbb64a401881bed56088c',1,'Filter']]],
+  ['getgestureseqrecorder',['getGestureSeqRecorder',['../class_gesture_filter.html#af77130b2c3dbaa45a78ea6aaa39152dd',1,'GestureFilter']]],
+  ['getinput',['getInput',['../class_filter.html#a8890993e559dc8b54c058b2666264ae8',1,'Filter']]],
+  ['getisconnected',['getIsConnected',['../class_shared_command_data.html#a20c85aaabaf7ab3d86f111bda016229a',1,'SharedCommandData']]],
+  ['getmode',['getMode',['../class_control_state.html#a882dd0cbcfa5cd1fae66cd18df270031',1,'ControlState']]],
+  ['getoutput',['getOutput',['../class_filter.html#a3da920ba56f06a1ff15f6da0f298f8db',1,'Filter']]],
+  ['getprogressmaxdeltatime',['getProgressMaxDeltaTime',['../class_gesture_seq_recorder.html#aa5de7ea6101ab22ba2a14f0f718a6370',1,'GestureSeqRecorder']]],
+  ['getrssi',['getRssi',['../class_shared_command_data.html#a82c2de924b98658e0fb43ffc6d8dd4ad',1,'SharedCommandData']]],
+  ['getvelocity',['getVelocity',['../class_shared_command_data.html#a6fef1c13e01cda4c6f5ac0687f0e3ffd',1,'SharedCommandData']]]
+];

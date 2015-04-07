@@ -1,0 +1,70 @@
+\hypertarget{class_main_g_u_i}{\section{Main\+G\+U\+I Class Reference}
+\label{class_main_g_u_i}\index{Main\+G\+U\+I@{Main\+G\+U\+I}}
+}
+
+
+{\ttfamily \#include $<$Main\+G\+U\+I.\+h$>$}
+
+Inheritance diagram for Main\+G\+U\+I\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{class_main_g_u_i}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_main_g_u_i_ac1cdc23a4db9ff808519ca15de19ac0f}{void {\bfseries toggle\+Keyboard} ()}\label{class_main_g_u_i_ac1cdc23a4db9ff808519ca15de19ac0f}
+
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_main_g_u_i_a5eb69632ddffc27a14b0eaa03beca8cb}{Main\+G\+U\+I} (\hyperlink{class_midas_thread}{Midas\+Thread} $\ast$main\+Thread, \hyperlink{class_profile_manager}{Profile\+Manager} $\ast$pm, int dead\+Zone\+Rad)
+\item 
+\hypertarget{class_main_g_u_i_a0b511adc61c2c2c9cfdaa41165ac6087}{void {\bfseries connect\+Signaller\+To\+Profile\+Widgets} (\hyperlink{class_profile_signaller}{Profile\+Signaller} $\ast$signaller)}\label{class_main_g_u_i_a0b511adc61c2c2c9cfdaa41165ac6087}
+
+\item 
+\hypertarget{class_main_g_u_i_ada2cc10a2e2ef8b05e3bd01a437730f7}{void {\bfseries connect\+Signaller\+To\+Info\+Indicator} (\hyperlink{class_gesture_signaller}{Gesture\+Signaller} $\ast$signaller)}\label{class_main_g_u_i_ada2cc10a2e2ef8b05e3bd01a437730f7}
+
+\item 
+\hypertarget{class_main_g_u_i_a31c4c557a74659225dcb453d1cfb2970}{void {\bfseries connect\+Signaller\+To\+Sequence\+Displayer} (\hyperlink{class_gesture_signaller}{Gesture\+Signaller} $\ast$signaller)}\label{class_main_g_u_i_a31c4c557a74659225dcb453d1cfb2970}
+
+\item 
+\hypertarget{class_main_g_u_i_a1335aa0c5aefba52f38a5ab4f6e35e6d}{void {\bfseries connect\+Signaller\+To\+Pose\+Displayer} (\hyperlink{class_gesture_signaller}{Gesture\+Signaller} $\ast$signaller)}\label{class_main_g_u_i_a1335aa0c5aefba52f38a5ab4f6e35e6d}
+
+\item 
+\hypertarget{class_main_g_u_i_a06813434f157b4813f82293a1a8a450e}{void {\bfseries connect\+Signaller\+To\+Keyboard\+Toggle} (\hyperlink{class_gesture_signaller}{Gesture\+Signaller} $\ast$signaller)}\label{class_main_g_u_i_a06813434f157b4813f82293a1a8a450e}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_main_g_u_i}{Main\+G\+U\+I} class is the parent G\+U\+I of all the widgets used in Midas. It contains the mouse indicator, sequence displayer, and info indicator. The mouse indicator shows the relative mouse velocity, the sequence displayer shows the gesture sequences, and the info indicator shows the current status of Midas. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_main_g_u_i_a5eb69632ddffc27a14b0eaa03beca8cb}{\index{Main\+G\+U\+I@{Main\+G\+U\+I}!Main\+G\+U\+I@{Main\+G\+U\+I}}
+\index{Main\+G\+U\+I@{Main\+G\+U\+I}!Main\+G\+U\+I@{Main\+G\+U\+I}}
+\subsubsection[{Main\+G\+U\+I}]{\setlength{\rightskip}{0pt plus 5cm}Main\+G\+U\+I\+::\+Main\+G\+U\+I (
+\begin{DoxyParamCaption}
+\item[{{\bf Midas\+Thread} $\ast$}]{main\+Thread, }
+\item[{{\bf Profile\+Manager} $\ast$}]{pm, }
+\item[{int}]{dead\+Zone\+Rad}
+\end{DoxyParamCaption}
+)}}\label{class_main_g_u_i_a5eb69632ddffc27a14b0eaa03beca8cb}
+The constructor for the \hyperlink{class_main_g_u_i}{Main\+G\+U\+I}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em main\+Thread} & The main Midas thread; used to pass information between the G\+U\+I and back-\/end. \\
+\hline
+{\em dead\+Zone\+Rad} & The radius of the dead zone in the mouse indicator. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Main\+G\+U\+I.\+h\item 
+Main\+G\+U\+I.\+cpp\end{DoxyCompactItemize}

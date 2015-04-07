@@ -1,0 +1,178 @@
+\hypertarget{class_gesture_seq_recorder}{\section{Gesture\+Seq\+Recorder Class Reference}
+\label{class_gesture_seq_recorder}\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_gesture_seq_recorder_a89617ae8b04c44b33006f14c388ed248}{Gesture\+Seq\+Recorder} (\hyperlink{class_control_state}{Control\+State} $\ast$control\+State\+Handle, \hyperlink{class_main_g_u_i}{Main\+G\+U\+I} $\ast$main\+Gui\+Handle, \hyperlink{class_sequence_image_manager}{Sequence\+Image\+Manager} image\+Manager)
+\item 
+\hypertarget{class_gesture_seq_recorder_a3aab363a46e6c19c494de8572c039577}{void {\bfseries unregister\+All} ()}\label{class_gesture_seq_recorder_a3aab363a46e6c19c494de8572c039577}
+
+\item 
+Sequence\+Status \hyperlink{class_gesture_seq_recorder_a5a2febae745433a770227ab6bdeb7630}{register\+Sequence} (midas\+Mode mode, sequence seq, \hyperlink{structcommand_data}{command\+Data} seq\+Response, std\+::string name)
+\item 
+Sequence\+Status \hyperlink{class_gesture_seq_recorder_aa64d6f130b1937fea36a8d6aa4362c6b}{progress\+Sequence} (Pose\+::\+Type \hyperlink{structgesture}{gesture}, \hyperlink{class_control_state}{Control\+State} state, \hyperlink{structcommand_data}{command\+Data} \&response)
+\item 
+void \hyperlink{class_gesture_seq_recorder_ad67f5a6b8d22d6895b42e4ec47be3562}{progress\+Sequence\+Time} (int delta, \hyperlink{structcommand_data}{command\+Data} \&response)
+\item 
+void \hyperlink{class_gesture_seq_recorder_a32b78602089532a166879ed9a27fac2e}{check\+Progress\+Base\+Time} ()
+\item 
+void \hyperlink{class_gesture_seq_recorder_a0692d367b4429900c3ab05dfa36990fa}{empty\+Active\+Sequences} ()
+\item 
+void \hyperlink{class_gesture_seq_recorder_a0a5fd083e4e0ed75d6f07415a6e5cea1}{set\+Progress\+Max\+Delta\+Time} (clock\+\_\+t new\+Time)
+\item 
+clock\+\_\+t \hyperlink{class_gesture_seq_recorder_aa5de7ea6101ab22ba2a14f0f718a6370}{get\+Progress\+Max\+Delta\+Time} (void)
+\item 
+void \hyperlink{class_gesture_seq_recorder_a65164a6763e30c37677cefe5aff5a36b}{print\+Status} (bool verbose=false)
+\item 
+void \hyperlink{class_gesture_seq_recorder_ad27d85ae4783eda851c692ffb542efdb}{update\+Gui\+Sequences} ()
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_gesture_seq_recorder_a89617ae8b04c44b33006f14c388ed248}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{Gesture\+Seq\+Recorder}]{\setlength{\rightskip}{0pt plus 5cm}Gesture\+Seq\+Recorder\+::\+Gesture\+Seq\+Recorder (
+\begin{DoxyParamCaption}
+\item[{{\bf Control\+State} $\ast$}]{control\+State\+Handle, }
+\item[{{\bf Main\+G\+U\+I} $\ast$}]{main\+Gui\+Handle, }
+\item[{{\bf Sequence\+Image\+Manager}}]{image\+Manager}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a89617ae8b04c44b33006f14c388ed248}
+Constructors/\+Destructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_gesture_seq_recorder_a32b78602089532a166879ed9a27fac2e}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!check\+Progress\+Base\+Time@{check\+Progress\+Base\+Time}}
+\index{check\+Progress\+Base\+Time@{check\+Progress\+Base\+Time}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{check\+Progress\+Base\+Time}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::check\+Progress\+Base\+Time (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a32b78602089532a166879ed9a27fac2e}
+Called to check against progress\+Base\+Time if any sequences are active, so that a sequence can be cleared if timed out, without an asynchronous gesture update. \hypertarget{class_gesture_seq_recorder_a0692d367b4429900c3ab05dfa36990fa}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!empty\+Active\+Sequences@{empty\+Active\+Sequences}}
+\index{empty\+Active\+Sequences@{empty\+Active\+Sequences}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{empty\+Active\+Sequences}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::empty\+Active\+Sequences (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a0692d367b4429900c3ab05dfa36990fa}
+Empty the references to sequences that were active, and set progress of each to 0. \hypertarget{class_gesture_seq_recorder_aa5de7ea6101ab22ba2a14f0f718a6370}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!get\+Progress\+Max\+Delta\+Time@{get\+Progress\+Max\+Delta\+Time}}
+\index{get\+Progress\+Max\+Delta\+Time@{get\+Progress\+Max\+Delta\+Time}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{get\+Progress\+Max\+Delta\+Time}]{\setlength{\rightskip}{0pt plus 5cm}clock\+\_\+t Gesture\+Seq\+Recorder\+::get\+Progress\+Max\+Delta\+Time (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_aa5de7ea6101ab22ba2a14f0f718a6370}
+Accessor.
+
+\begin{DoxyReturn}{Returns}
+Value of progress\+Max\+Delta\+Time. 
+\end{DoxyReturn}
+\hypertarget{class_gesture_seq_recorder_a65164a6763e30c37677cefe5aff5a36b}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!print\+Status@{print\+Status}}
+\index{print\+Status@{print\+Status}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{print\+Status}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::print\+Status (
+\begin{DoxyParamCaption}
+\item[{bool}]{verbose = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a65164a6763e30c37677cefe5aff5a36b}
+Print out a list of all active sequences, and possibly their progress, and next gesture required to proceed!
+
+
+\begin{DoxyParams}{Parameters}
+{\em verbose} & If true, prints progress and next gesture in sequence on top of active status.\\
+\hline
+\end{DoxyParams}
+T\+O\+D\+O\+: This is the beginning of the code which overlays graphically action data to the user. Just using printing temporarily. \hypertarget{class_gesture_seq_recorder_aa64d6f130b1937fea36a8d6aa4362c6b}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!progress\+Sequence@{progress\+Sequence}}
+\index{progress\+Sequence@{progress\+Sequence}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{progress\+Sequence}]{\setlength{\rightskip}{0pt plus 5cm}Sequence\+Status Gesture\+Seq\+Recorder\+::progress\+Sequence (
+\begin{DoxyParamCaption}
+\item[{Pose\+::\+Type}]{gesture, }
+\item[{{\bf Control\+State}}]{state, }
+\item[{{\bf command\+Data} \&}]{response}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_aa64d6f130b1937fea36a8d6aa4362c6b}
+Given a gesture, attempt to progress through any registered sequences, that match the mode of the control\+State.
+
+
+\begin{DoxyParams}{Parameters}
+{\em gesture} & The recorded gesture that is being used to compare with the registered sequences. \\
+\hline
+{\em state} & The \hyperlink{class_control_state}{Control\+State} handle to determine the current midas\+Mode of the system, thereby knowing which registered sequence list to search through. \\
+\hline
+{\em response} & The \hyperlink{structcommand_data}{command\+Data} that is populated by the function. Holding a type of N\+O\+N\+E means that no sequence was completed. However, if it's not N\+O\+N\+E, it holds the response that was registered against the completed sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sequence\+Status associated status information to inform caller of success/lack there of 
+\end{DoxyReturn}
+\hypertarget{class_gesture_seq_recorder_ad67f5a6b8d22d6895b42e4ec47be3562}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!progress\+Sequence\+Time@{progress\+Sequence\+Time}}
+\index{progress\+Sequence\+Time@{progress\+Sequence\+Time}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{progress\+Sequence\+Time}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::progress\+Sequence\+Time (
+\begin{DoxyParamCaption}
+\item[{int}]{delta, }
+\item[{{\bf command\+Data} \&}]{response}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_ad67f5a6b8d22d6895b42e4ec47be3562}
+To handle tap/hold differentiation, this should be called to notify the Seq\+Recorder that a certain amount of time has passed. If a certain amount of time passes while a user is holding a specific pose, then they are deemed to be holding it, otherwise they have tapped it. This function will continually decrement the hold timer, and if it reaches 0, it will clear any active sequences that were supposed to have a 'tap' action, and will progress any sequences that have a 'hold' action.
+
+
+\begin{DoxyParams}{Parameters}
+{\em delta} & The amount of time in ms indicated to have passed. \\
+\hline
+{\em response} & The \hyperlink{structcommand_data}{command\+Data} that is populated by the function. Holding a type of N\+O\+N\+E means that no sequence was completed. However, if it's not N\+O\+N\+E, it holds the response that was registered against the completed sequence. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sequence\+Status The status of the progression. S\+U\+C\+C\+E\+S\+S is typical and wanted. 
+\end{DoxyReturn}
+\hypertarget{class_gesture_seq_recorder_a5a2febae745433a770227ab6bdeb7630}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!register\+Sequence@{register\+Sequence}}
+\index{register\+Sequence@{register\+Sequence}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{register\+Sequence}]{\setlength{\rightskip}{0pt plus 5cm}Sequence\+Status Gesture\+Seq\+Recorder\+::register\+Sequence (
+\begin{DoxyParamCaption}
+\item[{midas\+Mode}]{mode, }
+\item[{sequence}]{seq, }
+\item[{{\bf command\+Data}}]{seq\+Response, }
+\item[{std\+::string}]{name}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a5a2febae745433a770227ab6bdeb7630}
+Register a sequence of gestures with this call. A registered sequence is associated with a midas\+Mode. When in that mode, any progression of gestures from the Myo will be compared to all associated and registered sequences, and if any are succesfully completed, the registered \hyperlink{structcommand_data}{command\+Data} will be returned to the caller. N\+O\+T\+E\+: Can only register sequences with Seq\+Elements of Pose\+Length I\+M\+M\+E\+D\+I\+A\+T\+E if the sequence is of length one. This could be changed in the future if deemed necessary, but this allows progress\+Sequence to be unnafected by this special case.
+
+
+\begin{DoxyParams}{Parameters}
+{\em mode} & The midas\+Mode that the caller is registering the sequence against. \\
+\hline
+{\em seq} & The sequence (std\+::vector$<$\+Pose\+::\+Type$>$) of gestures to register \\
+\hline
+{\em seq\+Response} & The desired response to activate if the sequence is recognized while in the registered mode. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sequence\+Status associated status information to inform caller of success/lack there of 
+\end{DoxyReturn}
+\hypertarget{class_gesture_seq_recorder_a0a5fd083e4e0ed75d6f07415a6e5cea1}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!set\+Progress\+Max\+Delta\+Time@{set\+Progress\+Max\+Delta\+Time}}
+\index{set\+Progress\+Max\+Delta\+Time@{set\+Progress\+Max\+Delta\+Time}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{set\+Progress\+Max\+Delta\+Time}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::set\+Progress\+Max\+Delta\+Time (
+\begin{DoxyParamCaption}
+\item[{clock\+\_\+t}]{new\+Time}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_a0a5fd083e4e0ed75d6f07415a6e5cea1}
+Modifier.
+
+
+\begin{DoxyParams}{Parameters}
+{\em new\+Time} & The new progress\+Max\+Delta\+Time. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_gesture_seq_recorder_ad27d85ae4783eda851c692ffb542efdb}{\index{Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}!update\+Gui\+Sequences@{update\+Gui\+Sequences}}
+\index{update\+Gui\+Sequences@{update\+Gui\+Sequences}!Gesture\+Seq\+Recorder@{Gesture\+Seq\+Recorder}}
+\subsubsection[{update\+Gui\+Sequences}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Seq\+Recorder\+::update\+Gui\+Sequences (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_seq_recorder_ad27d85ae4783eda851c692ffb542efdb}
+Updates the sequence displayer G\+U\+I with the latest sequence information. This should be called upon any update to the sequences. 
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Gesture\+Seq\+Recorder.\+h\item 
+Gesture\+Seq\+Recorder.\+cpp\end{DoxyCompactItemize}

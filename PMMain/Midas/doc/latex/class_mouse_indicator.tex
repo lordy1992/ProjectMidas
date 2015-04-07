@@ -1,0 +1,119 @@
+\hypertarget{class_mouse_indicator}{\section{Mouse\+Indicator Class Reference}
+\label{class_mouse_indicator}\index{Mouse\+Indicator@{Mouse\+Indicator}}
+}
+
+
+{\ttfamily \#include $<$Mouse\+Indicator.\+h$>$}
+
+Inheritance diagram for Mouse\+Indicator\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_mouse_indicator}
+\end{center}
+\end{figure}
+\subsection*{Public Slots}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mouse_indicator_a11748453ba0171fadd0e6b73667f84b0}{handle\+Update\+Cursor\+Pos} (int percent\+X, int percent\+Y)
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_mouse_indicator_a8e6ee604141f846c178c0e0d13d20ce4}{Mouse\+Indicator} (\hyperlink{class_midas_thread}{Midas\+Thread} $\ast$main\+Thread, int dead\+Zone\+Rad, int widget\+Width=M\+O\+U\+S\+E\+\_\+\+I\+N\+D\+I\+C\+A\+T\+O\+R\+\_\+\+S\+I\+Z\+E, int widget\+Height=M\+O\+U\+S\+E\+\_\+\+I\+N\+D\+I\+C\+A\+T\+O\+R\+\_\+\+S\+I\+Z\+E, Q\+Widget $\ast$parent=0)
+\item 
+\hypertarget{class_mouse_indicator_a019f2fb2ad443a461f1b937e8aaa343c}{Q\+Size {\bfseries size\+Hint} () const }\label{class_mouse_indicator_a019f2fb2ad443a461f1b937e8aaa343c}
+
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_mouse_indicator_a64de61642d4f219be8e468b654e833b6}{paint\+Event} (Q\+Paint\+Event $\ast$event)
+\item 
+void \hyperlink{class_mouse_indicator_af429d45e7abc7079fac4b0574dd4b983}{resize\+Event} (Q\+Resize\+Event $\ast$event)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+The \hyperlink{class_mouse_indicator}{Mouse\+Indicator} class represents a circular G\+U\+I which tracks Midas mouse velocity. The G\+U\+I supports a 'dead zone' for the mouse, which looks like a smaller circle within the display. It shows a small cursor that moves about that represents the current mouse velocity. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_mouse_indicator_a8e6ee604141f846c178c0e0d13d20ce4}{\index{Mouse\+Indicator@{Mouse\+Indicator}!Mouse\+Indicator@{Mouse\+Indicator}}
+\index{Mouse\+Indicator@{Mouse\+Indicator}!Mouse\+Indicator@{Mouse\+Indicator}}
+\subsubsection[{Mouse\+Indicator}]{\setlength{\rightskip}{0pt plus 5cm}Mouse\+Indicator\+::\+Mouse\+Indicator (
+\begin{DoxyParamCaption}
+\item[{{\bf Midas\+Thread} $\ast$}]{main\+Thread, }
+\item[{int}]{dead\+Zone\+Rad, }
+\item[{int}]{widget\+Width = {\ttfamily MOUSE\+\_\+INDICATOR\+\_\+SIZE}, }
+\item[{int}]{widget\+Height = {\ttfamily MOUSE\+\_\+INDICATOR\+\_\+SIZE}, }
+\item[{Q\+Widget $\ast$}]{parent = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)}}\label{class_mouse_indicator_a8e6ee604141f846c178c0e0d13d20ce4}
+The constructor for the \hyperlink{class_mouse_indicator}{Mouse\+Indicator}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em main\+Thread} & The main thread of the Midas application; used to retrieve mouse velocity information. \\
+\hline
+{\em dead\+Zone\+Rad} & The radius of the dead zone, expressed as a percentage of the range of possible velocity values. \\
+\hline
+{\em widget\+Width} & The width of the widget. \\
+\hline
+{\em widget\+Height} & The height of the widget. \\
+\hline
+{\em parent} & The parent widget. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_mouse_indicator_a11748453ba0171fadd0e6b73667f84b0}{\index{Mouse\+Indicator@{Mouse\+Indicator}!handle\+Update\+Cursor\+Pos@{handle\+Update\+Cursor\+Pos}}
+\index{handle\+Update\+Cursor\+Pos@{handle\+Update\+Cursor\+Pos}!Mouse\+Indicator@{Mouse\+Indicator}}
+\subsubsection[{handle\+Update\+Cursor\+Pos}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Indicator\+::handle\+Update\+Cursor\+Pos (
+\begin{DoxyParamCaption}
+\item[{int}]{percent\+X, }
+\item[{int}]{percent\+Y}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [slot]}}}\label{class_mouse_indicator_a11748453ba0171fadd0e6b73667f84b0}
+A slot that updates the cursor position based on the provided 'velocity percentages'. These velocity percentages are expressed as a percent of the maximum velocity, ranging from -\/100 to 100, where -\/100 represents the maximum velocity in the negative direction and +100 represents the maximum velocity in the positive direction.
+
+
+\begin{DoxyParams}{Parameters}
+{\em percent\+X} & A percent of the maximum x velocity, where the sign indicates direction, between -\/100 and 100. \\
+\hline
+{\em percent\+Y} & A percent of the maximum y velocity, where the sign indicates direction, between -\/100 and 100. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_indicator_a64de61642d4f219be8e468b654e833b6}{\index{Mouse\+Indicator@{Mouse\+Indicator}!paint\+Event@{paint\+Event}}
+\index{paint\+Event@{paint\+Event}!Mouse\+Indicator@{Mouse\+Indicator}}
+\subsubsection[{paint\+Event}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Indicator\+::paint\+Event (
+\begin{DoxyParamCaption}
+\item[{Q\+Paint\+Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mouse_indicator_a64de61642d4f219be8e468b654e833b6}
+The event that is called when the G\+U\+I needs to paint itself.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The information about the paint event. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_mouse_indicator_af429d45e7abc7079fac4b0574dd4b983}{\index{Mouse\+Indicator@{Mouse\+Indicator}!resize\+Event@{resize\+Event}}
+\index{resize\+Event@{resize\+Event}!Mouse\+Indicator@{Mouse\+Indicator}}
+\subsubsection[{resize\+Event}]{\setlength{\rightskip}{0pt plus 5cm}void Mouse\+Indicator\+::resize\+Event (
+\begin{DoxyParamCaption}
+\item[{Q\+Resize\+Event $\ast$}]{event}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_mouse_indicator_af429d45e7abc7079fac4b0574dd4b983}
+The event that is called when the widget is resized.
+
+
+\begin{DoxyParams}{Parameters}
+{\em event} & The information about the resize event. \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Mouse\+Indicator.\+h\item 
+Mouse\+Indicator.\+cpp\end{DoxyCompactItemize}

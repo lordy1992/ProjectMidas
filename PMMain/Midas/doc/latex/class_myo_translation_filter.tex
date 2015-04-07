@@ -1,0 +1,105 @@
+\hypertarget{class_myo_translation_filter}{\section{Myo\+Translation\+Filter Class Reference}
+\label{class_myo_translation_filter}\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+}
+
+
+{\ttfamily \#include $<$Myo\+Translation\+Filter.\+h$>$}
+
+Inheritance diagram for Myo\+Translation\+Filter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_myo_translation_filter}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_myo_translation_filter_aacbdcc20b57a927b758770e82111ce12}{Myo\+Translation\+Filter} (\hyperlink{class_control_state}{Control\+State} $\ast$control\+State)
+\item 
+void \hyperlink{class_myo_translation_filter_a9f72c6ac36ed5ea26574db4b207a0597}{process} ()
+\item 
+filter\+Error \hyperlink{class_myo_translation_filter_a1e1d3d6a3f1bf0d82d17367fc20d704d}{update\+Based\+On\+Profile} (\hyperlink{class_profile_manager}{Profile\+Manager} \&pm, std\+::string name)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static float \hyperlink{class_myo_translation_filter_a99537f31b135a0378f8b8c335c51941c}{calc\+Ring\+Delta} (float current, float base)
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Consult \hyperlink{_filter_8h_source}{Filter.\+h} for concepts regarding Filters. Handles translating from Myo orientation data to mouse movement information. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_myo_translation_filter_aacbdcc20b57a927b758770e82111ce12}{\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}!Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}!Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+\subsubsection[{Myo\+Translation\+Filter}]{\setlength{\rightskip}{0pt plus 5cm}Myo\+Translation\+Filter\+::\+Myo\+Translation\+Filter (
+\begin{DoxyParamCaption}
+\item[{{\bf Control\+State} $\ast$}]{control\+State}
+\end{DoxyParamCaption}
+)}}\label{class_myo_translation_filter_aacbdcc20b57a927b758770e82111ce12}
+The constructor for \hyperlink{class_myo_translation_filter}{Myo\+Translation\+Filter}.
+
+
+\begin{DoxyParams}{Parameters}
+{\em control\+State} & A handle to \hyperlink{class_control_state}{Control\+State}, to keep track of the application state. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_myo_translation_filter_a99537f31b135a0378f8b8c335c51941c}{\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}!calc\+Ring\+Delta@{calc\+Ring\+Delta}}
+\index{calc\+Ring\+Delta@{calc\+Ring\+Delta}!Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+\subsubsection[{calc\+Ring\+Delta}]{\setlength{\rightskip}{0pt plus 5cm}float Myo\+Translation\+Filter\+::calc\+Ring\+Delta (
+\begin{DoxyParamCaption}
+\item[{float}]{current, }
+\item[{float}]{base}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}}\label{class_myo_translation_filter_a99537f31b135a0378f8b8c335c51941c}
+Calculates the delta (in radians) between a base angle and a current angle, with respect to a ring. The pupose is to ensure that wrapping around the crossover section of the ring has no effect on the output which should safely range from -\/pi to +pi.
+
+
+\begin{DoxyParams}{Parameters}
+{\em current} & The current angle (in radians) that is being compared (from -\/\+Pi to pi rad) \\
+\hline
+{\em base} & The base angle (in radians) that is being compared against \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a value from -\/pi to +pi representing the delta between two input angles 
+\end{DoxyReturn}
+\hypertarget{class_myo_translation_filter_a9f72c6ac36ed5ea26574db4b207a0597}{\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}!process@{process}}
+\index{process@{process}!Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+\subsubsection[{process}]{\setlength{\rightskip}{0pt plus 5cm}void Myo\+Translation\+Filter\+::process (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_myo_translation_filter_a9f72c6ac36ed5ea26574db4b207a0597}
+Convert the supplied orientation data into mouse movement information, in the form of a percent of the total mouse velocity along both the x and y axes. 
+
+Implements \hyperlink{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{Filter}.
+
+\hypertarget{class_myo_translation_filter_a1e1d3d6a3f1bf0d82d17367fc20d704d}{\index{Myo\+Translation\+Filter@{Myo\+Translation\+Filter}!update\+Based\+On\+Profile@{update\+Based\+On\+Profile}}
+\index{update\+Based\+On\+Profile@{update\+Based\+On\+Profile}!Myo\+Translation\+Filter@{Myo\+Translation\+Filter}}
+\subsubsection[{update\+Based\+On\+Profile}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Error Myo\+Translation\+Filter\+::update\+Based\+On\+Profile (
+\begin{DoxyParamCaption}
+\item[{{\bf Profile\+Manager} \&}]{pm, }
+\item[{std\+::string}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_myo_translation_filter_a1e1d3d6a3f1bf0d82d17367fc20d704d}
+Update filters internal mechanisms if the profile changes.
+
+\begin{DoxyReturn}{Returns}
+The error code of the filter after completion. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{class_filter_a9ec2fbdbabb60c91e32048ebe386e372}{Filter}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Myo\+Translation\+Filter.\+h\item 
+Myo\+Translation\+Filter.\+cpp\end{DoxyCompactItemize}

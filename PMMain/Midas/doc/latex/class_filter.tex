@@ -1,0 +1,211 @@
+\hypertarget{class_filter}{\section{Filter Class Reference}
+\label{class_filter}\index{Filter@{Filter}}
+}
+
+
+{\ttfamily \#include $<$Filter.\+h$>$}
+
+Inheritance diagram for Filter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=1.577465cm]{class_filter}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+virtual void \hyperlink{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{process} ()=0
+\item 
+void \hyperlink{class_filter_a0d0f589585c96b4f0fcb1edb0454b958}{add\+Data\+As\+Input} (std\+::string name, boost\+::any value)
+\item 
+void \hyperlink{class_filter_a0b37fbd71bd25629f9476d61912ad038}{set\+Input} (filter\+Data\+Map input)
+\item 
+filter\+Data\+Map \hyperlink{class_filter_a3da920ba56f06a1ff15f6da0f298f8db}{get\+Output} ()
+\item 
+filter\+Status \hyperlink{class_filter_a547427e3f17dbb64a401881bed56088c}{get\+Filter\+Status} ()
+\item 
+filter\+Error \hyperlink{class_filter_a833dd72086569814cab3316c9354063a}{get\+Filter\+Error} ()
+\item 
+virtual filter\+Error \hyperlink{class_filter_a9ec2fbdbabb60c91e32048ebe386e372}{update\+Based\+On\+Profile} (\hyperlink{class_profile_manager}{Profile\+Manager} \&pm, std\+::string name)
+\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+filter\+Data\+Map \hyperlink{class_filter_a8890993e559dc8b54c058b2666264ae8}{get\+Input} ()
+\item 
+void \hyperlink{class_filter_aedef5ef76a93b8263bcb62339b7b9fa9}{set\+Output} (filter\+Data\+Map output)
+\item 
+void \hyperlink{class_filter_ac38c830a3f01c16e86b4898153df5784}{clear\+Output} (void)
+\item 
+void \hyperlink{class_filter_a7e551c2ce698025792a385ced72525db}{set\+Filter\+Status} (filter\+Status status)
+\item 
+void \hyperlink{class_filter_ab8dc20b9548391941c4ea5effce254a9}{set\+Filter\+Error} (filter\+Error error)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\hyperlink{class_filter}{Filter} is an abstract class that is a component in a data flow pipeline. It takes in named data, processes the data, and then outputs the data. Filters can act as simple functions or they can be more complex, involving state or accumulated data. 
+
+\subsection{Member Function Documentation}
+\hypertarget{class_filter_a0d0f589585c96b4f0fcb1edb0454b958}{\index{Filter@{Filter}!add\+Data\+As\+Input@{add\+Data\+As\+Input}}
+\index{add\+Data\+As\+Input@{add\+Data\+As\+Input}!Filter@{Filter}}
+\subsubsection[{add\+Data\+As\+Input}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::add\+Data\+As\+Input (
+\begin{DoxyParamCaption}
+\item[{std\+::string}]{name, }
+\item[{boost\+::any}]{value}
+\end{DoxyParamCaption}
+)}}\label{class_filter_a0d0f589585c96b4f0fcb1edb0454b958}
+Adds a new name-\/value pair to the input map of this filter. This value can be retrieved by name in the \hyperlink{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{process()} function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & The name of the parameter. \\
+\hline
+{\em value} & The value corresponding with the name. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_ac38c830a3f01c16e86b4898153df5784}{\index{Filter@{Filter}!clear\+Output@{clear\+Output}}
+\index{clear\+Output@{clear\+Output}!Filter@{Filter}}
+\subsubsection[{clear\+Output}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::clear\+Output (
+\begin{DoxyParamCaption}
+\item[{void}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_filter_ac38c830a3f01c16e86b4898153df5784}
+Clear the output of the filter. \hypertarget{class_filter_a833dd72086569814cab3316c9354063a}{\index{Filter@{Filter}!get\+Filter\+Error@{get\+Filter\+Error}}
+\index{get\+Filter\+Error@{get\+Filter\+Error}!Filter@{Filter}}
+\subsubsection[{get\+Filter\+Error}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Error Filter\+::get\+Filter\+Error (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_filter_a833dd72086569814cab3316c9354063a}
+Retrieve an error code from the filter.
+
+\begin{DoxyReturn}{Returns}
+The error code of the filter after completion. 
+\end{DoxyReturn}
+\hypertarget{class_filter_a547427e3f17dbb64a401881bed56088c}{\index{Filter@{Filter}!get\+Filter\+Status@{get\+Filter\+Status}}
+\index{get\+Filter\+Status@{get\+Filter\+Status}!Filter@{Filter}}
+\subsubsection[{get\+Filter\+Status}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Status Filter\+::get\+Filter\+Status (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_filter_a547427e3f17dbb64a401881bed56088c}
+Retrieve the status from the filter.
+
+\begin{DoxyReturn}{Returns}
+The status of the filter after completion. 
+\end{DoxyReturn}
+\hypertarget{class_filter_a8890993e559dc8b54c058b2666264ae8}{\index{Filter@{Filter}!get\+Input@{get\+Input}}
+\index{get\+Input@{get\+Input}!Filter@{Filter}}
+\subsubsection[{get\+Input}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Data\+Map Filter\+::get\+Input (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_filter_a8890993e559dc8b54c058b2666264ae8}
+Retrieve the input to the filter. Only a subclass of \hyperlink{class_filter}{Filter} can access the provided input.
+
+\begin{DoxyReturn}{Returns}
+The input to the filter. 
+\end{DoxyReturn}
+\hypertarget{class_filter_a3da920ba56f06a1ff15f6da0f298f8db}{\index{Filter@{Filter}!get\+Output@{get\+Output}}
+\index{get\+Output@{get\+Output}!Filter@{Filter}}
+\subsubsection[{get\+Output}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Data\+Map Filter\+::get\+Output (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}}\label{class_filter_a3da920ba56f06a1ff15f6da0f298f8db}
+Retrieve the output from the filter.
+
+\begin{DoxyReturn}{Returns}
+A map of name-\/value pairs. 
+\end{DoxyReturn}
+\hypertarget{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{\index{Filter@{Filter}!process@{process}}
+\index{process@{process}!Filter@{Filter}}
+\subsubsection[{process}]{\setlength{\rightskip}{0pt plus 5cm}virtual void Filter\+::process (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}}\label{class_filter_a2f7afde0413c71a3e4947a0537ca8996}
+This handles the processing of the data. It must get the named input, do something with the data, and then set the output. It is the responsibility of the implementing filter to properly set the output, status and error code before exiting this method. 
+
+Implemented in \hyperlink{class_shared_command_data_a3085d27336d75f8e1974206585f831dd}{Shared\+Command\+Data}, \hyperlink{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}{Gesture\+Filter}, \hyperlink{class_myo_translation_filter_a9f72c6ac36ed5ea26574db4b207a0597}{Myo\+Translation\+Filter}, \hyperlink{class_averaging_filter_accbc49506bc0c215ee8cb89b2a8b05f7}{Averaging\+Filter}, and \hyperlink{class_test_filter_acde9251dbdba4cd7913d3c641910a049}{Test\+Filter}.
+
+\hypertarget{class_filter_ab8dc20b9548391941c4ea5effce254a9}{\index{Filter@{Filter}!set\+Filter\+Error@{set\+Filter\+Error}}
+\index{set\+Filter\+Error@{set\+Filter\+Error}!Filter@{Filter}}
+\subsubsection[{set\+Filter\+Error}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::set\+Filter\+Error (
+\begin{DoxyParamCaption}
+\item[{filter\+Error}]{error}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_filter_ab8dc20b9548391941c4ea5effce254a9}
+Set the error code of the filter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & The error code of the filter. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_a7e551c2ce698025792a385ced72525db}{\index{Filter@{Filter}!set\+Filter\+Status@{set\+Filter\+Status}}
+\index{set\+Filter\+Status@{set\+Filter\+Status}!Filter@{Filter}}
+\subsubsection[{set\+Filter\+Status}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::set\+Filter\+Status (
+\begin{DoxyParamCaption}
+\item[{filter\+Status}]{status}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_filter_a7e551c2ce698025792a385ced72525db}
+Set the status of the filter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em status} & The status of the filter. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_a0b37fbd71bd25629f9476d61912ad038}{\index{Filter@{Filter}!set\+Input@{set\+Input}}
+\index{set\+Input@{set\+Input}!Filter@{Filter}}
+\subsubsection[{set\+Input}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::set\+Input (
+\begin{DoxyParamCaption}
+\item[{filter\+Data\+Map}]{input}
+\end{DoxyParamCaption}
+)}}\label{class_filter_a0b37fbd71bd25629f9476d61912ad038}
+Sets the input map for this filter. This can then be retrieved by the \hyperlink{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{process()} function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em input} & A map from string to boost\+::any of name-\/value pairs. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_aedef5ef76a93b8263bcb62339b7b9fa9}{\index{Filter@{Filter}!set\+Output@{set\+Output}}
+\index{set\+Output@{set\+Output}!Filter@{Filter}}
+\subsubsection[{set\+Output}]{\setlength{\rightskip}{0pt plus 5cm}void Filter\+::set\+Output (
+\begin{DoxyParamCaption}
+\item[{filter\+Data\+Map}]{output}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [protected]}}}\label{class_filter_aedef5ef76a93b8263bcb62339b7b9fa9}
+Set the output of the filter.
+
+
+\begin{DoxyParams}{Parameters}
+{\em output} & The map of name-\/value pairs. \\
+\hline
+\end{DoxyParams}
+\hypertarget{class_filter_a9ec2fbdbabb60c91e32048ebe386e372}{\index{Filter@{Filter}!update\+Based\+On\+Profile@{update\+Based\+On\+Profile}}
+\index{update\+Based\+On\+Profile@{update\+Based\+On\+Profile}!Filter@{Filter}}
+\subsubsection[{update\+Based\+On\+Profile}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Error Filter\+::update\+Based\+On\+Profile (
+\begin{DoxyParamCaption}
+\item[{{\bf Profile\+Manager} \&}]{pm, }
+\item[{std\+::string}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_filter_a9ec2fbdbabb60c91e32048ebe386e372}
+Update filters internal mechanisms if the profile changes.
+
+\begin{DoxyReturn}{Returns}
+The error code of the filter after completion. 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{class_myo_translation_filter_a1e1d3d6a3f1bf0d82d17367fc20d704d}{Myo\+Translation\+Filter}, and \hyperlink{class_gesture_filter_a65031496d7c7da33003499c75a63119c}{Gesture\+Filter}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Filter.\+h\item 
+Filter.\+cpp\end{DoxyCompactItemize}

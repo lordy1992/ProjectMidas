@@ -1,0 +1,113 @@
+\hypertarget{class_gesture_filter}{\section{Gesture\+Filter Class Reference}
+\label{class_gesture_filter}\index{Gesture\+Filter@{Gesture\+Filter}}
+}
+
+
+{\ttfamily \#include $<$Gesture\+Filter.\+h$>$}
+
+Inheritance diagram for Gesture\+Filter\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_gesture_filter}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_gesture_filter_a7ec8f885370e67e108bd1f767e9f2769}{Gesture\+Filter} (\hyperlink{class_control_state}{Control\+State} $\ast$control\+State, clock\+\_\+t time\+Del, \hyperlink{class_main_g_u_i}{Main\+G\+U\+I} $\ast$main\+Gui\+Handle)
+\item 
+void \hyperlink{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}{process} ()
+\item 
+\hypertarget{class_gesture_filter_a836ba016c9b8edf33c4511881218f7cf}{filter\+Data\+Map {\bfseries get\+Extra\+Data\+For\+S\+C\+D} ()}\label{class_gesture_filter_a836ba016c9b8edf33c4511881218f7cf}
+
+\item 
+filter\+Error \hyperlink{class_gesture_filter_a65031496d7c7da33003499c75a63119c}{update\+Based\+On\+Profile} (\hyperlink{class_profile_manager}{Profile\+Manager} \&pm, std\+::string name)
+\item 
+\hyperlink{class_gesture_seq_recorder}{Gesture\+Seq\+Recorder} $\ast$ \hyperlink{class_gesture_filter_af77130b2c3dbaa45a78ea6aaa39152dd}{get\+Gesture\+Seq\+Recorder} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_gesture_filter_ac778bc1d58a29b60b644252818a7d85f}{static void {\bfseries handle\+State\+Change} (\hyperlink{structcommand_data}{command\+Data} response)}\label{class_gesture_filter_ac778bc1d58a29b60b644252818a7d85f}
+
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+\hypertarget{class_gesture_filter_ad4a43c3f8911f427cf34b7d6d8c4e914}{void {\bfseries setup\+Callback\+Thread} (\hyperlink{class_gesture_filter}{Gesture\+Filter} $\ast$gf)}\label{class_gesture_filter_ad4a43c3f8911f427cf34b7d6d8c4e914}
+
+\item 
+\hypertarget{class_gesture_filter_adc082e2eed06986940cf0846b9f96968}{void {\bfseries callback\+Thread\+Wrapper} (\hyperlink{class_gesture_filter}{Gesture\+Filter} $\ast$gf)}\label{class_gesture_filter_adc082e2eed06986940cf0846b9f96968}
+
+\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+Consult \hyperlink{_filter_8h_source}{Filter.\+h} for concepts regarding Filters.
+
+A filter specific to the Myo armband that handles changing the application state when a certain gesture is performed, and translates from Myo gestures to mouse and keyboard commands. Furthermore, helps to prevent against false positive gesture recognition by forcing the user to hold a gesture for a certain amount of time before registering it. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_gesture_filter_a7ec8f885370e67e108bd1f767e9f2769}{\index{Gesture\+Filter@{Gesture\+Filter}!Gesture\+Filter@{Gesture\+Filter}}
+\index{Gesture\+Filter@{Gesture\+Filter}!Gesture\+Filter@{Gesture\+Filter}}
+\subsubsection[{Gesture\+Filter}]{\setlength{\rightskip}{0pt plus 5cm}Gesture\+Filter\+::\+Gesture\+Filter (
+\begin{DoxyParamCaption}
+\item[{{\bf Control\+State} $\ast$}]{control\+State, }
+\item[{clock\+\_\+t}]{time\+Del, }
+\item[{{\bf Main\+G\+U\+I} $\ast$}]{main\+Gui\+Handle}
+\end{DoxyParamCaption}
+)}}\label{class_gesture_filter_a7ec8f885370e67e108bd1f767e9f2769}
+The constructor for the \hyperlink{class_gesture_filter}{Gesture\+Filter}. It takes a \hyperlink{class_control_state}{Control\+State} handle so that the state of the application can be changed by gesture control. It sets the time that must occur before a gesture is registered.
+
+
+\begin{DoxyParams}{Parameters}
+{\em control\+State} & A handle to the \hyperlink{class_control_state}{Control\+State} object that manages application state. \\
+\hline
+{\em time\+Del} & The time that a user must hold a gesture before it is registered. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_gesture_filter_af77130b2c3dbaa45a78ea6aaa39152dd}{\index{Gesture\+Filter@{Gesture\+Filter}!get\+Gesture\+Seq\+Recorder@{get\+Gesture\+Seq\+Recorder}}
+\index{get\+Gesture\+Seq\+Recorder@{get\+Gesture\+Seq\+Recorder}!Gesture\+Filter@{Gesture\+Filter}}
+\subsubsection[{get\+Gesture\+Seq\+Recorder}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Gesture\+Seq\+Recorder}$\ast$ Gesture\+Filter\+::get\+Gesture\+Seq\+Recorder (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}}\label{class_gesture_filter_af77130b2c3dbaa45a78ea6aaa39152dd}
+return actual handle to gest\+Seq\+Recorder \hypertarget{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}{\index{Gesture\+Filter@{Gesture\+Filter}!process@{process}}
+\index{process@{process}!Gesture\+Filter@{Gesture\+Filter}}
+\subsubsection[{process}]{\setlength{\rightskip}{0pt plus 5cm}void Gesture\+Filter\+::process (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}
+This is the \hyperlink{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}{process()} function that overrides the base \hyperlink{class_filter}{Filter} class \hyperlink{class_gesture_filter_a73231d8753e5d4cf04a208131819ad2c}{process()}. It handles the logic of the filter. It translates gestures to the corresponding mouse and keyboard commands, handles changing the application state, and enforces the timing restriction that prevents, or rather reduces the chance of, false positive gestures from being recognized. 
+
+Implements \hyperlink{class_filter_a2f7afde0413c71a3e4947a0537ca8996}{Filter}.
+
+\hypertarget{class_gesture_filter_a65031496d7c7da33003499c75a63119c}{\index{Gesture\+Filter@{Gesture\+Filter}!update\+Based\+On\+Profile@{update\+Based\+On\+Profile}}
+\index{update\+Based\+On\+Profile@{update\+Based\+On\+Profile}!Gesture\+Filter@{Gesture\+Filter}}
+\subsubsection[{update\+Based\+On\+Profile}]{\setlength{\rightskip}{0pt plus 5cm}filter\+Error Gesture\+Filter\+::update\+Based\+On\+Profile (
+\begin{DoxyParamCaption}
+\item[{{\bf Profile\+Manager} \&}]{pm, }
+\item[{std\+::string}]{name}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}}\label{class_gesture_filter_a65031496d7c7da33003499c75a63119c}
+Update filters internal mechanisms if the profile changes.
+
+\begin{DoxyReturn}{Returns}
+The error code of the filter after completion. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{class_filter_a9ec2fbdbabb60c91e32048ebe386e372}{Filter}.
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+Gesture\+Filter.\+h\item 
+Gesture\+Filter.\+cpp\end{DoxyCompactItemize}
