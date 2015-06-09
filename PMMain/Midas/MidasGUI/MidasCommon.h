@@ -39,7 +39,6 @@ enum kybdGUICmds {
 /**
  * High-level keyboard commands that represent common actions.
  */
-// TODO - CHANGE THESE TO BINARY so that GestureHoldModeAction can emit more than one at once.
 enum kybdCmds {
     NO_CMD = 0,
     UNDO = 1,
