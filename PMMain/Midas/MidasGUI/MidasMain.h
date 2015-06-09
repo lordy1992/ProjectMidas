@@ -4,6 +4,6 @@
 #include "MidasThread.h"
 #include "ProfileManager.h"
 
-int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm, std::vector<ringData> *kybrdRingData);
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm);
 
 #endif /* MIDAS_MAIN_H */

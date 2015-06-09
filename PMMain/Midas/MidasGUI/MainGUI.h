@@ -7,11 +7,9 @@
 #include "InfoIndicator.h"
 #include "GestureSignaller.h"
 #include "PoseDisplayer.h"
-#include "KeyboardWidget.h"
 #include "ProfileDisplayer.h"
 #include "ProfileSignaller.h"
 #include "ProfileManager.h"
-#include "DistanceWidget.h"
 
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
@@ -38,10 +36,6 @@ public:
     void connectSignallerToInfoIndicator(GestureSignaller *signaller);
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
     void connectSignallerToPoseDisplayer(GestureSignaller *signaller);
-    void connectSignallerToKeyboardToggle(GestureSignaller *signaller);
-
-public slots:
-    void toggleKeyboard();
 
 private:
     QVBoxLayout *layout;
@@ -49,9 +43,7 @@ private:
     InfoIndicator *infoIndicator;
     SequenceDisplayer *sequenceDisplayer;
     PoseDisplayer *poseDisplayer;
-    KeyboardWidget* keyboard;
     std::vector<ProfileDisplayer*> profileWidgets;
-    DistanceWidget* distanceDisplayer;
     int totalWidth, totalHeight;
 };
 

@@ -2,15 +2,13 @@
 
 
 SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
-    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData)
+    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
     this->cntrlStateHandle = cntrlStateHandle;
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
-    this->kybrdRingData = kybrdRingData;
-    this->keyboardWidget = keyboardWidget;
     count = 0;
 }
 
@@ -88,21 +86,21 @@ void SCDDigester::digest()
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
-        unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
-        keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
-
-        if (count % 1000 == 0)
-        {
-            double angleAsDouble = (double)currKeyAngle.angle;
-            threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
-
-            // // TEMP TODO for debug only
-            // int x = currKeyAngle.x;
-            // int y = currKeyAngle.y;
-            // threadHandle->emitDebugInfo(x, y);
-        }
-
-        digestKeyboardGUIData(nextCmd);
+        //unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
+        //keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
+		//
+        //if (count % 1000 == 0)
+        //{
+        //    double angleAsDouble = (double)currKeyAngle.angle;
+        //    threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
+		//
+        //    // // TEMP TODO for debug only
+        //    // int x = currKeyAngle.x;
+        //    // int y = currKeyAngle.y;
+        //    // threadHandle->emitDebugInfo(x, y);
+        //}
+		//
+        //digestKeyboardGUIData(nextCmd);
     }
     
     count++;
@@ -110,7 +108,7 @@ void SCDDigester::digest()
 
 void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
 {
-    keyboardAngle currAngle;
+    /*keyboardAngle currAngle;
     int ringKeySelIdx;
     char key;
     if (nextCommand.type == KYBRD_GUI_CMD)
@@ -198,21 +196,11 @@ void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
         default:
             break;
         }
-    }
+    }*/
 }
 
 void SCDDigester::digestKybdCmd(commandData nextCommand)
 {
     kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
     kybrdCtrl->sendData();
-}
-
-// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
-int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
-{
-    qreal deltaAngle = 360.0 / ring->size();
-    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
-
-    // TODO: May have to change later, based on received angle
-    return (int)(adjustedAngle / deltaAngle);
 }

@@ -6,19 +6,16 @@
 #include "SCDDigester.h"
 #include "kybrdCtrl.h"
 #include "MouseCtrl.h"
-#include "ringData.h"
 #include "WearableDevice.h"
 #include <vector>
 #include <thread>
 #include "SharedCommandData.h"
 #include "MyoDevice.h"
-#include "KeyboardWidget.h"
 
 #include "MidasThread.h"
 #include "SharedCommandDataTest.h"
 #include "KybrdCtrlTest.h"
 #include "MouseCtrlTest.h"
-#include "KeyboardSettingsReader.h"
 
 using namespace std;
 
@@ -34,7 +31,7 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm, std::vector<ringData> *kybrdRingData) {
+int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
     std::cout << "starting Midas Main" << std::endl;
 
 #ifdef TEST_WEARABLE_DEVICE
@@ -79,7 +76,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm, s
 #endif
 
 #ifdef MAIN_MODE
-    SharedCommandData sharedData(kybrdRingData->size() * 2);
+    SharedCommandData sharedData;
     ControlState controlState(&sharedData);
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui, pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
@@ -88,7 +85,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm, s
     // Kick off device thread
     startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.
 
-    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl, kybrdRingData);
+    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
     
     while (true)
     {

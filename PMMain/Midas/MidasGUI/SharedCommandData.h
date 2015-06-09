@@ -8,8 +8,6 @@
 
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
-#define ANGLE_INPUT "angle"
-#define RSSI_INPUT "rssi"
 #define ISCONNECTED_INPUT "isConnected"
 
 /**
@@ -20,7 +18,7 @@
 class SharedCommandData : public Filter
 {
 public:
-    SharedCommandData(unsigned int maxKybdGuiSel) : Filter(), mouseVelocity(), kybdGuiSel(0) { this->maxKybdGuiSel = maxKybdGuiSel; }
+    SharedCommandData() : Filter(), mouseVelocity() { }
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -97,21 +95,6 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
-    void setKeySelectAngle(keyboardAngle angle);
-    bool trySetKeySelectAngle(keyboardAngle angle);
-    keyboardAngle getKeySelectAngle();
-    bool tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle);
-
-
-    keyboardAngle keySelectAngle;
-    void setKybdGuiSel(unsigned int kybdGuiSel);
-    bool trySetKybdGuiSel(unsigned int kybdGuiSel);
-    unsigned int getKybdGuiSel();
-    bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
-
-    unsigned int getKybdGuiSelMax();
-    bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
-
     /**
      * Returns a float value corresponding to the rssi. This will block
      * if another thread is using it.
@@ -175,8 +158,6 @@ private:
     bool  isConnected;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
-    unsigned int maxKybdGuiSel;
-    unsigned int kybdGuiSel;
     std::queue<commandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
@@ -188,7 +169,6 @@ private:
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-    void extractKeySelectAngle(boost::any value);
     void extractRssi(boost::any value);
     void extractIsConnected(boost::any value);
 };

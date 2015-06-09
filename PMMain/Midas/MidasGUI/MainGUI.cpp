@@ -19,8 +19,6 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
     poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
-    distanceDisplayer = new DistanceWidget(mainThread, INFO_INDICATOR_WIDTH,
-        DISTANCE_DISPLAY_HEIGHT, this);
 
     //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -44,44 +42,25 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         layout->addWidget(displayer, 0, Qt::AlignRight);
     }
 	
-    layout->addWidget(distanceDisplayer);
-
     boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
     boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
     layout->addLayout(boxLayout);
 
     layout->setAlignment(infoIndicator, Qt::AlignRight);
     layout->setStretchFactor(infoIndicator, 0);
-    layout->setAlignment(distanceDisplayer, Qt::AlignRight);
-    layout->setStretchFactor(distanceDisplayer, 0);
      
     setLayout(layout);
 
-    keyboard = new KeyboardWidget(mainThread);
-    keyboard->addWheels(mainThread->getKybrdRingData());
-
     totalWidth = std::max(sequenceDisplayer->width(), 
                         std::max(infoIndicator->width(),
-                        std::max(mouseIndicator->width(), distanceDisplayer->width())));
+                        mouseIndicator->width()));
     totalHeight = sequenceDisplayer->height() + infoIndicator->height() + 
-        mouseIndicator->height() + profileHeights + distanceDisplayer->height();
+        mouseIndicator->height() + profileHeights;
 
     QRect screen = QApplication::desktop()->availableGeometry(this);
     setGeometry(screen.right() - totalWidth - SCREEN_RIGHT_BUFFER,
         screen.bottom() - totalHeight - SCREEN_BOTTOM_BUFFER,
         totalWidth, totalHeight);
-}
-
-void MainGUI::toggleKeyboard()
-{
-    if (keyboard->isVisible())
-    {
-        keyboard->setVisible(false);
-    }
-    else
-    {
-        keyboard->setVisible(true);
-    }
 }
 
 MainGUI::~MainGUI()
@@ -94,8 +73,6 @@ MainGUI::~MainGUI()
     sequenceDisplayer = NULL;
     delete poseDisplayer;
     poseDisplayer = NULL;
-    delete distanceDisplayer;
-    distanceDisplayer = NULL;
     delete layout;
     layout = NULL;
 }
@@ -131,8 +108,3 @@ void MainGUI::connectSignallerToPoseDisplayer(GestureSignaller *signaller)
         poseDisplayer, SLOT(handlePoseImages(std::vector<sequenceImageSet>)));
 }
 
-void MainGUI::connectSignallerToKeyboardToggle(GestureSignaller *signaller)
-{
-    QObject::connect(signaller, SIGNAL(emitToggleKeyboard()),
-        this, SLOT(toggleKeyboard()));
-}

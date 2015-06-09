@@ -1,8 +1,6 @@
 #include "MidasThread.h"
 #include "MouseCtrl.h"
 #include "MainGUI.h"
-#include "KeyboardWidget.h"
-#include "KeyboardSettingsReader.h"
 
 #include <QtWidgets/QApplication>
 
@@ -14,12 +12,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    std::vector<ringData> kybrdRingData;
-    KeyboardSettingsReader readFile;
-    std::string fileName = "keyboardData.txt";
-    readFile.readKeyboardSetupFile(kybrdRingData,fileName);
-
-    MidasThread midasThread(&kybrdRingData);
+    MidasThread midasThread;
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");

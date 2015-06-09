@@ -28,7 +28,6 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGU
     {
         mainGui->connectSignallerToInfoIndicator(&signaller);
         mainGui->connectSignallerToPoseDisplayer(&signaller);
-        mainGui->connectSignallerToKeyboardToggle(&signaller);
     }
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));

@@ -6,7 +6,6 @@
 #include "ControlState.h"
 #include "MouseCtrl.h"
 #include "kybrdCtrl.h"
-#include "RingData.h"
 #include "MyoCommon.h"
 #include <iostream>
 
@@ -22,7 +21,7 @@ class SCDDigester
 {
 public:
     SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
-        MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData);
+        MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl);
     ~SCDDigester();
 
     void digest();
@@ -32,17 +31,12 @@ private:
 
     void digestKeyboardGUIData(commandData nextCommand);
 
-    int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);
-
     SharedCommandData *scdHandle;
     MidasThread *threadHandle;
     ControlState *cntrlStateHandle;
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     int count;
-
-    KeyboardWidget *keyboardWidget;
-    std::vector<ringData> *kybrdRingData;
 };
 
 #endif /* _SCD_DIGESTER_H */
