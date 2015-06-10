@@ -50,39 +50,45 @@ void SCDDigester::digest()
     }
 
     point unitVelocity = scdHandle->getVelocity();
-    if (unitVelocity.x != 0)
-    {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
+	if (unitVelocity.x != 0 || unitVelocity.y != 0)
+	{
+		// TODO - fix sign issue
+		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, unitVelocity.x, -unitVelocity.y);
+	}
+    //if (unitVelocity.x != 0)
+    //{
+    //    mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
+	//
+    //}
+    //if (unitVelocity.y != 0)
+    //{
+    //    mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
+    //}
 
-    }
-    if (unitVelocity.y != 0)
-    {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
-    }
-
-    if (count % 1000 == 0)
-    {
-        threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
-
-        /* Only update GUI if the connection status changed*/
-        testConnected = scdHandle->getIsConnected();
-        if (isConnected != testConnected)
-        {
-            if (!testConnected)
-            {
-                threadHandle->emitDisconnect(testConnected);
-            }
-        }
-        isConnected = testConnected;
-
-        /* Only update RSSI if device connected */
-        if (isConnected)
-        {
-            float rssi = scdHandle->getRssi();
-            threadHandle->emitRssi(rssi);
-        }
-
-    }
+	// Jorden TODO - deal with this - temp removing emitVeloc to see if CPU usage reduces.
+//    if (count % 1000 == 0)
+//    {
+//        threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
+//
+//        /* Only update GUI if the connection status changed*/
+//        testConnected = scdHandle->getIsConnected();
+//        if (isConnected != testConnected)
+//        {
+//            if (!testConnected)
+//            {
+//                threadHandle->emitDisconnect(testConnected);
+//            }
+//        }
+//        isConnected = testConnected;
+//
+//        ///* Only update RSSI if device connected */
+//        //if (isConnected)
+//        //{
+//        //    float rssi = scdHandle->getRssi();
+//        //    threadHandle->emitRssi(rssi);
+//        //}
+//
+//    }
 
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {

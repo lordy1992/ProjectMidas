@@ -66,7 +66,7 @@ public:
      * @param mouseCmd The mouse command to send.
      * @param mouseRateIfMove The new rate of the mouse movement.
      */
-    void sendCommand(mouseCmds mouseCmd, int mouseRateIfMove = 0);
+	void sendCommand(mouseCmds mouseCmd, int mouseRateIfMove = 0, int mouseRateIfMoveY_hack = 0);
 
 private:
 
@@ -76,7 +76,7 @@ private:
      * @param mouseRateIfMove The rate from -100 to 100 a mouse should move.
      * This determines velocity. This value gets normalized to absolute value.
      */
-    void setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove);
+	void setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int& mouseRateIfMoveY_hack);
 
     // Mouse Input 
     MOUSEINPUT mi;

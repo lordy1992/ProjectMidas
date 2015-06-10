@@ -211,163 +211,15 @@
             </hold>
         </holds>
     </profile>
-    <profile name="complex">
+    <profile name="Kardium">
         <sequences>
-            <sequence state="lockMode" name="Unlock">
+            <sequence state="mouseMode" name="Middle Click">
                 <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">fist</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">waveOut</gesture>
-                    <gesture type="tap">waveIn</gesture>
+                    <gesture type="immediate">fist</gesture>
                 </gestures>
-                <command type="stateChange">
+                <command type="mouse">
                     <actions>
-                        <action>mouseMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="mouseMode" name="Mouse to Gesture">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">fist</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>gestureMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="mouseMode" name="Mouse to Keyboard">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>keyboardMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="gestureMode" name="Gesture to Mouse">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">fist</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>mouseMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Keyboard to Mouse">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">waveOut</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>mouseMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="mouseMode" name="Mouse to Lock">
-                <gestures>
-                    <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">waveOut</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">doubleTap</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>lockMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="gestureMode" name="Gesture to Lock">
-                <gestures>
-                    <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">waveOut</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>lockMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Keyboard to Lock">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">waveOut</gesture>
-                </gestures>
-                <command type="stateChange">
-                    <actions>
-                        <action>lockMode</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Change Wheels">
-                <gestures>
-                    <gesture type="tap">fingersSpread</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>changeWheels</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Backspace">
-                <gestures>
-                    <gesture type="tap">waveOut</gesture>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>backspace</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Tab">
-                <gestures>
-                    <gesture type="tap">waveOut</gesture>
-                    <gesture type="tap">fingersSpread</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>tab</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Swap Ring Focus">
-                <gestures>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>swapRingFocus</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Select">
-                <gestures>
-                    <gesture type="tap">fist</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>select</action>
-                    </actions>
-                </command>
-            </sequence>
-            <sequence state="keyboardMode" name="Hold Select">
-                <gestures>
-                    <gesture type="hold">fist</gesture>
-                </gestures>
-                <command type="keyboardGui">
-                    <actions>
-                        <action>holdSelect</action>
+                        <action>middleHold</action>
                     </actions>
                 </command>
             </sequence>
@@ -381,13 +233,13 @@
                     </actions>
                 </command>
             </sequence>
-            <sequence state="mouseMode" name="Right Click">
+            <sequence state="gestureMode" name="Middle Click">
                 <gestures>
-                    <gesture type="immediate">fist</gesture>
+                    <gesture type="tap">fist</gesture>
                 </gestures>
                 <command type="mouse">
                     <actions>
-                        <action>rightHold</action>
+                        <action>MiddleClick</action>
                     </actions>
                 </command>
             </sequence>
@@ -401,13 +253,55 @@
                     </actions>
                 </command>
             </sequence>
-            <sequence state="gestureMode" name="Right Click">
+            <sequence state="lockMode" name="Unlock">
                 <gestures>
-                    <gesture type="tap">fist</gesture>
+                    <gesture type="tap">doubleTap</gesture>
                 </gestures>
-                <command type="mouse">
+                <command type="stateChange">
                     <actions>
-                        <action>rightClick</action>
+                        <action>mouseMode</action>
+                    </actions>
+                </command>
+            </sequence>
+            <sequence state="mouseMode" name="Mouse to Gesture">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <command type="stateChange">
+                    <actions>
+                        <action>gestureMode</action>
+                    </actions>
+                </command>
+            </sequence>
+            <sequence state="gestureMode" name="Gesture to Mouse">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <command type="stateChange">
+                    <actions>
+                        <action>mouseMode</action>
+                    </actions>
+                </command>
+            </sequence>
+            <sequence state="mouseMode" name="Lock">
+                <gestures>
+                    <gesture type="tap">waveIn</gesture>
+                    <gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <command type="stateChange">
+                    <actions>
+                        <action>lockMode</action>
+                    </actions>
+                </command>
+            </sequence>
+            <sequence state="gestureMode" name="Lock">
+                <gestures>
+                    <gesture type="tap">waveIn</gesture>
+                    <gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <command type="stateChange">
+                    <actions>
+                        <action>lockMode</action>
                     </actions>
                 </command>
             </sequence>
@@ -417,6 +311,16 @@
                 <angle type="roll">
                     <anglePositive>volumeUp</anglePositive>
                     <angleNegative>volumeDown</angleNegative>
+                </angle>
+            </hold>
+            <hold gesture="fingersSpread">
+                <angle type="pitch">
+                    <anglePositive>upArrow</anglePositive>
+                    <angleNegative>downArrow</angleNegative>
+                </angle>
+                <angle type="yaw">
+                    <anglePositive>rightArrow</anglePositive>
+                    <angleNegative>leftArrow</angleNegative>
                 </angle>
             </hold>
         </holds>

@@ -69,7 +69,9 @@ unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
     return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
-void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
+//Jorden Temp TODO - put code into correct pattern - hacking for now
+
+void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove, int mouseRateIfMoveY_hack)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
     DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
@@ -77,7 +79,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
     DWORD deltaTimeYMove = currentTime - lastMouseMoveY;
     DWORD deltaTimeScroll = currentTime - lastMouseScroll;
 
-    setMouseInputVars(mouseCmd, mouseRateIfMove);
+	setMouseInputVars(mouseCmd, mouseRateIfMove, mouseRateIfMoveY_hack);
 
     // Handle Early exit cases if moving mouse
     if (mi.dwFlags == MOUSEEVENTF_MOVE 
@@ -87,7 +89,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
         || 
         (mouseRateIfMove > 0 && mouseRateIfMove < MOVE_RATE_DEADZONE)
         ||
-        (mi.dx != 0 && mi.dy != 0))
+        (mi.dx != 0 && mi.dy != 0 && mouseCmd != mouseCmds::MOVE_ABSOLUTE))
         )
     {
         // Not enough time has passed to move the mouse again or 
@@ -162,7 +164,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
     delete in; in = NULL;
 }
 
-void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
+void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int& mouseRateIfMoveY_hack)
 {
     if (mouseCmd == MOVE_HOR && mouseRateIfMove < 0)
     {
@@ -181,7 +183,10 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
         mouseCmd = MOVE_UP;
     }
 
-    mouseRateIfMove = abs(mouseRateIfMove);
+	if (mouseCmd != mouseCmds::MOVE_ABSOLUTE)
+	{
+		mouseRateIfMove = abs(mouseRateIfMove);
+	}
 
     switch (mouseCmd)
     {
@@ -264,5 +269,11 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
         mi.dwFlags = MOUSEEVENTF_WHEEL;
         mi.mouseData = -scrollRate; // RANGE IS FROM -120 to +120 : WHEEL_DELTA = 120, which is one "wheel click"
         break;
+	case mouseCmds::MOVE_ABSOLUTE:
+		mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
+		int monitorWidth = 65535;
+		int monitorHeight = 65535;
+		mi.dy = monitorHeight / 2 + (mouseRateIfMoveY_hack/ 100.0 * monitorHeight / 2);
+		mi.dx = monitorWidth / 2 + (mouseRateIfMove / 100.0 * monitorWidth / 2);
     }
 }

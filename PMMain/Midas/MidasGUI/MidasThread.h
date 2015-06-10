@@ -29,8 +29,6 @@ signals:
 
     void emitDebugInfo(int, int);
 
-    void emitRssi(float);
-
     void emitDisconnect(bool);
 };
 

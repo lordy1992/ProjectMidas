@@ -95,20 +95,13 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
-    /**
-     * Returns a float value corresponding to the rssi. This will block
-     * if another thread is using it.
-     *
-     * @return The rssi value as a float.
-     */
-    float getRssi();
+	void SharedCommandData::setDelta(point delta);
 
-    /**
-     * Sets the rssi. This will block if another thread is using it.
-     *
-     * @param float rssi
-     */
-    void setRssi(float rssi);
+	bool SharedCommandData::trySetDelta(point delta);
+
+	point SharedCommandData::getDelta();
+
+	bool SharedCommandData::tryGetDelta(point& outDelta);
 
     /**
      * Returns whether the device is connected or not
@@ -156,6 +149,10 @@ private:
     point mouseVelocity;
     float rssiAVG;
     bool  isConnected;
+
+	// point to indicate offset from current mouse position, while a pose is being held 
+	point mouseDelta;
+	std::mutex mouseDeltaMutex;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
     std::queue<commandData> commandQueue;
@@ -169,7 +166,6 @@ private:
 
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
-    void extractRssi(boost::any value);
     void extractIsConnected(boost::any value);
 };
 

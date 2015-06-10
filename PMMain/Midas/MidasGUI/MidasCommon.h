@@ -96,7 +96,8 @@ enum mouseCmds {
     LEFT_RELEASE,
     RIGHT_RELEASE,
     MIDDLE_RELEASE,
-    RELEASE_LRM_BUTS
+    RELEASE_LRM_BUTS,
+	MOVE_ABSOLUTE
 };
 
 /**

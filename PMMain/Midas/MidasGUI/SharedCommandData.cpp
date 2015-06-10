@@ -81,21 +81,6 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
-float SharedCommandData::getRssi()
-{
-    rssiMutex.lock();
-    float rssi = rssiAVG;
-    rssiMutex.unlock();
-    return rssi;
-}
-
-void SharedCommandData::setRssi(float rssi)
-{
-    rssiMutex.lock();
-    rssiAVG = rssi;
-    rssiMutex.unlock();
-}
-
 bool SharedCommandData::getIsConnected()
 {
     isConnectedMutex.lock();
@@ -189,20 +174,6 @@ void SharedCommandData::extractPoint(boost::any value)
     }
 }
 
-void SharedCommandData::extractRssi(boost::any value)
-{
-    if (value.type() != typeid(float))
-    {
-        Filter::setFilterError(filterError::INVALID_INPUT);
-        Filter::setFilterStatus(filterStatus::FILTER_ERROR);
-    }
-    else
-    {
-        float rssi = boost::any_cast<float> (value);
-        setRssi(rssi);
-    }
-}
-
 void SharedCommandData::extractIsConnected(boost::any value)
 {
     if (value.type() != typeid(bool))
@@ -215,4 +186,42 @@ void SharedCommandData::extractIsConnected(boost::any value)
         bool isConnected = boost::any_cast<bool> (value);
         setIsConnected(isConnected);
     }
+}
+
+void SharedCommandData::setDelta(point delta)
+{
+	mouseDeltaMutex.lock();
+	mouseDelta = delta;
+	mouseDeltaMutex.unlock();
+}
+
+bool SharedCommandData::trySetDelta(point delta)
+{
+	bool locked = mouseDeltaMutex.try_lock();
+	if (locked) {
+		mouseDelta = delta;
+		mouseDeltaMutex.unlock();
+	}
+
+	return locked;
+}
+
+point SharedCommandData::getDelta()
+{
+	mouseDeltaMutex.lock();
+	point delta = mouseDelta;
+	mouseDeltaMutex.unlock();
+
+	return delta;
+}
+
+bool SharedCommandData::tryGetDelta(point& outDelta)
+{
+	bool locked = mouseDeltaMutex.try_lock();
+	if (locked) {
+		outDelta = mouseDelta;
+		mouseDeltaMutex.unlock();
+	}
+
+	return locked;
 }
