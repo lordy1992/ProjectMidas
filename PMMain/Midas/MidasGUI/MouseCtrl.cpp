@@ -271,7 +271,7 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int&
         break;
 	case mouseCmds::MOVE_ABSOLUTE:
 		mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-		int monitorWidth = 65535;
+		int monitorWidth = 65535; // size of a single monitor as represented by windows API
 		int monitorHeight = 65535;
 		mi.dy = monitorHeight / 2 + (mouseRateIfMoveY_hack/ 100.0 * monitorHeight / 2);
 		mi.dx = monitorWidth / 2 + (mouseRateIfMove / 100.0 * monitorWidth / 2);
