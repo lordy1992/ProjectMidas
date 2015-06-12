@@ -191,6 +191,9 @@
     <ClCompile Include="ProfileSignaller.cpp">
       <Filter>Source Files\Midas</Filter>
     </ClCompile>
+    <ClCompile Include="MyoState.cpp">
+      <Filter>Source Files\Midas</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -281,6 +284,9 @@
     </ClInclude>
     <ClInclude Include="ProfileManager.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyoState.h">
+      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

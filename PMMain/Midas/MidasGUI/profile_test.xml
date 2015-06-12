@@ -256,6 +256,8 @@
             <sequence state="lockMode" name="Unlock">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">waveIn</gesture>
+                    <gesture type="tap">waveOut</gesture>
                 </gestures>
                 <command type="stateChange">
                     <actions>

@@ -151,6 +151,7 @@
     <ClCompile Include="GestureSeqRecorder.cpp" />
     <ClCompile Include="GestureSignaller.cpp" />
     <ClCompile Include="InfoIndicator.cpp" />
+    <ClCompile Include="KeyboardVector.cpp" />
     <ClCompile Include="kybrdCtrl.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGUI.cpp" />
@@ -164,6 +165,7 @@
     </ClCompile>
     <ClCompile Include="MyoCommon.cpp" />
     <ClCompile Include="MyoDevice.cpp" />
+    <ClCompile Include="MyoState.cpp" />
     <ClCompile Include="MyoTranslationFilter.cpp" />
     <ClCompile Include="ProfileDisplayer.cpp" />
     <ClCompile Include="ProfileManager.cpp" />
@@ -213,6 +215,7 @@
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o ".\GeneratedFiles\$(ConfigurationName)\moc_%(Filename).cpp"  -DUNICODE -DWIN32 -DWIN64 -DQT_DLL -DQT_NO_DEBUG -DNDEBUG -DQT_CORE_LIB -DQT_GUI_LIB -DQT_WIDGETS_LIB "-I.\GeneratedFiles" "-I." "-I$(QTDIR)\include" "-I.\GeneratedFiles\$(ConfigurationName)\." "-I$(QTDIR)\include\QtCore" "-I$(QTDIR)\include\QtGui" "-I$(QTDIR)\include\QtWidgets"</Command>
     </CustomBuild>
+    <ClInclude Include="MyoState.h" />
     <ClInclude Include="kybrdCtrl.h" />
     <CustomBuild Include="MainGUI.h">
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>

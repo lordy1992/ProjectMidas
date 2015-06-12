@@ -25,8 +25,13 @@ bool ControlState::trySetMode(midasMode mode)
 {
     // Note that tryEmpty() uses a command Queue Mutex to protect
     // the SharedCommandData integrity.
-    currentMode = mode;
-    SCDHandle->tryEmpty();
+    
+	if (SCDHandle->tryEmpty()) {
+		currentMode = mode;
+	}
+	else {
+		return false;
+	}
     return true;
 }
 

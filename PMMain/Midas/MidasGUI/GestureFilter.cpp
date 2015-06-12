@@ -125,6 +125,20 @@ void GestureFilter::registerMouseSequences(void)
     clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP;
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp, "Right Click");
 
+	// Temp - setup so that waveout is for swapping 3D
+	// Register sequence to right click in mouse mode and gesture mode
+	clickSeq.clear();
+	clickSeq.push_back(SeqElement(Pose::waveOut, SeqElement::PoseLength::TAP));
+	clickResp.name = "3D";
+	clickResp.type = commandType::KYBRD_CMD;
+	clickResp.action.kybd = 
+	clickResp.action.mouse = mouseCmds::RIGHT_HOLD;
+	ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Right Click");
+	// setup clicking in gesture Mode
+	clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
+	clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP;
+	ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp, "Right Click");
+
     // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
     clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
     clickResp.name = "Release Mouse";

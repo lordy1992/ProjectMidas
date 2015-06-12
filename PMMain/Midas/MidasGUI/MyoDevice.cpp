@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <iostream>
 #include <fstream>
+#include <time.h>
 
 #define MIN_RSSI_DELAY 200
 
@@ -162,7 +163,7 @@ void MyoDevice::MyoCallbacks::onOrientationData(Myo* myo, uint64_t timestamp, co
     input[GYRO_DATA_Y] = 0.0f;
     input[GYRO_DATA_Z] = 0.0f;
     input[RSSI] = (int8_t)0;
-    
+	    
     parent.orientationPipeline.startPipeline(input);
 }
 
