@@ -1,13 +1,13 @@
 #include "SharedCommandData.h"
 
-void SharedCommandData::addCommand(commandData dat)
+void SharedCommandData::addCommand(CommandData dat)
 {
     commandQueueMutex.lock();
     commandQueue.push(dat);
     commandQueueMutex.unlock();
 }
 
-bool SharedCommandData::tryAddCommand(commandData dat)
+bool SharedCommandData::tryAddCommand(CommandData dat)
 {
     bool locked = commandQueueMutex.try_lock();
     if (locked) 
@@ -19,7 +19,7 @@ bool SharedCommandData::tryAddCommand(commandData dat)
     return locked;
 }
 
-bool SharedCommandData::consumeCommand(commandData& dat)
+bool SharedCommandData::consumeCommand(CommandData& dat)
 {
     if (commandQueue.empty()) return false;
     commandQueueMutex.lock();
@@ -30,7 +30,7 @@ bool SharedCommandData::consumeCommand(commandData& dat)
     return true;
 }
 
-bool SharedCommandData::tryConsumeCommand(commandData& outCommandData)
+bool SharedCommandData::tryConsumeCommand(CommandData& outCommandData)
 {
     bool locked = commandQueueMutex.try_lock();
     if (locked)
@@ -148,14 +148,14 @@ bool SharedCommandData::tryEmpty()
 
 void SharedCommandData::extractCommand(boost::any value)
 {
-    if (value.type() != typeid(commandData)) 
+    if (value.type() != typeid(CommandData)) 
     {
         Filter::setFilterError(filterError::INVALID_INPUT);
         Filter::setFilterStatus(filterStatus::FILTER_ERROR);
     }
     else
     {
-        commandData data = boost::any_cast<commandData>(value);
+        CommandData data = boost::any_cast<CommandData>(value);
         addCommand(data);
     }
 }

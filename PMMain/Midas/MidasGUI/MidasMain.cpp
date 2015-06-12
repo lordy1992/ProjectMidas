@@ -11,6 +11,7 @@
 #include <thread>
 #include "SharedCommandData.h"
 #include "MyoDevice.h"
+#include "KeyboardContoller.h"
 
 #include "MidasThread.h"
 #include "SharedCommandDataTest.h"
@@ -81,11 +82,12 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
     MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui, pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
+	KeyboardController* keyboardController = new KeyboardController();
 
     // Kick off device thread
     startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.
 
-    SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl);
+	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl, keyboardController);
     
     while (true)
     {

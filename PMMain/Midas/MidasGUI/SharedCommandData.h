@@ -4,6 +4,7 @@
 #include <mutex>
 #include <queue>
 #include "MidasCommon.h"
+#include "CommandData.h"
 #include "Filter.h"
 
 #define COMMAND_INPUT "command"
@@ -26,7 +27,7 @@ public:
      *
      * @param dat The data that will be added to the queue.
      */
-    void addCommand(commandData dat);
+    void addCommand(CommandData dat);
 
     /**
     * Adds a command to the queue of commands. If another thread is modifying the command queue,
@@ -36,7 +37,7 @@ public:
     * @param dat The data that will be added to the queue.
     * @return True if a command was successfully added, otherwise false.
     */
-    bool tryAddCommand(commandData dat);
+    bool tryAddCommand(CommandData dat);
 
     /**
     * Takes a command from the queue of commands, removing the command from the queue and 
@@ -46,7 +47,7 @@ public:
     * @param dat This will be set to the next command in the queue.
     * @return True if a command was successfully taken, false if the queue is empty.
     */
-    bool consumeCommand(commandData& dat);
+    bool consumeCommand(CommandData& dat);
 
     /**
     * Takes a command from the queue of commands, removing the command from the queue and
@@ -57,7 +58,7 @@ public:
     * @param outCommandData This will be set to the next command in the queue.
     * @return True if the command was successfully taken from the queue, otherwise false.
     */
-    bool tryConsumeCommand(commandData& outCommandData);
+    bool tryConsumeCommand(CommandData& outCommandData);
 
     /**
      * Sets the cursor velocity in the shared data. If another thread is accessing/changing
@@ -155,7 +156,7 @@ private:
 	std::mutex mouseDeltaMutex;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
-    std::queue<commandData> commandQueue;
+    std::queue<CommandData> commandQueue;
     std::mutex commandQueueMutex;
     std::mutex velocityMutex;
     std::mutex kybdGuiSelMutex;

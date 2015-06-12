@@ -2,14 +2,15 @@
 
 
 SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
-    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl)
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
     this->cntrlStateHandle = cntrlStateHandle;
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
-    count = 0;
+	this->keyboardController = keyboardController;
+    this->count = 0;
 }
 
 
@@ -19,7 +20,7 @@ SCDDigester::~SCDDigester()
 
 void SCDDigester::digest()
 {
-    commandData nextCmd;
+    CommandData nextCmd;
     static bool isConnected = true;
     static bool testConnected = true;
 
@@ -112,7 +113,7 @@ void SCDDigester::digest()
     count++;
 }
 
-void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
+void SCDDigester::digestKeyboardGUIData(CommandData nextCommand)
 {
     /*keyboardAngle currAngle;
     int ringKeySelIdx;
@@ -205,8 +206,17 @@ void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
     }*/
 }
 
-void SCDDigester::digestKybdCmd(commandData nextCommand)
+void SCDDigester::digestKybdCmd(CommandData nextCommand)
 {
-    kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
-    kybrdCtrl->sendData();
+	if (nextCommand.action.kybd == kybdCmds::INPUT_VECTOR)
+	{
+		keyboardController->setKiVector(nextCommand.keyboardVector);
+		keyboardController->sendData();
+	}
+	else
+	{
+		KeyboardVector vec = KeyboardVector::createFromCommand(nextCommand.action.kybd);
+		keyboardController->setKiVector(vec);
+		keyboardController->sendDataDelayed(10);
+	}
 }

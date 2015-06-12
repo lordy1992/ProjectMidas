@@ -1,5 +1,7 @@
+#pragma once
 #include <vector>
 #include <Windows.h>
+#include "MidasCommon.h"
 
 class KeyboardVector {
 public:
@@ -17,7 +19,11 @@ public:
 
 	void inputVKDownUp(unsigned int vk);
 
+	void mirrorVectorAllUp();
+
 	const std::vector<KEYBDINPUT> peakVector() { return kiVector; }
+
+	static KeyboardVector createFromCommand(kybdCmds cmd);
 
 private:
 	std::vector<KEYBDINPUT> kiVector;

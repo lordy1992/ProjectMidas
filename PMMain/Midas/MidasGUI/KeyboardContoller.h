@@ -2,7 +2,6 @@
 #define _KEYBOARD_CONTROLLER_H
 
 #include <Windows.h>
-#include "MidasCommon.h"
 #include "KeyboardVector.h"
 
 /**
@@ -12,8 +11,8 @@ class KeyboardController
 {
 public:
 	/* Basic Construction/Destruction */
-	KeyboardController();
-	~KeyboardController();
+	KeyboardController() {};
+	~KeyboardController() {};
 
 	void setKiVector(KeyboardVector kiVector) { this->kiVector = kiVector; }
 	KeyboardVector getKiVector() { return this->kiVector; }

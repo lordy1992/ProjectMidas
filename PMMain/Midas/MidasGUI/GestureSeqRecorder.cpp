@@ -44,7 +44,7 @@ void GestureSeqRecorder::unregisterAll()
     }
 }
 
-SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, commandData seqResponse, std::string name)
+SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq, CommandData seqResponse, std::string name)
 {
     sequenceInfo seqInfo;
     seqInfo.seq = seq;
@@ -76,7 +76,7 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, commandData& response)
+SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlState state, CommandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     response.type = commandType::NONE;
@@ -120,7 +120,7 @@ SequenceStatus GestureSeqRecorder::progressSequence(Pose::Type gesture, ControlS
 }
 
 
-void GestureSeqRecorder::progressSequenceTime(int delta, commandData& response)
+void GestureSeqRecorder::progressSequenceTime(int delta, CommandData& response)
 {
     if (signaller.getShowAll() != prevShowAll)
     {
@@ -367,7 +367,7 @@ SequenceStatus GestureSeqRecorder::ensureSameState(ControlState state)
     return SequenceStatus::SUCCESS;
 }
 
-SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, commandData& response)
+SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, ControlState state, CommandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
 
@@ -457,7 +457,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
     return status;
 }
 
-SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, commandData& response)
+SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlState state, CommandData& response)
 {
     SequenceStatus status = SequenceStatus::SUCCESS;
     sequenceList *seqList = (*seqMapPerMode)[state.getMode()];

@@ -7,6 +7,8 @@
 #include "MouseCtrl.h"
 #include "kybrdCtrl.h"
 #include "MyoCommon.h"
+#include "KeyboardContoller.h"
+#include "CommandData.h"
 #include <iostream>
 
 #ifdef USE_SIMULATOR
@@ -21,16 +23,17 @@ class SCDDigester
 {
 public:
     SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
-        MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl);
+		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController);
     ~SCDDigester();
 
     void digest();
 
 private:
-    void digestKybdCmd(commandData nextCommand);
+    void digestKybdCmd(CommandData nextCommand);
 
-    void digestKeyboardGUIData(commandData nextCommand);
+    void digestKeyboardGUIData(CommandData nextCommand);
 
+	KeyboardController *keyboardController;
     SharedCommandData *scdHandle;
     MidasThread *threadHandle;
     ControlState *cntrlStateHandle;

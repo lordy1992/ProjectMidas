@@ -12,6 +12,8 @@
 #define WIDGET_BUFFER 5
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
+class KeyboardVector;
+
 /**
  * Enumerates the types of commands that can be sent to control
  * peripherals on Windows.
@@ -69,7 +71,8 @@ enum kybdCmds {
     UP_ARROW = 33554432,
     RIGHT_ARROW = 67108864,
     DOWN_ARROW = 134217728,
-    LEFT_ARROW = 268435456 // 2^28 ... NEXT = 536870912
+    LEFT_ARROW = 268435456,
+	INPUT_VECTOR = 536870912 // 2^29 ... NEXT = 1073741824
 };
 
 /**
@@ -158,22 +161,30 @@ enum kybdStatus {
     N_PRESSES_MATCH_RELEASES    /**< The number of key presses does not match the number of key releases.*/
 };
 
-/**
- * This struct bundles the Midas command data. It represents
- * all Midas command types.
- */
-struct commandData {
-    commandType type = commandType::NONE;
-    union action{
-        kybdCmds kybd;
-        kybdGUICmds kybdGUI;
-        mouseCmds mouse;
-        midasMode mode;
-    };
-    action action;
+///**
+// * This struct bundles the Midas command data. It represents
+// * all Midas command types.
+// */
+//struct commandData {
+//    commandType type = commandType::NONE;
+//    union action{
+//        kybdCmds kybd;
+//        kybdGUICmds kybdGUI;
+//        mouseCmds mouse;
+//        midasMode mode;
+//    };
+//    action action;
+//
+//    std::string name = "";
+//	//KeyboardVector keyboardVector;
+//};
 
-    std::string name = "";
-};
+typedef union action{
+	kybdCmds kybd;
+	kybdGUICmds kybdGUI;
+	mouseCmds mouse;
+	midasMode mode;
+} action;
 
 /**
  * A simple point consisting of two coordinates, x and y.

@@ -193,7 +193,7 @@ float MyoTranslationFilter::calcRingDelta(float current, float base)
 
 void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataMap& outputToSharedCommandData)
 {
-    commandData command;
+    CommandData command;
     command.type = commandType::KYBRD_CMD;
     command.name = "HoldMode Command";
     command.action.kybd = kybdCmds::NO_CMD;
@@ -201,7 +201,7 @@ void MyoTranslationFilter::performHoldModeFunc(unsigned int holdNum, filterDataM
     GestureHoldModeAction currentHoldModeAction = gestHoldModeAction[holdNum];
     float thresh = .1;
     
-    commandData cd;
+    CommandData cd;
     angleData ad;
     bool tryAction = false;
 

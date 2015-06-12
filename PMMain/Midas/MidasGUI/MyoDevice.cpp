@@ -249,19 +249,19 @@ void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) {
 void MyoDevice::updateProfiles(void)
 {
     std::list<Filter*>* filters = posePipeline.getFilters();
-
+	
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
         error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
-
+	
     filters = orientationPipeline.getFilters();
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
         error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
-
+	
     if (error != (int)filterError::NO_FILTER_ERROR)
     {
         throw new std::exception("updateProfileException");

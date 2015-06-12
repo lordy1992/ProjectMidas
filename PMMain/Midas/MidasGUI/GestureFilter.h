@@ -64,7 +64,7 @@ public:
     */
     GestureSeqRecorder *getGestureSeqRecorder() { return gestSeqRecorder; }
 
-    static void handleStateChange(commandData response);
+    static void handleStateChange(CommandData response);
 
     friend void setupCallbackThread(GestureFilter *gf);
     friend void callbackThreadWrapper(GestureFilter *gf);
@@ -78,14 +78,14 @@ private:
      *
      * @param pose The pose to translate into a command.
      */
-    commandData translateGesture(Pose::Type pose);
+    CommandData translateGesture(Pose::Type pose);
 
     // registration functions. to be commented after integration success.
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleMouseCommand(commandData response);
-    void handleKybrdCommand(commandData response, bool addToExtra = false);
+    void handleMouseCommand(CommandData response);
+    void handleKybrdCommand(CommandData response, bool addToExtra = false);
 
     void emitPoseData(int poseInt);
 
