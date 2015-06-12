@@ -1,5 +1,5 @@
-#ifndef _KEYBOARD_CONTROLLER_H
-#define _KEYBOARD_CONTROLLER_H
+#ifndef _KYBRD_CONTROLLER_H
+#define _KYBRD_CONTROLLER_H
 
 #include <Windows.h>
 #include <vector>
@@ -90,4 +90,4 @@ private:
 };
 
 
-#endif /* _KEYBOARD_CONTROLLER_H */
+#endif /* _KYBRD_CONTROLLER_H */
