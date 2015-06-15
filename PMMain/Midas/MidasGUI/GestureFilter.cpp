@@ -377,22 +377,19 @@ void GestureFilter::handleMouseCommand(CommandData response)
 
 void GestureFilter::handleKybrdCommand(CommandData response, bool addToExtra)
 {
-    if (controlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
+    filterDataMap outputToSharedCommandData;
+    CommandData command;
+    command = response;
+
+    outputToSharedCommandData[COMMAND_INPUT] = command;
+
+    if (addToExtra) 
     {
-        filterDataMap outputToSharedCommandData;
-        CommandData command;
-        command = response;
-
-        outputToSharedCommandData[COMMAND_INPUT] = command;
-
-        if (addToExtra) 
-        {
-            extraDataForSCD = outputToSharedCommandData;
-        }
-        else
-        {
-            Filter::setOutput(outputToSharedCommandData);
-        }
+        extraDataForSCD = outputToSharedCommandData;
+    }
+    else
+    {
+        Filter::setOutput(outputToSharedCommandData);
     }
 }
 
@@ -513,6 +510,32 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
     clickSeq.push_back(SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE));
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Release Mouse");
 
+	// Temp - setup so that waveout is for swapping 2D/3D being added no matter what profile for Kardium testing.
+	// Register sequence to right click in mouse mode and gesture mode --> NOT WORKING... Jorden TODO figure out why
+	clickSeq.clear();
+	clickSeq.push_back(SeqElement(Pose::waveOut, SeqElement::PoseLength::TAP));
+	clickSeq.push_back(SeqElement(Pose::fingersSpread, SeqElement::PoseLength::TAP));
+	clickResp.name = "2D";
+	clickResp.type = commandType::KYBRD_CMD;
+	clickResp.action.kybd = kybdCmds::INPUT_VECTOR;
+	KeyboardVector keyVec;
+	keyVec.inputCharDownUp('Z');
+	clickResp.keyboardVector = keyVec;
+	ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "2D");
+	clickSeq.clear();
+	clickSeq.push_back(SeqElement(Pose::waveIn, SeqElement::PoseLength::TAP));
+	clickSeq.push_back(SeqElement(Pose::fingersSpread, SeqElement::PoseLength::TAP));
+	clickResp.name = "3D";
+	clickResp.type = commandType::KYBRD_CMD;
+	clickResp.action.kybd = kybdCmds::INPUT_VECTOR;
+	keyVec.clear();
+	keyVec.inputCharDownUp('M');
+	clickResp.keyboardVector = keyVec;
+	ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "3D");
+
+
+
+	/* Removing for now as to reduce complexity of Midas.
     // Register sequence from Gesture Mode to Gesture Hold Modes
     sequence toHoldGestSeq;
     toHoldGestSeq.push_back(SeqElement(Pose::Type::doubleTap, SeqElement::PoseLength::HOLD));
@@ -551,6 +574,7 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_THREE, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Fist");
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_FOUR, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Wave In");
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_FIVE, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Wave Out");
+	*/
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {
