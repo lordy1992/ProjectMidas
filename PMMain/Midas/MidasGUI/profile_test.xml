@@ -213,6 +213,28 @@
     </profile>
     <profile name="Kardium">
         <sequences>
+			<sequence state="mouseMode" name="2D">
+                <gestures>
+                    <gesture type="tap">waveIn</gesture>
+					<gesture type="tap">fingersSpread</gesture>
+                </gestures>
+                <command type="keyboard">
+                    <actions>
+                        <action>inputVector,Z</action>
+                    </actions>
+                </command>
+            </sequence>
+			<sequence state="mouseMode" name="3D">
+                <gestures>
+                    <gesture type="tap">waveOut</gesture>
+					<gesture type="tap">fingersSpread</gesture>
+                </gestures>
+                <command type="keyboard">
+                    <actions>
+                        <action>inputVector,M</action>
+                    </actions>
+                </command>
+            </sequence>
             <sequence state="mouseMode" name="Middle Click">
                 <gestures>
                     <gesture type="immediate">fist</gesture>
