@@ -161,24 +161,6 @@ enum kybdStatus {
     N_PRESSES_MATCH_RELEASES    /**< The number of key presses does not match the number of key releases.*/
 };
 
-///**
-// * This struct bundles the Midas command data. It represents
-// * all Midas command types.
-// */
-//struct commandData {
-//    commandType type = commandType::NONE;
-//    union action{
-//        kybdCmds kybd;
-//        kybdGUICmds kybdGUI;
-//        mouseCmds mouse;
-//        midasMode mode;
-//    };
-//    action action;
-//
-//    std::string name = "";
-//	//KeyboardVector keyboardVector;
-//};
-
 typedef union action{
 	kybdCmds kybd;
 	kybdGUICmds kybdGUI;

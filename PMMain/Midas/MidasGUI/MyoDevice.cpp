@@ -7,7 +7,8 @@
 #include <fstream>
 #include <time.h>
 
-#define MIN_RSSI_DELAY 200
+#define MIN_RSSI_DELAY 3000
+#define MIN_BATTERY_LEVEL_DELAY 30000
 
 ProfileSignaller MyoDevice::profileSignaller;
 
@@ -59,7 +60,11 @@ void MyoDevice::runDeviceLoop()
     std::chrono::milliseconds rssi_start =
         std::chrono::duration_cast<std::chrono::milliseconds>(
             std::chrono::steady_clock::now().time_since_epoch()); /* Used to control when to request rssi */
-    std::chrono::milliseconds rssi_finish;
+    std::chrono::milliseconds current_time;
+
+	std::chrono::milliseconds battery_start =
+		std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::steady_clock::now().time_since_epoch()); /* Used to control when to request battery levels */
 
     try
     {
@@ -97,14 +102,21 @@ void MyoDevice::runDeviceLoop()
                 updateProfiles();
             }
 
-            rssi_finish = std::chrono::duration_cast<std::chrono::milliseconds>(
+			current_time = std::chrono::duration_cast<std::chrono::milliseconds>(
                 std::chrono::steady_clock::now().time_since_epoch());
-            if ((rssi_finish - rssi_start).count() > MIN_RSSI_DELAY)
+			if ((current_time - rssi_start).count() > MIN_RSSI_DELAY)
             {
                 myo->requestRssi();
                 rssi_start = std::chrono::duration_cast<std::chrono::milliseconds>(
                     std::chrono::steady_clock::now().time_since_epoch());
             }
+
+			if ((current_time - battery_start).count() > MIN_BATTERY_LEVEL_DELAY)
+			{
+				myo->requestBatteryLevel();
+				battery_start = std::chrono::duration_cast<std::chrono::milliseconds>(
+					std::chrono::steady_clock::now().time_since_epoch());
+			}
 
             hub.run(durationInMilliseconds);
             
@@ -246,6 +258,53 @@ void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) {
     std::cout << "on arm unsync." << std::endl; 
 }
 
+void MyoDevice::MyoCallbacks::onUnlock(Myo* myo, uint64_t timestamp)
+{
+	std::cout << "on unlock." << std::endl;
+}
+
+void MyoDevice::MyoCallbacks::onLock(Myo* myo, uint64_t timestamp)
+{
+	std::cout << "on lock." << std::endl;
+}
+
+void MyoDevice::MyoCallbacks::onBatteryLevelReceived(myo::Myo* myo, uint64_t timestamp, uint8_t level)
+{
+	std::cout << "onBatteryLevelReceived." << std::endl;
+}
+
+void MyoDevice::MyoCallbacks::onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg)
+{
+	std::cout << "onEmgData." << std::endl;
+}
+
+void MyoDevice::MyoCallbacks::onWarmupCompleted(myo::Myo* myo, uint64_t timestamp, WarmupResult warmupResult)
+{
+	std::cout << "onWarmupCompleted." << std::endl;
+}
+
+void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) {
+	std::cout << "on rssi." << std::endl;
+	filterDataMap input;
+	input[RSSI] = rssi;
+
+	// The following is junk data. The averaging filter should be modified so
+	// that it doesn't deal with the data so specifically.
+	input[GYRO_DATA_X] = 0.0f;
+	input[GYRO_DATA_Y] = 0.0f;
+	input[GYRO_DATA_Z] = 0.0f;
+	input[QUAT_DATA_X] = 0.0f;
+	input[QUAT_DATA_Y] = 0.0f;
+	input[QUAT_DATA_Z] = 0.0f;
+	input[QUAT_DATA_W] = 0.0f;
+	input[ACCEL_DATA_X] = 0.0f;
+	input[ACCEL_DATA_Y] = 0.0f;
+	input[ACCEL_DATA_Z] = 0.0f;
+	input[INPUT_ARM] = armUnknown;
+	input[INPUT_X_DIRECTION] = xDirectionUnknown;
+	parent.rssiPipeline.startPipeline(input);
+}
+
 void MyoDevice::updateProfiles(void)
 {
     std::list<Filter*>* filters = posePipeline.getFilters();
@@ -266,26 +325,4 @@ void MyoDevice::updateProfiles(void)
     {
         throw new std::exception("updateProfileException");
     }
-}
-
-void MyoDevice::MyoCallbacks::onRssi(Myo* myo, uint64_t timestamp, int8_t rssi) {
-	std::cout << "on rssi." << std::endl; 
-    filterDataMap input;
-    input[RSSI] = rssi;
-
-    // The following is junk data. The averaging filter should be modified so
-    // that it doesn't deal with the data so specifically.
-    input[GYRO_DATA_X] = 0.0f;
-    input[GYRO_DATA_Y] = 0.0f;
-    input[GYRO_DATA_Z] = 0.0f;
-    input[QUAT_DATA_X] = 0.0f;
-    input[QUAT_DATA_Y] = 0.0f;
-    input[QUAT_DATA_Z] = 0.0f;
-    input[QUAT_DATA_W] = 0.0f;
-    input[ACCEL_DATA_X] = 0.0f;
-    input[ACCEL_DATA_Y] = 0.0f;
-    input[ACCEL_DATA_Z] = 0.0f;
-    input[INPUT_ARM] = armUnknown;
-    input[INPUT_X_DIRECTION] = xDirectionUnknown;
-    parent.rssiPipeline.startPipeline(input);
 }

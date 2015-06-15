@@ -10,11 +10,12 @@ SequenceEditor::SequenceEditor(QWidget *parent)
 
     otherSequences = NULL;
     formCommandComboBox();
+	formKeyLineInput();
 
     connect(ui.addGestureButton, SIGNAL(released()), this, SLOT(handleAddGesture()));
     connect(ui.addActionButton, SIGNAL(released()), this, SLOT(handleAddAction()));
     connect(ui.doneButton, SIGNAL(released()), this, SLOT(handleDone()));
-    connect(ui.commandComboBox, SIGNAL(activated(const QString &)), this, SLOT(handleActivateCommandBox(const QString &)));
+    connect(ui.commandComboBox, SIGNAL(activated(const QString &)), this, SLOT(handleActivateCommandBox(const QString &)));		
 }
 
 SequenceEditor::~SequenceEditor()
@@ -121,6 +122,10 @@ void SequenceEditor::handleAddGesture()
 void SequenceEditor::handleAddAction()
 {
     QString action = ui.actionComboBox->currentText();
+	if (action == "inputVector")
+	{
+		action += ("," + ui.keyInput->text());
+	}
     ui.actionList->addItem(action);
 }
 
@@ -193,6 +198,13 @@ void SequenceEditor::formCommandComboBox()
     ui.commandComboBox->addItem(QString("keyboardGui"));
     ui.commandComboBox->addItem(QString("mouse"));
     ui.commandComboBox->addItem(QString("stateChange"));
+}
+
+void SequenceEditor::formKeyLineInput()
+{
+	// uncomment if we want ALNUM chars.
+	//const QRegExp qregexp("[0-9a-zA-Z]*");
+	//ui.keyInput->setValidator(new QRegExpValidator(qregexp));
 }
 
 void SequenceEditor::formStateChangeActions()
@@ -268,7 +280,8 @@ void SequenceEditor::formKybdActions()
     ui.actionComboBox->addItem(QString("upArrow"));
     ui.actionComboBox->addItem(QString("downArrow"));
     ui.actionComboBox->addItem(QString("rightArrow"));
-    ui.actionComboBox->addItem(QString("leftArrow"));
+	ui.actionComboBox->addItem(QString("leftArrow")); 
+	ui.actionComboBox->addItem(QString("inputVector"));
     ui.actionComboBox->addItem(QString("none"));
 }
 

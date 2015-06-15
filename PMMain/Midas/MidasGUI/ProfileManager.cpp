@@ -51,7 +51,8 @@ std::map<std::string, kybdCmds> profileActionToKybd =
     { "upArrow", UP_ARROW },
     { "downArrow", DOWN_ARROW },
     { "rightArrow", RIGHT_ARROW },
-    { "leftArrow", LEFT_ARROW }
+    { "leftArrow", LEFT_ARROW },
+	{ "inputVector", INPUT_VECTOR }
 };
 
 std::map<std::string, mouseCmds> profileActionToMouseCommands =

@@ -25,6 +25,10 @@ public:
 
 	static KeyboardVector createFromCommand(kybdCmds cmd);
 
+	static KeyboardVector createFromProfileStr(std::string str);
+
 private:
+	unsigned int tryInsertCharAsVK(char c);
+
 	std::vector<KEYBDINPUT> kiVector;
 };

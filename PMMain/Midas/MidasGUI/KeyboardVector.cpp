@@ -31,17 +31,22 @@ void KeyboardVector::inputCharUp(char c)
 
 void KeyboardVector::inputCharDownUp(char c)
 {
-	KEYBDINPUT ki;
-	ZeroMemory(&ki, sizeof(KEYBDINPUT));
+	// try to insert as VK for down/up as it interacts with some 
+	// systems better.
+	if (!tryInsertCharAsVK(c))
+	{
+		KEYBDINPUT ki;
+		ZeroMemory(&ki, sizeof(KEYBDINPUT));
 
-	int cInt = int(c);
+		int cInt = int(c);
 
-	ki.wScan = cInt;
-	ki.dwFlags = KEYEVENTF_UNICODE;
-	this->kiVector.push_back(ki);
+		ki.wScan = cInt;
+		ki.dwFlags = KEYEVENTF_UNICODE;
+		this->kiVector.push_back(ki);
 
-	ki.dwFlags |= KEYEVENTF_KEYUP;
-	this->kiVector.push_back(ki);
+		ki.dwFlags |= KEYEVENTF_KEYUP;
+		this->kiVector.push_back(ki);
+	}
 }
 
 void KeyboardVector::inputVKDown(unsigned int vk)
@@ -216,4 +221,54 @@ KeyboardVector KeyboardVector::createFromCommand(kybdCmds cmd)
 	keyboardVector.mirrorVectorAllUp();
 
 	return keyboardVector;
+}
+
+KeyboardVector KeyboardVector::createFromProfileStr(std::string str)
+{
+	KeyboardVector keyboardVector;
+
+	char * cstr = new char[str.length() + 1];
+	std::strcpy(cstr, str.c_str());
+	char* inputVector = strtok(cstr, ",");
+	inputVector = strtok(NULL, ","); // do twice as we want the characters after the (first) comma
+	for (int i = 0; inputVector[i] != NULL; i++)
+	{
+		keyboardVector.inputCharDownUp(inputVector[i]);
+	}
+
+	delete[] cstr;
+	return keyboardVector;
+}
+
+unsigned int KeyboardVector::tryInsertCharAsVK(char c)
+{
+	int cInt = int(c);
+	
+	bool isCapital = false;
+	if (cInt >= 0x41 && cInt <= 0x5A)
+	{
+		isCapital = true;
+	}
+	else if (cInt >= 0x61 && cInt <= 0x7A)
+	{
+		cInt -= 0x20;
+	}
+	else
+	{
+		// return -1 if the mapping is not simple (not being handled right now)
+		// only alpha
+		return -1;
+	}
+
+	if (isCapital)
+	{
+		this->inputVKDown(VK_SHIFT);
+	}
+	
+	this->inputVKDownUp(cInt);
+
+	if (isCapital)
+	{
+		this->inputVKUp(VK_SHIFT);
+	}
 }

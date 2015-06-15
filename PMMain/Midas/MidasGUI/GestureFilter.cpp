@@ -474,7 +474,18 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
         switch (response.type)
         {
             case commandType::KYBRD_CMD:
-                response.action.kybd = profileActionToKybd[action];
+				if (action.find("inputVector") == 0)
+				{
+					// special case where user could specify 0 or more keys to be pressed
+					// in the format: "inputVector,ABCD..." where A, B, C, D... are all keys
+					// intended to be added to the keyboardVector response.
+					response.action.kybd = profileActionToKybd["inputVector"];
+					response.keyboardVector = KeyboardVector::createFromProfileStr(action);
+				}
+				else
+				{
+					response.action.kybd = profileActionToKybd[action];
+				}
             break;
             case commandType::KYBRD_GUI_CMD:
                 if (profileActionToKybdGui.find(action) != profileActionToKybdGui.end())

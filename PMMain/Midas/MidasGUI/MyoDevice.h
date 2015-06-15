@@ -106,6 +106,12 @@ private:
         void onAccelerometerData(Myo* myo, uint64_t timestamp, const Vector3<float>& accel);
         void onGyroscopeData(Myo* myo, uint64_t timestamp, const Vector3<float>& gyro);
         void onRssi(Myo* myo, uint64_t timestamp, int8_t rssi);
+		// Added on upgrade to SDK Win 0.9.0
+		void onUnlock(Myo* myo, uint64_t timestamp);
+		void onLock(Myo* myo, uint64_t timestamp);
+		void onBatteryLevelReceived(myo::Myo* myo, uint64_t timestamp, uint8_t level);
+		void onEmgData(myo::Myo* myo, uint64_t timestamp, const int8_t* emg);
+		void onWarmupCompleted(myo::Myo* myo, uint64_t timestamp, WarmupResult warmupResult);
 
     private:
         MyoDevice& parent;
