@@ -1,4 +1,5 @@
 #include "MouseCtrl.h"
+#include "BaseMeasurements.h"
 #include <iostream>
 #include <time.h>
 
@@ -271,9 +272,26 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int&
         break;
 	case mouseCmds::MOVE_ABSOLUTE:
 		mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-		int monitorWidth = 65535; // size of a single monitor as represented by windows API
-		int monitorHeight = 65535;
-		mi.dy = monitorHeight / 2 + (mouseRateIfMoveY_hack/ 100.0 * monitorHeight / 2);
-		mi.dx = monitorWidth / 2 + (mouseRateIfMove / 100.0 * monitorWidth / 2);
+		int monitorSizeWeight = 65535; // size of a single monitor as represented by windows API
+		float monitorWidth = 1920.0; // TEMP TODO - make variable perhaps? For now, this is size of expected monitors
+		float monitorHeight = 1080.0;
+
+		if (!BaseMeasurements::getInstance().areCurrentValuesValid())
+		{
+			break;
+		}
+		int baseCursorX = BaseMeasurements::getInstance().getBaseCursorX();
+		int baseCursorY = BaseMeasurements::getInstance().getBaseCursorY();
+		int baseWindowsLocX = (baseCursorX / monitorWidth) * monitorSizeWeight;
+		int baseWindowsLocY = (baseCursorY / monitorHeight) * monitorSizeWeight;
+
+		//mi.dy = monitorSizeWeight / 2 + (mouseRateIfMoveY_hack / 100.0 * monitorSizeWeight / 2);
+		//mi.dx = monitorSizeWeight / 2 + (mouseRateIfMove / 100.0 * monitorSizeWeight / 2);
+		mi.dx = baseWindowsLocX + (mouseRateIfMove / 100.0 * monitorSizeWeight / 2);
+		mi.dy = baseWindowsLocY + (mouseRateIfMoveY_hack / 100.0 * monitorSizeWeight / 2);
+
+		mi.dx = max(min(mi.dx, monitorSizeWeight), 0);
+		mi.dy = max(min(mi.dy, monitorSizeWeight), 0);
+		break;
     }
 }

@@ -12,10 +12,10 @@
 
 ProfileSignaller MyoDevice::profileSignaller;
 
-MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState,
+MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, MyoState* myoState,
     std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
-    durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), arm(DEFAULT_MYO_ARM), 
+    durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), myoState(myoState), arm(DEFAULT_MYO_ARM), 
     xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
 {
     prevProfileName = "";
@@ -39,12 +39,12 @@ void MyoDevice::runDeviceLoop()
 {
     WearableDevice::setDeviceStatus(deviceStatus::RUNNING);
 
-    GestureFilter gestureFilter(state, 0, mainGui);
+    GestureFilter gestureFilter(state, myoState, 0, mainGui);
     posePipeline.registerFilter(&gestureFilter);
     posePipeline.registerFilter(WearableDevice::sharedData);
 
     AveragingFilter averagingFilter(5);
-    MyoTranslationFilter translationFilter(state);
+    MyoTranslationFilter translationFilter(state, myoState);
     orientationPipeline.registerFilter(&averagingFilter);
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);

@@ -10,6 +10,7 @@
 #define COMMAND_INPUT "command"
 #define VELOCITY_INPUT "velocity"
 #define ISCONNECTED_INPUT "isConnected"
+#define DELTA_INPUT "deltaInput"
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
@@ -96,13 +97,13 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
-	void SharedCommandData::setDelta(point delta);
+	void SharedCommandData::setDelta(vector2D delta);
 
-	bool SharedCommandData::trySetDelta(point delta);
+	bool SharedCommandData::trySetDelta(vector2D delta);
 
-	point SharedCommandData::getDelta();
+	vector2D SharedCommandData::getDelta();
 
-	bool SharedCommandData::tryGetDelta(point& outDelta);
+	bool SharedCommandData::tryGetDelta(vector2D& outDelta);
 
     /**
      * Returns whether the device is connected or not
@@ -152,7 +153,7 @@ private:
     bool  isConnected;
 
 	// point to indicate offset from current mouse position, while a pose is being held 
-	point mouseDelta;
+	vector2D mouseDelta;
 	std::mutex mouseDeltaMutex;
    
     // together, these 2 vars define which wheel/RingData the keyboard should show on the GUI
@@ -168,6 +169,7 @@ private:
     void extractCommand(boost::any value);
     void extractPoint(boost::any value);
     void extractIsConnected(boost::any value);
+	void extractVector2D(boost::any value);
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

@@ -2,6 +2,7 @@
 #include "WearableDevice.h"
 #include "FilterPipeline.h"
 #include "ControlState.h"
+#include "MyoState.h"
 #include "myo\myo.hpp"
 #include "MainGUI.h"
 #include "ProfileSignaller.h"
@@ -35,7 +36,7 @@ public:
      * changed, and so that the device can read the current state.
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
-    MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, std::string applicationIdentifier, 
+	MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, MyoState* myoState, std::string applicationIdentifier,
         MainGUI *mainGuiHandle, ProfileManager* profileManagerHandle);
     ~MyoDevice();
 
@@ -121,6 +122,7 @@ private:
     unsigned int durationInMilliseconds;
     std::string appIdentifier;
     ControlState* state;
+	MyoState* myoState;
     FilterPipeline posePipeline, orientationPipeline, rssiPipeline,
         connectPipeline;
     MainGUI *mainGui;

@@ -2,6 +2,7 @@
 #define _GESTURE_FILTER_H
 
 #include "ControlState.h"
+#include "MyoState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
 #include "MainGUI.h"
@@ -44,7 +45,7 @@ public:
      * @param controlState A handle to the ControlState object that manages application state.
      * @param timeDel The time that a user must hold a gesture before it is registered.
      */
-    GestureFilter(ControlState* controlState, clock_t timeDel, MainGUI *mainGuiHandle);
+	GestureFilter(ControlState* controlState, MyoState* myoState, clock_t timeDel, MainGUI *mainGuiHandle);
     ~GestureFilter();
 
     /**
@@ -64,7 +65,7 @@ public:
     */
     GestureSeqRecorder *getGestureSeqRecorder() { return gestSeqRecorder; }
 
-    static void handleStateChange(CommandData response);
+	static void handleStateChange(CommandData response, GestureFilter *gf);
 
     friend void setupCallbackThread(GestureFilter *gf);
     friend void callbackThreadWrapper(GestureFilter *gf);
@@ -84,14 +85,15 @@ private:
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleMouseCommand(CommandData response);
-    void handleKybrdCommand(CommandData response, bool addToExtra = false);
+	filterDataMap handleMouseCommand(CommandData response);
+	filterDataMap handleKybrdCommand(CommandData response, bool addToExtra = false);
 
     void emitPoseData(int poseInt);
 
     Pose::Type lastPoseType;
     
     static ControlState* controlStateHandle;
+	MyoState* myoStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
 

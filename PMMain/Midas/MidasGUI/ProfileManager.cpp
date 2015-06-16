@@ -206,18 +206,28 @@ profileSequence ProfileManager::extractSequenceInformation(const boost::property
         }
     }
 
-    command cmd;
-    const ptree & pt = parentSequence.second.get_child("command");
-    cmd.type = pt.get<std::string>("<xmlattr>.type");
+//    command cmd;
+//    const ptree & pt = parentSequence.second.get_child("command");
+//    cmd.type = pt.get<std::string>("<xmlattr>.type");
 
-    BOOST_FOREACH(const ptree::value_type & vt, pt.get_child("actions")) {
-        if (vt.first == "action")
-        {
-            cmd.actions.push_back(vt.second.get_value<std::string>());
-        }
-    }
+	std::vector<command> cmds;
+	BOOST_FOREACH(const ptree::value_type & pt, parentSequence.second.get_child("commands")) {
+		command cmd;
+		if (pt.first == "command")
+		{
+			cmd.type = pt.second.get<std::string>("<xmlattr>.type");
+		}
 
-    seq.cmd = cmd;
+		BOOST_FOREACH(const ptree::value_type & vt, pt.second.get_child("actions")) {
+			if (vt.first == "action")
+			{
+				cmd.actions.push_back(vt.second.get_value<std::string>());
+			}
+		}
+		cmds.push_back(cmd);
+	}
+
+    seq.cmds = cmds;
     seq.gestures = gestures;
     seq.state = sequenceState;
     seq.name = sequenceName;

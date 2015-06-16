@@ -119,6 +119,12 @@ void SharedCommandData::process()
         extractPoint(value);
     }
 
+	if (input.find(DELTA_INPUT) != input.end())
+	{
+		boost::any value = input[DELTA_INPUT];
+		extractVector2D(value);
+	}
+
     if (input.find(ISCONNECTED_INPUT) != input.end())
     {
         boost::any value = input[ISCONNECTED_INPUT];
@@ -188,14 +194,28 @@ void SharedCommandData::extractIsConnected(boost::any value)
     }
 }
 
-void SharedCommandData::setDelta(point delta)
+void SharedCommandData::extractVector2D(boost::any value)
+{
+	if (value.type() != typeid(vector2D))
+	{
+		Filter::setFilterError(filterError::INVALID_INPUT);
+		Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+	}
+	else
+	{
+		vector2D vec2D = boost::any_cast<vector2D> (value);
+		setDelta(vec2D);
+	}
+}
+
+void SharedCommandData::setDelta(vector2D delta)
 {
 	mouseDeltaMutex.lock();
 	mouseDelta = delta;
 	mouseDeltaMutex.unlock();
 }
 
-bool SharedCommandData::trySetDelta(point delta)
+bool SharedCommandData::trySetDelta(vector2D delta)
 {
 	bool locked = mouseDeltaMutex.try_lock();
 	if (locked) {
@@ -206,16 +226,16 @@ bool SharedCommandData::trySetDelta(point delta)
 	return locked;
 }
 
-point SharedCommandData::getDelta()
+vector2D SharedCommandData::getDelta()
 {
 	mouseDeltaMutex.lock();
-	point delta = mouseDelta;
+	vector2D delta = mouseDelta;
 	mouseDeltaMutex.unlock();
 
 	return delta;
 }
 
-bool SharedCommandData::tryGetDelta(point& outDelta)
+bool SharedCommandData::tryGetDelta(vector2D& outDelta)
 {
 	bool locked = mouseDeltaMutex.try_lock();
 	if (locked) {

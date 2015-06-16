@@ -12,11 +12,13 @@
 #include "SharedCommandData.h"
 #include "MyoDevice.h"
 #include "KeyboardContoller.h"
+#include "BaseMeasurements.h"
 
 #include "MidasThread.h"
 #include "SharedCommandDataTest.h"
 #include "KybrdCtrlTest.h"
 #include "MouseCtrlTest.h"
+#include "MyoState.h"
 
 using namespace std;
 
@@ -79,7 +81,11 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
 #ifdef MAIN_MODE
     SharedCommandData sharedData;
     ControlState controlState(&sharedData);
-    MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, "com.midas.midas-test", mainGui, pm);
+	MyoState myoState;
+	myoState.setPoseHistLen(5); // arbitrary for now.
+	myoState.setSpatialHistLen(5);
+	BaseMeasurements::getInstance().setMyoStateHandle(&myoState);
+	MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, &myoState, "com.midas.midas-test", mainGui, pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 	KeyboardController* keyboardController = new KeyboardController();
@@ -87,7 +93,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
     // Kick off device thread
     startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.
 
-	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, mouseCtrl, kybrdCtrl, keyboardController);
+	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, &myoState, mouseCtrl, kybrdCtrl, keyboardController);
     
     while (true)
     {

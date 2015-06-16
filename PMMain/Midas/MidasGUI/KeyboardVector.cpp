@@ -271,4 +271,5 @@ unsigned int KeyboardVector::tryInsertCharAsVK(char c)
 	{
 		this->inputVKUp(VK_SHIFT);
 	}
+	return 0;
 }

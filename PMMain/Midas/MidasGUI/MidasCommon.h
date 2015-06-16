@@ -176,6 +176,16 @@ struct point {
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
 };
 
+struct vector2D {
+	double x, y;
+	vector2D(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
+};
+
+struct vector3D {
+	double x, y, z;
+	vector3D(double xVal = 0.0, double yVal = 0.0, double zVal = 0.0) : x(xVal), y(yVal), z(zVal) { }
+};
+
 struct keyboardAngle {
     int angle;
     bool ringThreshReached = true;

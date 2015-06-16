@@ -4,6 +4,7 @@
 #include "SharedCommandData.h"
 #include "MidasThread.h"
 #include "ControlState.h"
+#include "MyoState.h"
 #include "MouseCtrl.h"
 #include "kybrdCtrl.h"
 #include "MyoCommon.h"
@@ -22,7 +23,7 @@ using namespace myo;
 class SCDDigester
 {
 public:
-    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
+    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
 		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController);
     ~SCDDigester();
 
@@ -37,6 +38,7 @@ private:
     SharedCommandData *scdHandle;
     MidasThread *threadHandle;
     ControlState *cntrlStateHandle;
+	MyoState *myoStateHandle;
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     int count;

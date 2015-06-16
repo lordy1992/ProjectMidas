@@ -21,7 +21,7 @@ struct profileSequence {
     std::string state;
     std::string name;
     std::vector<gesture> gestures;
-    command cmd;
+    std::vector<command> cmds;
 };
 
 struct angleAction {

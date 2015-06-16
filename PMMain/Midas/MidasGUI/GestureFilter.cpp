@@ -2,6 +2,8 @@
 #include "MyoCommon.h"
 #include "CommandData.h"
 #include "ProfileManager.h"
+#include "BaseMeasurements.h"
+#include "FilterPipeline.h"
 #include <time.h>
 #include <thread>
 #include <qtranslator.h>
@@ -10,9 +12,9 @@
 ControlState* GestureFilter::controlStateHandle;
 GestureSignaller GestureFilter::signaller;
 
-GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGUI *mainGuiHandle) 
+GestureFilter::GestureFilter(ControlState* controlState, MyoState* myoState, clock_t timeDel, MainGUI *mainGuiHandle)
     : timeDelta(timeDel), lastPoseType(Pose::rest),
-    lastTime(0), mainGui(mainGuiHandle)
+	lastTime(0), mainGui(mainGuiHandle)
 {
     imageManager.loadImages();
     gestSeqRecorder = new GestureSeqRecorder(controlState, mainGuiHandle, imageManager);
@@ -22,6 +24,7 @@ GestureFilter::GestureFilter(ControlState* controlState, clock_t timeDel, MainGU
     registerStateSequences();
 
     controlStateHandle = controlState;
+	myoStateHandle = myoState;
 
     setupCallbackThread(this);
 
@@ -45,13 +48,25 @@ void GestureFilter::process()
     clock_t timeFromLastPose = 0;
     filterDataMap input = Filter::getInput();
     Pose::Type gesture = boost::any_cast<Pose::Type>(input[GESTURE_INPUT]);
+	
+	// update state and GUI
+	myoStateHandle->pushPose(gesture);
     emitPoseData(gesture);
+
+	if (gesture != lastPoseType)
+	{
+		// Update BaseCursor Position <-- fiddling for now still June 16
+		//BaseMeasurements::getInstance().setCurrentAnglesAsBase();
+		BaseMeasurements::getInstance().setCurrentPose(gesture);
+		
+		BaseMeasurements::getInstance().setScreenSize(0,0); // dont actually need to do. TODO - remove
+	}
     
     Filter::setFilterError(filterError::NO_FILTER_ERROR);
     Filter::setFilterStatus(filterStatus::OK);
-    Filter::clearOutput();
-
-    // First, filter based on "hold time" in a specific gesture.
+	Filter::clearOutput();
+	
+	// First, filter based on "hold time" in a specific gesture.
     timeFromLastPose = clock() - lastTime;
     if (timeFromLastPose < timeDelta)
     {
@@ -71,7 +86,7 @@ void GestureFilter::process()
 
     if (response.type == commandType::STATE_CHANGE)
     {
-        handleStateChange(response);
+        handleStateChange(response, this);
     }
     else if (response.type == commandType::MOUSE_CMD)
     {
@@ -340,7 +355,7 @@ void GestureFilter::registerStateSequences(void)
     }
 }
 
-void GestureFilter::handleStateChange(CommandData response)
+void GestureFilter::handleStateChange(CommandData response, GestureFilter *gf)
 {
     if (response.type != commandType::STATE_CHANGE)
     {
@@ -357,25 +372,44 @@ void GestureFilter::handleStateChange(CommandData response)
 
     std::cout << "Transitioning to state: " << response.action.mode << std::endl;
     controlStateHandle->setMode(response.action.mode);
-    
+
+	// If there are subsequent commands to execute, do so on a seperate pipeline!
+	std::vector<CommandData> changeStateCommands = response.getChangeStateActions();
+	FilterPipeline fp;
+	fp.registerFilter(gf->controlStateHandle->getSCD());
+	for (int i = 0; i < changeStateCommands.size(); i++)
+	{
+		filterDataMap dataMap;
+		if (changeStateCommands[i].type == commandType::MOUSE_CMD)
+		{
+			dataMap = gf->handleMouseCommand(changeStateCommands[i]);
+		}
+		else if (changeStateCommands[i].type == commandType::KYBRD_CMD || changeStateCommands[i].type == commandType::KYBRD_GUI_CMD)
+		{
+			dataMap = gf->handleKybrdCommand(changeStateCommands[i]);
+		}
+		fp.startPipeline(dataMap);
+	}
+	    
     return;
 }
 
-void GestureFilter::handleMouseCommand(CommandData response)
+filterDataMap GestureFilter::handleMouseCommand(CommandData response)
 {
+	filterDataMap outputToSharedCommandData;
     if (controlStateHandle->getMode() == midasMode::MOUSE_MODE ||
         controlStateHandle->getMode() == midasMode::GESTURE_MODE)
     {
-        filterDataMap outputToSharedCommandData;
         CommandData command;
         command = response;
 
         outputToSharedCommandData[COMMAND_INPUT] = command;
         Filter::setOutput(outputToSharedCommandData);
     }
+	return outputToSharedCommandData;
 }
 
-void GestureFilter::handleKybrdCommand(CommandData response, bool addToExtra)
+filterDataMap GestureFilter::handleKybrdCommand(CommandData response, bool addToExtra)
 {
     filterDataMap outputToSharedCommandData;
     CommandData command;
@@ -391,6 +425,8 @@ void GestureFilter::handleKybrdCommand(CommandData response, bool addToExtra)
     {
         Filter::setOutput(outputToSharedCommandData);
     }
+
+	return outputToSharedCommandData;
 }
 
 filterDataMap GestureFilter::getExtraDataForSCD()
@@ -417,7 +453,7 @@ void callbackThreadWrapper(GestureFilter *gf)
         gf->getGestureSeqRecorder()->progressSequenceTime(SLEEP_LEN, response);
         if (response.type == commandType::STATE_CHANGE)
         {
-            GestureFilter::handleStateChange(response);
+            GestureFilter::handleStateChange(response, gf);
         }
         else if (response.type == commandType::MOUSE_CMD)
         {
@@ -464,62 +500,136 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
             seq.push_back(SeqElement(type, len));
         }
 
-        CommandData response;
-        response.name = it->name;
-        response.type = profileCommandToCommandTypeMap[it->cmd.type];
-
-        // Currently only supporting one action, rather than a list.
-        // The XML format supports a list so that it can be extended in Midas easily.
-        std::string action = it->cmd.actions[0];
-        switch (response.type)
-        {
-            case commandType::KYBRD_CMD:
+		// For now, only ONE command can be used for all command types, except state changes.
+		// On a state change, the user can have Midas send a vector of commands as soon
+		// as they change into the state.
+		std::vector<CommandData> translatedCommands;
+		int cmdItCount = 0;
+		for (std::vector<command>::iterator cmdIt = it->cmds.begin(); cmdIt != it->cmds.end(); ++cmdIt)
+		{
+			CommandData translatedCommand;
+			translatedCommand.name = it->name;
+			translatedCommand.type = profileCommandToCommandTypeMap[cmdIt->type]; 
+			// Currently only supporting one action, rather than a list.
+			// The XML format supports a list so that it can be extended in Midas easily.
+			std::string action = cmdIt->actions[0];
+			switch (translatedCommand.type)
+			{
+			case commandType::KYBRD_CMD:
 				if (action.find("inputVector") == 0)
 				{
 					// special case where user could specify 0 or more keys to be pressed
 					// in the format: "inputVector,ABCD..." where A, B, C, D... are all keys
 					// intended to be added to the keyboardVector response.
-					response.action.kybd = profileActionToKybd["inputVector"];
-					response.keyboardVector = KeyboardVector::createFromProfileStr(action);
+					translatedCommand.action.kybd = profileActionToKybd["inputVector"];
+					translatedCommand.keyboardVector = KeyboardVector::createFromProfileStr(action);
 				}
 				else
 				{
-					response.action.kybd = profileActionToKybd[action];
+					translatedCommand.action.kybd = profileActionToKybd[action];
 				}
-            break;
-            case commandType::KYBRD_GUI_CMD:
-                if (profileActionToKybdGui.find(action) != profileActionToKybdGui.end())
-                {
-                    response.action.kybdGUI = profileActionToKybdGui[action];
-                }
-                else
-                {
-                    response.type = commandType::KYBRD_CMD;
-                    response.action.kybd = profileActionToKybd[action];
-                }
-            break;
-            case commandType::MOUSE_CMD:
-                response.action.mouse = profileActionToMouseCommands[action];
-            break;
-            case commandType::STATE_CHANGE:
-                response.action.mode = profileActionToStateChange[action];
-            break;
-            default:
-            break;
-        }
+				break;
+			case commandType::KYBRD_GUI_CMD:
+				if (profileActionToKybdGui.find(action) != profileActionToKybdGui.end())
+				{
+					translatedCommand.action.kybdGUI = profileActionToKybdGui[action];
+				}
+				else
+				{
+					translatedCommand.type = commandType::KYBRD_CMD;
+					translatedCommand.action.kybd = profileActionToKybd[action];
+				}
+				break;
+			case commandType::MOUSE_CMD:
+				translatedCommand.action.mouse = profileActionToMouseCommands[action];
+				break;
+			case commandType::STATE_CHANGE:
+				if (cmdItCount > 0)
+				{
+					throw new std::exception("GestureFilter: StateChangeAction set as StateChange");
+				}
+				translatedCommand.action.mode = profileActionToStateChange[action];
+				break;
+			default:
+				break;
+			}
+			translatedCommands.push_back(translatedCommand);
+			cmdItCount++;
+		}
+
+		CommandData response;
+		response = translatedCommands[0];
+		// if more than one command, add as changeStateActions
+		for (int i = 1; i < cmdItCount; i++)
+		{
+			response.addChangeStateAction(translatedCommands[i]);
+		}
+
+//        response.type = profileCommandToCommandTypeMap[it->cmd.type];
+//
+//        // Currently only supporting one action, rather than a list.
+//        // The XML format supports a list so that it can be extended in Midas easily.
+//        std::string action = it->cmd.actions[0];
+//        switch (response.type)
+//        {
+//            case commandType::KYBRD_CMD:
+//				if (action.find("inputVector") == 0)
+//				{
+//					// special case where user could specify 0 or more keys to be pressed
+//					// in the format: "inputVector,ABCD..." where A, B, C, D... are all keys
+//					// intended to be added to the keyboardVector response.
+//					response.action.kybd = profileActionToKybd["inputVector"];
+//					response.keyboardVector = KeyboardVector::createFromProfileStr(action);
+//				}
+//				else
+//				{
+//					response.action.kybd = profileActionToKybd[action];
+//				}
+//            break;
+//            case commandType::KYBRD_GUI_CMD:
+//                if (profileActionToKybdGui.find(action) != profileActionToKybdGui.end())
+//                {
+//                    response.action.kybdGUI = profileActionToKybdGui[action];
+//                }
+//                else
+//                {
+//                    response.type = commandType::KYBRD_CMD;
+//                    response.action.kybd = profileActionToKybd[action];
+//                }
+//            break;
+//            case commandType::MOUSE_CMD:
+//                response.action.mouse = profileActionToMouseCommands[action];
+//            break;
+//            case commandType::STATE_CHANGE:
+//                response.action.mode = profileActionToStateChange[action];
+//			//	// handle multi-line actions to attach actions to state changes.
+//			//	CommandData stateChangeAction;
+//			//	for (int j = 0; j < it->cmd.actions.size(); j++)
+//			//	{
+//			//		it->cmd.actions[0];
+//			//		action[j];
+//			//		CommandData stateChangeAction;
+//			//		response.name = it->name;
+//			//		response.type = profileCommandToCommandTypeMap[it->cmd.type];
+//			//	}
+//            break;
+//            default:
+//            break;
+//        }
 
         midasMode startState = profileActionToStateChange[it->state];
         ss |= (int)gestSeqRecorder->registerSequence(startState, seq, response, it->name);
 
     }
 
-    sequence clickSeq;
-    CommandData clickResp;
-    clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
-    clickResp.name = "Release Mouse";
-    clickResp.type = commandType::MOUSE_CMD;
-    clickSeq.push_back(SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE));
-    ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Release Mouse");
+	// Jorden TODO - add this back in proper way <-- Need a "submit action on transition" for this and for entering mouse mode.
+//    sequence clickSeq;
+//    CommandData clickResp;
+//    clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
+//    clickResp.name = "Release Mouse";
+//    clickResp.type = commandType::MOUSE_CMD;
+//    clickSeq.push_back(SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE));
+//    ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Release Mouse");
 
 	/* Removing for now as to reduce complexity of Midas.
     // Register sequence from Gesture Mode to Gesture Hold Modes

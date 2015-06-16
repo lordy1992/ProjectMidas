@@ -1,3 +1,6 @@
+#ifndef MYO_STATE_H
+#define MYO_STATE_H
+
 #include <queue>
 #include <mutex>
 #include "myo\cxx\Vector3.hpp"
@@ -6,20 +9,26 @@
 
 class MyoState {
 public:
+	MyoState();
+
 	void setSpatialHistLen(int spatialHistLen);
 	void setPoseHistLen(int poseHistLen);
 
 	void pushRotation(myo::Quaternion<float> rotation);
 	myo::Quaternion<float> popRotation();
+	std::queue<myo::Quaternion<float>> getRotationHistory();
 
 	void pushAccel(myo::Vector3<float> accel);
 	myo::Vector3<float> popAccel();
+	std::queue<myo::Vector3<float>> getAccelHistory();
 
 	void pushGyro(myo::Vector3<float> gyro);
 	myo::Vector3<float> popGryo();
+	std::queue<myo::Vector3<float>> getGyroHistory();
 
 	void pushPose(myo::Pose pose);
 	myo::Pose popPose();
+	std::queue<myo::Pose> getPoseHistory();
 private:
 	std::mutex myoStateMutex;
 
@@ -31,3 +40,5 @@ private:
 	int poseHistLen;
 	std::queue<myo::Pose> poseHistory;
 };
+
+#endif /* MYO_STATE_H */

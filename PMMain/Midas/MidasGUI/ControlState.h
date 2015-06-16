@@ -53,6 +53,8 @@ public:
      */
     midasMode getMode();
 
+	SharedCommandData* getSCD() { return SCDHandle; }
+
 private:
     midasMode currentMode;
     SharedCommandData *SCDHandle;

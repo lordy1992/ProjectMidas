@@ -27,10 +27,22 @@ public:
 	}
 	~CommandData();
 
+	/*
+	* Return 0 for success, positive otherwise
+	*/
+	int addChangeStateAction(CommandData cmd);
+	void clearChangeStateActions();
+	std::vector<CommandData> getChangeStateActions() { return changeStateActions; }
+
 	commandType type;
 	action action;
 
 	std::string name;
 	KeyboardVector keyboardVector;
+
+private:
+	// these actions will be executed as soon as the state is changed,
+	// in the order they are added.
+	std::vector<CommandData> changeStateActions;
 };
 

@@ -1,12 +1,14 @@
 #include "SCDDigester.h"
+#include "BaseMeasurements.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
 	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
     this->cntrlStateHandle = cntrlStateHandle;
+	this->myoStateHandle = myoStateHandle;
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
 	this->keyboardController = keyboardController;
@@ -50,12 +52,18 @@ void SCDDigester::digest()
         mouseCtrl->sendCommand(nextCmd.action.mouse);
     }
 
-    point unitVelocity = scdHandle->getVelocity();
-	if (unitVelocity.x != 0 || unitVelocity.y != 0)
+	vector2D mouseDelta = scdHandle->getDelta();
+	if (cntrlStateHandle->getMode() == midasMode::MOUSE_MODE)
 	{
-		// TODO - fix sign issue
-		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, unitVelocity.x, -unitVelocity.y);
+		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, mouseDelta.x, -mouseDelta.y);
 	}
+
+//    point unitVelocity = scdHandle->getVelocity();
+//	if (unitVelocity.x != 0 || unitVelocity.y != 0)
+//	{
+//		// TODO - fix sign issue
+//		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, unitVelocity.x, -unitVelocity.y);
+//	}
     //if (unitVelocity.x != 0)
     //{
     //    mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
