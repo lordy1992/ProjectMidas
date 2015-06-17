@@ -155,9 +155,11 @@ void SequenceEditor::handleDone()
         action = item->text().toStdString();
         actions.push_back(action);
     }
-
-    returnSequence.cmd.type = ui.commandComboBox->currentText().toStdString();
-    returnSequence.cmd.actions = actions;
+	// TODO - in the future make this accept/write multiple commands. For now, not supported.
+	Command cmd;
+	cmd.type = ui.commandComboBox->currentText().toStdString();
+	cmd.actions = actions;
+	returnSequence.cmds.push_back(cmd);
 
     std::string errorMsg;
     if (checkPrefixConstraint(errorMsg))
