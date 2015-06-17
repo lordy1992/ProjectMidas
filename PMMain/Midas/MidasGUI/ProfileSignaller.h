@@ -12,6 +12,7 @@ public:
     ~ProfileSignaller();
 
     std::string getProfileName();
+	void setProfileName(std::string name);
 
 public slots:
     void handleProfilePress(QString);

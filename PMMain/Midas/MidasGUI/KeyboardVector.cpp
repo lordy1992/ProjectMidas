@@ -33,7 +33,7 @@ void KeyboardVector::inputCharDownUp(char c)
 {
 	// try to insert as VK for down/up as it interacts with some 
 	// systems better.
-	if (!tryInsertCharAsVK(c))
+	if (tryInsertCharAsVK(c) == NO_VK_REP_FOUND)
 	{
 		KEYBDINPUT ki;
 		ZeroMemory(&ki, sizeof(KEYBDINPUT));
@@ -255,9 +255,9 @@ unsigned int KeyboardVector::tryInsertCharAsVK(char c)
 	}
 	else
 	{
-		// return -1 if the mapping is not simple (not being handled right now)
+		// return NO_VK_REP_FOUND if the mapping is not simple (not being handled right now)
 		// only alpha
-		return -1;
+		return NO_VK_REP_FOUND;
 	}
 
 	if (isCapital)

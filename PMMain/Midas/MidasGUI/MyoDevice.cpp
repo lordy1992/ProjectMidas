@@ -49,7 +49,9 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(&translationFilter);
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
-    mainGui->connectSignallerToProfileWidgets(&profileSignaller);
+	// init profileSignaller to the first profile name.
+	profileSignaller.setProfileName(profileManager->getProfiles()->at(0).profileName);
+	mainGui->connectSignallerToProfileWidgets(&profileSignaller); 
 	
     AveragingFilter rssiAveragingFilter(5);
     rssiPipeline.registerFilter(&rssiAveragingFilter);

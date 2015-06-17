@@ -3,6 +3,8 @@
 #include <Windows.h>
 #include "MidasCommon.h"
 
+#define NO_VK_REP_FOUND -1
+
 class KeyboardVector {
 public:
 	void clear();

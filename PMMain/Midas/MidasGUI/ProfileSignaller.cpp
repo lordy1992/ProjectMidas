@@ -20,3 +20,8 @@ std::string ProfileSignaller::getProfileName()
 {
     return profileName;
 }
+
+void ProfileSignaller::setProfileName(std::string name)
+{
+	profileName = name;
+}
