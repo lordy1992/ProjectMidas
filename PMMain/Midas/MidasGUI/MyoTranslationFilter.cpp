@@ -18,6 +18,10 @@ MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState, MyoState*
     roll(0), prevRoll(0), deltaRollDeg(0)
 {
     initGestHoldModeActionArr();
+
+	Filter::setFilterError(filterError::NO_FILTER_ERROR);
+	Filter::setFilterStatus(filterStatus::OK);
+	Filter::clearOutput();
 }
 
 MyoTranslationFilter::~MyoTranslationFilter()

@@ -24,7 +24,7 @@ using namespace myo;
 
 #define DEFAULT_PROG_MAX_DELTA 3000 // ms
 
-#define REQ_HOLD_TIME 1000 // ms
+#define REQ_HOLD_TIME 500 // ms
 
 enum class SequenceStatus {
     SUCCESS,

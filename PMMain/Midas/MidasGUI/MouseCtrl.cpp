@@ -132,6 +132,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove, int mouseRa
     INPUT* in = new INPUT();
     in->type = INPUT_MOUSE;
     in->mi = mi;
+
     SendInput(1, in, sizeof(INPUT));
 
     // Build and send opposite command if clicking!
@@ -271,15 +272,16 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int&
         mi.mouseData = -scrollRate; // RANGE IS FROM -120 to +120 : WHEEL_DELTA = 120, which is one "wheel click"
         break;
 	case mouseCmds::MOVE_ABSOLUTE:
+		if (!BaseMeasurements::getInstance().areCurrentValuesValid())
+		{
+			break;
+		}
+
 		mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
 		int monitorSizeWeight = 65535; // size of a single monitor as represented by windows API
 		float monitorWidth = 1920.0; // TEMP TODO - make variable perhaps? For now, this is size of expected monitors
 		float monitorHeight = 1080.0;
 
-		if (!BaseMeasurements::getInstance().areCurrentValuesValid())
-		{
-			break;
-		}
 		int baseCursorX = BaseMeasurements::getInstance().getBaseCursorX();
 		int baseCursorY = BaseMeasurements::getInstance().getBaseCursorY();
 		int baseWindowsLocX = (baseCursorX / monitorWidth) * monitorSizeWeight;
@@ -292,6 +294,12 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int&
 
 		mi.dx = max(min(mi.dx, monitorSizeWeight), 0);
 		mi.dy = max(min(mi.dy, monitorSizeWeight), 0);
+
+		if (mi.dx < 10 && mi.dy < 10)
+		{
+			int a = 1;
+		}
+
 		break;
     }
 }
