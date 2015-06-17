@@ -46,6 +46,7 @@ extern std::map<std::string, kybdGUICmds> profileActionToKybdGui;
 extern std::map<std::string, kybdCmds> profileActionToKybd;
 extern std::map<std::string, mouseCmds> profileActionToMouseCommands;
 extern std::map<std::string, midasMode> profileActionToStateChange;
+extern std::map<std::string, profileCmds> profileActionToProfileChange;
 extern std::map <std::string, SeqElement::PoseLength> profileGestureTypeToPoseLength;
 extern std::map <std::string, Pose::Type> profileGestureNameToType;
 

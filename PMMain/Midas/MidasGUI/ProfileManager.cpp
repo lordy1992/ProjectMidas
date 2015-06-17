@@ -9,6 +9,7 @@ std::map<std::string, commandType> profileCommandToCommandTypeMap =
     { "keyboardGui", KYBRD_GUI_CMD },
     { "mouse", MOUSE_CMD },
     { "stateChange", STATE_CHANGE },
+	{ "profileChange", PROFILE_CHANGE },
     { "none", NONE }
 };
 
@@ -90,6 +91,12 @@ std::map<std::string, midasMode> profileActionToStateChange =
     { "gestureHoldThree", GESTURE_HOLD_THREE },
     { "gestureHoldFour", GESTURE_HOLD_FOUR },
     { "gestureHoldFive", GESTURE_HOLD_FIVE }
+};
+
+std::map<std::string, profileCmds> profileActionToProfileChange =
+{
+	{ "moveProfileForward", MOVE_PROFILE_FORWARD },
+	{ "moveProfileBackward", MOVE_PROFILE_BACKWARD }
 };
 
 std::map <std::string, SeqElement::PoseLength> profileGestureTypeToPoseLength =
@@ -205,10 +212,6 @@ profileSequence ProfileManager::extractSequenceInformation(const boost::property
             gestures.push_back(gest);
         }
     }
-
-//    command cmd;
-//    const ptree & pt = parentSequence.second.get_child("command");
-//    cmd.type = pt.get<std::string>("<xmlattr>.type");
 
 	std::vector<command> cmds;
 	BOOST_FOREACH(const ptree::value_type & pt, parentSequence.second.get_child("commands")) {

@@ -100,6 +100,10 @@ void GestureFilter::process()
     {
         handleKybrdCommand(response);
     }
+	else if (response.type == commandType::PROFILE_CHANGE)
+	{
+		handleProfileChangeCommand(response);
+	}
 
     lastPoseType = gesture;
     lastTime = clock();
@@ -433,6 +437,19 @@ filterDataMap GestureFilter::handleKybrdCommand(CommandData response, bool addTo
 	return outputToSharedCommandData;
 }
 
+filterDataMap GestureFilter::handleProfileChangeCommand(CommandData response)
+{
+	filterDataMap outputToSharedCommandData;
+	CommandData command;
+	command = response;
+
+	outputToSharedCommandData[COMMAND_INPUT] = command;
+	setOutput(outputToSharedCommandData);
+	setFilterError(filterError::NO_FILTER_ERROR);
+	setFilterStatus(filterStatus::OK);
+	return outputToSharedCommandData;
+}
+
 filterDataMap GestureFilter::getExtraDataForSCD()
 {
     filterDataMap retVal = extraDataForSCD;
@@ -471,6 +488,10 @@ void callbackThreadWrapper(GestureFilter *gf)
         {
             gf->handleKybrdCommand(response, true);
         }
+		else if (response.type == commandType::PROFILE_CHANGE)
+		{
+			gf->handleProfileChangeCommand(response);
+		}
     } while (true);
 }
 
@@ -554,6 +575,8 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
 				}
 				translatedCommand.action.mode = profileActionToStateChange[action];
 				break;
+			case commandType::PROFILE_CHANGE:
+				translatedCommand.action.profile = profileActionToProfileChange[action];
 			default:
 				break;
 			}

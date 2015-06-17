@@ -23,6 +23,7 @@ private:
     void formMouseActions();
     void formKybdActions();
     void formKybdGUIActions();
+	void formProfileChangeActions();
     bool checkPrefixConstraint(std::string &errorMessage);
 
     Ui::SequenceEditor ui;

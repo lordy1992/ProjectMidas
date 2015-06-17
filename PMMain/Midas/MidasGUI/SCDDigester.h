@@ -10,6 +10,8 @@
 #include "MyoCommon.h"
 #include "KeyboardContoller.h"
 #include "CommandData.h"
+#include "ProfileManager.h"
+#include "ProfileSignaller.h"
 #include <iostream>
 
 #ifdef USE_SIMULATOR
@@ -24,13 +26,16 @@ class SCDDigester
 {
 public:
     SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
-		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController);
+		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle,
+		ProfileSignaller *profileSignallerHandle);
     ~SCDDigester();
 
     void digest();
 
 private:
     void digestKybdCmd(CommandData nextCommand);
+
+	void digestProfileChange(CommandData nextCmd);
 
     void digestKeyboardGUIData(CommandData nextCommand);
 
@@ -42,6 +47,9 @@ private:
     MouseCtrl *mouseCtrl;
     KybrdCtrl *kybrdCtrl;
     int count;
+
+	ProfileManager *pm;
+	ProfileSignaller *ps;
 };
 
 #endif /* _SCD_DIGESTER_H */

@@ -2,6 +2,18 @@
 <profiles>
     <profile name="Rotate Model">
         <sequences>
+			<sequence state="gestureMode" name="Switch Rotate/Draw">
+                <gestures>
+                    <gesture type="hold">waveOut</gesture>
+                </gestures>
+				<commands>
+				<command type="profileChange">
+                    <actions>
+                        <action>moveProfileForward</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
 			<sequence state="gestureMode" name="2D">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
@@ -55,8 +67,6 @@
             <sequence state="lockMode" name="Unlock">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">waveOut</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -204,8 +214,6 @@
             <sequence state="lockMode" name="Unlock">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
-                    <gesture type="tap">waveOut</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">

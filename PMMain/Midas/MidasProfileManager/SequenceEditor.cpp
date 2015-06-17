@@ -190,16 +190,21 @@ void SequenceEditor::handleActivateCommandBox(const QString & text)
     {
         formStateChangeActions();
     }
+	else if (text == "profileChange")
+	{
+		formProfileChangeActions();
+	}
 }
 
 void SequenceEditor::formCommandComboBox()
 {
     ui.commandComboBox->clear();
 
+	ui.commandComboBox->addItem(QString("mouse"));
     ui.commandComboBox->addItem(QString("keyboard"));
     ui.commandComboBox->addItem(QString("keyboardGui"));
-    ui.commandComboBox->addItem(QString("mouse"));
     ui.commandComboBox->addItem(QString("stateChange"));
+	ui.commandComboBox->addItem(QString("profileChange"));
 }
 
 void SequenceEditor::formKeyLineInput()
@@ -325,4 +330,12 @@ void SequenceEditor::formKybdGUIActions()
     ui.actionComboBox->addItem(QString("rightArrow"));
     ui.actionComboBox->addItem(QString("leftArrow"));
     ui.actionComboBox->addItem(QString("none"));
+}
+
+void SequenceEditor::formProfileChangeActions()
+{
+	ui.actionComboBox->clear();
+
+	ui.actionComboBox->addItem(QString("moveProfileForward"));
+	ui.actionComboBox->addItem(QString("moveProfileBackward"));
 }

@@ -3,7 +3,8 @@
 
 
 SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
-	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController)
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle, 
+	ProfileSignaller *profileSignallerHandle)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -12,6 +13,9 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
 	this->keyboardController = keyboardController;
+
+	this->pm = profileManagerHandle;
+	this->ps = profileSignallerHandle;
     this->count = 0;
 }
 
@@ -39,6 +43,9 @@ void SCDDigester::digest()
         break;
     case STATE_CHANGE:
         break;
+	case PROFILE_CHANGE:
+		digestProfileChange(nextCmd);
+		break;
     case NONE:
         break;
     case UNKNOWN_COMMAND:
@@ -58,66 +65,62 @@ void SCDDigester::digest()
 		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, mouseDelta.x, -mouseDelta.y);
 	}
 
-//    point unitVelocity = scdHandle->getVelocity();
-//	if (unitVelocity.x != 0 || unitVelocity.y != 0)
-//	{
-//		// TODO - fix sign issue
-//		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, unitVelocity.x, -unitVelocity.y);
-//	}
-    //if (unitVelocity.x != 0)
-    //{
-    //    mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
-	//
-    //}
-    //if (unitVelocity.y != 0)
-    //{
-    //    mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
-    //}
+#ifdef JOYSTICK_CURSOR
+    point unitVelocity = scdHandle->getVelocity();
+	if (unitVelocity.x != 0)
+	{
+	    mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
+	}
+	if (unitVelocity.y != 0)
+	{
+	    mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
+	}
 
 	// Jorden TODO - deal with this - temp removing emitVeloc to see if CPU usage reduces.
-//    if (count % 1000 == 0)
-//    {
-//        threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
-//
-//        /* Only update GUI if the connection status changed*/
-//        testConnected = scdHandle->getIsConnected();
-//        if (isConnected != testConnected)
-//        {
-//            if (!testConnected)
-//            {
-//                threadHandle->emitDisconnect(testConnected);
-//            }
-//        }
-//        isConnected = testConnected;
-//
-//        ///* Only update RSSI if device connected */
-//        //if (isConnected)
-//        //{
-//        //    float rssi = scdHandle->getRssi();
-//        //    threadHandle->emitRssi(rssi);
-//        //}
-//
-//    }
+    if (count % 1000 == 0)
+    {
+        threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
 
+        /* Only update GUI if the connection status changed*/
+        testConnected = scdHandle->getIsConnected();
+        if (isConnected != testConnected)
+        {
+            if (!testConnected)
+            {
+                threadHandle->emitDisconnect(testConnected);
+            }
+        }
+        isConnected = testConnected;
+
+        /* Only update RSSI if device connected */
+        if (isConnected)
+        {
+            float rssi = scdHandle->getRssi();
+            threadHandle->emitRssi(rssi);
+        }
+    }
+#endif /* JOYSTICK_CURSOR */
+#ifdef KEYBOARD_ENABLED
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
-        //unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
-        //keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
-		//
-        //if (count % 1000 == 0)
-        //{
-        //    double angleAsDouble = (double)currKeyAngle.angle;
-        //    threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
-		//
-        //    // // TEMP TODO for debug only
-        //    // int x = currKeyAngle.x;
-        //    // int y = currKeyAngle.y;
-        //    // threadHandle->emitDebugInfo(x, y);
-        //}
-		//
-        //digestKeyboardGUIData(nextCmd);
+        unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
+        keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
+		
+        if (count % 1000 == 0)
+        {
+            double angleAsDouble = (double)currKeyAngle.angle;
+            threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
+		
+            // // TEMP TODO for debug only
+            // int x = currKeyAngle.x;
+            // int y = currKeyAngle.y;
+            // threadHandle->emitDebugInfo(x, y);
+        }
+		
+        digestKeyboardGUIData(nextCmd);
     }
-    
+#endif /* KEYBOARD_ENABLED */    
+
     count++;
 }
 
@@ -227,4 +230,11 @@ void SCDDigester::digestKybdCmd(CommandData nextCommand)
 		keyboardController->setKiVector(vec);
 		keyboardController->sendDataDelayed(10);
 	}
+}
+
+void SCDDigester::digestProfileChange(CommandData nextCmd)
+{
+	//emitChangeProfile(QString("TODO - send next"));
+	// TODO - use ProfileManager and ProfileSignaller to handle command here.
+	ps->setProfileName("Rotate Model");
 }

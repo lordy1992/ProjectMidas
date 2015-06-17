@@ -13,12 +13,13 @@
 ProfileSignaller MyoDevice::profileSignaller;
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, MyoState* myoState,
-    std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle)
+    std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle, ProfileSignaller *profileSignallerHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
     durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), myoState(myoState), arm(DEFAULT_MYO_ARM), 
-    xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
+	xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
 {
     prevProfileName = "";
+	//MyoDevice::profileSignaller = profileSignallerHandle;
 }
 
 MyoDevice::~MyoDevice()
@@ -100,7 +101,7 @@ void MyoDevice::runDeviceLoop()
 
             if (profileSignaller.getProfileName() != prevProfileName)
             {
-                prevProfileName = profileSignaller.getProfileName();
+				prevProfileName = profileSignaller.getProfileName();
                 updateProfiles();
             }
 
@@ -314,13 +315,13 @@ void MyoDevice::updateProfiles(void)
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
+		error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
 	
     filters = orientationPipeline.getFilters();
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-        error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
+		error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
     }
 	
     if (error != (int)filterError::NO_FILTER_ERROR)

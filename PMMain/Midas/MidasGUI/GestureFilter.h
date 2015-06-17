@@ -87,6 +87,7 @@ private:
     void registerStateSequences(void);
 	filterDataMap handleMouseCommand(CommandData response);
 	filterDataMap handleKybrdCommand(CommandData response, bool addToExtra = false);
+	filterDataMap handleProfileChangeCommand(CommandData response);
 
     void emitPoseData(int poseInt);
 

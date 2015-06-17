@@ -6,9 +6,9 @@
 
 #define MOUSE_INDICATOR_SIZE 100
 #define INFO_INDICATOR_WIDTH   250
-#define INFO_INDICATOR_HEIGHT  50
+#define INFO_INDICATOR_HEIGHT  35
 #define PROF_INDICATOR_WIDTH   250
-#define PROF_INDICATOR_HEIGHT  50
+#define PROF_INDICATOR_HEIGHT  35
 #define WIDGET_BUFFER 5
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
@@ -23,8 +23,14 @@ enum commandType {
     KYBRD_GUI_CMD,
     MOUSE_CMD,
     STATE_CHANGE,
+	PROFILE_CHANGE,
     NONE,
     UNKNOWN_COMMAND
+};
+
+enum profileCmds {
+	MOVE_PROFILE_FORWARD,
+	MOVE_PROFILE_BACKWARD
 };
 
 /**
@@ -166,6 +172,7 @@ typedef union action{
 	kybdGUICmds kybdGUI;
 	mouseCmds mouse;
 	midasMode mode;
+	profileCmds profile;
 } action;
 
 /**

@@ -89,7 +89,7 @@ void ProfileWriter::writeSequence(boost::property_tree::ptree &sequenceNode, Seq
 
 	BOOST_FOREACH(Command command, sequence.cmds)
 	{
-		ptree &commandNode = sequenceNode.add("commands.command", command.type);
+		ptree &commandNode = sequenceNode.add("commands.command", "");
 		commandNode.put("<xmlattr>.type", command.type);
 
 		BOOST_FOREACH(std::string action, command.actions)
