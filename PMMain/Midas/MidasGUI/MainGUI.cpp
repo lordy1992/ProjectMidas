@@ -15,7 +15,7 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
 {
 	infoIndicator = new InfoIndicator(INFO_INDICATOR_WIDTH, INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
-	poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE + 30, MOUSE_INDICATOR_SIZE + 30, this);
+	poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
 
 	setupProfileIcons();
 

@@ -4,7 +4,7 @@
 #include <string>
 #include <map>
 
-#define MOUSE_INDICATOR_SIZE 100
+#define MOUSE_INDICATOR_SIZE 130
 #define INFO_INDICATOR_WIDTH   150
 #define INFO_INDICATOR_HEIGHT  35
 #define PROF_INDICATOR_WIDTH   250
