@@ -3,8 +3,7 @@
 
 
 SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
-	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle, 
-	ProfileSignaller *profileSignallerHandle)
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle)
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -15,7 +14,6 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
 	this->keyboardController = keyboardController;
 
 	this->pm = profileManagerHandle;
-	this->ps = profileSignallerHandle;
     this->count = 0;
 }
 
@@ -235,12 +233,12 @@ void SCDDigester::digestKybdCmd(CommandData nextCommand)
 void SCDDigester::digestProfileChange(CommandData nextCmd)
 {
 	//emitChangeProfile(QString("TODO - send next"));
-	// TODO - use ProfileManager and ProfileSignaller to handle command here.
+	// TODO - use ProfileManager and control state handle to handle command here.
+
 
 	if (nextCmd.name == "moveProfileForward")
 	{
 
 	}
-	//ps->setProfileName("Rotate Model");
 	cntrlStateHandle->setProfile("Rotate Model");
 }

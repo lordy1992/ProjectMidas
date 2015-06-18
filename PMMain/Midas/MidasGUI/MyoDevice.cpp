@@ -13,13 +13,12 @@
 ProfileSignaller MyoDevice::profileSignaller;
 
 MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, MyoState* myoState,
-    std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle, ProfileSignaller *profileSignallerHandle)
+    std::string applicationIdentifier, MainGUI *mainGuiHandle, ProfileManager *profileManagerHandle)
     : WearableDevice(sharedCommandData), appIdentifier(applicationIdentifier), myoFindTimeout(DEFAULT_FIND_MYO_TIMEOUT),
     durationInMilliseconds(DEFAULT_MYO_DURATION_MS), state(controlState), myoState(myoState), arm(DEFAULT_MYO_ARM), 
 	xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
 {
     prevProfileName = "";
-	// profileSignaller = profileSignallerHandle; // TODO remove
 }
 
 MyoDevice::~MyoDevice()

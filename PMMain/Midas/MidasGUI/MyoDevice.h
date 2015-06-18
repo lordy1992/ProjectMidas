@@ -37,7 +37,7 @@ public:
      * @param applicationIdentifier A myo-specific app identifier used to create the myo hub.
      */
 	MyoDevice(SharedCommandData* sharedCommandData, ControlState* controlState, MyoState* myoState, std::string applicationIdentifier,
-		MainGUI *mainGuiHandle, ProfileManager* profileManagerHandle, ProfileSignaller *profileSignallerHandle);
+		MainGUI *mainGuiHandle, ProfileManager* profileManagerHandle);
     ~MyoDevice();
 
     /**

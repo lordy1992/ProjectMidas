@@ -85,8 +85,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
 	myoState.setPoseHistLen(5); // arbitrary for now.
 	myoState.setSpatialHistLen(5);
 	BaseMeasurements::getInstance().setMyoStateHandle(&myoState);
-	ProfileSignaller* ps = new ProfileSignaller(); // TODO - make this work within our system - currently messes up button signal connection if this is used in myoDevice.
-	MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, &myoState, "com.midas.midas-test", mainGui, pm, ps);
+	MyoDevice* myoDevice = new MyoDevice(&sharedData, &controlState, &myoState, "com.midas.midas-test", mainGui, pm);
     MouseCtrl* mouseCtrl = new MouseCtrl();
     KybrdCtrl* kybrdCtrl = new KybrdCtrl();
 	KeyboardController* keyboardController = new KeyboardController();
@@ -94,7 +93,7 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
     // Kick off device thread
     startWearableDeviceListener(myoDevice); // TODO - add a flag in myoDevice to see if it is running. Don't enter 'while true' until running.
 
-	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, &myoState, mouseCtrl, kybrdCtrl, keyboardController, pm, ps);
+	SCDDigester scdDigester(&sharedData, threadHandle, &controlState, &myoState, mouseCtrl, kybrdCtrl, keyboardController, pm);
     
     while (true)
     {

@@ -26,8 +26,7 @@ class SCDDigester
 {
 public:
     SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
-		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle,
-		ProfileSignaller *profileSignallerHandle);
+		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle);
     ~SCDDigester();
 
     void digest();
@@ -49,7 +48,6 @@ private:
     int count;
 
 	ProfileManager *pm;
-	ProfileSignaller *ps;
 };
 
 #endif /* _SCD_DIGESTER_H */
