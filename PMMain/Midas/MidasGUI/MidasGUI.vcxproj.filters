@@ -218,8 +218,14 @@
     <ClCompile Include="MyoTranslationFilter.cpp">
       <Filter>Source Files\Midas\Filters</Filter>
     </ClCompile>
-    <ClCompile Include="ChangeStateAction.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="ProfileIcon.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ProfileIcon.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ProfileIcon.cpp">
+      <Filter>Generated Files\Release</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -244,14 +250,17 @@
     <CustomBuild Include="GestureSignaller.h">
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
-    <CustomBuild Include="PoseDisplayer.h">
-      <Filter>Header Files\Midas</Filter>
-    </CustomBuild>
     <CustomBuild Include="ProfileDisplayer.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="ProfileSignaller.h">
       <Filter>Header Files\Midas\Profiles</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ProfileIcon.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PoseDisplayer.h">
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
@@ -326,9 +335,6 @@
     </ClInclude>
     <ClInclude Include="MyoTranslationFilter.h">
       <Filter>Header Files\Midas\Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="ChangeStateAction.h">
-      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

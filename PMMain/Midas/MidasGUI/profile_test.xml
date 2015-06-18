@@ -17,7 +17,6 @@
 			<sequence state="gestureMode" name="2D">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
-					<gesture type="tap">fingersSpread</gesture>
                 </gestures>
 				<commands>
 				<command type="keyboard">
@@ -30,7 +29,6 @@
 			<sequence state="gestureMode" name="3D">
                 <gestures>
                     <gesture type="tap">waveOut</gesture>
-					<gesture type="tap">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="keyboard">
@@ -42,7 +40,7 @@
             </sequence>
             <sequence state="gestureMode" name="Middle Click">
                 <gestures>
-                    <gesture type="tap">fist</gesture>
+                    <gesture type="tap">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="mouse">
@@ -54,7 +52,7 @@
             </sequence>
             <sequence state="gestureMode" name="Left Click">
                 <gestures>
-                    <gesture type="tap">fingersSpread</gesture>
+                    <gesture type="tap">fist</gesture>
                 </gestures>
                 <commands>
 				<command type="mouse">
@@ -67,7 +65,7 @@
             <sequence state="lockMode" name="Unlock">
                 <gestures>
 					<gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
+					<gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -172,7 +170,6 @@
 			<sequence state="gestureMode" name="2D">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
-					<gesture type="tap">fingersSpread</gesture>
                 </gestures>
 				<commands>
 				<command type="keyboard">
@@ -185,7 +182,6 @@
 			<sequence state="gestureMode" name="3D">
                 <gestures>
                     <gesture type="tap">waveOut</gesture>
-					<gesture type="tap">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="keyboard">
@@ -197,7 +193,7 @@
             </sequence>
             <sequence state="gestureMode" name="Middle Click">
                 <gestures>
-                    <gesture type="tap">fist</gesture>
+                    <gesture type="tap">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="mouse">
@@ -209,7 +205,7 @@
             </sequence>
             <sequence state="gestureMode" name="Left Click">
                 <gestures>
-                    <gesture type="tap">fingersSpread</gesture>
+                    <gesture type="tap">fist</gesture>
                 </gestures>
                 <commands>
 				<command type="mouse">
@@ -222,7 +218,7 @@
             <sequence state="lockMode" name="Unlock">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
+					<gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">

@@ -7,6 +7,7 @@
 #include "InfoIndicator.h"
 #include "GestureSignaller.h"
 #include "PoseDisplayer.h"
+#include "ProfileIcon.h"
 #include "ProfileDisplayer.h"
 #include "ProfileSignaller.h"
 #include "ProfileManager.h"
@@ -36,15 +37,25 @@ public:
     void connectSignallerToInfoIndicator(GestureSignaller *signaller);
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
     void connectSignallerToPoseDisplayer(GestureSignaller *signaller);
+	void connectSignallerToProfileIcons(GestureSignaller *signaller);
 
 private:
+
+	void setupProfileIcons();
+
     QVBoxLayout *layout;
     MouseIndicator *mouseIndicator;
     InfoIndicator *infoIndicator;
     SequenceDisplayer *sequenceDisplayer;
     PoseDisplayer *poseDisplayer;
+	ProfileIcon *icon0;
+	ProfileIcon *icon1;
+	bool icon0IsActive;
     std::vector<ProfileDisplayer*> profileWidgets;
     int totalWidth, totalHeight;
+
+public slots:
+	void handleUpdateProfile();
 };
 
 #endif

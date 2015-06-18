@@ -32,6 +32,7 @@ GestureFilter::GestureFilter(ControlState* controlState, MyoState* myoState, clo
     {
         mainGui->connectSignallerToInfoIndicator(&signaller);
         mainGui->connectSignallerToPoseDisplayer(&signaller);
+		mainGui->connectSignallerToProfileIcons(&signaller);
     }
 
     signaller.emitStateString(QTranslator::tr((modeToString(controlState->getMode())).c_str()));
@@ -443,6 +444,8 @@ filterDataMap GestureFilter::handleProfileChangeCommand(CommandData response)
 	filterDataMap outputToSharedCommandData;
 	CommandData command;
 	command = response;
+
+	signaller.emitToggleActiveIcon();
 
 	outputToSharedCommandData[COMMAND_INPUT] = command;
 	setOutput(outputToSharedCommandData);
