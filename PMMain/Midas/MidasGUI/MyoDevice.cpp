@@ -100,7 +100,6 @@ void MyoDevice::runDeviceLoop()
                 WearableDevice::sharedData->process();
             }
 
-            //if (profileSignaller.getProfileName() != prevProfileName)
 			if (state->getProfile() != prevProfileName)
             {
 				prevProfileName = state->getProfile();
