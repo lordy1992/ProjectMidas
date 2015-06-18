@@ -64,19 +64,26 @@
                 </command>
 				</commands>
             </sequence>
+			<sequence state="gestureMode" name="Left Click">
+                <gestures>
+                    <gesture type="hold">waveIn</gesture>
+                </gestures>
+                <commands>
+				<command type="mouse">
+                    <actions>
+                        <action>leftClick</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
             <sequence state="lockMode" name="Unlock">
                 <gestures>
-                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
                     <actions>
                         <action>gestureMode</action>
-                    </actions>
-                </command>
-				<command type="mouse">
-                    <actions>
-                        <action>releaseLrmButs</action>
                     </actions>
                 </command>
 				</commands>
@@ -219,11 +226,6 @@
 				<command type="stateChange">
                     <actions>
                         <action>gestureMode</action>
-                    </actions>
-                </command>
-				<command type="mouse">
-                    <actions>
-                        <action>releaseLrmButs</action>
                     </actions>
                 </command>
 				</commands>
