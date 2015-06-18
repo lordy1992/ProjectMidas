@@ -241,5 +241,6 @@ void SCDDigester::digestProfileChange(CommandData nextCmd)
 	{
 
 	}
-	ps->setProfileName("Rotate Model");
+	//ps->setProfileName("Rotate Model");
+	cntrlStateHandle->setProfile("Rotate Model");
 }

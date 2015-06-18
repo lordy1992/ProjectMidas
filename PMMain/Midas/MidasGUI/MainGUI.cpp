@@ -79,9 +79,10 @@ MainGUI::~MainGUI()
 
 void MainGUI::connectSignallerToProfileWidgets(ProfileSignaller* signaller)
 {
+	QMetaObject::Connection conn;
     for (int i = 0; i < profileWidgets.size(); i++)
     {
-        QObject::connect(profileWidgets[i], SIGNAL(emitChangeProfile(QString)), signaller, SLOT(handleProfilePress(QString)));
+		conn = QObject::connect(profileWidgets[i], SIGNAL(emitChangeProfile(QString)), signaller, SLOT(handleProfilePress(QString)));
     }
 }
 

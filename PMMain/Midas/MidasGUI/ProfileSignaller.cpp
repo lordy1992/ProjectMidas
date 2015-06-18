@@ -3,7 +3,7 @@
 ProfileSignaller::ProfileSignaller(QObject *parent)
     : QObject(parent)
 {
-    profileName = "default";
+    //profileName = "default";
 }
 
 ProfileSignaller::~ProfileSignaller()
@@ -13,15 +13,17 @@ ProfileSignaller::~ProfileSignaller()
 
 void ProfileSignaller::handleProfilePress(QString name)
 {
-    profileName = name.toStdString();
+    //profileName = name.toStdString();
+
+	controlStateHandle->setProfile(name.toStdString());
 }
 
-std::string ProfileSignaller::getProfileName()
-{
-    return profileName;
-}
-
-void ProfileSignaller::setProfileName(std::string name)
-{
-	profileName = name;
-}
+//std::string ProfileSignaller::getProfileName()
+//{
+//    return profileName;
+//}
+//
+//void ProfileSignaller::setProfileName(std::string name)
+//{
+//	profileName = name;
+//}

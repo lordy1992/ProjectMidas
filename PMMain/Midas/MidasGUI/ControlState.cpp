@@ -5,6 +5,7 @@ ControlState::ControlState(SharedCommandData* SCDHandle)
 {
     this->SCDHandle = SCDHandle;
     currentMode = LOCK_MODE;
+	currentProfile = "default";
 }
 
 
@@ -38,4 +39,16 @@ bool ControlState::trySetMode(midasMode mode)
 midasMode ControlState::getMode()
 {
     return currentMode;
+}
+
+void ControlState::setProfile(std::string profile)
+{
+	//profileMutex.lock();
+	currentProfile = profile;
+	//profileMutex.unlock();
+}
+
+std::string ControlState::getProfile()
+{
+	return currentProfile;
 }

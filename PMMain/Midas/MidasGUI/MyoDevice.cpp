@@ -19,7 +19,7 @@ MyoDevice::MyoDevice(SharedCommandData* sharedCommandData, ControlState* control
 	xDirection(DEFAULT_MYO_XDIR), mainGui(mainGuiHandle), profileManager(profileManagerHandle)
 {
     prevProfileName = "";
-	//MyoDevice::profileSignaller = profileSignallerHandle;
+	// profileSignaller = profileSignallerHandle; // TODO remove
 }
 
 MyoDevice::~MyoDevice()
@@ -51,9 +51,11 @@ void MyoDevice::runDeviceLoop()
     orientationPipeline.registerFilter(WearableDevice::sharedData);
 
 	// init profileSignaller to the first profile name.
-	profileSignaller.setProfileName(profileManager->getProfiles()->at(0).profileName);
+//	profileSignaller.setProfileName(profileManager->getProfiles()->at(0).profileName);
+	profileSignaller.setControlStateHandle(state);
+	state->setProfile(profileManager->getProfiles()->at(0).profileName);
 	mainGui->connectSignallerToProfileWidgets(&profileSignaller); 
-	
+		
     AveragingFilter rssiAveragingFilter(5);
     rssiPipeline.registerFilter(&rssiAveragingFilter);
     rssiPipeline.registerFilter(WearableDevice::sharedData);
@@ -99,9 +101,10 @@ void MyoDevice::runDeviceLoop()
                 WearableDevice::sharedData->process();
             }
 
-            if (profileSignaller.getProfileName() != prevProfileName)
+            //if (profileSignaller.getProfileName() != prevProfileName)
+			if (state->getProfile() != prevProfileName)
             {
-				prevProfileName = profileSignaller.getProfileName();
+				prevProfileName = state->getProfile();
                 updateProfiles();
             }
 
@@ -315,13 +318,13 @@ void MyoDevice::updateProfiles(void)
     int error = (int)filterError::NO_FILTER_ERROR;
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-		error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
+		error |= (int)(*it)->updateBasedOnProfile(*profileManager, state->getProfile());//profileSignaller.getProfileName());
     }
 	
     filters = orientationPipeline.getFilters();
     for (std::list<Filter*>::iterator it = filters->begin(); it != filters->end(); ++it)
     {
-		error |= (int)(*it)->updateBasedOnProfile(*profileManager, profileSignaller.getProfileName());
+		error |= (int)(*it)->updateBasedOnProfile(*profileManager, state->getProfile());// profileSignaller.getProfileName());
     }
 	
     if (error != (int)filterError::NO_FILTER_ERROR)
