@@ -13,11 +13,9 @@
 MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
     : DraggableWidget(NULL, Qt::FramelessWindowHint | Qt::WindowSystemMenuHint | Qt::WindowStaysOnTopHint)
 {
-    //mouseIndicator = new MouseIndicator(mainThread, deadZoneRad, MOUSE_INDICATOR_SIZE,
-    //    MOUSE_INDICATOR_SIZE, this);
 	infoIndicator = new InfoIndicator(INFO_INDICATOR_WIDTH, INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
-	poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE + 25, MOUSE_INDICATOR_SIZE + 25, this);
+	poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE + 30, MOUSE_INDICATOR_SIZE + 30, this);
 
 	setupProfileIcons();
 
@@ -43,35 +41,12 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
 	mainBoxLayout->addWidget(poseDisplayer);
 	mainBoxLayout->setAlignment(Qt::AlignRight);
 
-    //QHBoxLayout *boxLayout = new QHBoxLayout;
-    //boxLayout->setSpacing(INFO_INDICATOR_WIDTH - MOUSE_INDICATOR_SIZE*2);
-	//
-    //layout->addWidget(infoIndicator);
-    //
-    //std::vector<profile>* profiles = pm->getProfiles();
-    //std::vector<profile>::iterator it;
-    //int profileHeights = 0;
-    //for (it = profiles->begin(); it != profiles->end(); it++)
-    //{
-    //    ProfileDisplayer* displayer = new ProfileDisplayer(it->profileName, PROF_INDICATOR_WIDTH, PROF_INDICATOR_HEIGHT, this);
-    //    profileHeights += displayer->height();
-    //    profileWidgets.push_back(displayer);
-    //    layout->addWidget(displayer, 0, Qt::AlignRight);
-    //}
-	//
-    //boxLayout->addWidget(poseDisplayer, 1, Qt::AlignRight);    
-    //boxLayout->addWidget(mouseIndicator, 0, Qt::AlignRight);
-    //layout->addLayout(boxLayout);
-	//
-    //layout->setAlignment(infoIndicator, Qt::AlignRight);
-    //layout->setStretchFactor(infoIndicator, 0);
-
 	layout->addItem(mainBoxLayout);
      
     setLayout(layout);
 
     totalWidth = std::max(sequenceDisplayer->width(), 
-                        infoIndicator->width()); // this is wrong currently
+                        (infoIndicator->width() + poseDisplayer->width()));
     totalHeight = sequenceDisplayer->height() + poseDisplayer->height();
 
     QRect screen = QApplication::desktop()->availableGeometry(this);

@@ -88,7 +88,6 @@
   <ItemGroup>
     <ClCompile Include="AveragingFilter.cpp" />
     <ClCompile Include="BaseMeasurements.cpp" />
-    <ClCompile Include="ChangeStateAction.cpp" />
     <ClCompile Include="CommandData.cpp" />
     <ClCompile Include="ControlState.cpp" />
     <ClCompile Include="DraggableWidget.cpp" />
@@ -191,7 +190,6 @@
   <ItemGroup>
     <ClInclude Include="AveragingFilter.h" />
     <ClInclude Include="BaseMeasurements.h" />
-    <ClInclude Include="ChangeStateAction.h" />
     <ClInclude Include="CommandData.h" />
     <ClInclude Include="ControlState.h" />
     <CustomBuild Include="DraggableWidget.h">

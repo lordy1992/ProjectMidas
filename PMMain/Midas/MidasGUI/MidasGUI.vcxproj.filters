@@ -218,9 +218,6 @@
     <ClCompile Include="MyoTranslationFilter.cpp">
       <Filter>Source Files\Midas\Filters</Filter>
     </ClCompile>
-    <ClCompile Include="ChangeStateAction.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ProfileIcon.cpp">
       <Filter>Source Files\GUI</Filter>
     </ClCompile>
@@ -338,9 +335,6 @@
     </ClInclude>
     <ClInclude Include="MyoTranslationFilter.h">
       <Filter>Header Files\Midas\Filters</Filter>
-    </ClInclude>
-    <ClInclude Include="ChangeStateAction.h">
-      <Filter>Header Files\Midas</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
