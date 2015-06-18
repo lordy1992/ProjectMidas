@@ -6,13 +6,26 @@
 
 #include "ProfileManager.h"
 
+#ifdef BUILD_KEYBOARD
+#include "KeyboardWidget.h"
+#include "KeyboardSettingsReader.h"
+#endif
+
 #define TASK_BAR_ICON_PATH "Resources\\ProjectMidasLogo.ico"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+#ifdef BUILD_KEYBOARD
+	std::vector<ringData> kybrdRingData;
+	KeyboardSettingsReader readFile;
+	readFile.readKeyboardSetupFile(kybrdRingData);
+	
+	MidasThread midasThread(&kybrdRingData);
+#else
     MidasThread midasThread;
+#endif
 
     qRegisterMetaType<std::vector<sequenceImageSet> >("std::vector<sequenceImageSet>");
     qRegisterMetaType<std::vector<sequenceProgressData> >("std::vector<sequenceProgressData>");

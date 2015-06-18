@@ -3,9 +3,15 @@
 #include "MainGUI.h"
 #include <qdebug.h>
 #include <Windows.h>
+#ifdef BUILD_KEYBOARD
+#include "KeyboardWidget.h"
+#endif
 
-
+#ifdef BUILD_KEYBOARD
+MidasThread::MidasThread(std::vector<ringData> *kybrdRingData) : kybrdRingData(kybrdRingData)
+#else
 MidasThread::MidasThread()
+#endif
 {
 }
 
@@ -25,6 +31,17 @@ void MidasThread::setProfileManagerHandle(ProfileManager *profileManager)
 
 void MidasThread::run()
 {
-    midasMain(this, mainGui, profileManager);
+#ifdef BUILD_KEYBOARD
+	midasMain(this, mainGui, profileManager, kybrdRingData);
+#else
+	midasMain(this, mainGui, profileManager);
+#endif
 }
+
+#ifdef BUILD_KEYBOARD
+std::vector<ringData>* MidasThread::getKybrdRingData()
+{
+	return kybrdRingData;
+}
+#endif
 

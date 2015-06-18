@@ -81,6 +81,125 @@ bool SharedCommandData::tryGetVelocity(point& outVelocity)
     return locked;
 }
 
+#ifdef BUILD_KEYBOARD
+void SharedCommandData::setKybdGuiSel(unsigned int kybdGuiSel)
+{
+	kybdGuiSelMutex.lock();
+	if (kybdGuiSel <= maxKybdGuiSel)
+	{
+		this->kybdGuiSel = kybdGuiSel;
+	}
+	kybdGuiSelMutex.unlock();
+}
+
+bool SharedCommandData::trySetKybdGuiSel(unsigned int kybdGuiSel)
+{
+	bool locked = kybdGuiSelMutex.try_lock();
+	if (locked) {
+		if (kybdGuiSel <= maxKybdGuiSel)
+		{
+			this->kybdGuiSel = kybdGuiSel;
+			kybdGuiSelMutex.unlock();
+		}
+	}
+	return locked;
+}
+
+unsigned int SharedCommandData::getKybdGuiSel()
+{
+	kybdGuiSelMutex.lock();
+	unsigned int guiSel = kybdGuiSel;
+	kybdGuiSelMutex.unlock();
+
+	return guiSel;
+}
+
+bool SharedCommandData::tryGetKybdGuiSel(unsigned int& outKybdGuiSel)
+{
+	bool locked = kybdGuiSelMutex.try_lock();
+	if (locked) {
+		outKybdGuiSel = kybdGuiSel;
+		kybdGuiSelMutex.unlock();
+	}
+
+	return locked;
+}
+
+unsigned int SharedCommandData::getKybdGuiSelMax()
+{
+	kybdGuiSelMutex.lock();
+	unsigned int max = maxKybdGuiSel;
+	kybdGuiSelMutex.unlock();
+
+	return max;
+}
+
+bool SharedCommandData::tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel)
+{
+	bool locked = kybdGuiSelMutex.try_lock();
+	if (locked) {
+		outMaxKybdGuiSel = maxKybdGuiSel;
+		kybdGuiSelMutex.unlock();
+	}
+
+	return locked;
+}
+
+void SharedCommandData::setKeySelectAngle(keyboardAngle angle)
+{
+	keySelectAngleMutex.lock();
+	keySelectAngle = angle;
+	keySelectAngleMutex.unlock();
+}
+
+bool SharedCommandData::trySetKeySelectAngle(keyboardAngle angle)
+{
+	bool locked = keySelectAngleMutex.try_lock();
+	if (locked) {
+		keySelectAngle = angle;
+		keySelectAngleMutex.unlock();
+	}
+
+	return locked;
+}
+
+keyboardAngle SharedCommandData::getKeySelectAngle()
+{
+	keySelectAngleMutex.lock();
+	keyboardAngle angle = keySelectAngle;
+	keySelectAngleMutex.unlock();
+
+	return angle;
+}
+
+
+bool SharedCommandData::tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle)
+{
+	bool locked = keySelectAngleMutex.try_lock();
+	if (locked) {
+		outKeySelectAngle = keySelectAngle;
+		keySelectAngleMutex.unlock();
+	}
+
+	return locked;
+}
+
+float SharedCommandData::getRssi()
+{
+	rssiMutex.lock();
+	float rssi = rssiAVG;
+	rssiMutex.unlock();
+	return rssi;
+}
+
+void SharedCommandData::setRssi(float rssi)
+{
+	rssiMutex.lock();
+	rssiAVG = rssi;
+	rssiMutex.unlock();
+}
+#endif
+
 bool SharedCommandData::getIsConnected()
 {
     isConnectedMutex.lock();
@@ -130,6 +249,20 @@ void SharedCommandData::process()
         boost::any value = input[ISCONNECTED_INPUT];
         extractIsConnected(value);
     }
+
+#ifdef BUILD_KEYBOARD
+if (input.find(ANGLE_INPUT) != input.end())
+{
+	boost::any value = input[ANGLE_INPUT];
+	extractKeySelectAngle(value);
+}
+	
+if (input.find(RSSI_INPUT) != input.end())
+{
+	boost::any value = input[RSSI_INPUT];
+	extractRssi(value);
+}
+#endif
 }
 
 void SharedCommandData::empty()
@@ -179,6 +312,36 @@ void SharedCommandData::extractPoint(boost::any value)
         setVelocity(velocity);
     }
 }
+
+#ifdef BUILD_KEYBOARD
+void SharedCommandData::extractKeySelectAngle(boost::any value)
+{
+	if (value.type() != typeid(keyboardAngle))
+	{
+		Filter::setFilterError(filterError::INVALID_INPUT);
+		Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+	}
+	else
+	{
+		keyboardAngle angle = boost::any_cast<keyboardAngle> (value);
+		setKeySelectAngle(angle);
+	}
+}
+
+void SharedCommandData::extractRssi(boost::any value)
+{
+	if (value.type() != typeid(float))
+	{
+		Filter::setFilterError(filterError::INVALID_INPUT);
+		Filter::setFilterStatus(filterStatus::FILTER_ERROR);
+	}
+	else
+	{
+		float rssi = boost::any_cast<float> (value);
+		setRssi(rssi);
+	}
+}
+#endif
 
 void SharedCommandData::extractIsConnected(boost::any value)
 {

@@ -293,31 +293,33 @@ void MyoTranslationFilter::performMouseModeFunc(filterDataMap& outputToSharedCom
 
 void MyoTranslationFilter::performeKybdModeFunc(filterDataMap& outputToSharedCommandData)
 {
-    //keyboardAngle myoAngle;
-	//
-    //point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
-    //unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
-    //myoAngle.ringThreshReached = false;
-    //if (magnitude > KEYBOARD_THRESH_MAG)
-    //{
-    //    myoAngle.ringThreshReached = true;
-    //}
-	//
-    //// TEMP TODO for debug only
-    //myoAngle.x = myoAnglePoint.x;
-    //myoAngle.y = myoAnglePoint.y;
-	//
-    //// TODO - verify/disprove this function 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x);
-    //// using 90 instead of 180 *seems* to make it better, but then the upper left quadrant is unnaccessable.
-    //int myoAngleDegree = 90 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
-    //while (myoAngleDegree < 0)
-    //{
-    //    myoAngleDegree += 360;
-    //}
-	//
-    //myoAngle.angle = myoAngleDegree;
-	//
-    //outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
+#ifdef BUILD_KEYBOARD
+    keyboardAngle myoAngle;
+	
+    point myoAnglePoint = getMouseUnitVelocity(pitch, yaw);
+    unsigned int magnitude = sqrt(pow(myoAnglePoint.x, 2) + pow(myoAnglePoint.y, 2));
+    myoAngle.ringThreshReached = false;
+    if (magnitude > KEYBOARD_THRESH_MAG)
+    {
+        myoAngle.ringThreshReached = true;
+    }
+	
+    // TEMP TODO for debug only
+    myoAngle.x = myoAnglePoint.x;
+    myoAngle.y = myoAnglePoint.y;
+	
+    // TODO - verify/disprove this function 180 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x);
+    // using 90 instead of 180 *seems* to make it better, but then the upper left quadrant is unnaccessable.
+    int myoAngleDegree = 90 - (180.0 / M_PI) * atan2((double)myoAnglePoint.y, (double)myoAnglePoint.x); // NEED to add section size/2 TODO
+    while (myoAngleDegree < 0)
+    {
+        myoAngleDegree += 360;
+    }
+	
+    myoAngle.angle = myoAngleDegree;
+	
+    outputToSharedCommandData[ANGLE_INPUT] = myoAngle;
+#endif
 }
 
 bool MyoTranslationFilter::initGestHoldModeActionArr(void)

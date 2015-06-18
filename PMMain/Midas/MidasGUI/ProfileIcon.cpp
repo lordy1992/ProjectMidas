@@ -1,14 +1,3 @@
-//#include "InfoIndicator.h"
-//#include <QTimer.h>
-//#include <QAction.h>
-//#include <QApplication.h>
-//#include <QEvent.h>
-//#include <QPainter.h>
-//#include <qstyle.h>
-//#include <qdesktopwidget.h>
-//#include <math.h>
-//#include <qmessagebox.h>
-
 #include "ProfileIcon.h"
 
 ProfileIcon::ProfileIcon(int widgetWidth, int widgetHeight, bool active, QPixmap imgActive, QPixmap imgInactive, QWidget *parent)

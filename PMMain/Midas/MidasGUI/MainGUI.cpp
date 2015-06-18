@@ -55,6 +55,18 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         totalWidth, totalHeight);
 }
 
+void MainGUI::toggleKeyboard()
+{
+	if (keyboard->isVisible())
+	{
+		keyboard->setVisible(false);
+	}
+	else
+	{
+		keyboard->setVisible(true);
+	}
+}
+
 MainGUI::~MainGUI()
 {
     delete mouseIndicator;
@@ -71,6 +83,12 @@ MainGUI::~MainGUI()
 	icon0 = NULL;
 	delete icon1;
 	icon1 = NULL;
+}
+
+void MainGUI::connectSignallerToKeyboardToggle(GestureSignaller *signaller)
+{
+	QObject::connect(signaller, SIGNAL(emitToggleKeyboard()),
+			this, SLOT(toggleKeyboard()));
 }
 
 void MainGUI::connectSignallerToProfileWidgets(ProfileSignaller* signaller)

@@ -12,6 +12,11 @@
 #include "ProfileSignaller.h"
 #include "ProfileManager.h"
 
+#ifdef BUILD_KEYBOARD
+#include "KeyboardWidget.h"
+#include "DistanceWidget.h"
+#endif
+
 /**
  * The MainGUI class is the parent GUI of all the widgets used in Midas. It contains the mouse
  * indicator, sequence displayer, and info indicator. The mouse indicator shows the relative mouse 
@@ -38,6 +43,16 @@ public:
     void connectSignallerToSequenceDisplayer(GestureSignaller *signaller);
     void connectSignallerToPoseDisplayer(GestureSignaller *signaller);
 	void connectSignallerToProfileIcons(GestureSignaller *signaller);
+
+#ifdef BUILD_KEYBOARD
+public:
+	void connectSignallerToKeyboardToggle(GestureSignaller *signaller);
+public slots:
+	void toggleKeyboard();
+private:
+	KeyboardWidget* keyboard;
+	DistanceWidget* distanceDisplayer;
+#endif
 
 private:
 

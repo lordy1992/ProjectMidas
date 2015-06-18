@@ -14,6 +14,10 @@
 #include "ProfileSignaller.h"
 #include <iostream>
 
+#ifdef BUILD_KEYBOARD
+#include "RingData.h"
+#endif
+
 #ifdef USE_SIMULATOR
 #include "MyoSimIncludes.hpp"
 using namespace myoSim;
@@ -25,8 +29,13 @@ using namespace myo;
 class SCDDigester
 {
 public:
-    SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
+#ifdef BUILD_KEYBOARD
+	SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
+		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle, std::vector<ringData> *kybrdRingData);
+#else
+	SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState *myoStateHandle,
 		MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle);
+#endif
     ~SCDDigester();
 
     void digest();
@@ -36,7 +45,14 @@ private:
 
 	void digestProfileChange(CommandData nextCmd);
 
+#ifdef BUILD_KEYBOARD
     void digestKeyboardGUIData(CommandData nextCommand);
+
+	int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);
+
+	KeyboardWidget *keyboardWidget;
+	std::vector<ringData> *kybrdRingData;
+#endif
 
 	KeyboardController *keyboardController;
     SharedCommandData *scdHandle;

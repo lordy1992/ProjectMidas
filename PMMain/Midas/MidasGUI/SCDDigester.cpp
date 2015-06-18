@@ -2,8 +2,13 @@
 #include "BaseMeasurements.h"
 
 
+#ifdef BUILD_KEYBOARD
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle, std::vector<ringData> *kybrdRingData)
+#else
 SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
 	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle)
+#endif
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
@@ -15,6 +20,11 @@ SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlSta
 
 	this->pm = profileManagerHandle;
     this->count = 0;
+
+#ifdef BUILD_KEYBOARD
+	this->kybrdRingData = kybrdRingData;
+	this->keyboardWidget = keyboardWidget;
+#endif
 }
 
 
@@ -98,7 +108,7 @@ void SCDDigester::digest()
         }
     }
 #endif /* JOYSTICK_CURSOR */
-#ifdef KEYBOARD_ENABLED
+#ifdef BUILD_KEYBOARD
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
@@ -117,14 +127,24 @@ void SCDDigester::digest()
 		
         digestKeyboardGUIData(nextCmd);
     }
-#endif /* KEYBOARD_ENABLED */    
+#endif 
 
     count++;
 }
 
+#ifdef BUILD_KEYBOARD
+// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
+int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
+{
+	qreal deltaAngle = 360.0 / ring->size();
+	int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
+	// TODO: May have to change later, based on received angle
+	return (int)(adjustedAngle / deltaAngle);
+}
+
 void SCDDigester::digestKeyboardGUIData(CommandData nextCommand)
 {
-    /*keyboardAngle currAngle;
+    keyboardAngle currAngle;
     int ringKeySelIdx;
     char key;
     if (nextCommand.type == KYBRD_GUI_CMD)
@@ -212,8 +232,9 @@ void SCDDigester::digestKeyboardGUIData(CommandData nextCommand)
         default:
             break;
         }
-    }*/
+    }
 }
+#endif
 
 void SCDDigester::digestKybdCmd(CommandData nextCommand)
 {

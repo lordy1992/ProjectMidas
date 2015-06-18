@@ -14,14 +14,10 @@ public:
 
 	void setControlStateHandle(ControlState* handle) { controlStateHandle = handle; }
 
-    //std::string getProfileName();
-	//void setProfileName(std::string name);
-
 public slots:
     void handleProfilePress(QString);
 
 private:
-    //std::string profileName;
 	ControlState* controlStateHandle;
 };
 
