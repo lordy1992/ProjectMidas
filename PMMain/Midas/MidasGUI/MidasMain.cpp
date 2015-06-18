@@ -102,7 +102,6 @@ int midasMain(MidasThread *threadHandle, MainGUI *mainGui, ProfileManager *pm) {
         scdDigester.digest();
     }
 
-	delete ps;
 	delete myoDevice;
 	delete mouseCtrl;
 	delete kybrdCtrl;

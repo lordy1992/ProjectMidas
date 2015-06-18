@@ -232,13 +232,43 @@ void SCDDigester::digestKybdCmd(CommandData nextCommand)
 
 void SCDDigester::digestProfileChange(CommandData nextCmd)
 {
-	//emitChangeProfile(QString("TODO - send next"));
-	// TODO - use ProfileManager and control state handle to handle command here.
+	std::vector<profile>* profiles = pm->getProfiles();
+	if (profiles->size() == 0) { return; }
 
-
-	if (nextCmd.name == "moveProfileForward")
+	std::string currProfileName = cntrlStateHandle->getProfile();
+	std::string prevProfileName = "";
+	std::string nextProfileName = "";
+	for (int i = 0; i < profiles->size(); i++)
 	{
+		if (profiles->at(i).profileName == currProfileName)
+		{
+			if (i > 0)
+			{
+				prevProfileName = profiles->at(i - 1).profileName;
+			}
+			else
+			{
+				prevProfileName = profiles->at(profiles->size() - 1).profileName;
+			}
 
+			if (i < profiles->size() - 1)
+			{
+				nextProfileName = profiles->at(i + 1).profileName;
+			}
+			else
+			{
+				nextProfileName = profiles->at(0).profileName;
+			}
+			break;
+		}
 	}
-	cntrlStateHandle->setProfile("Rotate Model");
+
+	if (nextCmd.action.profile == MOVE_PROFILE_FORWARD)
+	{
+		cntrlStateHandle->setProfile(nextProfileName);
+	}
+	else if (nextCmd.action.profile == MOVE_PROFILE_BACKWARD)
+	{
+		cntrlStateHandle->setProfile(prevProfileName);
+	}
 }
