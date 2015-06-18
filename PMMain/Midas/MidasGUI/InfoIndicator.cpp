@@ -45,7 +45,7 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
 
     button = new QPushButton("?", this);
     button->setText(getShowAllString());
-	button->setFixedWidth(20);
+	button->setFixedWidth(20); // Remove this line if getShowAllString has more than just a "?"
     QFont timesSmall("Times", 8, QFont::DemiBold);
     button->setFont(timesSmall);
     connect(button, SIGNAL(released()), this, SLOT(handleButton()));

@@ -221,6 +221,15 @@
     <ClCompile Include="ChangeStateAction.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ProfileIcon.cpp">
+      <Filter>Source Files\GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Debug\moc_ProfileIcon.cpp">
+      <Filter>Generated Files\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneratedFiles\Release\moc_ProfileIcon.cpp">
+      <Filter>Generated Files\Release</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="MidasThread.h">
@@ -244,14 +253,17 @@
     <CustomBuild Include="GestureSignaller.h">
       <Filter>Header Files\Midas</Filter>
     </CustomBuild>
-    <CustomBuild Include="PoseDisplayer.h">
-      <Filter>Header Files\Midas</Filter>
-    </CustomBuild>
     <CustomBuild Include="ProfileDisplayer.h">
       <Filter>Header Files\GUI</Filter>
     </CustomBuild>
     <CustomBuild Include="ProfileSignaller.h">
       <Filter>Header Files\Midas\Profiles</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ProfileIcon.h">
+      <Filter>Header Files\GUI</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PoseDisplayer.h">
+      <Filter>Header Files\GUI</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
