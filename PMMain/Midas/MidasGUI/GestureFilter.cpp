@@ -381,7 +381,8 @@ void GestureFilter::handleStateChange(CommandData response, GestureFilter *gf)
     std::cout << "Transitioning to state: " << response.action.mode << std::endl;
     controlStateHandle->setMode(response.action.mode);
 
-	// If there are subsequent commands to execute, do so on a seperate pipeline!
+	// If there are subsequent commands to execute, do so on a seperate pipeline! -- Note this assumes no further 
+	// filtering is desired on this data, and it can go straight to the SCD
 	std::vector<CommandData> changeStateCommands = response.getChangeStateActions();
 	FilterPipeline fp;
 	fp.registerFilter(gf->controlStateHandle->getSCD());
@@ -450,6 +451,17 @@ filterDataMap GestureFilter::handleProfileChangeCommand(CommandData response)
 	return outputToSharedCommandData;
 }
 
+void GestureFilter::handleProfileChangeCommand(CommandData response, GestureFilter *gf)
+{
+	// If there are subsequent commands to execute, do so on a seperate pipeline! -- Note this assumes no further 
+	// filtering is desired on this data, and it can go straight to the SCD
+	FilterPipeline fp;
+	fp.registerFilter(gf->controlStateHandle->getSCD());
+	filterDataMap dataMap;
+	dataMap = gf->handleProfileChangeCommand(response);
+	fp.startPipeline(dataMap);
+}
+
 filterDataMap GestureFilter::getExtraDataForSCD()
 {
     filterDataMap retVal = extraDataForSCD;
@@ -490,7 +502,9 @@ void callbackThreadWrapper(GestureFilter *gf)
         }
 		else if (response.type == commandType::PROFILE_CHANGE)
 		{
-			gf->handleProfileChangeCommand(response);
+			//gf->handleProfileChangeCommand(response);
+			GestureFilter::handleProfileChangeCommand(response, gf);
+
 		}
     } while (true);
 }

@@ -66,6 +66,7 @@ public:
     GestureSeqRecorder *getGestureSeqRecorder() { return gestSeqRecorder; }
 
 	static void handleStateChange(CommandData response, GestureFilter *gf);
+	static void handleProfileChangeCommand(CommandData response, GestureFilter *gf);
 
     friend void setupCallbackThread(GestureFilter *gf);
     friend void callbackThreadWrapper(GestureFilter *gf);

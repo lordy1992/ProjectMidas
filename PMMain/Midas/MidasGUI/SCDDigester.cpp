@@ -236,5 +236,10 @@ void SCDDigester::digestProfileChange(CommandData nextCmd)
 {
 	//emitChangeProfile(QString("TODO - send next"));
 	// TODO - use ProfileManager and ProfileSignaller to handle command here.
+
+	if (nextCmd.name == "moveProfileForward")
+	{
+
+	}
 	ps->setProfileName("Rotate Model");
 }

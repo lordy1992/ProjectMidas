@@ -64,18 +64,6 @@
                 </command>
 				</commands>
             </sequence>
-			<sequence state="gestureMode" name="Left Click">
-                <gestures>
-                    <gesture type="hold">waveIn</gesture>
-                </gestures>
-                <commands>
-				<command type="mouse">
-                    <actions>
-                        <action>leftClick</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
             <sequence state="lockMode" name="Unlock">
                 <gestures>
 					<gesture type="tap">doubleTap</gesture>
@@ -168,6 +156,18 @@
     </profile>
 	<profile name="Draw on Model">
         <sequences>
+			<sequence state="gestureMode" name="Switch Rotate/Draw">
+                <gestures>
+                    <gesture type="hold">waveOut</gesture>
+                </gestures>
+				<commands>
+				<command type="profileChange">
+                    <actions>
+                        <action>moveProfileForward</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
 			<sequence state="gestureMode" name="2D">
                 <gestures>
                     <gesture type="tap">waveIn</gesture>
