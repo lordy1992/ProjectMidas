@@ -34,24 +34,24 @@ InfoIndicator::InfoIndicator(int widgetWidth, int widgetHeight, QWidget *parent)
     setPalette(pal);
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
-    layout = new QGridLayout;
+    layout = new QHBoxLayout;
     layout->setSpacing(5);
     setLayout(layout);
 
     QFont timesFont("Times", 9, QFont::Bold);
     stateLabel = new QLabel(tr("%1").arg("jorden test"));
     stateLabel->setFont(timesFont);
-    layout->addWidget(stateLabel, 0, 0);
-    layout->setAlignment(stateLabel, Qt::AlignLeft);
+    layout->addWidget(stateLabel, 1, Qt::AlignLeft);
 
-    button = new QPushButton(this);
+    button = new QPushButton("?", this);
     button->setText(getShowAllString());
+	button->setFixedWidth(20);
     QFont timesSmall("Times", 8, QFont::DemiBold);
     button->setFont(timesSmall);
     connect(button, SIGNAL(released()), this, SLOT(handleButton()));
-    layout->addWidget(button, 0, 1);
+    layout->addWidget(button, 0, Qt::AlignRight);
 
-    setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Expanding);
+	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setMinimumSize(indWidth, indHeight);
 }
 
@@ -82,11 +82,11 @@ QString InfoIndicator::getShowAllString()
 {
     if (showAll)
     {
-        return tr("less");
+        return tr("?");
     }
     else
     {
-        return tr("more");
+        return tr("?");
     }
 
 }

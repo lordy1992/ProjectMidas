@@ -43,6 +43,8 @@ private:
     InfoIndicator *infoIndicator;
     SequenceDisplayer *sequenceDisplayer;
     PoseDisplayer *poseDisplayer;
+	PoseDisplayer *poseDisplayer2;
+	PoseDisplayer *poseDisplayer3;
     std::vector<ProfileDisplayer*> profileWidgets;
     int totalWidth, totalHeight;
 };
