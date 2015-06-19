@@ -69,22 +69,7 @@ void PoseDisplayer::handlePoseImages(std::vector<sequenceImageSet> poseImages)
     if (poseImages.size() == 1)
     {
         QPixmap scaledPic = poseImages[0].nextImage;
-        scaledPic = scaledPic.scaled(indWidth, indHeight);
-
-        // TODO - remove -- TEST ***************
-        QPixmap result(indWidth, indHeight);
-        result.fill(Qt::transparent); // force alpha channel
-        QPainter painter(&result);
-        painter.drawPixmap(0, 0, scaledPic);
-
-        QImage holdOverlayImage(QString(POSE_LENGTH_HOLD_PATH));
-        QPixmap pic;
-        pic = QPixmap::fromImage(holdOverlayImage);
-        pic = pic.scaled(indWidth / POSE_LEN_SCALEDOWN_ICON, indHeight / POSE_LEN_SCALEDOWN_ICON);
-
-        painter.drawPixmap(indWidth - (indWidth / POSE_LEN_SCALEDOWN_ICON), 0, pic);
-        //*******************************
-        
-        poseImgLabel->setPixmap(result);
+        scaledPic = scaledPic.scaled(indWidth, indHeight);        
+        poseImgLabel->setPixmap(scaledPic);
     }
 }
