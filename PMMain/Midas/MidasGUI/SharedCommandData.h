@@ -11,6 +11,10 @@
 #define VELOCITY_INPUT "velocity"
 #define ISCONNECTED_INPUT "isConnected"
 #define DELTA_INPUT "deltaInput"
+#ifdef BUILD_KEYBOARD
+#define ANGLE_INPUT "angle"
+#define RSSI_INPUT "rssi"
+#endif
 
 /**
  * Acts as the shared data between the main thread and the device threads. Contains the 
@@ -20,7 +24,11 @@
 class SharedCommandData : public Filter
 {
 public:
+#ifdef BUILD_KEYBOARD
+	SharedCommandData(unsigned int maxKybdGuiSel) : Filter(), mouseVelocity(), kybdGuiSel(0) { this->maxKybdGuiSel = maxKybdGuiSel; }
+#else
     SharedCommandData() : Filter(), mouseVelocity() { }
+#endif
 
     /**
      * Adds a command to the queue of commands. If another thread is modifying the command queue, 
@@ -97,6 +105,37 @@ public:
     */
     bool tryGetVelocity(point& outVelocity);
 
+#ifdef BUILD_KEYBOARD
+	void setKeySelectAngle(keyboardAngle angle);
+	bool trySetKeySelectAngle(keyboardAngle angle);
+	keyboardAngle getKeySelectAngle();
+	bool tryGetKeySelectAngle(keyboardAngle& outKeySelectAngle);
+
+	keyboardAngle keySelectAngle;
+	void setKybdGuiSel(unsigned int kybdGuiSel);
+	bool trySetKybdGuiSel(unsigned int kybdGuiSel);
+	unsigned int getKybdGuiSel();
+	bool tryGetKybdGuiSel(unsigned int& outKybdGuiSel);
+
+	unsigned int getKybdGuiSelMax();
+	bool tryGetKybdGuiSelMax(unsigned int& outMaxKybdGuiSel);
+
+	/**
+	* Returns a float value corresponding to the rssi. This will block
+	* if another thread is using it.
+	*
+	* @return The rssi value as a float.
+	*/
+	float getRssi();
+
+	/**
+	* Sets the rssi. This will block if another thread is using it.
+	*
+	* @param float rssi
+	*/
+	void setRssi(float rssi);
+#endif
+
 	void SharedCommandData::setDelta(vector2D delta);
 
 	bool SharedCommandData::trySetDelta(vector2D delta);
@@ -170,6 +209,13 @@ private:
     void extractPoint(boost::any value);
     void extractIsConnected(boost::any value);
 	void extractVector2D(boost::any value);
+
+#ifdef BUILD_KEYBOARD
+	unsigned int maxKybdGuiSel;
+	unsigned int kybdGuiSel;
+	void extractKeySelectAngle(boost::any value);
+	void extractRssi(boost::any value);
+#endif
 };
 
 #endif /* _SHARED_COMMAND_DATA_H */

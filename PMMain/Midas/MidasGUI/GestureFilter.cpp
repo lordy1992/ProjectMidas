@@ -32,6 +32,9 @@ GestureFilter::GestureFilter(ControlState* controlState, MyoState* myoState, clo
     {
         mainGui->connectSignallerToInfoIndicator(&signaller);
         mainGui->connectSignallerToPoseDisplayer(&signaller);
+#ifdef BUILD_KEYBOARD
+		mainGui->connectSignallerToKeyboardToggle(&signaller);
+#endif
 		mainGui->connectSignallerToProfileIcons(&signaller);
     }
 
@@ -149,29 +152,6 @@ void GestureFilter::registerMouseSequences(void)
     clickResp.action.mouse = mouseCmds::RIGHT_CLICK;
     clickSeq.at(0).poseLen = SeqElement::PoseLength::TAP;
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_MODE, clickSeq, clickResp, "Right Click");
-
-	// Temp - setup so that waveout is for swapping 2D/3D
-	// Register sequence to right click in mouse mode and gesture mode --> NOT WORKING... Jorden TODO figure out why
-	clickSeq.clear();
-	clickSeq.push_back(SeqElement(Pose::waveOut, SeqElement::PoseLength::TAP));
-	clickSeq.push_back(SeqElement(Pose::fingersSpread, SeqElement::PoseLength::TAP));
-	clickResp.name = "2D";
-	clickResp.type = commandType::KYBRD_CMD;
-	clickResp.action.kybd = kybdCmds::INPUT_VECTOR;
-	KeyboardVector keyVec;
-	keyVec.inputCharDownUp('Z');
-	clickResp.keyboardVector = keyVec;
-	ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "2D");
-	clickSeq.clear();
-	clickSeq.push_back(SeqElement(Pose::waveIn, SeqElement::PoseLength::TAP));
-	clickSeq.push_back(SeqElement(Pose::fingersSpread, SeqElement::PoseLength::TAP));
-	clickResp.name = "3D";
-	clickResp.type = commandType::KYBRD_CMD;
-	clickResp.action.kybd = kybdCmds::INPUT_VECTOR;
-	keyVec.clear();
-	keyVec.inputCharDownUp('M');
-	clickResp.keyboardVector = keyVec;
-	ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "3D");
 
     // allow clicking and dragging of any button by releasing mouse buttons on rest (immediate still).
     clickResp.action.mouse = mouseCmds::RELEASE_LRM_BUTS;
@@ -609,61 +589,8 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
 			response.addChangeStateAction(translatedCommands[i]);
 		}
 
-//        response.type = profileCommandToCommandTypeMap[it->cmd.type];
-//
-//        // Currently only supporting one action, rather than a list.
-//        // The XML format supports a list so that it can be extended in Midas easily.
-//        std::string action = it->cmd.actions[0];
-//        switch (response.type)
-//        {
-//            case commandType::KYBRD_CMD:
-//				if (action.find("inputVector") == 0)
-//				{
-//					// special case where user could specify 0 or more keys to be pressed
-//					// in the format: "inputVector,ABCD..." where A, B, C, D... are all keys
-//					// intended to be added to the keyboardVector response.
-//					response.action.kybd = profileActionToKybd["inputVector"];
-//					response.keyboardVector = KeyboardVector::createFromProfileStr(action);
-//				}
-//				else
-//				{
-//					response.action.kybd = profileActionToKybd[action];
-//				}
-//            break;
-//            case commandType::KYBRD_GUI_CMD:
-//                if (profileActionToKybdGui.find(action) != profileActionToKybdGui.end())
-//                {
-//                    response.action.kybdGUI = profileActionToKybdGui[action];
-//                }
-//                else
-//                {
-//                    response.type = commandType::KYBRD_CMD;
-//                    response.action.kybd = profileActionToKybd[action];
-//                }
-//            break;
-//            case commandType::MOUSE_CMD:
-//                response.action.mouse = profileActionToMouseCommands[action];
-//            break;
-//            case commandType::STATE_CHANGE:
-//                response.action.mode = profileActionToStateChange[action];
-//			//	// handle multi-line actions to attach actions to state changes.
-//			//	CommandData stateChangeAction;
-//			//	for (int j = 0; j < it->cmd.actions.size(); j++)
-//			//	{
-//			//		it->cmd.actions[0];
-//			//		action[j];
-//			//		CommandData stateChangeAction;
-//			//		response.name = it->name;
-//			//		response.type = profileCommandToCommandTypeMap[it->cmd.type];
-//			//	}
-//            break;
-//            default:
-//            break;
-//        }
-
         midasMode startState = profileActionToStateChange[it->state];
         ss |= (int)gestSeqRecorder->registerSequence(startState, seq, response, it->name);
-
     }
 
 	// Jorden TODO - add this back in proper way <-- Need a "submit action on transition" for this and for entering mouse mode.
@@ -675,7 +602,7 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
 //    clickSeq.push_back(SeqElement(Pose::rest, SeqElement::PoseLength::IMMEDIATE));
 //    ss |= (int)gestSeqRecorder->registerSequence(midasMode::MOUSE_MODE, clickSeq, clickResp, "Release Mouse");
 
-	/* Removing for now as to reduce complexity of Midas.
+#ifdef BUILD_KEYBOARD
     // Register sequence from Gesture Mode to Gesture Hold Modes
     sequence toHoldGestSeq;
     toHoldGestSeq.push_back(SeqElement(Pose::Type::doubleTap, SeqElement::PoseLength::HOLD));
@@ -714,7 +641,7 @@ filterError GestureFilter::updateBasedOnProfile(ProfileManager& pm, std::string 
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_THREE, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Fist");
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_FOUR, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Wave In");
     ss |= (int)gestSeqRecorder->registerSequence(midasMode::GESTURE_HOLD_FIVE, fromHoldGestSeq, fromHoldGestResponse, "Gesture from Hold Wave Out");
-	*/
+#endif
 
     if (ss != (int)SequenceStatus::SUCCESS)
     {
