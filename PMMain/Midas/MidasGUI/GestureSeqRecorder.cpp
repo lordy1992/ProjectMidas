@@ -62,14 +62,16 @@ SequenceStatus GestureSeqRecorder::registerSequence(midasMode mode, sequence seq
     seqList = NULL;
 
     std::vector<int> ids;
+    std::vector<PoseLength> lengths;
     sequence::iterator it;
 
     for (it = seq.begin(); it != seq.end(); ++it)
     {
         ids.push_back(it->type);
+        lengths.push_back(it->poseLen);
     }
 
-    std::vector<sequenceImageSet> images = imageManager.formSequenceSetFromIds(ids);
+    std::vector<sequenceImageSet> images = imageManager.formSequenceSetFromIds(ids, lengths);
 
     signaller.emitRegisterSequence(seqInfo.id, QString(seqInfo.sequenceName.c_str()), images);
 
@@ -147,7 +149,7 @@ void GestureSeqRecorder::progressSequenceTime(int delta, CommandData& response)
             if (seqProg < (*it)->seq.size())
             {
                 // We just hit the "hold" state, handle accordingly
-                if (SeqElement::PoseLength::HOLD == (*it)->seq.at(seqProg).poseLen)
+                if (PoseLength::HOLD == (*it)->seq.at(seqProg).poseLen)
                 {
                     (*it)->progress++;
                     if ((*it)->progress == (*it)->seq.size())
@@ -277,7 +279,7 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 SeqElement gestInQuestion = seqInQuestion.at(gestureIdx);
                 SeqElement baseGest = *baseSeqIt;
                 
-                if (gestInQuestion.poseLen == SeqElement::PoseLength::IMMEDIATE || baseGest.poseLen == SeqElement::PoseLength::IMMEDIATE)
+                if (gestInQuestion.poseLen == PoseLength::IMMEDIATE || baseGest.poseLen == PoseLength::IMMEDIATE)
                 {
                     if (gestureIdx > 1)
                     {
@@ -313,7 +315,7 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 SeqElement gestInQuestion = *seqInQIt;
                 SeqElement baseGest = baseSeq.at(gestureIdx);
 
-                if (gestInQuestion.poseLen == SeqElement::PoseLength::IMMEDIATE || baseGest.poseLen == SeqElement::PoseLength::IMMEDIATE)
+                if (gestInQuestion.poseLen == PoseLength::IMMEDIATE || baseGest.poseLen == PoseLength::IMMEDIATE)
                 {
                     if (gestureIdx > 1)
                     {
@@ -392,7 +394,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
     {
         unsigned int seqProg = (*it)->progress;
         if ((seqProg < (*it)->seq.size()) &&
-            (SeqElement::PoseLength::IMMEDIATE == (*it)->seq.at(seqProg).poseLen))
+            (PoseLength::IMMEDIATE == (*it)->seq.at(seqProg).poseLen))
         {
             // Handle IMMEDIATE uniquely, by not dealing with holdGestureTimer at all.
         }
@@ -403,7 +405,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
             if (holdGestTimer > 0)
             {
                 if ((seqProg < (*it)->seq.size()) &&
-                    (SeqElement::PoseLength::TAP == (*it)->seq.at(seqProg).poseLen))
+                    (PoseLength::TAP == (*it)->seq.at(seqProg).poseLen))
                 {
                     // match! Progress forward :)
                     (*it)->progress++;
@@ -471,7 +473,7 @@ SequenceStatus GestureSeqRecorder::findActivation(Pose::Type gesture, ControlSta
         {
             clock_t now = clock();
             progressBaseTime = now;
-            if (it->seq.at(0).poseLen == SeqElement::PoseLength::IMMEDIATE)
+            if (it->seq.at(0).poseLen == PoseLength::IMMEDIATE)
             {
                 // Special case. Immediate isn't 'held'
                 response = it->sequenceResponse;

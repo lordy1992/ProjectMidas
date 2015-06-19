@@ -18,6 +18,19 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
+// Enumeration to distinguish between:
+// TAP: 'short hold' ie, this is a pose that occurs for less time than REQ_HOLD_TIME,
+//      and using this type allows holds to be registered that would logically conflict otherwise
+// HOLD: indicates a pose needs to be held for REQ_HOLD_TIME to progress the sequence
+// IMMEDIATE: this will progress a sequence immediately, but will mean that no holds of the same
+//              pose-prefix can be registered without conflict. This should be okay, as it's main 
+//              design intention is to allow for click/drag functionality.
+enum class PoseLength {
+    TAP,
+    HOLD,
+    IMMEDIATE
+};
+
 /*
 * Each step in a sequence may have three different images, depending on
 * the progress of the sequence. The 'doneImage' is displayed on sequence
@@ -30,6 +43,7 @@ struct sequenceImageSet
     QPixmap nextImage, laterImage;
     QLabel* currentImgLabel;
     int actionTag;
+    PoseLength poseLen;
 };
 
 struct sequenceData
@@ -65,19 +79,6 @@ struct sequenceProgressData
 std::string PoseTypeToString(Pose::Type gesture);
 
 struct SeqElement {
-    // Enumeration to distinguish between:
-    // TAP: 'short hold' ie, this is a pose that occurs for less time than REQ_HOLD_TIME,
-    //      and using this type allows holds to be registered that would logically conflict otherwise
-    // HOLD: indicates a pose needs to be held for REQ_HOLD_TIME to progress the sequence
-    // IMMEDIATE: this will progress a sequence immediately, but will mean that no holds of the same
-    //              pose-prefix can be registered without conflict. This should be okay, as it's main 
-    //              design intention is to allow for click/drag functionality.
-    enum class PoseLength {
-        TAP,
-        HOLD,
-        IMMEDIATE
-    };
-
     SeqElement(Pose::Type type) {
         this->type = type;
         poseLen = PoseLength::TAP;

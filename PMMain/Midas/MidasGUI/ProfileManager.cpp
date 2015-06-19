@@ -99,11 +99,11 @@ std::map<std::string, profileCmds> profileActionToProfileChange =
 	{ "moveProfileBackward", MOVE_PROFILE_BACKWARD }
 };
 
-std::map <std::string, SeqElement::PoseLength> profileGestureTypeToPoseLength =
+std::map <std::string, PoseLength> profileGestureTypeToPoseLength =
 {
-    { "tap", SeqElement::PoseLength::TAP },
-    { "hold", SeqElement::PoseLength::HOLD },
-    { "immediate", SeqElement::PoseLength::IMMEDIATE }
+    { "tap", PoseLength::TAP },
+    { "hold", PoseLength::HOLD },
+    { "immediate", PoseLength::IMMEDIATE }
 };
 
 std::map <std::string, Pose::Type> profileGestureNameToType =
