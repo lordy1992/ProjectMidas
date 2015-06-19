@@ -59,6 +59,7 @@ void MyoTranslationFilter::process()
 		// update base angles for each new mode
 		BaseMeasurements::getInstance().setBaseAngles(roll, pitch, yaw);
 		BaseMeasurements::getInstance().updateBaseCursor();
+		BaseMeasurements::getInstance().setCurrentState(currMode);
     }
 
 	deltaRollDeg = radToDeg(calcRingDelta(roll, BaseMeasurements::getInstance().getBaseRoll()) - calcRingDelta(prevRoll, BaseMeasurements::getInstance().getBaseRoll())); // normalized to avoid overflow

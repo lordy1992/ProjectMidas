@@ -2,6 +2,8 @@
 #define BASE_MEASUREMENTS_H
 
 #include "MyoState.h"
+#include "ControlState.h"
+#include "MidasCommon.h"
 #include "myo\myo.hpp"
 
 /* Singleton */
@@ -28,8 +30,12 @@ public:
 	void setCurrentAnglesAsBase();
 
 	void setCurrentPose(myo::Pose pose);
+	
+	void setCurrentState(midasMode state);
 
 	void setMyoStateHandle(MyoState* myoState) { myoStateHandle = myoState; }
+
+	void setControlStateHandle(ControlState* controlState) { controlStateHandle = controlState; }
 
 	float getBaseRoll() { return baseRoll; }
 	float getBasePitch() { return basePitch; }
@@ -39,12 +45,13 @@ public:
 	float getScreenSizeX() { return screenSizeX; }
 	float getScreenSizeY() { return screenSizeY; }
 	myo::Pose BaseMeasurements::getCurrentPose() { return currentPose; }
+	midasMode BaseMeasurements::getCurrentState() { return currentState; }
 
 	bool areCurrentValuesValid();
 
 private:
 	// Force as singleton
-	BaseMeasurements() { myoStateHandle = NULL; };
+	BaseMeasurements() { myoStateHandle = NULL; currentState = LOCK_MODE; currentPose = myo::Pose::rest; };
 	//~BaseMeasurements();
 	BaseMeasurements(BaseMeasurements const&) = delete;
 	void operator=(BaseMeasurements const&) = delete;
@@ -66,9 +73,11 @@ private:
 	float currentPitch;
 	float currentYaw;
 
+	midasMode currentState;
 	myo::Pose currentPose;
 
 	MyoState* myoStateHandle;
+	ControlState* controlStateHandle;
 };
 
 #endif /* BASE_MEASUREMENTS_H */

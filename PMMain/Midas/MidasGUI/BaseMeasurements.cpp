@@ -74,11 +74,18 @@ void BaseMeasurements::setCurrentPose(myo::Pose pose)
 	accessMutex.unlock();
 }
 
+void BaseMeasurements::setCurrentState(midasMode state)
+{
+	accessMutex.lock();
+	currentState = state;
+	accessMutex.unlock();
+}
+
 bool BaseMeasurements::areCurrentValuesValid()
 {
 	accessMutex.lock();
 	// check if current pose is caught up to myoState. if not, invalid.
-	if (currentPose == (myoStateHandle->getPoseHistory()).back())
+	if (currentPose == (myoStateHandle->getPoseHistory()).back() && currentState == (controlStateHandle->getMode()))
 	{
 		accessMutex.unlock();
 		return true;

@@ -70,8 +70,6 @@ unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
     return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
-//Jorden Temp TODO - put code into correct pattern - hacking for now
-
 void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove, int mouseRateIfMoveY_hack)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
