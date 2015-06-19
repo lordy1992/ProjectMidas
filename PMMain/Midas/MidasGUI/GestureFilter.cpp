@@ -63,8 +63,6 @@ void GestureFilter::process()
 
 	if (gesture != lastPoseType)
 	{
-		// Update BaseCursor Position <-- fiddling for now still June 16
-		//BaseMeasurements::getInstance().setCurrentAnglesAsBase();
 		BaseMeasurements::getInstance().setCurrentPose(gesture);
 		
 		BaseMeasurements::getInstance().setScreenSize(0,0); // dont actually need to do. TODO - remove

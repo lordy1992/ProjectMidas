@@ -15,8 +15,8 @@
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
 
 #define SPECIFIC_PROFILE_ICON_SIZE 60
-#define PROFILE_ICON0_ACTIVE	"Resources\\icons\\Ring_Post.png"	
-#define PROFILE_ICON0_INACTIVE	"Resources\\icons\\RingBW.png"		
+#define PROFILE_ICON0_ACTIVE	"Resources\\icons\\Ring_Post2.png"	
+#define PROFILE_ICON0_INACTIVE	"Resources\\icons\\RingBW2.png"		
 #define PROFILE_ICON1_ACTIVE	"Resources\\icons\\Pencil_Post.png"
 #define PROFILE_ICON1_INACTIVE	"Resources\\icons\\PencilBW.png"
 

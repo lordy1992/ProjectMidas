@@ -14,10 +14,10 @@ KeyboardSettingsReader::~KeyboardSettingsReader()
 }
 
 
-void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDataHandle)
+void KeyboardSettingsReader::readKeyboardSetupFile(std::vector<ringData>& ringDataHandle, std::string fileName)
 {
 
-    std::ifstream ringDataFile("./keyboardData.txt");
+    std::ifstream ringDataFile(fileName);
     std::vector<std::string> temp;
     std::string line;
 

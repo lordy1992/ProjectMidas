@@ -75,7 +75,7 @@
                 </command>
 				</commands>
             </sequence>
-            <sequence state="mouseMode" name="Mouse to Gesture">
+            <sequence state="mouseMode" name="Release Cursor">
                 <gestures>
                     <gesture type="immediate">rest</gesture>
                 </gestures>
@@ -92,7 +92,7 @@
                 </command>
 				</commands>
             </sequence>
-            <sequence state="gestureMode" name="Gesture to Mouse">
+            <sequence state="gestureMode" name="Click+Drag Cursor">
                 <gestures>
                     <gesture type="hold">fist</gesture>
                 </gestures>
@@ -109,7 +109,7 @@
                 </command>
 				</commands>
             </sequence>
-			<sequence state="gestureMode" name="Gesture to Mouse">
+			<sequence state="gestureMode" name="Move Cursor">
                 <gestures>
                     <gesture type="hold">fingersSpread</gesture>
                 </gestures>
@@ -228,7 +228,7 @@
                 </command>
 				</commands>
             </sequence>
-            <sequence state="mouseMode" name="Mouse to Gesture">
+            <sequence state="mouseMode" name="Release Cursor">
                 <gestures>
                     <gesture type="immediate">rest</gesture>
                 </gestures>
@@ -245,7 +245,7 @@
                 </command>
 				</commands>
             </sequence>
-            <sequence state="gestureMode" name="Gesture to Mouse">
+            <sequence state="gestureMode" name="Click+Drag Cursor">
                 <gestures>
                     <gesture type="hold">fist</gesture>
                 </gestures>
@@ -262,7 +262,7 @@
                 </command>
 				</commands>
             </sequence>
-			<sequence state="gestureMode" name="Gesture to Mouse">
+			<sequence state="gestureMode" name="Move Cursor">
                 <gestures>
                     <gesture type="hold">fingersSpread</gesture>
                 </gestures>

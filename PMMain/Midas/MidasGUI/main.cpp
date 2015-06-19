@@ -20,7 +20,8 @@ int main(int argc, char *argv[])
 #ifdef BUILD_KEYBOARD
 	std::vector<ringData> kybrdRingData;
 	KeyboardSettingsReader readFile;
-	readFile.readKeyboardSetupFile(kybrdRingData);
+    std::string fileName = "keyboardData.txt";
+    readFile.readKeyboardSetupFile(kybrdRingData,fileName); // TODO - might fail here.
 	
 	MidasThread midasThread(&kybrdRingData);
 #else
