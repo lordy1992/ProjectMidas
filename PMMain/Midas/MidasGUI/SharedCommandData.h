@@ -213,7 +213,6 @@ private:
 #ifdef BUILD_KEYBOARD
 	unsigned int maxKybdGuiSel;
 	unsigned int kybdGuiSel;
-	std::queue<CommandData> commandQueue;
 	void extractKeySelectAngle(boost::any value);
 	void extractRssi(boost::any value);
 #endif

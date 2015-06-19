@@ -16,6 +16,10 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
 	infoIndicator = new InfoIndicator(INFO_INDICATOR_WIDTH, INFO_INDICATOR_HEIGHT, this);
     sequenceDisplayer = new SequenceDisplayer(this);
 	poseDisplayer = new PoseDisplayer(MOUSE_INDICATOR_SIZE, MOUSE_INDICATOR_SIZE, this);
+#ifdef BUILD_KEYBOARD_ANDDISTANCE
+	distanceDisplayer = new DistanceWidget(mainThread, INFO_INDICATOR_WIDTH,
+		DISTANCE_DISPLAY_HEIGHT, this);
+#endif
 
 	setupProfileIcons();
 
@@ -45,6 +49,11 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
      
     setLayout(layout);
 
+#ifdef BUILD_KEYBOARD
+	keyboard = new KeyboardWidget(mainThread);
+	keyboard->addWheels(mainThread->getKybrdRingData());
+#endif
+
     totalWidth = std::max(sequenceDisplayer->width(), 
                         (infoIndicator->width() + poseDisplayer->width()));
     totalHeight = sequenceDisplayer->height() + poseDisplayer->height();
@@ -55,6 +64,7 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
         totalWidth, totalHeight);
 }
 
+#ifdef BUILD_KEYBOARD
 void MainGUI::toggleKeyboard()
 {
 	if (keyboard->isVisible())
@@ -66,6 +76,7 @@ void MainGUI::toggleKeyboard()
 		keyboard->setVisible(true);
 	}
 }
+#endif
 
 MainGUI::~MainGUI()
 {
@@ -85,11 +96,13 @@ MainGUI::~MainGUI()
 	icon1 = NULL;
 }
 
+#ifdef BUILD_KEYBOARD
 void MainGUI::connectSignallerToKeyboardToggle(GestureSignaller *signaller)
 {
 	QObject::connect(signaller, SIGNAL(emitToggleKeyboard()),
 			this, SLOT(toggleKeyboard()));
 }
+#endif
 
 void MainGUI::connectSignallerToProfileWidgets(ProfileSignaller* signaller)
 {

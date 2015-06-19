@@ -50,7 +50,7 @@ private:
 
 	int getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring);
 
-	KeyboardWidget *keyboardWidget;
+	//KeyboardWidget *keyboardWidget;
 	std::vector<ringData> *kybrdRingData;
 #endif
 

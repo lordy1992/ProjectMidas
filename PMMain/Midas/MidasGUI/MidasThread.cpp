@@ -8,11 +8,10 @@
 #endif
 
 #ifdef BUILD_KEYBOARD
-MidasThread::MidasThread(std::vector<ringData> *kybrdRingData) : kybrdRingData(kybrdRingData)
+MidasThread::MidasThread(std::vector<ringData> *kybrdRingData) : kybrdRingData(kybrdRingData) {
 #else
-MidasThread::MidasThread()
+MidasThread::MidasThread() {
 #endif
-{
 }
 
 MidasThread::~MidasThread()

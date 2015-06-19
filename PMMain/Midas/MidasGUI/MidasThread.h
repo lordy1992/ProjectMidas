@@ -22,8 +22,8 @@ public:
 #ifdef BUILD_KEYBOARD
 	MidasThread(std::vector<ringData> *kybrdRingData);
 	std::vector<ringData>* getKybrdRingData();
-	MidasThread();
 #endif
+	MidasThread();
 
     void setMainGuiHandle(MainGUI *mainGui);
     void setProfileManagerHandle(ProfileManager *profileManager);

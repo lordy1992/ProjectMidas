@@ -51,7 +51,7 @@ public slots:
 	void toggleKeyboard();
 private:
 	KeyboardWidget* keyboard;
-	DistanceWidget* distanceDisplayer;
+//	DistanceWidget* distanceDisplayer;
 #endif
 
 private:
