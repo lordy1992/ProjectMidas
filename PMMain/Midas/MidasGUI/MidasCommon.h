@@ -145,11 +145,11 @@ static std::string modeToString(midasMode mm)
     case LOCK_MODE:   
         return "Locked";
     case MOUSE_MODE:  
-        return "Mouse Mode";
+        return "Unlocked - Mouse";
     case KEYBOARD_MODE:  
-        return "Keyboard Mode";
+        return "Unlocked - Keyboard";
     case GESTURE_MODE:  
-        return "Gesture Mode";
+        return "Unlocked";
     case GESTURE_HOLD_ONE:
         return "Hold1 Mode";
     case GESTURE_HOLD_TWO:

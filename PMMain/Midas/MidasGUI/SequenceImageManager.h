@@ -23,7 +23,7 @@
 
 #define POSE_LENGTH_IMMEDIATE_PATH "Resources\\icons\\PoseLenImmediate.png"
 #define POSE_LENGTH_HOLD_PATH "Resources\\icons\\PoseLenHold.png"
-#define POSE_LEN_SCALEDOWN_ICON 4
+#define POSE_LEN_SCALEDOWN_ICON 3
 
 class SequenceImageManager
 {

@@ -63,6 +63,14 @@ void GestureFilter::process()
 
 	if (gesture != lastPoseType)
 	{
+        /* HACK - Myo API used to enforce that gestures ALWAYS had a 'rest' gesture inbetween other poses.
+         * Going to manually insert a rest inbetween sequences without a rest.
+         */
+        if (lastPoseType != Pose::rest && gesture != Pose::rest)
+        {
+            gesture = Pose::rest;
+        }
+
 		BaseMeasurements::getInstance().setCurrentPose(gesture);
 		
 		BaseMeasurements::getInstance().setScreenSize(0,0); // dont actually need to do. TODO - remove
