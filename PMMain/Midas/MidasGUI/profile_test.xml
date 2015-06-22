@@ -38,18 +38,6 @@
                 </command>
 				</commands>
             </sequence>
-            <sequence state="gestureMode" name="Middle Click">
-                <gestures>
-                    <gesture type="tap">fingersSpread</gesture>
-                </gestures>
-                <commands>
-				<command type="mouse">
-                    <actions>
-                        <action>MiddleClick</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
             <sequence state="gestureMode" name="Left Click">
                 <gestures>
                     <gesture type="tap">fist</gesture>
@@ -111,7 +99,7 @@
             </sequence>
 			<sequence state="gestureMode" name="Move Cursor">
                 <gestures>
-                    <gesture type="hold">fingersSpread</gesture>
+                    <gesture type="immediate">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -139,16 +127,6 @@
                 <angle type="roll">
                     <anglePositive>volumeUp</anglePositive>
                     <angleNegative>volumeDown</angleNegative>
-                </angle>
-            </hold>
-            <hold gesture="fingersSpread">
-                <angle type="pitch">
-                    <anglePositive>upArrow</anglePositive>
-                    <angleNegative>downArrow</angleNegative>
-                </angle>
-                <angle type="yaw">
-                    <anglePositive>rightArrow</anglePositive>
-                    <angleNegative>leftArrow</angleNegative>
                 </angle>
             </hold>
         </holds>
@@ -187,18 +165,6 @@
 				<command type="keyboard">
                     <actions>
                         <action>inputVector,M</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
-            <sequence state="gestureMode" name="Middle Click">
-                <gestures>
-                    <gesture type="tap">fingersSpread</gesture>
-                </gestures>
-                <commands>
-				<command type="mouse">
-                    <actions>
-                        <action>MiddleClick</action>
                     </actions>
                 </command>
 				</commands>
@@ -264,7 +230,7 @@
             </sequence>
 			<sequence state="gestureMode" name="Move Cursor">
                 <gestures>
-                    <gesture type="hold">fingersSpread</gesture>
+                    <gesture type="immediate">fingersSpread</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -292,16 +258,6 @@
                 <angle type="roll">
                     <anglePositive>volumeUp</anglePositive>
                     <angleNegative>volumeDown</angleNegative>
-                </angle>
-            </hold>
-            <hold gesture="fingersSpread">
-                <angle type="pitch">
-                    <anglePositive>upArrow</anglePositive>
-                    <angleNegative>downArrow</angleNegative>
-                </angle>
-                <angle type="yaw">
-                    <anglePositive>rightArrow</anglePositive>
-                    <angleNegative>leftArrow</angleNegative>
                 </angle>
             </hold>
         </holds>

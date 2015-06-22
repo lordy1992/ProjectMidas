@@ -71,6 +71,8 @@ private:
 
 public slots:
 	void handleUpdateProfile();
+
+    void handleFocusMidas();
 };
 
 #endif

@@ -23,6 +23,8 @@ MainGUI::MainGUI(MidasThread *mainThread, ProfileManager *pm, int deadZoneRad)
 
 	setupProfileIcons();
 
+    // Ensure Midas stays on top even when other applications have popups, etc
+    this->setFocus();
     //setWindowFlags(windowFlags() | Qt::Tool);
     setAttribute(Qt::WA_TranslucentBackground);
     setWindowOpacity(0.8);
@@ -169,4 +171,9 @@ void MainGUI::handleUpdateProfile()
 		icon1->setImgActiveSel(false);
 		icon0IsActive = true;
 	}
+}
+
+void MainGUI::handleFocusMidas()
+{
+
 }
