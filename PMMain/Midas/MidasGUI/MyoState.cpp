@@ -1,4 +1,5 @@
 #include "MyoState.h"
+#include "MyoDevice.h"
 
 MyoState::MyoState()
 {
@@ -147,3 +148,9 @@ std::queue<myo::Pose> MyoState::getPoseHistory()
 
 	return copy;
 }
+
+void MyoState::setMyo(MyoDevice *myo)
+{ myoHandle = myo; }
+
+const MyoDevice* MyoState::peakMyo()
+{ return myoHandle; }

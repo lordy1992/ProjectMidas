@@ -7,6 +7,8 @@
 #include "myo\cxx\Quaternion.hpp"
 #include "myo\cxx\Pose.hpp"
 
+class MyoDevice;
+
 class MyoState {
 public:
 	MyoState();
@@ -29,6 +31,10 @@ public:
 	void pushPose(myo::Pose pose);
 	myo::Pose popPose();
 	std::queue<myo::Pose> getPoseHistory();
+
+    void setMyo(MyoDevice *myo);
+    const MyoDevice* peakMyo();
+
 private:
 	std::mutex myoStateMutex;
 
@@ -39,6 +45,8 @@ private:
 
 	int poseHistLen;
 	std::queue<myo::Pose> poseHistory;
+
+    MyoDevice* myoHandle;
 };
 
 #endif /* MYO_STATE_H */

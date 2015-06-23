@@ -81,6 +81,13 @@ public:
      */
     void updateProfiles(void);
 
+    /**
+     * Send a vibration command to the myo.
+     *
+     * @param 
+     */
+    void vibrateMyo(myo::Myo::VibrationType vibType) const;
+
 private:
     /**
      * This class implements all of the callback functions from the Myo DeviceListener
@@ -98,6 +105,7 @@ private:
         void onConnect(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion);
         void onDisconnect(Myo* myo, uint64_t timestamp);
         void onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection);
+        void onArmSync(Myo *myo, uint64_t timestamp, Arm arm, XDirection xDirection, float rotation, WarmupState warmupState); // SDK V0.9.0
         void onArmUnsync(Myo* myo, uint64_t timestamp);
         // For SDK <= 5, use these 2 arm callbacks.
         void onArmRecognized(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { onArmSync(myo, timestamp, arm, xDirection); }
@@ -117,6 +125,8 @@ private:
     private:
         MyoDevice& parent;
     };
+
+    myo::Myo* currentMyo;
 
     unsigned int myoFindTimeout;
     unsigned int durationInMilliseconds;

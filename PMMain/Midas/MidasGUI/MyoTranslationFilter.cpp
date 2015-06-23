@@ -11,6 +11,11 @@ float radToDeg(float rad)
     return rad * (180.0 / M_PI);
 }
 
+float degToRad(float deg)
+{
+    return (deg / 180.0) * M_PI;
+}
+
 MyoTranslationFilter::MyoTranslationFilter(ControlState* controlState, MyoState* myoState)
     : controlStateHandle(controlState), myoStateHandle(myoState), previousMode(LOCK_MODE), 
     pitch(0), prevPitch(0), deltaPitchDeg(0),
@@ -123,8 +128,8 @@ point MyoTranslationFilter::getMouseUnitVelocity(float pitch, float yaw)
 	float deltaPitch = calcRingDelta(pitch, BaseMeasurements::getInstance().getBasePitch());
 	float deltaYaw = calcRingDelta(yaw, BaseMeasurements::getInstance().getBaseYaw());
 
-    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / MAX_PITCH_ANGLE) : std::max(-1.0f, deltaPitch / MAX_PITCH_ANGLE);
-    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / MAX_YAW_ANGLE) : std::max(-1.0f, deltaYaw / MAX_YAW_ANGLE);
+    float unitPitch = (deltaPitch >= 0) ? std::min(1.0f, deltaPitch / degToRad(MAX_PITCH_ANGLE)) : std::max(-1.0f, deltaPitch / degToRad(MAX_PITCH_ANGLE));
+    float unitYaw = (deltaYaw >= 0) ? std::min(1.0f, deltaYaw / degToRad(MAX_YAW_ANGLE)) : std::max(-1.0f, deltaYaw / degToRad(MAX_YAW_ANGLE));
 
     return point((int) (unitYaw * 100), (int) (unitPitch * 100));
 }
@@ -134,8 +139,8 @@ vector2D MyoTranslationFilter::getMouseDelta(float pitch, float yaw)
 	float deltaPitch = calcRingDelta(pitch, BaseMeasurements::getInstance().getBasePitch());
 	float deltaYaw = calcRingDelta(yaw, BaseMeasurements::getInstance().getBaseYaw());
 
-	float relativePitch = (deltaPitch / MAX_PITCH_ANGLE) * 100;
-	float relativeYaw = (deltaYaw / MAX_YAW_ANGLE) * 100;
+    float relativePitch = (deltaPitch / degToRad(MAX_PITCH_ANGLE)) * 100;
+    float relativeYaw = (deltaYaw / degToRad(MAX_YAW_ANGLE)) * 100;
 
 	return vector2D((double)relativeYaw, (double)relativePitch);
 }

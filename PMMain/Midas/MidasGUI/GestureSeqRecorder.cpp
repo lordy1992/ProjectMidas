@@ -397,6 +397,7 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
             (PoseLength::IMMEDIATE == (*it)->seq.at(seqProg).poseLen))
         {
             // Handle IMMEDIATE uniquely, by not dealing with holdGestureTimer at all.
+            int a = 5;
         }
 
         if (gesture == Pose::rest)

@@ -4,6 +4,7 @@
 #include "ProfileManager.h"
 #include "BaseMeasurements.h"
 #include "FilterPipeline.h"
+#include "MyoDevice.h"
 #include <time.h>
 #include <thread>
 #include <qtranslator.h>
@@ -354,6 +355,11 @@ void GestureFilter::registerStateSequences(void)
 
 void GestureFilter::handleStateChange(CommandData response, GestureFilter *gf)
 {
+    if (gf->controlStateHandle->getMode() == LOCK_MODE || response.action.mode == LOCK_MODE)
+    {
+        gf->myoStateHandle->peakMyo()->vibrateMyo(myo::Myo::VibrationType::vibrationShort);
+    }
+
     if (response.type != commandType::STATE_CHANGE)
     {
         // Should NOT have made it here

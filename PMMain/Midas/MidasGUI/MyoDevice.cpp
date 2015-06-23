@@ -142,6 +142,13 @@ int MyoDevice::getDeviceError()
     return 0;
 }
 
+void MyoDevice::vibrateMyo(myo::Myo::VibrationType vibType) const
+{
+    if (currentMyo != NULL) {
+        currentMyo->vibrate(vibType);
+    }
+}
+
 // Device Listener
 MyoDevice::MyoCallbacks::MyoCallbacks(MyoDevice& parentDevice) 
     : parent(parentDevice)
@@ -232,9 +239,11 @@ void MyoDevice::MyoCallbacks::onGyroscopeData(Myo* myo, uint64_t timestamp, cons
 // TODO: Implement
 void MyoDevice::MyoCallbacks::onPair(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { 
     std::cout << "on pair." << std::endl; 
+    parent.currentMyo = myo;
 }
 void MyoDevice::MyoCallbacks::onUnpair(Myo* myo, uint64_t timestamp) { 
     std::cout << "on unpair." << std::endl; 
+    parent.currentMyo = NULL;
 }
 void MyoDevice::MyoCallbacks::onConnect(Myo* myo, uint64_t timestamp, FirmwareVersion firmwareVersion) { 
     std::cout << "on connect." << std::endl; 
@@ -242,6 +251,8 @@ void MyoDevice::MyoCallbacks::onConnect(Myo* myo, uint64_t timestamp, FirmwareVe
     input[ISCONNECTED_INPUT] = true;
 
     parent.connectPipeline.startPipeline(input);
+
+    parent.currentMyo = myo;
 }
 void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) { 
     std::cout << "on disconnect." << std::endl; 
@@ -250,11 +261,21 @@ void MyoDevice::MyoCallbacks::onDisconnect(Myo* myo, uint64_t timestamp) {
 
     parent.connectPipeline.startPipeline(input);
 
+    parent.currentMyo = NULL;
+}
+
+void MyoDevice::MyoCallbacks::onArmSync(Myo *myo, uint64_t timestamp, Arm arm, XDirection xDirection, float rotation, WarmupState warmupState)
+{
+    parent.arm = arm;
+    parent.xDirection = xDirection;
+    std::cout << "on arm sync." << std::endl;
+    parent.currentMyo = myo;
 }
 void MyoDevice::MyoCallbacks::onArmSync(Myo* myo, uint64_t timestamp, Arm arm, XDirection xDirection) { 
     parent.arm = arm;
     parent.xDirection = xDirection;
     std::cout << "on arm sync." << std::endl; 
+    parent.currentMyo = NULL;
 }
 void MyoDevice::MyoCallbacks::onArmUnsync(Myo* myo, uint64_t timestamp) { 
     parent.arm = Arm::armUnknown;

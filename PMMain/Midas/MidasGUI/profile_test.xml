@@ -2,6 +2,71 @@
 <profiles>
     <profile name="Rotate Model">
         <sequences>
+			<sequence state="lockMode" name="Unlock">
+                <gestures>
+					<gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <commands>
+				<command type="stateChange">
+                    <actions>
+                        <action>gestureMode</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="View Flow Map">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">waveOut</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,f</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="View Impedance Map">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">waveIn</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,i</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="3D">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">fist</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,M</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="2D">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">fingersSpread</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,Z</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
 			<sequence state="gestureMode" name="Switch Rotate/Draw">
                 <gestures>
                     <gesture type="hold">waveOut</gesture>
@@ -14,30 +79,6 @@
                 </command>
 				</commands>
             </sequence>
-			<sequence state="gestureMode" name="2D">
-                <gestures>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-				<commands>
-				<command type="keyboard">
-                    <actions>
-                        <action>inputVector,Z</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
-			<sequence state="gestureMode" name="3D">
-                <gestures>
-                    <gesture type="tap">waveOut</gesture>
-                </gestures>
-                <commands>
-				<command type="keyboard">
-                    <actions>
-                        <action>inputVector,M</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
             <sequence state="gestureMode" name="Left Click">
                 <gestures>
                     <gesture type="tap">fist</gesture>
@@ -46,19 +87,6 @@
 				<command type="mouse">
                     <actions>
                         <action>leftClick</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
-            <sequence state="lockMode" name="Unlock">
-                <gestures>
-					<gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">doubleTap</gesture>
-                </gestures>
-                <commands>
-				<command type="stateChange">
-                    <actions>
-                        <action>gestureMode</action>
                     </actions>
                 </command>
 				</commands>
@@ -133,6 +161,71 @@
     </profile>
 	<profile name="Draw on Model">
         <sequences>
+			<sequence state="lockMode" name="Unlock">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">doubleTap</gesture>
+                </gestures>
+                <commands>
+				<command type="stateChange">
+                    <actions>
+                        <action>gestureMode</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="View Flow Map">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">waveOut</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,f</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="View Impedance Map">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">waveIn</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,i</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="3D">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">fist</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,M</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
+			<sequence state="lockMode" name="2D">
+                <gestures>
+                    <gesture type="tap">doubleTap</gesture>
+					<gesture type="tap">fingersSpread</gesture>
+                </gestures>
+                <commands>
+					<command type="keyboard">
+						<actions>
+							<action>inputVector,Z</action>
+						</actions>
+					</command>
+				</commands>
+            </sequence>
 			<sequence state="gestureMode" name="Switch Rotate/Draw">
                 <gestures>
                     <gesture type="hold">waveOut</gesture>
@@ -145,30 +238,6 @@
                 </command>
 				</commands>
             </sequence>
-			<sequence state="gestureMode" name="2D">
-                <gestures>
-                    <gesture type="tap">waveIn</gesture>
-                </gestures>
-				<commands>
-				<command type="keyboard">
-                    <actions>
-                        <action>inputVector,Z</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
-			<sequence state="gestureMode" name="3D">
-                <gestures>
-                    <gesture type="tap">waveOut</gesture>
-                </gestures>
-                <commands>
-				<command type="keyboard">
-                    <actions>
-                        <action>inputVector,M</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
             <sequence state="gestureMode" name="Left Click">
                 <gestures>
                     <gesture type="tap">fist</gesture>
@@ -177,19 +246,6 @@
 				<command type="mouse">
                     <actions>
                         <action>leftClick</action>
-                    </actions>
-                </command>
-				</commands>
-            </sequence>
-            <sequence state="lockMode" name="Unlock">
-                <gestures>
-                    <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">doubleTap</gesture>
-                </gestures>
-                <commands>
-				<command type="stateChange">
-                    <actions>
-                        <action>gestureMode</action>
                     </actions>
                 </command>
 				</commands>
