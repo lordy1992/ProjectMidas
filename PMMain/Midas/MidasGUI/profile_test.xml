@@ -5,7 +5,7 @@
 			<sequence state="lockMode" name="Unlock">
                 <gestures>
 					<gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">doubleTap</gesture>
+					<gesture type="immediate">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -18,7 +18,7 @@
 			<sequence state="lockMode" name="View Flow Map">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveOut</gesture>
+					<gesture type="immediate">waveOut</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -31,7 +31,7 @@
 			<sequence state="lockMode" name="View Impedance Map">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
+					<gesture type="immediate">waveIn</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -44,7 +44,7 @@
 			<sequence state="lockMode" name="3D">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">fist</gesture>
+					<gesture type="immediate">fist</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -57,7 +57,7 @@
 			<sequence state="lockMode" name="2D">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">fingersSpread</gesture>
+					<gesture type="immediate">fingersSpread</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -176,7 +176,7 @@
 			<sequence state="lockMode" name="Unlock">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">doubleTap</gesture>
+					<gesture type="immediate">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -189,7 +189,7 @@
 			<sequence state="lockMode" name="View Flow Map">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveOut</gesture>
+					<gesture type="immediate">waveOut</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -202,7 +202,7 @@
 			<sequence state="lockMode" name="View Impedance Map">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">waveIn</gesture>
+					<gesture type="immediate">waveIn</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -215,7 +215,7 @@
 			<sequence state="lockMode" name="3D">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">fist</gesture>
+					<gesture type="immediate">fist</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">
@@ -228,7 +228,7 @@
 			<sequence state="lockMode" name="2D">
                 <gestures>
                     <gesture type="tap">doubleTap</gesture>
-					<gesture type="tap">fingersSpread</gesture>
+					<gesture type="immediate">fingersSpread</gesture>
                 </gestures>
                 <commands>
 					<command type="keyboard">

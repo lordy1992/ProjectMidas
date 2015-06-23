@@ -281,12 +281,13 @@ SequenceStatus GestureSeqRecorder::checkLegalRegister(midasMode mode, sequenceIn
                 
                 if (gestInQuestion.poseLen == PoseLength::IMMEDIATE || baseGest.poseLen == PoseLength::IMMEDIATE)
                 {
-                    if (gestureIdx > 1)
-                    {
-                        // can ONLY have length one IMMEDIATE types. This allows for very quick actions, such as clicking of a cursor,
-                        // but is not fully supported.
-                        return SequenceStatus::INVALID_SEQUENCE;
-                    }
+                    // Jun 23 2015 TODO - verify if removing this works or not. Not sure what "not fully supported" meant.
+                    //if (gestureIdx > 1)
+                    //{
+                    //    // can ONLY have length one IMMEDIATE types. This allows for very quick actions, such as clicking of a cursor,
+                    //    // but is not fully supported.
+                    //    return SequenceStatus::INVALID_SEQUENCE;
+                    //}
                     if (gestInQuestion.type == baseGest.type)
                     {
                         conflict = true;
@@ -397,7 +398,20 @@ SequenceStatus GestureSeqRecorder::progressActiveSequences(Pose::Type gesture, C
             (PoseLength::IMMEDIATE == (*it)->seq.at(seqProg).poseLen))
         {
             // Handle IMMEDIATE uniquely, by not dealing with holdGestureTimer at all.
-            int a = 5;
+
+            // June 23 2015 trying to deal with this.
+            if (gesture == (*it)->seq.at(seqProg).type)
+            {
+                // match! Progress forward :)
+                (*it)->progress++;
+                if ((*it)->progress == (*it)->seq.size())
+                {
+                    // found a complete sequence!
+                    response = (*it)->sequenceResponse;
+                    break;
+                }
+                it++;
+            }
         }
 
         if (gesture == Pose::rest)
