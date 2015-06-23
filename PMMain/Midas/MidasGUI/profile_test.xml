@@ -91,6 +91,18 @@
                 </command>
 				</commands>
             </sequence>
+			<sequence state="gestureMode" name="Right Click">
+                <gestures>
+                    <gesture type="tap">waveOut</gesture>
+                </gestures>
+                <commands>
+				<command type="mouse">
+                    <actions>
+                        <action>rightClick</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
             <sequence state="mouseMode" name="Release Cursor">
                 <gestures>
                     <gesture type="immediate">rest</gesture>
@@ -139,7 +151,7 @@
             </sequence>
             <sequence state="gestureMode" name="Lock">
                 <gestures>
-                    <gesture type="tap">doubleTap</gesture>
+                    <gesture type="immediate">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
@@ -250,6 +262,18 @@
                 </command>
 				</commands>
             </sequence>
+			<sequence state="gestureMode" name="Right Click">
+                <gestures>
+                    <gesture type="tap">waveOut</gesture>
+                </gestures>
+                <commands>
+				<command type="mouse">
+                    <actions>
+                        <action>rightClick</action>
+                    </actions>
+                </command>
+				</commands>
+            </sequence>
             <sequence state="mouseMode" name="Release Cursor">
                 <gestures>
                     <gesture type="immediate">rest</gesture>
@@ -298,7 +322,7 @@
             </sequence>
             <sequence state="gestureMode" name="Lock">
                 <gestures>
-                    <gesture type="tap">doubleTap</gesture>
+                    <gesture type="immediate">doubleTap</gesture>
                 </gestures>
                 <commands>
 				<command type="stateChange">
