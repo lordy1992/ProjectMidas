@@ -1,6 +1,5 @@
 #include "SequenceImageManager.h"
 #include <QImage.h>
-#include <qpainter.h>
 #include <qstring.h>
 
 #include "myo\myo.hpp"
@@ -21,63 +20,16 @@ SequenceImageManager::~SequenceImageManager()
 {
 }
 
-std::vector<sequenceImageSet> SequenceImageManager::formSequenceSetFromIds(std::vector<int> ids, std::vector<PoseLength> lengths)
+std::vector<sequenceImageSet> SequenceImageManager::formSequenceSetFromIds(std::vector<int> ids)
 {
     std::vector<int>::iterator it;
     std::vector<sequenceImageSet> sequenceImages;
 
-    int idx = 0;
     for (it = ids.begin(); it != ids.end(); ++it)
     {
         if (idToImageMap.find(*it) != idToImageMap.end())
         {
-            sequenceImageSet currentImageSet = idToImageMap[*it];
-
-            int currentWidth = currentImageSet.nextImage.width();
-            int currentHeight = currentImageSet.nextImage.height();
-
-            QPixmap nextModified(currentWidth, currentHeight);
-            nextModified.fill(Qt::transparent); // force alpha channel
-            QPainter painter(&nextModified);
-            painter.drawPixmap(0, 0, currentImageSet.nextImage);
-
-            QPixmap laterModified(currentWidth, currentHeight);
-            laterModified.fill(Qt::transparent); // force alpha channel
-            QPainter painter2(&laterModified);
-            QImage holdOverlayImage;
-            QPixmap pic;
-            painter2.drawPixmap(0, 0, currentImageSet.laterImage);
-            switch (lengths[idx])
-            {
-            case PoseLength::HOLD:
-                holdOverlayImage = QImage(QString(POSE_LENGTH_HOLD_PATH));
-                pic = QPixmap::fromImage(holdOverlayImage);
-                pic = pic.scaled(currentWidth / POSE_LEN_SCALEDOWN_ICON, currentHeight / POSE_LEN_SCALEDOWN_ICON);
-
-                painter.drawPixmap(currentWidth - (currentWidth / POSE_LEN_SCALEDOWN_ICON), 0, pic);
-                painter2.drawPixmap(currentWidth - (currentWidth / POSE_LEN_SCALEDOWN_ICON), 0, pic);
-                currentImageSet.nextImage = nextModified;
-                currentImageSet.laterImage = laterModified;
-                break;
-            case PoseLength::IMMEDIATE:
-                holdOverlayImage = QImage(QString(POSE_LENGTH_IMMEDIATE_PATH));
-                pic = QPixmap::fromImage(holdOverlayImage);
-                pic = pic.scaled(currentWidth / POSE_LEN_SCALEDOWN_ICON, currentHeight / POSE_LEN_SCALEDOWN_ICON);
-
-                painter.drawPixmap(currentWidth - (currentWidth / POSE_LEN_SCALEDOWN_ICON), 0, pic);
-                painter2.drawPixmap(currentWidth - (currentWidth / POSE_LEN_SCALEDOWN_ICON), 0, pic);
-                currentImageSet.nextImage = nextModified;
-                currentImageSet.laterImage = laterModified;
-                break;
-            case PoseLength::TAP:
-                break;
-            default:
-                break;
-            }
-
-            sequenceImages.push_back(currentImageSet);
-            sequenceImages.at(idx).poseLen = lengths[idx];
-            idx++;
+            sequenceImages.push_back(idToImageMap[*it]);
         }
         else
         {

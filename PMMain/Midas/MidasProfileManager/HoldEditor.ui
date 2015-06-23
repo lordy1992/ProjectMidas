@@ -36,11 +36,11 @@
     </rect>
    </property>
    <property name="currentText">
-    <string>doubleTap</string>
+    <string>thumbToPinky</string>
    </property>
    <item>
     <property name="text">
-     <string>doubleTap</string>
+     <string>thumbToPinky</string>
     </property>
    </item>
    <item>

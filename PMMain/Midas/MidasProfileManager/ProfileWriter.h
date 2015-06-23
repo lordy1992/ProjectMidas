@@ -19,7 +19,7 @@ struct Sequence {
     std::string state;
     std::string name;
     std::vector<Gesture> gestures;
-	std::vector<Command> cmds;
+    Command cmd;
 };
 
 struct AngleAction {

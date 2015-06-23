@@ -35,8 +35,6 @@ signals:
     void emitPoseImages(std::vector<sequenceImageSet>);
 
     void emitToggleKeyboard();
-
-	void emitToggleActiveIcon();
 private:
     static bool showAll;
 };

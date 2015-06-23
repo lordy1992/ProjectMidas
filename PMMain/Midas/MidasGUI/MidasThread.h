@@ -4,46 +4,38 @@
 #include <QThread>
 #include <string>
 #include "MyoCommon.h"
+#include "RingData.h"
 #include "ProfileManager.h"
 
-#ifdef BUILD_KEYBOARD
-#include "RingData.h"
-class KeyboardWidget;
-#endif
-
 class MainGUI;
+class KeyboardWidget;
 
 class MidasThread : public QThread
 {
     Q_OBJECT
 
 public:
+    MidasThread(std::vector<ringData> *kybrdRingData);
     ~MidasThread();
-#ifdef BUILD_KEYBOARD
-	MidasThread(std::vector<ringData> *kybrdRingData);
-	std::vector<ringData>* getKybrdRingData();
-#endif
-	MidasThread();
 
     void setMainGuiHandle(MainGUI *mainGui);
     void setProfileManagerHandle(ProfileManager *profileManager);
     void run();
+    std::vector<ringData>* getKybrdRingData();
 
 private:
     MainGUI *mainGui;
     ProfileManager *profileManager;
-
-#ifdef BUILD_KEYBOARD
-	std::vector<ringData> *kybrdRingData;
-signals:
-	void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
-	void emitRssi(float);
-#endif
+    std::vector<ringData> *kybrdRingData;
 
 signals:
     void emitVeloc(int, int);
 
+    void emitUpdateKeyboard(int, double, bool, bool);  // kybdGUISel, angle, center, held
+
     void emitDebugInfo(int, int);
+
+    void emitRssi(float);
 
     void emitDisconnect(bool);
 };
