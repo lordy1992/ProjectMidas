@@ -70,7 +70,7 @@ unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
     return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
-void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove, int mouseRateIfMoveY_hack)
+void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double mouseRateIfMoveY_hack)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
     DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
@@ -164,7 +164,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove, int mouseRa
     delete in; in = NULL;
 }
 
-void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int& mouseRateIfMoveY_hack)
+void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, double& mouseRateIfMove, double& mouseRateIfMoveY_hack)
 {
     if (mouseCmd == MOVE_HOR && mouseRateIfMove < 0)
     {
@@ -280,10 +280,10 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove, int&
 		float monitorWidth = 1920.0; // TEMP TODO - make variable perhaps? For now, this is size of expected monitors
 		float monitorHeight = 1080.0;
 
-		int baseCursorX = BaseMeasurements::getInstance().getBaseCursorX();
-		int baseCursorY = BaseMeasurements::getInstance().getBaseCursorY();
-		int baseWindowsLocX = (baseCursorX / monitorWidth) * monitorSizeWeight;
-		int baseWindowsLocY = (baseCursorY / monitorHeight) * monitorSizeWeight;
+		float baseCursorX = BaseMeasurements::getInstance().getBaseCursorX();
+        float baseCursorY = BaseMeasurements::getInstance().getBaseCursorY();
+        float baseWindowsLocX = (baseCursorX / monitorWidth) * monitorSizeWeight;
+        float baseWindowsLocY = (baseCursorY / monitorHeight) * monitorSizeWeight;
 
 		//mi.dy = monitorSizeWeight / 2 + (mouseRateIfMoveY_hack / 100.0 * monitorSizeWeight / 2);
 		//mi.dx = monitorSizeWeight / 2 + (mouseRateIfMove / 100.0 * monitorSizeWeight / 2);

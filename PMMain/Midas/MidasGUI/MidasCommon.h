@@ -205,7 +205,7 @@ struct point {
 
 struct vector2D {
 	double x, y;
-	vector2D(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
+    vector2D(double xVal = 0, double yVal = 0) : x(xVal), y(yVal) { }
 };
 
 struct vector3D {

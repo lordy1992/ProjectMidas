@@ -22,9 +22,8 @@ using namespace myo;
 #define INPUT_ARM "arm"
 #define INPUT_X_DIRECTION "xDirection"
 
-// Testing Constants -- Modify until seems reasonable
-#define MAX_PITCH_ANGLE 25.0f // 45.0 //0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
-#define MAX_YAW_ANGLE 35.0f //0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
+#define MAX_PITCH_ANGLE 25.0f /* Maximum delta angle in degrees */
+#define MAX_YAW_ANGLE 35.0f /* Maximum delta angle in degrees */
 
 #define KEYBOARD_THRESH_MAG 30
 
