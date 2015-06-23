@@ -21,14 +21,7 @@ void ProfileWriter::writeProfiles(std::string filename, std::vector<Profile> pro
     BOOST_FOREACH(Profile profile, profiles)
     {
         ptree &profileNode = tr.add("profiles.profile", "");
-		if (profile.profileName.size() > 0)
-		{
-			profileNode.put("<xmlattr>.name", profile.profileName);
-		}
-		else
-		{
-			profileNode.put("<xmlattr>.name", "default");
-		}
+        profileNode.put("<xmlattr>.name", profile.profileName);
         writeProfile(profileNode, profile);
     }
 
@@ -87,24 +80,13 @@ void ProfileWriter::writeSequence(boost::property_tree::ptree &sequenceNode, Seq
         gestureNode.put("<xmlattr>.type", gesture.type);
     }
 
-	BOOST_FOREACH(Command command, sequence.cmds)
-	{
-		ptree &commandNode = sequenceNode.add("commands.command", "");
-		commandNode.put("<xmlattr>.type", command.type);
+    ptree &cmdNode = sequenceNode.add("command", "");
+    cmdNode.put("<xmlattr>.type", sequence.cmd.type);
 
-		BOOST_FOREACH(std::string action, command.actions)
-		{
-			commandNode.add("actions.action", action);
-		}
-	}
-
-    //ptree &cmdNode = sequenceNode.add("command", "");
-    //cmdNode.put("<xmlattr>.type", sequence.cmd.type);
-	//
-    //BOOST_FOREACH(std::string action, sequence.cmd.actions)
-    //{
-    //    cmdNode.add("actions.action", action);
-    //}
+    BOOST_FOREACH(std::string action, sequence.cmd.actions)
+    {
+        cmdNode.add("actions.action", action);
+    }
 }
 
 std::vector<Profile> ProfileWriter::loadProfilesFromFile(std::string fileName)
@@ -196,36 +178,18 @@ Sequence ProfileWriter::extractSequenceInformation(const boost::property_tree::p
         }
     }
 
-	std::vector<Command> cmds;
-	BOOST_FOREACH(const ptree::value_type & vt, parentSequence.second.get_child("commands")) {
-		if (vt.first == "command")
-		{
-			Command cmd;
-			cmd.type = vt.second.get<std::string>("<xmlattr>.type");
+    Command cmd;
+    const ptree & pt = parentSequence.second.get_child("command");
+    cmd.type = pt.get<std::string>("<xmlattr>.type");
 
-			BOOST_FOREACH(const ptree::value_type & action_vt, vt.second.get_child("actions")) {
-				if (action_vt.first == "action")
-				{
-					cmd.actions.push_back(action_vt.second.get_value<std::string>());
-				}
-			}
-			cmds.push_back(cmd);
-		}
-	}
+    BOOST_FOREACH(const ptree::value_type & vt, pt.get_child("actions")) {
+        if (vt.first == "action")
+        {
+            cmd.actions.push_back(vt.second.get_value<std::string>());
+        }
+    }
 
-	// OLD with single command. todo - delete once functionality tested
-    //Command cmd;
-    //const ptree & pt = parentSequence.second.get_child("command");
-    //cmd.type = pt.get<std::string>("<xmlattr>.type");
-	//
-    //BOOST_FOREACH(const ptree::value_type & vt, pt.get_child("actions")) {
-    //    if (vt.first == "action")
-    //    {
-    //        cmd.actions.push_back(vt.second.get_value<std::string>());
-    //    }
-    //}
-
-    seq.cmds = cmds;
+    seq.cmd = cmd;
     seq.gestures = gestures;
     seq.state = sequenceState;
     seq.name = sequenceName;

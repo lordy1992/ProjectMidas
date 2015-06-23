@@ -1,5 +1,4 @@
 #include "MouseCtrl.h"
-#include "BaseMeasurements.h"
 #include <iostream>
 #include <time.h>
 
@@ -70,7 +69,7 @@ unsigned int MouseCtrl::convertRateToDelta(unsigned int rate)
     return min(max(ceil(NUM_PIXEL_MOVE / currVeloc), MIN_MOVE_TIME_DELTA), MAX_MOVE_TIME_DELTA);
 }
 
-void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double mouseRateIfMoveY_hack)
+void MouseCtrl::sendCommand(mouseCmds mouseCmd, int mouseRateIfMove)
 {
     ZeroMemory(&mi, sizeof(MOUSEINPUT));
     DWORD currentTime = clock() * (1000 / CLOCKS_PER_SEC);
@@ -78,7 +77,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double m
     DWORD deltaTimeYMove = currentTime - lastMouseMoveY;
     DWORD deltaTimeScroll = currentTime - lastMouseScroll;
 
-	setMouseInputVars(mouseCmd, mouseRateIfMove, mouseRateIfMoveY_hack);
+    setMouseInputVars(mouseCmd, mouseRateIfMove);
 
     // Handle Early exit cases if moving mouse
     if (mi.dwFlags == MOUSEEVENTF_MOVE 
@@ -88,7 +87,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double m
         || 
         (mouseRateIfMove > 0 && mouseRateIfMove < MOVE_RATE_DEADZONE)
         ||
-        (mi.dx != 0 && mi.dy != 0 && mouseCmd != mouseCmds::MOVE_ABSOLUTE))
+        (mi.dx != 0 && mi.dy != 0))
         )
     {
         // Not enough time has passed to move the mouse again or 
@@ -130,7 +129,6 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double m
     INPUT* in = new INPUT();
     in->type = INPUT_MOUSE;
     in->mi = mi;
-
     SendInput(1, in, sizeof(INPUT));
 
     // Build and send opposite command if clicking!
@@ -164,7 +162,7 @@ void MouseCtrl::sendCommand(mouseCmds mouseCmd, double mouseRateIfMove, double m
     delete in; in = NULL;
 }
 
-void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, double& mouseRateIfMove, double& mouseRateIfMoveY_hack)
+void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, int& mouseRateIfMove)
 {
     if (mouseCmd == MOVE_HOR && mouseRateIfMove < 0)
     {
@@ -183,10 +181,7 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, double& mouseRateIfMove, d
         mouseCmd = MOVE_UP;
     }
 
-	if (mouseCmd != mouseCmds::MOVE_ABSOLUTE)
-	{
-		mouseRateIfMove = abs(mouseRateIfMove);
-	}
+    mouseRateIfMove = abs(mouseRateIfMove);
 
     switch (mouseCmd)
     {
@@ -269,35 +264,5 @@ void MouseCtrl::setMouseInputVars(mouseCmds mouseCmd, double& mouseRateIfMove, d
         mi.dwFlags = MOUSEEVENTF_WHEEL;
         mi.mouseData = -scrollRate; // RANGE IS FROM -120 to +120 : WHEEL_DELTA = 120, which is one "wheel click"
         break;
-	case mouseCmds::MOVE_ABSOLUTE:
-		if (!BaseMeasurements::getInstance().areCurrentValuesValid())
-		{
-			break;
-		}
-
-		mi.dwFlags = MOUSEEVENTF_MOVE | MOUSEEVENTF_ABSOLUTE;
-		int monitorSizeWeight = 65535; // size of a single monitor as represented by windows API
-		float monitorWidth = 1920.0; // TEMP TODO - make variable perhaps? For now, this is size of expected monitors
-		float monitorHeight = 1080.0;
-
-		float baseCursorX = BaseMeasurements::getInstance().getBaseCursorX();
-        float baseCursorY = BaseMeasurements::getInstance().getBaseCursorY();
-        float baseWindowsLocX = (baseCursorX / monitorWidth) * monitorSizeWeight;
-        float baseWindowsLocY = (baseCursorY / monitorHeight) * monitorSizeWeight;
-
-		//mi.dy = monitorSizeWeight / 2 + (mouseRateIfMoveY_hack / 100.0 * monitorSizeWeight / 2);
-		//mi.dx = monitorSizeWeight / 2 + (mouseRateIfMove / 100.0 * monitorSizeWeight / 2);
-		mi.dx = baseWindowsLocX + (mouseRateIfMove / 100.0 * monitorSizeWeight / 2);
-		mi.dy = baseWindowsLocY + (mouseRateIfMoveY_hack / 100.0 * monitorSizeWeight / 2);
-
-		mi.dx = max(min(mi.dx, monitorSizeWeight), 0);
-		mi.dy = max(min(mi.dy, monitorSizeWeight), 0);
-
-		if (mi.dx < 10 && mi.dy < 10)
-		{
-			int a = 1;
-		}
-
-		break;
     }
 }

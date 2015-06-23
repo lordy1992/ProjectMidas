@@ -1,5 +1,4 @@
 #include "PoseDisplayer.h"
-#include "SequenceImageManager.h"
 #include <QTimer.h>
 #include <QAction.h>
 #include <QApplication.h>
@@ -9,9 +8,6 @@
 #include <qdesktopwidget.h>
 #include <math.h>
 #include <qmessagebox.h>
-
-#include <qimage.h>
-#include <qpixmap.h>
 
 PoseDisplayer::PoseDisplayer(int widgetWidth, int widgetHeight, QWidget *parent)
     : QWidget(parent), indWidth(widgetWidth), indHeight(widgetHeight)
@@ -69,7 +65,7 @@ void PoseDisplayer::handlePoseImages(std::vector<sequenceImageSet> poseImages)
     if (poseImages.size() == 1)
     {
         QPixmap scaledPic = poseImages[0].nextImage;
-        scaledPic = scaledPic.scaled(indWidth, indHeight);        
+        scaledPic.scaled(indWidth, indHeight);
         poseImgLabel->setPixmap(scaledPic);
     }
 }

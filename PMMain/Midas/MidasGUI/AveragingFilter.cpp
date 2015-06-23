@@ -10,19 +10,9 @@ using namespace myoSim;
 using namespace myo;
 #endif
 
-AveragingFilter::AveragingFilter() : avgCount(DEFAULT_AVG_COUNT)
-{
-	Filter::setFilterError(filterError::NO_FILTER_ERROR);
-	Filter::setFilterStatus(filterStatus::OK);
-	Filter::clearOutput();
-}
+AveragingFilter::AveragingFilter() : avgCount(DEFAULT_AVG_COUNT) {}
 
-AveragingFilter::AveragingFilter(unsigned int avgCount) : avgCount(avgCount) 
-{
-	Filter::setFilterError(filterError::NO_FILTER_ERROR);
-	Filter::setFilterStatus(filterStatus::OK);
-	Filter::clearOutput();
-}
+AveragingFilter::AveragingFilter(unsigned int avgCount) : avgCount(avgCount) {}
 
 AveragingFilter::~AveragingFilter() {}
 

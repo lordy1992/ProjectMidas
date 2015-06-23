@@ -1,4 +1,3 @@
-#ifdef BUILD_KEYBOARD
 #ifndef KEYBOARD_WIDGET_H
 #define KEYBOARD_WIDGET_H
 
@@ -63,8 +62,5 @@ private:
     QString tempDebugText3;
     QString tempDebugText4;
 };
-
-#endif
-
 
 #endif

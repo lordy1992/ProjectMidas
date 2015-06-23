@@ -1,4 +1,3 @@
-#ifdef BUILD_KEYBOARD_ANDDISTANCE
 #include "DistanceBar.h"
 
 distanceBar::distanceBar(qreal x, qreal y, QWidget *parent, qreal width,
@@ -51,6 +50,3 @@ void distanceBar::paintEvent(QPaintEvent *e)
     painter.drawRect(rect);
     painter.drawText(rect, Qt::AlignCenter, current_bin_text);
 }
-
-
-#endif

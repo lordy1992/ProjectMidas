@@ -10,12 +10,11 @@ SequenceEditor::SequenceEditor(QWidget *parent)
 
     otherSequences = NULL;
     formCommandComboBox();
-	formKeyLineInput();
 
     connect(ui.addGestureButton, SIGNAL(released()), this, SLOT(handleAddGesture()));
     connect(ui.addActionButton, SIGNAL(released()), this, SLOT(handleAddAction()));
     connect(ui.doneButton, SIGNAL(released()), this, SLOT(handleDone()));
-    connect(ui.commandComboBox, SIGNAL(activated(const QString &)), this, SLOT(handleActivateCommandBox(const QString &)));		
+    connect(ui.commandComboBox, SIGNAL(activated(const QString &)), this, SLOT(handleActivateCommandBox(const QString &)));
 }
 
 SequenceEditor::~SequenceEditor()
@@ -122,10 +121,6 @@ void SequenceEditor::handleAddGesture()
 void SequenceEditor::handleAddAction()
 {
     QString action = ui.actionComboBox->currentText();
-	if (action == "inputVector")
-	{
-		action += ("," + ui.keyInput->text());
-	}
     ui.actionList->addItem(action);
 }
 
@@ -155,11 +150,9 @@ void SequenceEditor::handleDone()
         action = item->text().toStdString();
         actions.push_back(action);
     }
-	// TODO - in the future make this accept/write multiple commands. For now, not supported.
-	Command cmd;
-	cmd.type = ui.commandComboBox->currentText().toStdString();
-	cmd.actions = actions;
-	returnSequence.cmds.push_back(cmd);
+
+    returnSequence.cmd.type = ui.commandComboBox->currentText().toStdString();
+    returnSequence.cmd.actions = actions;
 
     std::string errorMsg;
     if (checkPrefixConstraint(errorMsg))
@@ -190,28 +183,16 @@ void SequenceEditor::handleActivateCommandBox(const QString & text)
     {
         formStateChangeActions();
     }
-	else if (text == "profileChange")
-	{
-		formProfileChangeActions();
-	}
 }
 
 void SequenceEditor::formCommandComboBox()
 {
     ui.commandComboBox->clear();
 
-	ui.commandComboBox->addItem(QString("mouse"));
     ui.commandComboBox->addItem(QString("keyboard"));
     ui.commandComboBox->addItem(QString("keyboardGui"));
+    ui.commandComboBox->addItem(QString("mouse"));
     ui.commandComboBox->addItem(QString("stateChange"));
-	ui.commandComboBox->addItem(QString("profileChange"));
-}
-
-void SequenceEditor::formKeyLineInput()
-{
-	// uncomment if we want ALNUM chars.
-	//const QRegExp qregexp("[0-9a-zA-Z]*");
-	//ui.keyInput->setValidator(new QRegExpValidator(qregexp));
 }
 
 void SequenceEditor::formStateChangeActions()
@@ -287,8 +268,7 @@ void SequenceEditor::formKybdActions()
     ui.actionComboBox->addItem(QString("upArrow"));
     ui.actionComboBox->addItem(QString("downArrow"));
     ui.actionComboBox->addItem(QString("rightArrow"));
-	ui.actionComboBox->addItem(QString("leftArrow")); 
-	ui.actionComboBox->addItem(QString("inputVector"));
+    ui.actionComboBox->addItem(QString("leftArrow"));
     ui.actionComboBox->addItem(QString("none"));
 }
 
@@ -330,12 +310,4 @@ void SequenceEditor::formKybdGUIActions()
     ui.actionComboBox->addItem(QString("rightArrow"));
     ui.actionComboBox->addItem(QString("leftArrow"));
     ui.actionComboBox->addItem(QString("none"));
-}
-
-void SequenceEditor::formProfileChangeActions()
-{
-	ui.actionComboBox->clear();
-
-	ui.actionComboBox->addItem(QString("moveProfileForward"));
-	ui.actionComboBox->addItem(QString("moveProfileBackward"));
 }

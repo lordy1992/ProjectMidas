@@ -23,7 +23,7 @@ private:
 
     QPoint position;
     int indWidth, indHeight;
-    QHBoxLayout *layout;
+    QGridLayout *layout;
     QLabel *stateLabel;
 
     QPushButton *button;

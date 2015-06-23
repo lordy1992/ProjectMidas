@@ -3,7 +3,6 @@
 
 #include "Filter.h"
 #include "ControlState.h"
-#include "MyoState.h"
 #include "GestureHoldModeAction.h"
 #include "ProfileManager.h"
 #include "myo\myo.hpp"
@@ -22,8 +21,9 @@ using namespace myo;
 #define INPUT_ARM "arm"
 #define INPUT_X_DIRECTION "xDirection"
 
-#define MAX_PITCH_ANGLE 25.0f /* Maximum delta angle in degrees */
-#define MAX_YAW_ANGLE 35.0f /* Maximum delta angle in degrees */
+// Testing Constants -- Modify until seems reasonable
+#define MAX_PITCH_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
+#define MAX_YAW_ANGLE 0.7853981634f //45deg. //1.04719755f //60 deg /* Maximum delta angle in radians */
 
 #define KEYBOARD_THRESH_MAG 30
 
@@ -46,7 +46,7 @@ public:
      *
      * @param controlState A handle to ControlState, to keep track of the application state.
      */
-    MyoTranslationFilter(ControlState* controlState, MyoState* myoState);
+    MyoTranslationFilter(ControlState* controlState);
     ~MyoTranslationFilter();
 
     /**
@@ -119,8 +119,6 @@ private:
     */
     point getMouseUnitVelocity(float pitch, float yaw);
 
-	vector2D getMouseDelta(float pitch, float yaw);
-
     void performHoldModeFunc(unsigned int holdNum, filterDataMap& outputToSharedCommandData);
     void performMouseModeFunc(filterDataMap& outputToSharedCommandData);
     void performeKybdModeFunc(filterDataMap& outputToSharedCommandData);
@@ -129,7 +127,6 @@ private:
     void unregisterHoldModeActions(void);
 
     ControlState* controlStateHandle;
-	MyoState* myoStateHandle;
     midasMode previousMode;
     float pitch, basePitch, prevPitch, deltaPitchDeg, 
         yaw, baseYaw, prevYaw, deltaYawDeg,

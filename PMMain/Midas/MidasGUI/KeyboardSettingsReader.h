@@ -1,4 +1,3 @@
-#ifdef BUILD_KEYBOARD
 #pragma once
 #include <vector>
 #include "ringData.h"
@@ -18,8 +17,6 @@ class KeyboardSettingsReader
 public:
     KeyboardSettingsReader();
     ~KeyboardSettingsReader();
-    void readKeyboardSetupFile(std::vector<ringData> &ringDataHandle, std::string fileName);
+    void readKeyboardSetupFile(std::vector<ringData> &ringDataHandle, std::string fileName );
 };
 
-
-#endif
