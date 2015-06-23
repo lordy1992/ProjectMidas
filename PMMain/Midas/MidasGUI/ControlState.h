@@ -53,8 +53,15 @@ public:
      */
     midasMode getMode();
 
+	void setProfile(std::string profile);
+	std::string getProfile();
+
+	SharedCommandData* getSCD() { return SCDHandle; }
+
 private:
     midasMode currentMode;
+	std::string currentProfile;
+	//std::mutex profileMutex;
     SharedCommandData *SCDHandle;
 };
 

@@ -21,7 +21,7 @@ struct profileSequence {
     std::string state;
     std::string name;
     std::vector<gesture> gestures;
-    command cmd;
+    std::vector<command> cmds;
 };
 
 struct angleAction {
@@ -46,7 +46,8 @@ extern std::map<std::string, kybdGUICmds> profileActionToKybdGui;
 extern std::map<std::string, kybdCmds> profileActionToKybd;
 extern std::map<std::string, mouseCmds> profileActionToMouseCommands;
 extern std::map<std::string, midasMode> profileActionToStateChange;
-extern std::map <std::string, SeqElement::PoseLength> profileGestureTypeToPoseLength;
+extern std::map<std::string, profileCmds> profileActionToProfileChange;
+extern std::map <std::string, PoseLength> profileGestureTypeToPoseLength;
 extern std::map <std::string, Pose::Type> profileGestureNameToType;
 
 class ProfileManager {

@@ -1,17 +1,30 @@
 #include "SCDDigester.h"
+#include "BaseMeasurements.h"
 
 
-SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, 
-    MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, std::vector<ringData> *kybrdRingData)
+#ifdef BUILD_KEYBOARD
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle, std::vector<ringData> *kybrdRingData)
+#else
+SCDDigester::SCDDigester(SharedCommandData* scd, MidasThread *thread, ControlState *cntrlStateHandle, MyoState* myoStateHandle,
+	MouseCtrl *mouseCtrl, KybrdCtrl *kybrdCtrl, KeyboardController *keyboardController, ProfileManager* profileManagerHandle)
+#endif
 {
     this->scdHandle = scd;
     this->threadHandle = thread;
     this->cntrlStateHandle = cntrlStateHandle;
+	this->myoStateHandle = myoStateHandle;
     this->mouseCtrl = mouseCtrl;
     this->kybrdCtrl = kybrdCtrl;
-    this->kybrdRingData = kybrdRingData;
-    this->keyboardWidget = keyboardWidget;
-    count = 0;
+	this->keyboardController = keyboardController;
+
+	this->pm = profileManagerHandle;
+    this->count = 0;
+
+#ifdef BUILD_KEYBOARD
+	this->kybrdRingData = kybrdRingData;
+	//this->keyboardWidget = keyboardWidget;
+#endif
 }
 
 
@@ -21,7 +34,7 @@ SCDDigester::~SCDDigester()
 
 void SCDDigester::digest()
 {
-    commandData nextCmd;
+    CommandData nextCmd;
     static bool isConnected = true;
     static bool testConnected = true;
 
@@ -38,6 +51,9 @@ void SCDDigester::digest()
         break;
     case STATE_CHANGE:
         break;
+	case PROFILE_CHANGE:
+		digestProfileChange(nextCmd);
+		break;
     case NONE:
         break;
     case UNKNOWN_COMMAND:
@@ -51,17 +67,24 @@ void SCDDigester::digest()
         mouseCtrl->sendCommand(nextCmd.action.mouse);
     }
 
+	vector2D mouseDelta = scdHandle->getDelta();
+	if (cntrlStateHandle->getMode() == midasMode::MOUSE_MODE)
+	{
+		mouseCtrl->sendCommand(mouseCmds::MOVE_ABSOLUTE, mouseDelta.x, -mouseDelta.y);
+	}
+
+#ifdef JOYSTICK_CURSOR
     point unitVelocity = scdHandle->getVelocity();
-    if (unitVelocity.x != 0)
-    {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
+	if (unitVelocity.x != 0)
+	{
+	    mouseCtrl->sendCommand(mouseCmds::MOVE_HOR, unitVelocity.x);
+	}
+	if (unitVelocity.y != 0)
+	{
+	    mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
+	}
 
-    }
-    if (unitVelocity.y != 0)
-    {
-        mouseCtrl->sendCommand(mouseCmds::MOVE_VERT, unitVelocity.y);
-    }
-
+	// Jorden TODO - deal with this - temp removing emitVeloc to see if CPU usage reduces.
     if (count % 1000 == 0)
     {
         threadHandle->emitVeloc(unitVelocity.x, unitVelocity.y);
@@ -83,32 +106,43 @@ void SCDDigester::digest()
             float rssi = scdHandle->getRssi();
             threadHandle->emitRssi(rssi);
         }
-
     }
-
+#endif /* JOYSTICK_CURSOR */
+#ifdef BUILD_KEYBOARD
     if (cntrlStateHandle->getMode() == midasMode::KEYBOARD_MODE)
     {
         unsigned int kybdGUISel = scdHandle->getKybdGuiSel();
         keyboardAngle currKeyAngle = scdHandle->getKeySelectAngle();
-
+		
         if (count % 1000 == 0)
         {
             double angleAsDouble = (double)currKeyAngle.angle;
             threadHandle->emitUpdateKeyboard(kybdGUISel, angleAsDouble, currKeyAngle.ringThreshReached, false);
-
+		
             // // TEMP TODO for debug only
             // int x = currKeyAngle.x;
             // int y = currKeyAngle.y;
             // threadHandle->emitDebugInfo(x, y);
         }
-
+		
         digestKeyboardGUIData(nextCmd);
     }
-    
+#endif 
+
     count++;
 }
 
-void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
+#ifdef BUILD_KEYBOARD
+// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
+int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
+{
+	qreal deltaAngle = 360.0 / ring->size();
+	int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
+	// TODO: May have to change later, based on received angle
+	return (int)(adjustedAngle / deltaAngle);
+}
+
+void SCDDigester::digestKeyboardGUIData(CommandData nextCommand)
 {
     keyboardAngle currAngle;
     int ringKeySelIdx;
@@ -200,19 +234,62 @@ void SCDDigester::digestKeyboardGUIData(commandData nextCommand)
         }
     }
 }
+#endif
 
-void SCDDigester::digestKybdCmd(commandData nextCommand)
+void SCDDigester::digestKybdCmd(CommandData nextCommand)
 {
-    kybrdCtrl->setKeyCmd(nextCommand.action.kybd);
-    kybrdCtrl->sendData();
+	if (nextCommand.action.kybd == kybdCmds::INPUT_VECTOR)
+	{
+		keyboardController->setKiVector(nextCommand.keyboardVector);
+		keyboardController->sendData();
+	}
+	else
+	{
+		KeyboardVector vec = KeyboardVector::createFromCommand(nextCommand.action.kybd);
+		keyboardController->setKiVector(vec);
+		keyboardController->sendDataDelayed(10);
+	}
 }
 
-// MAKE SURE THIS FUNCTION MATCHES THE SAME FUNCTION IN SCDDigester.
-int SCDDigester::getSelectedKeyFromAngle(double angle, std::vector<ringData::keyboardValue> *ring)
+void SCDDigester::digestProfileChange(CommandData nextCmd)
 {
-    qreal deltaAngle = 360.0 / ring->size();
-    int adjustedAngle = (int)(angle + deltaAngle / 2) % 360;
+	std::vector<profile>* profiles = pm->getProfiles();
+	if (profiles->size() == 0) { return; }
 
-    // TODO: May have to change later, based on received angle
-    return (int)(adjustedAngle / deltaAngle);
+	std::string currProfileName = cntrlStateHandle->getProfile();
+	std::string prevProfileName = "";
+	std::string nextProfileName = "";
+	for (int i = 0; i < profiles->size(); i++)
+	{
+		if (profiles->at(i).profileName == currProfileName)
+		{
+			if (i > 0)
+			{
+				prevProfileName = profiles->at(i - 1).profileName;
+			}
+			else
+			{
+				prevProfileName = profiles->at(profiles->size() - 1).profileName;
+			}
+
+			if (i < profiles->size() - 1)
+			{
+				nextProfileName = profiles->at(i + 1).profileName;
+			}
+			else
+			{
+				nextProfileName = profiles->at(0).profileName;
+			}
+			break;
+		}
+	}
+
+	if (nextCmd.action.profile == MOVE_PROFILE_FORWARD)
+	{
+		cntrlStateHandle->setProfile(nextProfileName);
+	}
+	else if (nextCmd.action.profile == MOVE_PROFILE_BACKWARD)
+	{
+		cntrlStateHandle->setProfile(prevProfileName);
+	}
 }

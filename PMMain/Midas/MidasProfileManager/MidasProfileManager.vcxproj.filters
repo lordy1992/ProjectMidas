@@ -82,9 +82,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="midasprofilemanager.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="midasprofilemanager.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
@@ -111,9 +108,6 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GeneratedFiles\ui_midasprofilemanager.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="ProfileWriter.h">
       <Filter>Header Files</Filter>
     </ClInclude>

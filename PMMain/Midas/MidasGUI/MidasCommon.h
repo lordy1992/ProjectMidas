@@ -4,15 +4,23 @@
 #include <string>
 #include <map>
 
-#define MOUSE_INDICATOR_SIZE 100
-#define INFO_INDICATOR_WIDTH   250
-#define INFO_INDICATOR_HEIGHT  50
+#define MOUSE_INDICATOR_SIZE 130
+#define INFO_INDICATOR_WIDTH   150
+#define INFO_INDICATOR_HEIGHT  35
 #define PROF_INDICATOR_WIDTH   250
-#define PROF_INDICATOR_HEIGHT  50
+#define PROF_INDICATOR_HEIGHT  35
+#define WIDGET_BUFFER 5
 #define DISTANCE_DISPLAY_WIDTH 250
 #define DISTANCE_DISPLAY_HEIGHT 40
-#define WIDGET_BUFFER 5
 #define GUI_HEIGHT_OFFSET_FROM_BOTTOM (MOUSE_INDICATOR_SIZE + INFO_INDICATOR_HEIGHT + 3*WIDGET_BUFFER)
+
+#define SPECIFIC_PROFILE_ICON_SIZE 60
+#define PROFILE_ICON0_ACTIVE	"Resources\\icons\\Ring_Post2.png"	
+#define PROFILE_ICON0_INACTIVE	"Resources\\icons\\RingBW2.png"		
+#define PROFILE_ICON1_ACTIVE	"Resources\\icons\\Pencil_Post.png"
+#define PROFILE_ICON1_INACTIVE	"Resources\\icons\\PencilBW.png"
+
+class KeyboardVector;
 
 /**
  * Enumerates the types of commands that can be sent to control
@@ -23,8 +31,14 @@ enum commandType {
     KYBRD_GUI_CMD,
     MOUSE_CMD,
     STATE_CHANGE,
+	PROFILE_CHANGE,
     NONE,
     UNKNOWN_COMMAND
+};
+
+enum profileCmds {
+	MOVE_PROFILE_FORWARD,
+	MOVE_PROFILE_BACKWARD
 };
 
 /**
@@ -41,7 +55,6 @@ enum kybdGUICmds {
 /**
  * High-level keyboard commands that represent common actions.
  */
-// TODO - CHANGE THESE TO BINARY so that GestureHoldModeAction can emit more than one at once.
 enum kybdCmds {
     NO_CMD = 0,
     UNDO = 1,
@@ -72,7 +85,8 @@ enum kybdCmds {
     UP_ARROW = 33554432,
     RIGHT_ARROW = 67108864,
     DOWN_ARROW = 134217728,
-    LEFT_ARROW = 268435456 // 2^28 ... NEXT = 536870912
+    LEFT_ARROW = 268435456,
+	INPUT_VECTOR = 536870912 // 2^29 ... NEXT = 1073741824
 };
 
 /**
@@ -99,7 +113,8 @@ enum mouseCmds {
     LEFT_RELEASE,
     RIGHT_RELEASE,
     MIDDLE_RELEASE,
-    RELEASE_LRM_BUTS
+    RELEASE_LRM_BUTS,
+	MOVE_ABSOLUTE
 };
 
 /**
@@ -128,13 +143,25 @@ static std::string modeToString(midasMode mm)
     switch (mm)
     {
     case LOCK_MODE:   
+#ifdef BUILD_FOR_KARDIUM
+        return "Basic Mode";
+#else
         return "Locked";
+#endif
     case MOUSE_MODE:  
-        return "Mouse Mode";
+#ifdef BUILD_FOR_KARDIUM
+        return "Advanced Mode";
+#else
+        return "Unlocked - Mouse";
+#endif
     case KEYBOARD_MODE:  
-        return "Keyboard Mode";
+        return "Unlocked - Keyboard";
     case GESTURE_MODE:  
-        return "Gesture Mode";
+#ifdef BUILD_FOR_KARDIUM
+        return "Advanced Mode";
+#else
+        return "Unlocked";
+#endif
     case GESTURE_HOLD_ONE:
         return "Hold1 Mode";
     case GESTURE_HOLD_TWO:
@@ -160,22 +187,13 @@ enum kybdStatus {
     N_PRESSES_MATCH_RELEASES    /**< The number of key presses does not match the number of key releases.*/
 };
 
-/**
- * This struct bundles the Midas command data. It represents
- * all Midas command types.
- */
-struct commandData {
-    commandType type = commandType::NONE;
-    union action{
-        kybdCmds kybd;
-        kybdGUICmds kybdGUI;
-        mouseCmds mouse;
-        midasMode mode;
-    };
-    action action;
-
-    std::string name = "";
-};
+typedef union action{
+	kybdCmds kybd;
+	kybdGUICmds kybdGUI;
+	mouseCmds mouse;
+	midasMode mode;
+	profileCmds profile;
+} action;
 
 /**
  * A simple point consisting of two coordinates, x and y.
@@ -183,6 +201,16 @@ struct commandData {
 struct point {
     int x, y;
     point(int xVal = 0, int yVal = 0) : x(xVal), y(yVal) { }
+};
+
+struct vector2D {
+	double x, y;
+    vector2D(double xVal = 0, double yVal = 0) : x(xVal), y(yVal) { }
+};
+
+struct vector3D {
+	double x, y, z;
+	vector3D(double xVal = 0.0, double yVal = 0.0, double zVal = 0.0) : x(xVal), y(yVal), z(zVal) { }
 };
 
 struct keyboardAngle {

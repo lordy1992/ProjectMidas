@@ -21,6 +21,10 @@
 #define NO_HAND_LATER_PATH           "Resources\\Post200PxImgs\\noHand.jpg"
 #define NO_HAND_NEXT_PATH            "Resources\\Post200PxImgs\\noHand.jpg"
 
+#define POSE_LENGTH_IMMEDIATE_PATH "Resources\\icons\\PoseLenImmediate.png"
+#define POSE_LENGTH_HOLD_PATH "Resources\\icons\\PoseLenHold.png"
+#define POSE_LEN_SCALEDOWN_ICON 3
+
 class SequenceImageManager
 {
 public:
@@ -28,7 +32,7 @@ public:
     ~SequenceImageManager();
 
     void loadImages();
-    std::vector<sequenceImageSet> formSequenceSetFromIds(std::vector<int> ids);
+    std::vector<sequenceImageSet> formSequenceSetFromIds(std::vector<int> ids, std::vector<PoseLength> lengths);
 
 private:
     std::map<int, sequenceImageSet> idToImageMap;

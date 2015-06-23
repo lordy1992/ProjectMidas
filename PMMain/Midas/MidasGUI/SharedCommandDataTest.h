@@ -15,7 +15,7 @@ public:
     {
         filterDataMap input = Filter::getInput();
         int cmd = boost::any_cast<int>(input["cmd"]);
-        commandData command;
+        CommandData command;
 
         if (cmd == 0)
         {

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>387</width>
-    <height>400</height>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -127,11 +127,11 @@
     </rect>
    </property>
    <property name="currentText">
-    <string>thumbToPinky</string>
+    <string>doubleTap</string>
    </property>
    <item>
     <property name="text">
-     <string>thumbToPinky</string>
+     <string>doubleTap</string>
     </property>
    </item>
    <item>
@@ -287,7 +287,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>260</y>
+     <y>300</y>
      <width>211</width>
      <height>81</height>
     </rect>
@@ -303,13 +303,42 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>360</y>
+     <y>390</y>
      <width>75</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
     <string>Done</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>260</y>
+     <width>51</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Key:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="keyInput">
+   <property name="geometry">
+    <rect>
+     <x>70</x>
+     <y>260</y>
+     <width>211</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="inputMask">
+    <string/>
+   </property>
+   <property name="maxLength">
+    <number>32767</number>
    </property>
   </widget>
  </widget>

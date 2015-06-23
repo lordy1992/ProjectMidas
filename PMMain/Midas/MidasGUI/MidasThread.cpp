@@ -1,22 +1,21 @@
 #include "MidasThread.h"
 #include "MidasMain.h"
 #include "MainGUI.h"
-#include "KeyboardWidget.h"
 #include <qdebug.h>
 #include <Windows.h>
+#ifdef BUILD_KEYBOARD
+#include "KeyboardWidget.h"
+#endif
 
-
-MidasThread::MidasThread(std::vector<ringData> *kybrdRingData) : kybrdRingData(kybrdRingData)
-{
+#ifdef BUILD_KEYBOARD
+MidasThread::MidasThread(std::vector<ringData> *kybrdRingData) : kybrdRingData(kybrdRingData) {
+#else
+MidasThread::MidasThread() {
+#endif
 }
 
 MidasThread::~MidasThread()
 {
-}
-
-std::vector<ringData>* MidasThread::getKybrdRingData()
-{
-    return kybrdRingData;
 }
 
 void MidasThread::setMainGuiHandle(MainGUI *mainGui)
@@ -31,6 +30,17 @@ void MidasThread::setProfileManagerHandle(ProfileManager *profileManager)
 
 void MidasThread::run()
 {
-    midasMain(this, mainGui, profileManager, kybrdRingData);
+#ifdef BUILD_KEYBOARD
+	midasMain(this, mainGui, profileManager, kybrdRingData);
+#else
+	midasMain(this, mainGui, profileManager);
+#endif
 }
+
+#ifdef BUILD_KEYBOARD
+std::vector<ringData>* MidasThread::getKybrdRingData()
+{
+	return kybrdRingData;
+}
+#endif
 

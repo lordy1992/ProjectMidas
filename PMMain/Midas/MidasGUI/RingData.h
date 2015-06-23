@@ -1,3 +1,4 @@
+#ifdef BUILD_KEYBOARD
 #include <vector>
 
 #pragma once
@@ -32,3 +33,4 @@ private:
 
 };
 
+#endif

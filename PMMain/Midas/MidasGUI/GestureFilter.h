@@ -2,6 +2,7 @@
 #define _GESTURE_FILTER_H
 
 #include "ControlState.h"
+#include "MyoState.h"
 #include "Filter.h"
 #include "GestureSeqRecorder.h"
 #include "MainGUI.h"
@@ -44,7 +45,7 @@ public:
      * @param controlState A handle to the ControlState object that manages application state.
      * @param timeDel The time that a user must hold a gesture before it is registered.
      */
-    GestureFilter(ControlState* controlState, clock_t timeDel, MainGUI *mainGuiHandle);
+	GestureFilter(ControlState* controlState, MyoState* myoState, clock_t timeDel, MainGUI *mainGuiHandle);
     ~GestureFilter();
 
     /**
@@ -64,7 +65,8 @@ public:
     */
     GestureSeqRecorder *getGestureSeqRecorder() { return gestSeqRecorder; }
 
-    static void handleStateChange(commandData response);
+	static void handleStateChange(CommandData response, GestureFilter *gf);
+	static void handleProfileChangeCommand(CommandData response, GestureFilter *gf);
 
     friend void setupCallbackThread(GestureFilter *gf);
     friend void callbackThreadWrapper(GestureFilter *gf);
@@ -78,20 +80,22 @@ private:
      *
      * @param pose The pose to translate into a command.
      */
-    commandData translateGesture(Pose::Type pose);
+    CommandData translateGesture(Pose::Type pose);
 
     // registration functions. to be commented after integration success.
     void registerMouseSequences(void);
     void registerKeyboardSequences(void);
     void registerStateSequences(void);
-    void handleMouseCommand(commandData response);
-    void handleKybrdCommand(commandData response, bool addToExtra = false);
+	filterDataMap handleMouseCommand(CommandData response);
+	filterDataMap handleKybrdCommand(CommandData response, bool addToExtra = false);
+	filterDataMap handleProfileChangeCommand(CommandData response);
 
     void emitPoseData(int poseInt);
 
     Pose::Type lastPoseType;
     
     static ControlState* controlStateHandle;
+	MyoState* myoStateHandle;
     clock_t timeDelta;
     clock_t lastTime;
 

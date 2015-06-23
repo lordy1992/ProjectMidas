@@ -1,3 +1,4 @@
+#ifdef BUILD_KEYBOARD
 #include "KeyboardWidget.h"
 #include <QEvent.h>
 #include <QPainter.h>
@@ -304,3 +305,6 @@ QSize KeyboardWidget::sizeHint() const
 {
     return QSize(keyboardRadius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST, keyboardRadius * 2 + POPOUT_DISTANCE + EXTRA_WINDOW_DIST);
 }
+
+
+#endif

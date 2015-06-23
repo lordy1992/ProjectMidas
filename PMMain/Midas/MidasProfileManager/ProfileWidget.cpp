@@ -212,14 +212,14 @@ void ProfileWidget::drawSequence(Sequence sequence, int ind, bool insertBefore)
 
     sequenceLayout->addWidget(sequences);
 
-    std::string cmdLabel = "Command type " + sequence.cmd.type;
+    std::string cmdLabel = "Command type " + sequence.cmds[0].type;
     QLabel* commandTitle = new QLabel(QString(cmdLabel.c_str()));
     sequenceLayout->addWidget(commandTitle);
 
     QListWidget* actions = new QListWidget();
     actions->setMaximumSize(256, 72);
 
-    std::vector<std::string> actionList = sequence.cmd.actions;
+	std::vector<std::string> actionList = sequence.cmds[0].actions;
     std::vector<std::string>::iterator actionIt;
 
     for (actionIt = actionList.begin(); actionIt != actionList.end(); actionIt++)
@@ -282,10 +282,10 @@ void ProfileWidget::modifySequence(int ind, Sequence seq)
         seqWidgets.sequences->addItem(item);
     }
 
-    std::string cmdLabel = "Command type " + seq.cmd.type;
+	std::string cmdLabel = "Command type " + seq.cmds[0].type;
     seqWidgets.commandTitle->setText(QString(cmdLabel.c_str()));
 
-    std::vector<std::string> actionList = seq.cmd.actions;
+	std::vector<std::string> actionList = seq.cmds[0].actions;
     std::vector<std::string>::iterator actionIt;
 
     seqWidgets.actions->clear();
